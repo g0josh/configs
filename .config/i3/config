@@ -16,7 +16,7 @@ bindsym $mod+z		gaps inner current plus 5
 bindsym $mod+Shift+z 	gaps inner current minus 5
 
 
-set $term urxvt
+set $term termite 
 set $browser firefox
 hide_edge_borders both
 set $bg-color 	         #2f343f
@@ -45,7 +45,7 @@ font pango:hack 14
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec $term 
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -189,3 +189,7 @@ bindsym $mod+r mode "resize"
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec compton -f
 exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
+bindsym XF86AudioPlay exec playerctl play-pause||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
