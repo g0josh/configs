@@ -18,8 +18,8 @@ bindsym $mod+Shift+z 	gaps inner current minus 5
 set $term termite 
 set $browser firefox
 hide_edge_borders both
-default_border pixel 3 
-default_floating_border pixel 10
+default_border pixel 0 
+default_floating_border pixel 0
 set $bg-clr 	        #E2434B
 set $inact-bg-clr 	#222222
 set $txt-clr          	#FEE9D7
@@ -194,7 +194,7 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec compton -f
+exec compton -f -i 0.4
 exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
