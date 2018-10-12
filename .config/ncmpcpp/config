@@ -11,14 +11,14 @@
 ## ncmpcpp.
 ##
 #
-ncmpcpp_directory = ~/Music/.ncmpcpp
+ncmpcpp_directory = /home/job/Music/.ncmpcpp
 #
 ##
 ## Directory for storing downloaded lyrics. It defaults to ~/.lyrics since other
 ## MPD clients (eg. ncmpc) also use that location.
 ##
 #
-lyrics_directory = ~/Music/.lyrics
+lyrics_directory = /home/job/Music/.lyrics
 #
 ##### connection settings #####
 #
@@ -45,7 +45,7 @@ audio_output {
 	type            "fifo"
 	name            "Visualizer feed"
 	path            "/tmp/mpd.fifo"
-	format          "44100:16:2"
+	format          "44100:16"
 }
 ##
 #
@@ -62,7 +62,7 @@ visualizer_output_name = Visualizer feed
 ##
 ## If you set format to 44100:16:2, make it 'yes'.
 ##
-visualizer_in_stereo = yes
+visualizer_in_stereo = no
 #
 ##
 ## Note: Below parameter defines how often ncmpcpp has to "synchronize"
@@ -80,9 +80,9 @@ visualizer_sync_interval = 30
 #
 ## Available values: spectrum, wave, wave_filled, ellipse.
 ##
-visualizer_type = wave
-#
-visualizer_look = ●▮
+visualizer_type = wave_filled
+visualizer_look = ▮▮
+
 #
 visualizer_color = blue, cyan, green, yellow, magenta, red
 #
