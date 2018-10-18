@@ -2,7 +2,7 @@
 
 killall -q polybar
 
-while prep -u $UID -x polybar >/dev/null; do sleep 1;done
+while prep -u $UID -x polybar >/dev/null; do sleep 0.5;done
 
 polybar example &
 

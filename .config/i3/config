@@ -117,16 +117,16 @@ bindsym $mod+space focus mode_toggle
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 " 1   "
-set $ws2 " 2   "
-set $ws3 " 3   "
-set $ws4 " 4   "
-set $ws5 " 5   "
-set $ws6 " 6 "
-set $ws7 " 7 "
-set $ws8 " 8 "
-set $ws9 " 9 "
-set $ws10 " 10 "
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1 
@@ -190,22 +190,22 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-	colors{
-		background #000000
-		statusline #e2a581 
-		focused_workspace  #bc3500 #bc3500 #ffffff
-		inactive_workspace #6b2525 #000000 #6b2525
-		urgent_workspace   #e8a220 #e8a220 #ffffff
-	}
-        status_command i3status -c ~/.config/i3/i3status.conf
+#bar {
+#	colors{
+#		background #000000
+#		statusline #e2a581 
+#		focused_workspace  #bc3500 #bc3500 #ffffff
+#		inactive_workspace #6b2525 #000000 #6b2525
+#		urgent_workspace   #e8a220 #e8a220 #ffffff
+#	}
+#        status_command i3status -c ~/.config/i3/i3status.conf 
 #        status_command ~/.config/i3/i3status.sh
-
-        position top
-}
+#        position top
+#	tray_padding 2 
+#}
 
 # misc startup
-#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec compton -f -i 0.4
 exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper
 
@@ -220,6 +220,7 @@ exec --no-startup-id mpd
 #exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp
 #assign [instance="ncmpcpp_inst"] $ws5
 exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp'
+exec --no-startup-id i3-msg 'workspace $ws1'
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
