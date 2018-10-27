@@ -48,8 +48,8 @@ scrollbar = right
 #foreground_bold = #ffffff
 #background = #3f3f3f
 
-# 20% background transparency (requires a compositor)
-background = rgba(0,0,0, 0.85)
+# background transparency (requires a compositor)
+background = rgba(0,0,0, 0.95)
 
 # If unset, will reverse foreground and background
 highlight = #2f2f2f

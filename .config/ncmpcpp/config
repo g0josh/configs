@@ -18,7 +18,7 @@ ncmpcpp_directory = /home/job/Music/.ncmpcpp
 ## MPD clients (eg. ncmpc) also use that location.
 ##
 #
-lyrics_directory = /home/job/Music/.lyrics
+lyrics_directory = /home/job/Music/lyrics
 #
 ##### connection settings #####
 #

@@ -247,12 +247,10 @@ format-disconnected-prefix-foreground = ${colors.urgent}
 type = internal/date
 interval = 5
 
+format = %{A1:/home/job/.config/polybar/launch_khal.sh:}<label>%{A}
 label = %date% %time%
 date = %h %d, %A 
-date-alt = %h %d, %A 
-
 time = %I:%M %p
-time-alt = %H:%M
 
 format-prefix = " " 
 format-prefix-foreground = ${colors.inactive}
@@ -260,7 +258,7 @@ format-prefix-foreground = ${colors.inactive}
 [module/dateIndia]
 type = custom/script
 interval = 5
-exec = TZ=Asia/Kolkata date +"India %H:%M %p"
+exec = TZ=Asia/Kolkata date +"India %I:%M %p"
 
 [module/pulseaudio]
 type = internal/pulseaudio

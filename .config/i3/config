@@ -9,14 +9,16 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $mod_alt Mod1
+set $term urxvt
+set $browser chromium
+
 gaps inner 8 
 #gaps outer 5 
+smart_gaps on
 bindsym $mod+z		gaps inner current plus 5
 bindsym $mod+Shift+z 	gaps inner current minus 5
 
-
-set $term termite 
-set $browser firefox
 hide_edge_borders both
 default_border pixel 0 
 default_floating_border pixel 0
@@ -140,6 +142,9 @@ bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 
+bindsym Control+$mod+Left workspace prev
+bindsym Control+$mod+Right workspace next
+
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
@@ -207,7 +212,7 @@ bindsym $mod+r mode "resize"
 # misc startup
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec compton -f -i 0.4
-exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper
+exec_always --no-startup-id feh --bg-fill ~/Pictures/Wallpaper
 
 exec --no-startup-id code
 assign [class="code"] $ws3
@@ -219,12 +224,15 @@ exec --no-startup-id i3-msg 'workspace $ws4; exec $term -e ranger'
 exec --no-startup-id mpd
 #exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp
 #assign [instance="ncmpcpp_inst"] $ws5
-exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp'
+exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp --slave-screen Visualizer'
 exec --no-startup-id i3-msg 'workspace $ws1'
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
+bindsym $mod_alt+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
+bindsym $mod_alt+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
 bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
 bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym Control+Right exec mpc next
-bindsym Control+Left exec mpc prev
+bindsym $mod_alt+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $mod_alt+Right exec mpc next
+bindsym $mod_alt+Left exec mpc prev
