@@ -1,0 +1,67 @@
+Xft.dpi:       96
+Xft.antialias: true
+Xft.hinting:   true
+Xft.rgba:      rgb
+Xft.autohint:  false
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+
+!COLORS-------------------------------------------------------------------------
+! special
+*.foreground:   #C6B4C9
+*.background:   #10132D 
+*.cursorColor:  #F05461
+
+! black
+*.color0:       #202647
+*.color8:       #202647
+
+! red dark 1
+*.color1:       #8E293D
+*.color9:       #8E293D
+
+! red
+*.color2:       #F05461
+*.color10:      #F05461
+
+! blue
+*.color3:       #194A88
+*.color11:      #194A88
+
+! blue light
+*.color4:       #3895CB
+*.color12:      #3895CB
+
+! red dark 2
+*.color5:       #983E59
+*.color13:      #983E59
+
+! cyan
+*.color6:       #C6B4C9
+*.color14:      #C6B4C9
+
+! white
+*.color7:       #E0284D
+*.color15:      #E0284D
+
+!URxvt--------------------------------------------------------------------------
+URxvt.letterSpace:0
+URxvt.font:xft:DejaVu Sans Mono:style=Book:size=12
+
+URxvt.depth:                      32
+URxvt.background:                 [95]#10132D 
+URxvt*borderColor:                [95]#10132D 
+URxvt*internalBorder:             10
+URxvt*scrollBar:                  false
+URxvt*mouseWheelScrollPage:       true
+URxvt*cursorBlink:                true
+URxvt*saveLines:                  5000
+
+URxvt.keysym.C-0: command:\033]710;xft:NotoSansMono:size=12:antialias=true\007
+URxvt.keysym.C--: command:\033]710;xft:NotoSansMono:size=8:antialias=true\007
+URxvt.keysym.C-=: command:\033]710;xft:NotoSansMono:size=14:antialias=true\007
+
+! Normal copy-paste keybindings without perls
+URxvt.iso14755:                   false
+URxvt.keysym.Shift-Control-V:     eval:paste_clipboard
+URxvt.keysym.Shift-Control-C:     eval:selection_to_clipboard

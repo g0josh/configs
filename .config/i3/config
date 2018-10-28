@@ -224,7 +224,7 @@ exec --no-startup-id i3-msg 'workspace $ws4; exec $term -e ranger'
 exec --no-startup-id mpd
 #exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp
 #assign [instance="ncmpcpp_inst"] $ws5
-exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp --slave-screen Visualizer'
+exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp --slave-screen visualizer'
 exec --no-startup-id i3-msg 'workspace $ws1'
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym $mod_alt+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
