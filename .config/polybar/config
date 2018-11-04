@@ -17,12 +17,11 @@
 ;==========================================================
 
 [colors]
-;background = ${xrdb:color0:#222}
-accent = #bc3500
+accent = ${xrdb:color1} 
 urgent = #e8a220
-inactive = #aa9b98
-background = #000000
-foreground = #ffffff
+inactive = ${xrdb:color3} 
+background = ${xrdb:background} 
+foreground = ${xrdb:color6} 
 transparent = #00000000
 
 [bar/example]
@@ -33,6 +32,8 @@ height = 22
 ;offset-y = 30%
 radius = 0
 fixed-center = false
+background = ${colors.background}
+foreground = ${colors.foreground}
 
 #line-size = 1 
 #line-color = #f00
@@ -45,21 +46,20 @@ border-color = ${colors.transparent}
 padding-left =0 
 padding-right =0 
 
-module-margin-left = 3
-module-margin-right = 3
+module-margin-left = 2
+module-margin-right = 2
 
-font-0 = Noto Sans:pixelsize=12;1
+font-0 = Iosevka Term:style=Regular:pixelsize=12;1
 font-1 = "Font Awesome 5 Free:style=Regular:pixelsize=12;1"
 font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=12;1"
-font-3 = "Font Awesome 5 Brands:pixelsize=12;1"
+font-3 = "Font Awesome 5 Brands:pixelsize=11;3"
 
 modules-left = i3 
 modules-center = 
 modules-right = mpd pulseaudio xkeyboard ssd hdd memory cpu temperature eth date dateIndia
-tray-position = center 
-tray-padding = 2
-;tray-transparent = true
-;tray-background = #0063ff
+#tray-position = right
+#tray-padding = 2
+#tray-transparent = true
 
 wm-restack = i3
 
@@ -72,16 +72,20 @@ cursor-scroll = ns-resize
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 
 [module/xkeyboard]
 type = internal/xkeyboard
 format = <label-indicator>
 
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 label-indicator = %name%
 label-indicator-padding = 1
 label-indicator-margin = 1
 label-indicator-foreground= ${colors.background}
-label-indicator-background = ${colors.urgent}
+label-indicator-background = ${colors.accent}
 
 [module/ssd]
 type = internal/fs
@@ -89,12 +93,14 @@ interval = 25
 
 mount-0 = /
 
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 format-mounted-prefix = " "
 format-mounted-prefix-foreground = ${colors.inactive}
 label-mounted = %percentage_used%%
 label-mounted-foreground = ${colors.foreground}
 
-label-unmounted =   
+label-unmounted =  
 label-unmounted-foreground = ${colors.urgent}
 
 [module/hdd]
@@ -102,6 +108,8 @@ type = internal/fs
 interval = 25
 
 mount-0 = /mnt/storage
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 
 format-mounted-prefix = " "
 format-mounted-prefix-foreground = ${colors.inactive}
@@ -126,12 +134,13 @@ format = <label-state> <label-mode>
 ;pin-workspaces = true
 label-mode = %mode%
 label-mode-padding = 2
-#label-mode-foreground = #000
+label-mode-foreground = ${colors.foreground}
 label-mode-background = ${colors.background}
 
 ; focused = Active workspace on focused monitor
 label-focused = %index% %icon%
 label-focused-background = ${colors.accent}
+label-focused-foreground= ${colors.foreground}
 label-focused-underline = ${colors.urgent}
 label-focused-padding = 2
 #label-focused-font = 0
@@ -140,10 +149,12 @@ label-focused-padding = 2
 label-unfocused = %index% %icon%
 label-unfocused-padding = 2
 label-unfocused-background = ${colors.background}
+label-unfocused-foreground= ${colors.foreground}
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %index% %icon%
 label-visible-background = ${colors.background}
+label-visible-foreground= ${colors.foreground}
 label-visible-underline = ${colors.accent}
 label-visible-padding = 2
 
@@ -155,6 +166,8 @@ label-urgent-padding = 2
 [module/mpd]
 type = internal/mpd
 format-online = <label-song>  <label-time>  <icon-prev> <icon-stop> <toggle> <icon-next>
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 label-song =  %title%
 label-time = %elapsed% / %total%
 icon-prev = 
@@ -162,34 +175,11 @@ icon-stop = 
 icon-play = 
 icon-pause = 
 icon-next = 
-
 label-song-maxlen = 40 
 label-song-ellipsis = true
 
 format-offline = <label-offline>
 label-offline =  
-
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #fff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
 
 [module/cpu]
 type = internal/cpu
@@ -201,6 +191,8 @@ label = %percentage:2%%
 [module/memory]
 type = internal/memory
 interval = 2
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 format-prefix = " " 
 format-prefix-foreground = ${colors.inactive}
 label = %percentage_used%%
@@ -231,6 +223,8 @@ ramp-signal-foreground = ${colors.foreground-alt}
 type = internal/network
 interface = enp24s0
 interval = 3.0
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 
 format-connected = <label-connected>
 format-connected-prefix = " "  
@@ -246,6 +240,8 @@ format-disconnected-prefix-foreground = ${colors.urgent}
 [module/date]
 type = internal/date
 interval = 5
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 
 format = %{A1:/home/job/.config/polybar/launch_khal.sh:}<label>%{A}
 label = %date% %time%
@@ -258,13 +254,17 @@ format-prefix-foreground = ${colors.inactive}
 [module/dateIndia]
 type = custom/script
 interval = 5
-exec = TZ=Asia/Kolkata date +"India %I:%M %p"
+exec = TZ=Asia/Kolkata date +"India %I:%M %p "
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 
 [module/pulseaudio]
 type = internal/pulseaudio
 use-ui-max = 100 
 
 format-volume = <ramp-volume> <label-volume>
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 label-volume = %percentage%%
 label-volume-foreground = ${colors.foreground}
 
@@ -363,6 +363,8 @@ type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
 
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 format = <ramp> <label>
 format-underline = #f50a4d
 format-warn = <ramp> <label-warn>
@@ -380,6 +382,8 @@ ramp-foreground = ${colors.foreground-alt}
 [module/powermenu]
 type = custom/menu
 
+format-background = ${colors.background}
+format-foreground = ${colors.foreground}
 expand-right = true
 
 format-spacing = 1
