@@ -6,60 +6,65 @@ Xft.autohint:  false
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
-!COLORS-------------------------------------------------------------------------
+!Colors___________________________
 ! special
-*.foreground:   #C6B4C9
-*.background:   #10132D 
-*.cursorColor:  #F05461
+*.foreground:   #858585
+*.background:   #0d0b0b
+*.cursorColor:  #9f2323
 
 ! black
-*.color0:       #202647
-*.color8:       #202647
-
-! red dark 1
-*.color1:       #8E293D
-*.color9:       #8E293D
+*.color0:       #282a2e
+*.color8:       #4e4e50
 
 ! red
-*.color2:       #F05461
-*.color10:      #F05461
+*.color1:       #6f2232
+*.color9:       #9f2323
+
+! green
+*.color2:       #116466
+*.color10:      #00887a
+
+! yellow
+*.color3:       #5d2632
+*.color11:      #9f2323
 
 ! blue
-*.color3:       #194A88
-*.color11:      #194A88
+*.color4:       #5d2632
+*.color12:      #812828
 
-! blue light
-*.color4:       #3895CB
-*.color12:      #3895CB
-
-! red dark 2
-*.color5:       #983E59
-*.color13:      #983E59
+! magenta
+*.color5:       #9f2323
+*.color13:      #bc4639
 
 ! cyan
-*.color6:       #C6B4C9
-*.color14:      #C6B4C9
+*.color6:       #5d3535
+*.color14:      #845b5b
 
 ! white
-*.color7:       #E0284D
-*.color15:      #E0284D
+*.color7:       #707880
+*.color15:      #c5c8c6
 
-!URxvt--------------------------------------------------------------------------
-URxvt.letterSpace:0
-URxvt.font:xft:DejaVu Sans Mono:style=Book:size=12
-
+!URxvt----------------------------
+!URxvt.letterSpace:0
+!URxvt.font:xft:DejaVu Sans Mono:style=Book:size=12:minispace=False, xft:DejaVu Sans:style=Oblique:pixelsize=12:minispace=False
+URxvt.font: xft:Iosevka Term:style=Regular:size=12:antialias=true:hinting=true:minispace=False,\
+	    xft:DejaVu Sans Mono:style=Regular:size=11:minispace=False,\
+	    xft:Unifont:style=Medium:size=11:minispace=False
+	    
 URxvt.depth:                      32
-URxvt.background:                 [95]#10132D 
-URxvt*borderColor:                [95]#10132D 
+!URxvt.background:                 [95]#10132D 
+!URxvt*borderColor:                [95]#10132D 
 URxvt*internalBorder:             10
 URxvt*scrollBar:                  false
+URxvt*scrollTtyOutput:            false
+URxvt*scrollTtyKeypress:          true
 URxvt*mouseWheelScrollPage:       true
 URxvt*cursorBlink:                true
 URxvt*saveLines:                  5000
 
-URxvt.keysym.C-0: command:\033]710;xft:NotoSansMono:size=12:antialias=true\007
-URxvt.keysym.C--: command:\033]710;xft:NotoSansMono:size=8:antialias=true\007
-URxvt.keysym.C-=: command:\033]710;xft:NotoSansMono:size=14:antialias=true\007
+URxvt.keysym.C-0: command:\033]710;xft:Iosevka term:style=Regular:size=12:antialias=true\007
+URxvt.keysym.C-minus: command:\033]710;xft:Iosevka Term:style=Reular:size=10:antialias=true\007
+URxvt.keysym.C-equal: command:\033]710;xft:Iosevka Term:style=Regular:size=15:antialias=true\007
 
 ! Normal copy-paste keybindings without perls
 URxvt.iso14755:                   false
