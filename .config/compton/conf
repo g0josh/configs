@@ -1,0 +1,19 @@
+shadow=true
+shadow-red = 0.5
+shadow-green = 0.0
+shadow-blue = 0.0
+shadow-radius = 5
+
+no-dnd-shadow = true
+no-dock-shadow = true
+shadow-offset-x = -2
+shadow-offset-y = -2
+# The translucency for shadows. (default .75)
+shadow-opacity = 0.4
+# Disable shadow for unfocussed
+shadow-exclude = ["!focused"]
+
+# inactive-opacity = 0.5
+inactive-dim = 0.2
+
+fading = true

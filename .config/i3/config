@@ -10,12 +10,13 @@
 
 set $mod Mod4
 set $mod_alt Mod1
-set $term urxvt
+set $term st 
+set $term_name st-256color 
 set $browser chromium
 
-gaps inner 8 
+gaps inner 10 
 #gaps outer 5 
-#smart_gaps on
+#smart_gaps off
 bindsym $mod+z		gaps inner current plus 5
 bindsym $mod+Shift+z 	gaps inner current minus 5
 
@@ -29,14 +30,14 @@ set_from_resource $inact-txt-clr color6	#5d3535
 set_from_resource $urg-bg-clr color2 #116466
 
 #colors:                border		backgr.     	text          	indicator
-client.focused          $accent-clr   	$accent-clr   	$txt-clr   	#2b2b2b
-client.focused_inactive $bg-clr		$bg-clr 	$inact-txt-clr	#2b2b2b
-client.unfocused        $bg-clr   	$bg-clr 	$inact-txt-clr	#2b2b2b
-client.urgent           $urg-bg-clr  	$urg-bg-clr	$txt-clr	#2b2b2b
+client.focused          $accent-clr   	$accent-clr   	$txt-clr   	$accent-clr
+client.focused_inactive $bg-clr		$bg-clr 	$inact-txt-clr	$bg-clr
+client.unfocused        $bg-clr   	$bg-clr 	$inact-txt-clr	$bg-clr
+client.urgent           $urg-bg-clr  	$urg-bg-clr	$txt-clr	$urg-bg-clr
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font xft:Iosevka Term Regular 13
+font xft:Iosevka Term Regular 14
 # font pango:hack 14 
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -60,7 +61,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+a exec rofi -show run
+bindsym $mod+a exec rofi -show drun -config $HOME/.config/rofi/conf
 # bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -210,22 +211,19 @@ bindsym $mod+r mode "resize"
 #}
 
 # misc startup
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-#exec compton -f -i 0.5
-exec_always --no-startup-id feh --bg-fill ~/Pictures/Wallpaper --no-fehbg
+exec --no-startup-id $HOME/.config/polybar/launch.sh
+exec --no-startup-id compton --config $HOME/.config/compton/conf
+exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 exec --no-startup-id code
 assign [class="code"] $ws3
-exec --no-startup-id i3-msg 'workspace $ws4; exec $term -e ranger'
-#exec --no-startup-id $term -name ranger_inst -e ranger
-#assign [instance="ranger_inst"] $ws4
+exec --no-startup-id $term -n ranger_inst -e ranger
+assign [class=$term_name instance="ranger_inst"] $ws4
 
 # Music Controls
 exec --no-startup-id mpd
-#exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp
-#assign [instance="ncmpcpp_inst"] $ws5
-exec --no-startup-id i3-msg 'workspace $ws5; exec $term -e ncmpcpp'
-exec --no-startup-id i3-msg 'workspace $ws1'
+exec --no-startup-id $term -n ncmpcpp_inst -e ncmpcpp
+assign [class=$term_name instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym $mod_alt+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
