@@ -1,3 +1,4 @@
+modi: window,run,ssh,drun
 rofi.fullscreen: true
 rofi.separator-style: solid
 rofi.hide-scrollbar: true
@@ -14,7 +15,7 @@ rofi.font: DejaVu Sans-Book 15
 ! rofi.auto-select: true
 
 ! Window		'background'	'border'	'separator'
-rofi.color-window:	#F00d0b0b,	#6f2232,	#6f2232
+rofi.color-window:	#ec0d0b0b,	#6f2232,	#6f2232
 
 ! State			'bg',		'fg',		'altbg',	'hlbg',		'hlfg'
 rofi.color-normal:	#00000000,	#6f2232,	#00000000,	#9f2323,	#0d0b0b
