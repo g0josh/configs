@@ -8,12 +8,12 @@ Xft.lcdfilter: lcddefault
 
 ! special
 *.foreground:   #c1c0c0
-*.background:   rgba:0000/0000/0000/ea00
+*.background:   #0d0b0b 
 *.cursorColor:  #c1c0c0
 
 ! black
 *.color0:       #0d0b0b
-*.color8:       #4e4e50
+*.color8:       #222222
 
 ! red
 *.color1:       #791c1c

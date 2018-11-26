@@ -14,7 +14,7 @@ set $term urxvt
 set $term_name URxvt
 set $browser firefox
 
-gaps inner 10 
+gaps inner 15
 #gaps outer 5 
 #smart_gaps off
 bindsym $mod+z		gaps inner current plus 5
@@ -32,7 +32,7 @@ set_from_resource $urg-bg-clr color2 #116466
 #colors:                border		backgr.     	text          	indicator
 client.focused          $accent-clr   	$accent-clr   	$txt-clr   	$accent-clr
 client.focused_inactive $bg-clr		$bg-clr 	$inact-txt-clr	$bg-clr
-client.unfocused        $bg-clr   	$bg-clr 	$inact-txt-clr	$bg-clr
+client.unfocused        $bg-clr		$bg-clr		$inact-txt-clr	$bg-clr
 client.urgent           $urg-bg-clr  	$urg-bg-clr	$txt-clr	$urg-bg-clr
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -217,6 +217,8 @@ exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 exec --no-startup-id code
 assign [class="code"] $ws3
+exec --no-startup-id $term -name tmux_inst -e tmux new -s code 
+assign [class=$term_name instance="tmux_inst"] $ws3
 exec --no-startup-id $term -name ranger_inst -e ranger
 assign [class=$term_name instance="ranger_inst"] $ws4
 

@@ -12,7 +12,10 @@ export PS1="\[\e[0;41m\] \A \[\e[0m\] \[\e[0;41m\] \u@\h\[\e[0m\] \[\e[0;45m\]\w
 
 alias ls='ls --color=auto'
 alias shut='shutdown now'
+alias m='tmux new -s'
+alias ma='tmux attach -t'
+alias ml='tmux ls'
 
 # ROS
-source ~/dev/catkin_ws/devel/setup.bash
+alias roslocal='source ~/dev/catkin_ws/devel/setup.bash'
 alias catkin_make='catkin_make -DPYTHON_VERSION=3.7'
