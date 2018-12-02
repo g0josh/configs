@@ -14,7 +14,7 @@ set $term urxvt
 set $term_name URxvt
 set $browser firefox
 
-gaps inner 15
+gaps inner 12
 #gaps outer 5 
 #smart_gaps off
 bindsym $mod+z		gaps inner current plus 5
@@ -164,8 +164,8 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-#bindsym $mod+x		exec --no-startup-id lockscreen
-#bindsym $mod+Shift+x	exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
+bindsym $mod+x	exec --no-startup-id i3lock -i ~/Pictures/Lockscreen -t -e -f 
+#bindsym $mod+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -211,7 +211,7 @@ bindsym $mod+b exec --no-startup-id $browser
 #}
 
 # misc startup
-exec --no-startup-id $HOME/.config/polybar/launch.sh
+exec --no-startup-id polybar example
 exec --no-startup-id compton --config $HOME/.config/compton/conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
@@ -224,7 +224,7 @@ assign [class=$term_name instance="ranger_inst"] $ws4
 
 # Music Controls
 exec --no-startup-id mpd
-exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp
+exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp -s visualizer
 assign [class=$term_name instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym $mod_alt+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%

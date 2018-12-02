@@ -17,11 +17,10 @@
 ;==========================================================
 
 [colors]
-accent = ${xrdb:color2} 
+accent = ${xrdb:color1} 
 urgent = ${xrdb:color9}
-inactive = ${xrdb:color8}
-#background = ${xrdb:background} 
-background = e00d0b0b
+inactive = ${xrdb:color0}
+background = ${xrdb:background} 
 foreground = ${xrdb:color2} 
 transparent = #00000000
 
@@ -32,8 +31,8 @@ height = 22
 #offset-x = 10%
 #offset-y = 10%
 radius = 0
-fixed-center = false
-background = ${colors.background}
+fixed-center = true
+background = ${colors.transparent}
 foreground = ${colors.foreground}
 
 #line-size = 1 
@@ -48,8 +47,8 @@ border-bottom-size = 0
 padding-left =0 
 padding-right =0 
 
-module-margin-left = 2
-module-margin-right = 2
+module-margin-left = 1
+module-margin-right = 1
 
 font-0 = Iosevka Term:style=Bold:pixelsize=12;1
 font-1 = Font Awesome 5 Free:style=Regular:pixelsize=12;1
@@ -57,8 +56,8 @@ font-2 = Font Awesome 5 Free:style=Solid:pixelsize=12;1
 font-3 = Font Awesome 5 Brands:pixelsize=11;1
 
 modules-left = i3 
-modules-center = 
-modules-right = mpd pulseaudio xkeyboard ssd memory cpu temperature eth date dateIndia
+modules-center = date time
+modules-right = mpd pulseaudio xkeyboard temp eth  timeIndia
 #tray-position = right
 #tray-padding = 2
 #tray-transparent = true
@@ -81,13 +80,12 @@ format-foreground = ${colors.foreground}
 type = internal/xkeyboard
 format = <label-indicator>
 
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 label-indicator = %name%
 label-indicator-padding = 1
 label-indicator-margin = 1
 label-indicator-foreground= ${colors.background}
-label-indicator-background = ${colors.accent}
+label-indicator-background = ${colors.foreground}
 
 [module/ssd]
 type = internal/fs
@@ -95,10 +93,9 @@ interval = 25
 
 mount-0 = /
 
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 format-mounted-prefix = " "
-format-mounted-prefix-foreground = ${colors.inactive}
+format-mounted-prefix-foreground = ${colors.accent}
 label-mounted = %percentage_used%%
 label-mounted-foreground = ${colors.foreground}
 
@@ -110,11 +107,10 @@ type = internal/fs
 interval = 25
 
 mount-0 = /mnt/storage
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 
 format-mounted-prefix = " "
-format-mounted-prefix-foreground = ${colors.inactive}
+format-mounted-prefix-foreground = ${colors.accent}
 label-mounted =  %percentage_used%%
 label-unmounted =   
 label-unmounted-foreground = ${colors.urgent}
@@ -141,7 +137,7 @@ label-mode-background = ${colors.background}
 
 ; focused = Active workspace on focused monitor
 label-focused = %index% %icon%
-label-focused-background = ${colors.accent}
+label-focused-background = ${colors.foreground}
 label-focused-foreground= ${colors.background}
 label-focused-underline = ${colors.urgent}
 label-focused-padding = 2
@@ -150,12 +146,12 @@ label-focused-padding = 2
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = %index% %icon%
 label-unfocused-padding = 2
-label-unfocused-background = ${colors.background}
+label-unfocused-background = ${colors.transparent}
 label-unfocused-foreground= ${colors.foreground}
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %index% %icon%
-label-visible-background = ${colors.background}
+label-visible-background = ${colors.transparent}
 label-visible-foreground= ${colors.foreground}
 label-visible-underline = ${colors.accent}
 label-visible-padding = 2
@@ -168,10 +164,16 @@ label-urgent-padding = 2
 
 [module/mpd]
 type = internal/mpd
-format-online = <label-song>  <label-time>  <icon-prev> <icon-stop> <toggle> <icon-next>
+format-online = <label-song>  <label-time>  <icon-prev> <toggle> <icon-next>
 format-online-foreground = ${colors.foreground}
-format-online-background = ${colors.background}
-label-song = %{F#4e4e50}%{F-} %title%
+format-playing-prefix = 
+format-playing-prefix-foreground = ${colors.accent}
+format-paused-prefix = 
+format-paused-prefix-foreground = ${colors.inactive}
+format-stopped-prefix = 
+format-stopped-prefix-foreground = ${colors.inactive}
+#label-song = %{F#0d0b0b}%{F-} %title%
+label-song = " %title%"
 label-time = %elapsed% / %total%
 icon-prev = 
 icon-stop = 
@@ -182,24 +184,22 @@ label-song-maxlen = 40
 label-song-ellipsis = true
 
 format-offline = <label-offline>
-format-offline-foreground = ${colors.inactive}
-format-offline-background = ${colors.background}
+format-offline-foreground = ${colors.urgent}
 label-offline =  
 
 [module/cpu]
 type = internal/cpu
 interval = 2
 format-prefix = 
-format-prefix-foreground = ${colors.inactive}
+format-prefix-foreground = ${colors.accent}
 label = %percentage:2%%
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 format-prefix = " " 
-format-prefix-foreground = ${colors.inactive}
+format-prefix-foreground = ${colors.accent}
 label = %percentage_used%%
 
 [module/wlan]
@@ -228,12 +228,11 @@ ramp-signal-foreground = ${colors.foreground-alt}
 type = internal/network
 interface = enp24s0
 interval = 3.0
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 
 format-connected = <label-connected>
 format-connected-prefix = " "  
-format-connected-prefix-foreground = ${colors.inactive}
+format-connected-prefix-foreground = ${colors.accent}
 label-connected = %downspeed:6%
 
 format-disconnected = <label-disconnected>
@@ -245,30 +244,40 @@ format-disconnected-prefix-foreground = ${colors.urgent}
 [module/date]
 type = internal/date
 interval = 5
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 
 format = %{A1:/home/job/.config/polybar/launch_khal.sh:}<label>%{A}
-label = %date% %time%
+label = %date%
 date = %h %d, %A 
-time = %I:%M %p
 
 format-prefix = " " 
-format-prefix-foreground = ${colors.inactive}
+format-prefix-foreground = ${colors.accent}
 
-[module/dateIndia]
+[module/time]
+type = internal/date
+interval = 5
+format-foreground = ${colors.foreground}
+
+format = <label>
+label = %time%
+time = %I:%M %p
+
+format-prefix = " " 
+format-prefix-foreground = ${colors.accent}
+
+[module/timeIndia]
 type = custom/script
 interval = 5
-exec = TZ=Asia/Kolkata date +"India %I:%M %p "
-format-background = ${colors.background}
+exec = TZ=Asia/Kolkata date +"%I:%M %p "
 format-foreground = ${colors.foreground}
+format-prefix = " " 
+format-prefix-foreground = ${colors.accent}
 
 [module/pulseaudio]
 type = internal/pulseaudio
 use-ui-max = 100 
 
 format-volume = <ramp-volume> <label-volume>
-format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 label-volume = %percentage%%
 label-volume-foreground = ${colors.foreground}
@@ -283,7 +292,7 @@ ramp-volume-1 = 
 ramp-volume-2 =   
 ramp-volume-3 =   
 ramp-volume-4 = 
-ramp-volume-foreground = ${colors.inactive}
+ramp-volume-foreground = ${colors.accent}
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #55aa55
@@ -362,6 +371,14 @@ animation-discharging-1 = 
 animation-discharging-2 = 
 animation-discharging-foreground = ${colors.foreground-alt}
 animation-discharging-framerate = 750
+
+[module/temp]
+type = custom/script
+interval = 5
+exec = bash $HOME/.config/polybar/gettemp.sh
+format-foreground = ${colors.foreground}
+format-prefix = " "
+format-prefix-foreground = ${colors.accent}
 
 [module/temperature]
 type = internal/temperature
