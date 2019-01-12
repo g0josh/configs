@@ -18,4 +18,4 @@ alias ml='tmux ls'
 
 # ROS
 alias roslocal='source ~/dev/catkin_ws/devel/setup.bash'
-alias catkin_make='catkin_make -DPYTHON_VERSION=3.7'
+#alias catkin_make='catkin_make -DPYTHON_VERSION=3.7'

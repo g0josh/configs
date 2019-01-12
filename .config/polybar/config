@@ -22,7 +22,7 @@ urgent = ${xrdb:color9}
 inactive = ${xrdb:color0}
 background = ${xrdb:background} 
 foreground = ${xrdb:color2} 
-transparent = #00000000
+transparent = #a0000000
 
 [bar/example]
 monitor = ${env:MONITOR:HDMI-1}
@@ -57,7 +57,7 @@ font-3 = Font Awesome 5 Brands:pixelsize=11;1
 
 modules-left = i3 
 modules-center = date time
-modules-right = mpd pulseaudio xkeyboard temp eth  timeIndia
+modules-right = mpd pulseaudio xkeyboard temp wlan timeIndia
 #tray-position = right
 #tray-padding = 2
 #tray-transparent = true
@@ -204,25 +204,24 @@ label = %percentage_used%%
 
 [module/wlan]
 type = internal/network
-interface = net1
+interface = wlo1 
 interval = 3.0
 
-format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
-label-connected = %essid%
+format-connected = <label-connected>
+format-connected-prefix =  " "
+format-connected-prefix-foreground = ${colors.accent}
+label-connected = %essid%|%downspeed%
 
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
+format-disconnected = <label-disconnected>
+label-disconnected =  " "
+format-disconnected-foreground = ${colors.urgent}
 
 ramp-signal-0 = 
 ramp-signal-1 = 
 ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
-ramp-signal-foreground = ${colors.foreground-alt}
+ramp-signal-foreground = ${colors.foreground}
 
 [module/eth]
 type = internal/network

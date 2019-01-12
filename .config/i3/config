@@ -14,7 +14,7 @@ set $term urxvt
 set $term_name URxvt
 set $browser firefox
 
-gaps inner 12
+gaps inner 10
 #gaps outer 5 
 #smart_gaps off
 bindsym $mod+z		gaps inner current plus 5
@@ -217,8 +217,8 @@ exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 exec --no-startup-id code
 assign [class="code"] $ws3
-exec --no-startup-id $term -name tmux_inst -e tmux new -s code 
-assign [class=$term_name instance="tmux_inst"] $ws3
+#exec --no-startup-id $term -name tmux_inst -e tmux new -s code 
+#assign [class=$term_name instance="tmux_inst"] $ws3
 exec --no-startup-id $term -name ranger_inst -e ranger
 assign [class=$term_name instance="ranger_inst"] $ws4
 
