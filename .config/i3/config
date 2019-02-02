@@ -215,9 +215,10 @@ exec --no-startup-id polybar example
 exec --no-startup-id compton --config $HOME/.config/compton/conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 exec --not-startup-id rslsync --config /home/job/.config/rslsync/config.json
+exec --no-startup-id numlockx on
 
 #exec --no-startup-id code
-#assign [class="code"] $ws3
+assign [class="Code"] $ws3
 #exec --no-startup-id $term -name tmux_inst -e tmux new -s code 
 #assign [class=$term_name instance="tmux_inst"] $ws3
 exec --no-startup-id $term -name ranger_inst -e ranger
