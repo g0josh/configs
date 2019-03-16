@@ -17,7 +17,7 @@
 ;==========================================================
 
 [bar/example]
-monitor = ${env:MONITOR:HDMI-1}
+#monitor = ${env:MONITOR:HDMI-1}
 width = 100%
 height = 20
 #offset-x = 10%
@@ -73,7 +73,7 @@ ws-icon-4 = 5;
 
 ws-icon-default = 
 format = <label-state> <label-mode>
-
+;
 ; Only show workspaces on the same output as the bar
 ;pin-workspaces = true
 label-mode = %mode%
@@ -82,16 +82,16 @@ label-mode-padding = 0
 # label-mode-background = ${colors.background}
 
 ; focused = Active workspace on focused monitor
-label-focused = "%{F#791c1c}%{B#00000000}%{F-}%{B-}%{F#0d0b0b}%{B#791c1c} %index% %icon% %{F-}%{B-}%{F#791c1c}%{B#00000000}%{F-}%{B-}"
+label-focused = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%index% %icon%%{F-}%{B-}%{F#791c1c}%{F-}"
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = "%{F#191919}%{F-}%{F#a34a20}%{B#191919}%index% %icon%%{F-}%{B-}%{F#191919}%{F-}"
+label-unfocused = "%{F#291414}%{F-}%{F#a34a20}%{B#291414}%index% %icon%%{F-}%{B-}%{F#291414}%{F-}"
 
 ; visible = Active workspace on unfocused monitor
-label-visible = "%{F#191919}%{F-}%{F#791c1c}%{B#191919}%index% %icon%%{F-}%{B-}%{F#191919}%{F-}"
+label-visible = "%{F#291414}%{F-}%{F#791c1c}%{B#291414}%index% %icon%%{F-}%{B-}%{F#291414}%{F-}"
 
 ; urgent = Workspace with urgency hint set
-label-urgent = "%{F#a34a20}%{B#00000000}%{F-}%{B-}%{F#0d0b0b}%{B#a34a20}%index% %icon%%{F-}%{B-}%{F#a34a20}%{B#00000000}%{F-}%{B-}"
+label-urgent = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%index% %icon%%{F-}%{B-}%{F#a34a20}%{F-}"
 
 [module/mpd]
 type = internal/mpd

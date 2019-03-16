@@ -1,4 +1,4 @@
-# It will not be overwritten, so edit it as you like.
+#It will not be overwritten, so edit it as you like.
 #
 # Should you change your keyboard layout some time, delete
 # this file and re-run i3-config-wizard(1).
@@ -8,23 +8,24 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod4
-set $mod_alt Mod1
-set $term urxvt
-set $term_name URxvt
-set $browser firefox
+set $MOD Mod4
+set $MOD_ALT Mod1
+set $TERM urxvt
+set $TERM_NAME URxvt
+set $BROWSER firefox
 
-gaps inner 15
+gaps inner 20
 #gaps outer 5 
-#smart_gaps off
-bindsym $mod+z		gaps inner current plus 5
-bindsym $mod+Shift+z 	gaps inner current minus 5
+#smart_gaps on
+smart_borders on
+bindsym $MOD+z		gaps inner current plus 5
+bindsym $MOD+Shift+z 	gaps inner current minus 5
 
 hide_edge_borders both
-default_border pixel 3
-default_floating_border pixel 3
+default_border pixel 2
+default_floating_border pixel 2
 set_from_resource $accent-clr color9 #9f2323
-set_from_resource $bg-clr color0 #0d0b0b
+set_from_resource $bg-clr color0 #000000
 set_from_resource $txt-clr foreground #858585
 set_from_resource $inact-txt-clr color6	#5d3535
 set_from_resource $urg-bg-clr color2 #116466
@@ -37,7 +38,7 @@ client.urgent           $urg-bg-clr  	$urg-bg-clr	$txt-clr	$urg-bg-clr
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font xft:Iosevka Term Regular 14
+font xft:Iosevka Medium Oblique 10 
 # font pango:hack 14 
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -51,72 +52,81 @@ font xft:Iosevka Term Regular 14
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
+# Use Mouse+$MOD to drag floating windows to their wanted position
+floating_modifier $MOD
 
 # start a terminal
-bindsym $mod+Return exec $term 
+bindsym $MOD+Return exec $TERM 
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $MOD+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+a exec rofi -show drun -config $HOME/.config/rofi/conf
-# bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"
+bindsym $MOD+a exec rofi -show drun -config $HOME/.config/rofi/conf
+# bindsym $MOD+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+# bindsym $MOD+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $MOD+j focus left
+bindsym $MOD+k focus down
+bindsym $MOD+l focus up
+bindsym $MOD+semicolon focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $MOD+Left focus left
+bindsym $MOD+Down focus down
+bindsym $MOD+Up focus up
+bindsym $MOD+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $MOD+Shift+j move left
+bindsym $MOD+Shift+k move down
+bindsym $MOD+Shift+l move up
+bindsym $MOD+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $MOD+Shift+Left move left
+bindsym $MOD+Shift+Down move down
+bindsym $MOD+Shift+Up move up
+bindsym $MOD+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $MOD+h split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $MOD+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $MOD+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+t layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $MOD+s layout stacking
+bindsym $MOD+t layout tabbed
+bindsym $MOD+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $MOD+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $MOD+space focus mode_toggle
 
 # focus the parent container
-#bindsym $mod+a focus parent
+bindsym $MOD+p focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+#bindsym $MOD+w focus child
+
+# Scratchpad
+bindsym $MOD+Shift+w move scratchpad
+bindsym $MOD+w scratchpad show
+
+# Python calculator
+# bindsym $MOD+c exec $TERM -name calculator -e python
+bindsym $MOD+c exec --no-startup-id $HOME/.config/i3/toggle_calc.sh
+for_window [class=$TERM_NAME instance="calculator"] floating enable
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -132,40 +142,41 @@ set $ws9 "9"
 set $ws10 "10"
 
 # switch to workspace
-bindsym $mod+1 workspace $ws1 
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
-bindsym $mod+0 workspace $ws10
+bindsym $MOD+1 workspace $ws1 
+bindsym $MOD+2 workspace $ws2
+bindsym $MOD+3 workspace $ws3
+bindsym $MOD+4 workspace $ws4
+bindsym $MOD+5 workspace $ws5
+bindsym $MOD+6 workspace $ws6
+bindsym $MOD+7 workspace $ws7
+bindsym $MOD+8 workspace $ws8
+bindsym $MOD+9 workspace $ws9
+bindsym $MOD+0 workspace $ws10
 
-bindsym Control+$mod+Left workspace prev
-bindsym Control+$mod+Right workspace next
+bindsym Control+$MOD+Left workspace prev
+bindsym Control+$MOD+Right workspace next
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $MOD+Shift+1 move container to workspace $ws1
+bindsym $MOD+Shift+2 move container to workspace $ws2
+bindsym $MOD+Shift+3 move container to workspace $ws3
+bindsym $MOD+Shift+4 move container to workspace $ws4
+bindsym $MOD+Shift+5 move container to workspace $ws5
+bindsym $MOD+Shift+6 move container to workspace $ws6
+bindsym $MOD+Shift+7 move container to workspace $ws7
+bindsym $MOD+Shift+8 move container to workspace $ws8
+bindsym $MOD+Shift+9 move container to workspace $ws9
+bindsym $MOD+Shift+0 move container to workspace $ws10
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $MOD+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $MOD+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+x	exec --no-startup-id i3lock -i ~/Pictures/Lockscreen -t -e -f 
-#bindsym $mod+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
+#bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $MOD+Shift+e exit
+bindsym $MOD+x	exec --no-startup-id i3lock -i ~/Pictures/Lockscreen -t -e -f 
+#bindsym $MOD+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -186,14 +197,14 @@ mode "resize" {
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape or $mod+r
+        # back to normal: Enter or Escape or $MOD+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+        bindsym $MOD+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
-bindsym $mod+b exec --no-startup-id $browser
+bindsym $MOD+r mode "resize"
+bindsym $MOD+b exec --no-startup-id $BROWSER
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 #bar {
@@ -214,27 +225,26 @@ bindsym $mod+b exec --no-startup-id $browser
 exec --no-startup-id polybar example
 exec --no-startup-id compton --config $HOME/.config/compton/conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
-exec --not-startup-id rslsync --config /home/job/.config/rslsync/config.json
-exec --no-startup-id numlockx on
-
 #exec --no-startup-id code
 assign [class="Code"] $ws3
-#exec --no-startup-id $term -name tmux_inst -e tmux new -s code 
-#assign [class=$term_name instance="tmux_inst"] $ws3
-exec --no-startup-id $term -name ranger_inst -e ranger
-assign [class=$term_name instance="ranger_inst"] $ws4
+#exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
+#assign [class=$TERM_NAME instance="tmux_inst"] $ws3
+exec --no-startup-id $TERM -name ranger_inst -e ranger
+assign [class=$TERM_NAME instance="ranger_inst"] $ws4
+exec --no-startup-id $TERM -name scratch
+for_window [class=$TERM_NAME instance="scratch"] move scratchpad
 
 # Music Controls
 exec --no-startup-id mpd
-exec --no-startup-id $term -name ncmpcpp_inst -e ncmpcpp -s visualizer
-assign [class=$term_name instance="ncmpcpp_inst"] $ws5
+exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
+assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
-bindsym $mod_alt+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
+bindsym $MOD_ALT+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
-bindsym $mod_alt+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
+bindsym $MOD_ALT+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
 bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
 bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym $mod_alt+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym $mod_alt+Right exec mpc next
-bindsym $mod_alt+Left exec mpc prev
+bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $MOD_ALT+Right exec mpc next
+bindsym $MOD_ALT+Left exec mpc prev
