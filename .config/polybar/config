@@ -48,7 +48,7 @@ font-4 = FuraCode Nerd Font Mono: style=Regular:pixelsize=18;1
 
 modules-left = i3 mpd
 modules-center = date timeIndia
-modules-right = xkeyboard wlan lan pulseaudio temp powermenu
+modules-right = xkeyboard wlan lan pulseaudio utilization temp powermenu
 tray-position = right
 tray-padding = 2
 
@@ -73,7 +73,7 @@ ws-icon-4 = 5;
 
 ws-icon-default = 
 format = <label-state> <label-mode>
-;
+  
 ; Only show workspaces on the same output as the bar
 ;pin-workspaces = true
 label-mode = %mode%
@@ -85,10 +85,10 @@ label-mode-padding = 0
 label-focused = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%index% %icon%%{F-}%{B-}%{F#791c1c}%{F-}"
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = "%{F#291414}%{F-}%{F#a34a20}%{B#291414}%index% %icon%%{F-}%{B-}%{F#291414}%{F-}"
+label-unfocused = "%{F#110808}%{F-}%{F#a34a20}%{B#110808}%index% %icon%%{F-}%{B-}%{F#110808}%{F-}"
 
 ; visible = Active workspace on unfocused monitor
-label-visible = "%{F#291414}%{F-}%{F#791c1c}%{B#291414}%index% %icon%%{F-}%{B-}%{F#291414}%{F-}"
+label-visible = "%{F#110808}%{F-}%{F#791c1c}%{B#110808}%index% %icon%%{F-}%{B-}%{F#110808}%{F-}"
 
 ; urgent = Workspace with urgency hint set
 label-urgent = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%index% %icon%%{F-}%{B-}%{F#a34a20}%{F-}"
@@ -99,20 +99,20 @@ format-online = <label-song><label-time><icon-prev><toggle><icon-next>
 
 format-playing-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#a34a20}%{B#791c1c}%{F-}%{B-}"
 format-paused-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#a34a20}%{B#791c1c}%{F-}%{B-}"
-format-stopped-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#a34a20}%{B#791c1c}%{F-}%{B-}"
+format-stopped-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{F-}"
 
-label-song = "%{F#0d0b0b}%{B#a34a20}%title%%{F-}%{B-}"
+label-song = "%{F#0d0b0b}%{B#a34a20}%title% %{F-}%{B-}"
 label-time = "%{F#0d0b0b}%{B#a34a20} %elapsed% / %total%%{F-}%{B-}%{F#a34a20}%{F-}"
 icon-prev = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
 icon-stop = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
 icon-play = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
 icon-pause = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
 icon-next = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-label-song-maxlen = 75
-# label-song-ellipsis = true
+label-song-maxlen = 60
+label-song-ellipsis = false
 
 format-offline = <label-offline>
-label-offline = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
+label-offline = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#000000}%{F-}"
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -143,6 +143,16 @@ ramp-volume-3 = 
 ramp-volume-4 = 
 ramp-volume-foreground = #0d0b0b
 ramp-volume-background = #791c1c
+
+[module/utilization]
+type = custom/script
+interval = 5
+exec = bash $HOME/.config/polybar/utilization.sh
+label-foreground = #0d0b0b
+label-background = #a34a20
+format = "%{F#a34a20}%{B#791c1c}%{F-}%{B-}<label>%{F#a34a20}%{F-}"
+format-foreground = #a34a20
+format-prefix =  "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
 
 [module/temp]
 type = custom/script
