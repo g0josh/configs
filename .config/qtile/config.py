@@ -6,6 +6,8 @@ from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
+from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume, FuncOrTextWithClick
+
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
@@ -28,7 +30,7 @@ keys = [
     Key([MOD], "Down", lazy.layout.down()),
     Key([MOD], "Left", lazy.layout.left()),
     Key([MOD], "Right", lazy.layout.right()),
-    
+
     # Move windows up or down in current stack
     Key([MOD, "shift"], "k", lazy.layout.shuffle_up()),
     Key([MOD, "shift"], "j", lazy.layout.shuffle_down()),
@@ -38,7 +40,7 @@ keys = [
     Key([MOD, "shift"], "Down", lazy.layout.shuffle_down()),
     Key([MOD, "shift"], "Left", lazy.layout.swap_left(), lazy.layout.shuffle_left()),
     Key([MOD, "shift"], "Right", lazy.layout.swap_right(), lazy.layout.shuffle_right()),
-    
+
     Key([MOD, "control"], "k", lazy.layout.grow(), lazy.layout.grow_up()),
     Key([MOD, "control"], "j", lazy.layout.shrink(), lazy.layout.grow_down()),
     Key([MOD, "control"], "h", lazy.layout.grow_left()),
@@ -47,12 +49,12 @@ keys = [
     Key([MOD, "control"], "Down", lazy.layout.shrink(), lazy.layout.grow_down()),
     Key([MOD, "control"], "Left", lazy.layout.grow_left()),
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
-   
+
      Key([MOD, "control"], "n", lazy.layout.normalize()),
     Key([MOD, "control"], "m", lazy.layout.maximize()),
     Key([MOD, "control"], "space", lazy.layout.flip()),
 
-    
+
     # Switch window focus to other pane(s) of stack
     Key([MOD], "space", lazy.layout.next()),
 
@@ -70,7 +72,7 @@ keys = [
     # Toggle between different layouts as defined below
     Key([MOD], "Tab", lazy.next_layout()),
     Key([MOD], "w", lazy.window.kill()),
-    
+
     Key([], "XF86AudioMute", lazy.spawn(CONF_DIR+"pulse_mute.sh toggle")),
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([], "XF86AudioLowerVolume", lazy.spawn(CONF_DIR+"pulse_vol.sh -5%")),
@@ -90,7 +92,7 @@ groups = [
     Group(name='3', label=" 3  ", matches=[Match(wm_class=["Code"])] ),
     Group(name='4', label=" 4  ", matches=[Match(wm_instance_class=["ranger"])],
         init=True, spawn="urxvt -name ranger -e ranger"),
-    Group(name='5', label=" 5  ", matches=[Match(wm_instance_class=["ncmpcpp"])],
+    Group(name='5', label=" 5 ", matches=[Match(wm_instance_class=["ncmpcpp"])],
         init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer"),
     Group(name='6', label=" 6  "),
     Group(name='7', label=" 7  ")
@@ -119,14 +121,14 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Iosevka Nerd Font Medium Oblique" ,
-    fontsize=14, 
-    padding=0,
+    font="Iosevka Nerd Font Medium Oblique",
+    fontsize=14,
+    padding=0
 )
 widget_border_defaults = dict(
-    font="Iosevka Nerd Font Medium Oblique" ,
+    font="Iosevka Nerd Font Medium Oblique",
     fontsize=20,
-    padding=0,
+    padding=0
 )
 extension_defaults = widget_defaults.copy()
 
@@ -143,13 +145,14 @@ screens = [
                     **widget_border_defaults,background=COLOR_ACC,
                     text="", foreground=COLOR_ACT,
                 ),
-                widget.GroupBox(active=COLOR_TXT, inactive=COLOR_INA, borderwidth=2, center_aligned=True,
+                widget.GroupBox(active=COLOR_TXT, inactive=COLOR_INA, borderwidth=0, center_aligned=True,
                         foreground=COLOR_INA, background=COLOR_ACC, hide_unused=True,
                         highlight_color=[COLOR_ACT], highlight_method='line', disable_drag=True,
-                        invert_mouse_wheel=False, markup=True, rounded=False, 
+                        invert_mouse_wheel=False, markup=True, rounded=False,
                         this_current_screen_border=COLOR_ACT, this_screen_border=COLOR_ACC, spacing=2,
-                        urgent_alert_method='border', urgent_border=COLOR_INA, urgent_text=COLOR_INA,
-                        use_mouse_wheel=True, font='Iosevka Nerd Font', font_size=15),
+                        urgent_alert_method='block', urgent_border=COLOR_INA, urgent_text=COLOR_ACT,
+                        use_mouse_wheel=True, **widget_defaults),
+
                 widget.TextBox(
                     **widget_border_defaults,
                     text="", foreground=COLOR_ACC,
@@ -161,8 +164,8 @@ screens = [
                     text="", foreground=COLOR_ACT,
                 ),
                 widget.TextBox(
-                    **widget_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text="", 
+                    **widget_border_defaults,
+                    foreground=COLOR_TXT, background=COLOR_ACT, text="",
                 ),
                 widget.TextBox(
                     **widget_border_defaults,
@@ -172,24 +175,24 @@ screens = [
                     **widget_defaults,
                     background=COLOR_ACC, foreground=COLOR_TXT,
                     no_connection='', update_iterval=1
-                ),    
+                ),
                 widget.TextBox(
                     **widget_border_defaults,
                     text="", foreground=COLOR_ACC,
                 ),
 
                 widget.Spacer(),
-                
+
                 # time
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text=""),
                 widget.TextBox(
-                    **widget_defaults,
+                    **widget_border_defaults,
                     background=COLOR_ACT, text="",foreground=COLOR_TXT),
                 widget.TextBox(
                     **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
+                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
                 widget.Clock(format='%a %d-%m %I:%M %p',
                     **widget_defaults,
                     foreground=COLOR_TXT, background=COLOR_ACC),
@@ -206,14 +209,16 @@ screens = [
                     **widget_border_defaults,
                     foreground=COLOR_ACC, text=""),
 
-                widget.Spacer(length=500),
+                widget.Spacer(length=700),
+
+                widget.Systray(),
 
                 # Caps & Num Lock
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text=""),
                 widget.TextBox(
-                    **widget_defaults,
+                    **widget_border_defaults,
                     foreground=COLOR_TXT, background=COLOR_ACT, text=""),
                 widget.TextBox(
                     **widget_border_defaults,
@@ -230,7 +235,7 @@ screens = [
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text=""),
                 widget.TextBox(
-                    **widget_defaults,
+                    **widget_border_defaults,
                     foreground=COLOR_TXT, background=COLOR_ACT, text=""),
                 widget.TextBox(
                     **widget_border_defaults,
@@ -246,55 +251,47 @@ screens = [
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text=""),
                 widget.TextBox(
-                    **widget_defaults,
+                    **widget_border_defaults,
                     foreground=COLOR_TXT, background=COLOR_ACT, text=""),
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.BashCommand("~/.config/polybar/utilization.sh",
+                widget.BashCommand("~/.config/qtile/utilization.sh",
                     foreground=COLOR_TXT, background=COLOR_ACC),
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACC, text="", background=None),
 
                 # Volume
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.jVolume(muted_label='',
-                    **widget_defaults,
-                    background=COLOR_ACC, foreground=COLOR_TXT),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None),
-                
+                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
+                    update_interval=0.5, **widget_border_defaults),
+                FuncOrTextWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
+                    **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
+                    click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
+                FuncOrTextWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
+                    background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
+                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
+                    update_interval=0.5, **widget_border_defaults),
+
+
                 # wifi
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text=""),
                 widget.TextBox(
-                    **widget_defaults,
+                    **widget_border_defaults,
                     foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.jWlan(background=COLOR_ACC, foreground=COLOR_TXT,
-                    disconnected_message='', interface='wlo1',
-                    format='{essid}', **widget_defaults),
+                FuncOrTextWithClick(func=getWlan, update_interval=1.0,
+                    background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
                 widget.TextBox(
                     **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None),
-
-                
-                widget.Systray()
+                    foreground=COLOR_ACC, text="", background=None)
             ],
-            size=widget_border_defaults['fontsize'] - 2,
+            size=widget_border_defaults['fontsize'] - 1,
             background=(255, 0, 0, 0.0),
             opacity=0.9
         ),
