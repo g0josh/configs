@@ -1,3 +1,5 @@
+
+
 import os
 import subprocess
 from typing import List
@@ -6,7 +8,8 @@ from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
-from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume, FuncOrTextWithClick
+from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
+from my_scripts import FuncWithClick, GroupBoxText
 
 MOD = "mod4"
 ALT = "mod1"
@@ -87,15 +90,15 @@ keys = [
 ]
 
 groups = [
-    Group(name='1', label=" 1  "),
-    Group(name='2', label=" 2  "),
-    Group(name='3', label=" 3  ", matches=[Match(wm_class=["Code"])] ),
-    Group(name='4', label=" 4  ", matches=[Match(wm_instance_class=["ranger"])],
+    Group(name='1', label="1 "),
+    Group(name='2', label="2 "),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])] ),
+    Group(name='4', label="4 ", matches=[Match(wm_instance_class=["ranger"])],
         init=True, spawn="urxvt -name ranger -e ranger"),
-    Group(name='5', label=" 5 ", matches=[Match(wm_instance_class=["ncmpcpp"])],
+    Group(name='5', label="5 ", matches=[Match(wm_instance_class=["ncmpcpp"])],
         init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer"),
-    Group(name='6', label=" 6  "),
-    Group(name='7', label=" 7  ")
+    Group(name='6', label="6 "),
+    Group(name='7', label="7 ")
 ]
 
 for i in groups:
@@ -108,7 +111,7 @@ for i in groups:
     ])
 
 configs={
-    'margin':10
+    "margin":10
 }
 
 layouts = [
@@ -122,7 +125,7 @@ layouts = [
 
 widget_defaults = dict(
     font="Iosevka Nerd Font Medium Oblique",
-    fontsize=14,
+    fontsize=15,
     padding=0
 )
 widget_border_defaults = dict(
@@ -131,6 +134,28 @@ widget_border_defaults = dict(
     padding=0
 )
 extension_defaults = widget_defaults.copy()
+
+# def getGroupBoxWidgets(border_text_l="", border_text_r="", border_fg="", border_bg="", text_bg="", text_fg=""):
+#     return [
+#         GroupBoxText( )
+#     ]
+
+# def getWidgets():
+#     widgets = [
+#         # Group box
+#         widget.TextBox(
+#             **widget_border_defaults, background=COLOR_ACT,
+#             foreground=COLOR_ACT, text="a"
+#         ),
+#         widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
+#         widget.TextBox(
+#             **widget_border_defaults,background=COLOR_ACC,
+#             text="", foreground=COLOR_ACT,
+#         ),
+#     ]
+
+#     return widgets
+
 
 screens = [
     Screen(
@@ -180,6 +205,36 @@ screens = [
                     **widget_border_defaults,
                     text="", foreground=COLOR_ACC,
                 ),
+
+                GroupBoxText(track_group="1",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_border_defaults, borderwidth=0, center_aligned=True),
+
+                GroupBoxText(track_group="1", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_defaults, borderwidth=0, center_aligned=True),
+
+                GroupBoxText(track_group="1",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_border_defaults, borderwidth=0, center_aligned=True),
+
+                  GroupBoxText(track_group="7",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_defaults, borderwidth=0, center_aligned=True),
+
+                GroupBoxText(track_group="7", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_defaults, borderwidth=0, center_aligned=True),
+
+                GroupBoxText(track_group="7",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
+                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
+                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
+                  **widget_defaults, borderwidth=0, center_aligned=True),
 
                 widget.Spacer(),
 
@@ -263,15 +318,15 @@ screens = [
                     foreground=COLOR_ACC, text="", background=None),
 
                 # Volume
-                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
+                FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
                     update_interval=0.5, **widget_border_defaults),
-                FuncOrTextWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
+                FuncWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
                     **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
-                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
+                FuncWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
                     click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
-                FuncOrTextWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
+                FuncWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
                     background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-                FuncOrTextWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
+                FuncWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
                     update_interval=0.5, **widget_border_defaults),
 
 
@@ -285,7 +340,7 @@ screens = [
                 widget.TextBox(
                     **widget_border_defaults,
                     foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                FuncOrTextWithClick(func=getWlan, update_interval=1.0,
+                FuncWithClick(func=getWlan, update_interval=1.0,
                     background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
                 widget.TextBox(
                     **widget_border_defaults,
