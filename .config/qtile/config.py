@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
-from my_scripts import FuncWithClick, GroupBoxText
+from my_scripts import FuncWithClick, GroupTextBox
 
 MOD = "mod4"
 ALT = "mod1"
@@ -22,6 +22,7 @@ COLOR_ACT = '791c1c'
 COLOR_ACC = 'a34a20'
 COLOR_INA = '441500'
 COLOR_TXT = '110808'
+COLOR_BG = (255, 0, 0, 0.0)
 
 keys = [
     # Switch between windows in current stack pane
@@ -124,232 +125,144 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Iosevka Nerd Font Medium Oblique",
+    font="Iosevka Nerd Font Mono",
     fontsize=15,
     padding=0
 )
 widget_border_defaults = dict(
-    font="Iosevka Nerd Font Medium Oblique",
+    font="Iosevka Nerd Font Mono",
     fontsize=20,
     padding=0
 )
 extension_defaults = widget_defaults.copy()
 
-# def getGroupBoxWidgets(border_text_l="", border_text_r="", border_fg="", border_bg="", text_bg="", text_fg=""):
-#     return [
-#         GroupBoxText( )
-#     ]
+def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg, inactive_fg, inactive_bg, urgent_fg, urgent_bg):
+    w = []
+    for g in groups:
+        w += [ 
+            GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
+                active_fg=active_bg, active_bg=COLOR_BG,
+                inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
+                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
+            GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
+                active_fg=active_fg, active_bg=active_bg,
+                inactive_fg=inactive_fg, inactive_bg=inactive_bg,
+                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **widget_border_defaults),
+            GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
+                active_fg=active_bg, active_bg=COLOR_BG,
+                inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
+                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
+        ]
+    return w
 
-# def getWidgets():
-#     widgets = [
-#         # Group box
-#         widget.TextBox(
-#             **widget_border_defaults, background=COLOR_ACT,
-#             foreground=COLOR_ACT, text="a"
-#         ),
-#         widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
-#         widget.TextBox(
-#             **widget_border_defaults,background=COLOR_ACC,
-#             text="", foreground=COLOR_ACT,
-#         ),
-#     ]
+def getWidgets():
+    widgets = [
+        # Group box
+        widget.TextBox(
+            **widget_border_defaults, background=COLOR_ACT,
+            foreground=COLOR_ACT, text="a"
+        ),
+        widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
+        widget.TextBox(
+            **widget_border_defaults,background=COLOR_BG,
+            text="", foreground=COLOR_ACT,
+        )
+    ]
 
-#     return widgets
+    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLOR_TXT, active_bg=COLOR_ACT,
+        inactive_fg=COLOR_ACT, inactive_bg=COLOR_TXT, urgent_fg=COLOR_TXT, urgent_bg=COLOR_ACC) 
+
+    widgets += [
+        widget.Spacer(length=430),
+
+        # time
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            background=COLOR_ACT, text="",foreground=COLOR_TXT),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+        widget.Clock(format='%a %d-%m %I:%M %p',
+            **widget_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACC),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text=""),
+        widget.Clock(format='%I:%M %p ', timezone='Asia/Kolkata',
+            **widget_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACC),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text=""),
+
+        widget.Spacer(),
+
+        widget.Systray(),
+
+        # Caps & Num Lock
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT,
+            text="", background=COLOR_ACC),
+        widget.CapsNumLockIndicator(**widget_defaults, foreground=COLOR_TXT,
+            background=COLOR_ACC, update_interval=0.3),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text="", background=None),
+        # Volume
+        FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
+            update_interval=0.5, **widget_border_defaults),
+        FuncWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
+            **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+        FuncWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
+            click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
+        FuncWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
+            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
+        FuncWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
+            update_interval=0.5, **widget_border_defaults),
+
+
+        # wifi
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+        FuncWithClick(func=getWlan, update_interval=1.0,
+            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text="", background=None)
+
+    ]
+
+    return widgets
 
 
 screens = [
     Screen(
         top=bar.Bar(
-            [# Group box
-                widget.TextBox(
-                    **widget_border_defaults, background=COLOR_ACT,
-                    foreground=COLOR_ACT, text="a"
-                ),
-                widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
-                widget.TextBox(
-                    **widget_border_defaults,background=COLOR_ACC,
-                    text="", foreground=COLOR_ACT,
-                ),
-                widget.GroupBox(active=COLOR_TXT, inactive=COLOR_INA, borderwidth=0, center_aligned=True,
-                        foreground=COLOR_INA, background=COLOR_ACC, hide_unused=True,
-                        highlight_color=[COLOR_ACT], highlight_method='line', disable_drag=True,
-                        invert_mouse_wheel=False, markup=True, rounded=False,
-                        this_current_screen_border=COLOR_ACT, this_screen_border=COLOR_ACC, spacing=2,
-                        urgent_alert_method='block', urgent_border=COLOR_INA, urgent_text=COLOR_ACT,
-                        use_mouse_wheel=True, **widget_defaults),
-
-                widget.TextBox(
-                    **widget_border_defaults,
-                    text="", foreground=COLOR_ACC,
-                ),
-
-                # Music
-                widget.TextBox(
-                    **widget_border_defaults,
-                    text="", foreground=COLOR_ACT,
-                ),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text="",
-                ),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="",  background=COLOR_ACC
-                ),
-                widget.jMpd2(status_format='{artist}|{title} - {elapsed}/{duration}',
-                    **widget_defaults,
-                    background=COLOR_ACC, foreground=COLOR_TXT,
-                    no_connection='', update_iterval=1
-                ),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    text="", foreground=COLOR_ACC,
-                ),
-
-                GroupBoxText(track_group="1",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_border_defaults, borderwidth=0, center_aligned=True),
-
-                GroupBoxText(track_group="1", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_defaults, borderwidth=0, center_aligned=True),
-
-                GroupBoxText(track_group="1",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_border_defaults, borderwidth=0, center_aligned=True),
-
-                  GroupBoxText(track_group="7",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_defaults, borderwidth=0, center_aligned=True),
-
-                GroupBoxText(track_group="7", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_defaults, borderwidth=0, center_aligned=True),
-
-                GroupBoxText(track_group="7",text="", active_fg_color=COLOR_TXT, active_bg_color=COLOR_ACT,
-                  inactive_fg_color=COLOR_ACC, inactive_bg_color=COLOR_TXT,
-                  urgent_fg_color=COLOR_TXT, urgent_bg_color=COLOR_ACC,
-                  **widget_defaults, borderwidth=0, center_aligned=True),
-
-                widget.Spacer(),
-
-                # time
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    background=COLOR_ACT, text="",foreground=COLOR_TXT),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.Clock(format='%a %d-%m %I:%M %p',
-                    **widget_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACC),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text=""),
-                widget.Clock(format='%I:%M %p ', timezone='Asia/Kolkata',
-                    **widget_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACC),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text=""),
-
-                widget.Spacer(length=700),
-
-                widget.Systray(),
-
-                # Caps & Num Lock
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT,
-                    text="", background=COLOR_ACC),
-                widget.CapsNumLockIndicator(**widget_defaults, foreground=COLOR_TXT,
-                    background=COLOR_ACC, update_interval=0.3),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None),
-
-                # Temperature
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.BashCommand("~/.config/polybar/gettemp.sh",
-                    foreground=COLOR_TXT, background=COLOR_ACC),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None),
-
-                # Utilization
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                widget.BashCommand("~/.config/qtile/utilization.sh",
-                    foreground=COLOR_TXT, background=COLOR_ACC),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None),
-
-                # Volume
-                FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
-                    update_interval=0.5, **widget_border_defaults),
-                FuncWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
-                    **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
-                FuncWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
-                    click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
-                FuncWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
-                    background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-                FuncWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
-                    update_interval=0.5, **widget_border_defaults),
-
-
-                # wifi
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text=""),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACT, text="", background=COLOR_ACC),
-                FuncWithClick(func=getWlan, update_interval=1.0,
-                    background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-                widget.TextBox(
-                    **widget_border_defaults,
-                    foreground=COLOR_ACC, text="", background=None)
-            ],
+            getWidgets(),
             size=widget_border_defaults['fontsize'] - 1,
             background=(255, 0, 0, 0.0),
-            opacity=0.9
-        ),
+            opacity=1.0        
+            ),
     ),
 ]
 
