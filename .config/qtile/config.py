@@ -9,20 +9,24 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
-from my_scripts import FuncWithClick, GroupTextBox
+from my_scripts import FuncWithClick, GroupTextBox, getMpd, clickMpd
+from my_scripts import getCapsNumLocks, getTemps
 
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-HOME = os.path.expanduser('~')
-CONF_DIR = os.path.join(HOME, ".config/qtile/")
-
+HOME_DIR = os.path.expanduser('~')
+CONF_DIR = os.path.join(HOME_DIR, ".config/qtile/")
+CUSTOM_EXECS = {
+    'temperatures':os.path.join(CONF_DIR, 'gettemp.sh'),
+    'utilization':os.path.join(CONF_DIR, 'utilization.sh'),
+}
 COLOR_ACT = '791c1c'
 COLOR_ACC = 'a34a20'
 COLOR_INA = '441500'
 COLOR_TXT = '110808'
-COLOR_BG = (255, 0, 0, 0.0)
+COLOR_BG = '0d0b0b'
 
 keys = [
     # Switch between windows in current stack pane
@@ -125,31 +129,32 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Iosevka Nerd Font Mono",
+    font="Iosevka Nerd Font Mono Medium",
     fontsize=15,
     padding=0
 )
 widget_border_defaults = dict(
-    font="Iosevka Nerd Font Mono",
+    font="Iosevka Nerd Font Mono Medium",
     fontsize=20,
     padding=0
 )
 extension_defaults = widget_defaults.copy()
 
-def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg, inactive_fg, inactive_bg, urgent_fg, urgent_bg):
+def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
+    inactive_fg, inactive_bg, urgent_fg, urgent_bg, not_empty_fg, not_empty_bg):
     w = []
     for g in groups:
-        w += [ 
+        w += [
             GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLOR_BG,
+                active_fg=active_bg, active_bg=COLOR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
                 urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
             GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
-                active_fg=active_fg, active_bg=active_bg,
+                active_fg=active_fg, active_bg=active_bg,not_empty_fg=not_empty_fg, not_empty_bg=not_empty_bg,
                 inactive_fg=inactive_fg, inactive_bg=inactive_bg,
-                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **widget_border_defaults),
+                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **widget_defaults),
             GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLOR_BG,
+                active_fg=active_bg, active_bg=COLOR_BG,not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
                 urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
         ]
@@ -158,10 +163,6 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg, inacti
 def getWidgets():
     widgets = [
         # Group box
-        widget.TextBox(
-            **widget_border_defaults, background=COLOR_ACT,
-            foreground=COLOR_ACT, text="a"
-        ),
         widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
         widget.TextBox(
             **widget_border_defaults,background=COLOR_BG,
@@ -169,11 +170,32 @@ def getWidgets():
         )
     ]
 
-    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLOR_TXT, active_bg=COLOR_ACT,
-        inactive_fg=COLOR_ACT, inactive_bg=COLOR_TXT, urgent_fg=COLOR_TXT, urgent_bg=COLOR_ACC) 
+    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLOR_TXT, active_bg=COLOR_ACC,
+        inactive_fg=COLOR_INA, inactive_bg=COLOR_TXT, urgent_fg=COLOR_TXT, urgent_bg=COLOR_ACT,
+        not_empty_fg=COLOR_ACC, not_empty_bg=COLOR_TXT)
 
     widgets += [
-        widget.Spacer(length=430),
+        # Music
+        widget.TextBox(
+            **widget_border_defaults,
+            text="", foreground=COLOR_ACT,
+        ),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACT, text="",
+        ),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text="",  background=COLOR_ACC
+        ),
+        FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=0.5,
+            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
+        widget.TextBox(
+            **widget_border_defaults,
+            text="", foreground=COLOR_ACC,
+        ),
+
+        widget.Spacer(length=500),
 
         # time
         widget.TextBox(
@@ -216,11 +238,44 @@ def getWidgets():
             **widget_border_defaults,
             foreground=COLOR_ACT,
             text="", background=COLOR_ACC),
-        widget.CapsNumLockIndicator(**widget_defaults, foreground=COLOR_TXT,
-            background=COLOR_ACC, update_interval=0.3),
+        FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
+            update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACC, text="", background=None),
+
+        # Temperature
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+        FuncWithClick(func=getTemps, update_interval=1, **widget_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACC),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text="", background=None),
+
+        # Utilization
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+        widget.BashCommand(CUSTOM_EXECS['utilization'],
+            foreground=COLOR_TXT, background=COLOR_ACC),
+        widget.TextBox(
+            **widget_border_defaults,
+            foreground=COLOR_ACC, text="", background=None),
+
         # Volume
         FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
             update_interval=0.5, **widget_border_defaults),
@@ -249,20 +304,17 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACC, text="", background=None)
-
     ]
-
     return widgets
-
 
 screens = [
     Screen(
         top=bar.Bar(
             getWidgets(),
             size=widget_border_defaults['fontsize'] - 1,
-            background=(255, 0, 0, 0.0),
-            opacity=1.0        
-            ),
+            background=COLOR_BG,
+            opacity=0.9
+        ),
     ),
 ]
 
