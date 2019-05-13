@@ -5,7 +5,7 @@ import re
 from libqtile import bar
 from libqtile.widget import base
 from libqtile.widget.groupbox import _GroupBase
-from libqtile.command import Client
+from libqtile.command import Client, lazy
 
 import iwlib
 import psutil
@@ -28,7 +28,7 @@ def getCpuCores():
 
     cores = re.search(r'cpu cores\s:\s\d', _file)
     if cores:
-        cpu_cores = cores.group().split(':')[1].strip()
+        cpu_cores = int(cores.group().split(':')[1].strip())
     else:
         cpu_cores = 4
 
@@ -74,7 +74,7 @@ class GroupTextBox(_GroupBase):
     def get_group(self):
         for g in self.qtile.groups:
             if g.name == self.track_group_name:
-            # if g.name == self.track_group and (g.windows or g.screen):
+            #if g.name == self.track_group and (g.windows or g.screen):
                 return g
         return None
 
@@ -88,7 +88,6 @@ class GroupTextBox(_GroupBase):
 
         # if tracking_group == self.tracking_group:
             # return True
-
         self.tracking_group = tracking_group
         # self.text = self.tracking_group.label if self.text == 'NA' else self.text
         if self.tracking_group == self.qtile.currentGroup:
@@ -108,7 +107,7 @@ class GroupTextBox(_GroupBase):
         self.drawbox(0, self.label, self.border, self.foreground)
         self.drawer.draw(offsetx=self.offset, width=self.width)
 
-class FuncWithClick(base.ThreadedPollText):
+class FuncWithClick(base.ThreadPoolText):
     """A generic text widget that polls using poll function to get the text"""
     orientations = base.ORIENTATION_HORIZONTAL
     defaults = [
@@ -122,10 +121,10 @@ class FuncWithClick(base.ThreadedPollText):
         self.add_defaults(FuncWithClick.defaults)
         self.func_args = func_args
         self.click_func_args = click_func_args
-        if self.func:
-            self._text = self.func(**self.func_args)
-        else:
-            self._text = ""
+        # if self.func:
+        #     self._text = self.func(**self.func_args)
+        # else:
+        #     self._text = ""
 
     def button_press(self, x, y, button):
         if self.click_func:
@@ -162,9 +161,19 @@ def isVolumeMuted():
         cmd = "pacmd list-sinks|grep 'muted'|awk '{print $2}'"
         muted = subprocess.check_output(cmd, shell=True).strip().decode()
     except subprocess.CalledProcessError as e:
-        return err.output.decode().strip()
+        print (err.output.decode().strip())
+        return 'error' 
 
     return muted == 'yes'
+
+def _getPulseSinks():
+    try:
+        output = subprocess.check_output(['pactl','list','short','sinks']).decode()
+    except subprocess.CalledProcessError as e:
+        print (err.output.decode().strip())
+        return []
+    else:
+        return re.findall(r'^\d', output, flags=re.MULTILINE)
 
 def getVolumeIcon(muted_icon='婢', icons=['奄', '奔', '墳']):
     # check if muted
@@ -173,12 +182,16 @@ def getVolumeIcon(muted_icon='婢', icons=['奄', '奔', '墳']):
 
     # Check volume level
     try:
-        cmd = "pactl list sinks | grep 'Volume: front' | awk '{print $5}'"
-        output = subprocess.check_output(cmd, shell=True).strip().decode()
-        volume = int(output[:-1])
+        output = subprocess.check_output(['pactl','list', 'sinks']).decode()
+        volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
     except subprocess.CalledProcessError as e:
-        return err.output.decode().strip()
+        print (err.output.decode().strip())
+        return 'error'
 
+    if volume:
+        volume = int(volume.group().split('/')[-1].strip())
+    else:
+        return 'error'
     margin = 100 / len(icons)
     index, _ = divmod(volume, margin)
     if index >= len(icons):
@@ -189,23 +202,39 @@ def getVolume():
     if isVolumeMuted():
         return ""
     try:
-        cmd = "pactl list sinks | grep 'Volume: front' | awk '{print $5}'"
-        output = subprocess.check_output(cmd, shell=True).strip().decode()
+        output = subprocess.check_output(['pactl','list','sinks']).decode()
+        volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
     except subprocess.CalledProcessError as e:
-        output = err.output.decode().strip()
-    return output
+        print (err.output.decode().strip())
+        return 'error'
 
-def muteVolume():
-    pass
+    if volume:
+        volume = volume.group().split('/')[-1].strip() + '%'
+    else:
+        return 'error'
+    return volume 
 
-def changeVolume():
-    pass
+def toggleMuteVolume():
+    sinks = _getPulseSinks()
+    if not sinks:
+        return
+    for sink in sinks:
+        subprocess.call(['pactl', 'set-sink-mute', sink, 'toggle'])
+
+def changeVolume(value='+5%'):
+    sinks = _getPulseSinks()
+    if not sinks:
+        return
+    for sink in sinks:
+        subprocess.call(['pactl', 'set-sink-volume', sink, value])
 
 def getWlan(interface='wlo1'):
     global init_time, init_speed
-
     status = iwlib.get_iwconfig(interface)
-    essid = bytes(status['ESSID']).decode().strip()
+    essid = status['ESSID'].decode().strip()
+    
+    if not essid:
+        return ""
 
     speed = ( psutil.net_io_counters(pernic=True)[interface][0],
                 psutil.net_io_counters(pernic=True)[interface][1])
@@ -216,7 +245,9 @@ def getWlan(interface='wlo1'):
         init_speed = speed
         init_time = _time
     except Exception as e:
-        return e
+        print (e)
+        return 'error'
+
     return "{}|{:4.0f} kB/s".format(essid, dl)
 
 def mpd_reconnect(host='localhost', port='6600'):
@@ -294,7 +325,9 @@ def getCapsNumLocks(num_text='NUM', caps_text='CAPS'):
     try:
         output = subprocess.check_output(['xset', 'q']).decode()
     except subprocess.CalledProcessError as err:
-        output = err.output.decode()
+        print(err.output.decode().strip())
+        return 'error'
+
     if output.startswith("Keyboard"):
         indicators = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
     result = ""
@@ -309,13 +342,14 @@ def getTemps():
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
     except subprocess.CalledProcessError as e:
-        return err.output.decode().strip()
+        print (err.output.decode().strip())
+        return 'error'
 
     result = ""
     _cpu_temp = re.search(r'\d+\.\d+°C', cpu, flags=re.UNICODE)
     _gpu_temp = re.search(r'\s\d+C\s', gpu)
     if _cpu_temp:
-        result = _cpu_temp.group()[:-2]
+        result = _cpu_temp.group()[:-4]
     if _gpu_temp:
         gpu_temp = _gpu_temp.group().strip()[:-1]
         result = result + '|' + gpu_temp if result else gpu_temp
@@ -323,7 +357,25 @@ def getTemps():
     return result
 
 def getUtilization():
-    pass
+    try:
+        cpu = subprocess.check_output(['top','-bn2','-d0.1']).decode()
+        gpu = subprocess.check_output(['nvidia-smi','-q','-d', 'UTILIZATION']).decode()
+    except subprocess.CalledProcessError as e:
+        print (err.output.decode().strip())
+        return 'error'
+    
+    result = ""
+    _cpu_util = re.search(r'load average:\s(\d+\.\d+),\s(\d+\.\d+)', cpu)
+    _gpu_util = re.search(r'Gpu\s+:\s\d+',gpu)
+    if _cpu_util:
+        global cpu_cores
+        u = _cpu_util.group().split(',')[-1].strip()
+        result = '{:0.0f}'.format((float(u)*100/cpu_cores))
+    if _gpu_util:
+        u = _gpu_util.group().split(':')[-1].strip()
+        result = result + '|' + u if result else u
+
+    return result
 
 
 

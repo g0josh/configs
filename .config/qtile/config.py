@@ -10,18 +10,13 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
 from my_scripts import FuncWithClick, GroupTextBox, getMpd, clickMpd
-from my_scripts import getCapsNumLocks, getTemps
+from my_scripts import getCapsNumLocks, getTemps, getUtilization
+from my_scripts import toggleMuteVolume, changeVolume
 
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-HOME_DIR = os.path.expanduser('~')
-CONF_DIR = os.path.join(HOME_DIR, ".config/qtile/")
-CUSTOM_EXECS = {
-    'temperatures':os.path.join(CONF_DIR, 'gettemp.sh'),
-    'utilization':os.path.join(CONF_DIR, 'utilization.sh'),
-}
 COLOR_ACT = '791c1c'
 COLOR_ACC = 'a34a20'
 COLOR_INA = '441500'
@@ -81,10 +76,10 @@ keys = [
     Key([MOD], "Tab", lazy.next_layout()),
     Key([MOD], "w", lazy.window.kill()),
 
-    Key([], "XF86AudioMute", lazy.spawn(CONF_DIR+"pulse_mute.sh toggle")),
+    Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(CONF_DIR+"pulse_vol.sh -5%")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(CONF_DIR+"pulse_vol.sh +5%")),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:changeVolume('-5%'))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
 
@@ -188,7 +183,7 @@ def getWidgets():
             **widget_border_defaults,
             foreground=COLOR_ACT, text="",  background=COLOR_ACC
         ),
-        FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=0.5,
+        FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=2.0,
             **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
             **widget_border_defaults,
@@ -207,7 +202,7 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        widget.Clock(format='%a %d-%m %I:%M %p',
+        widget.Clock(format='%b %d, %a, %I:%M %p',
             **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
@@ -228,21 +223,21 @@ def getWidgets():
         widget.Systray(),
 
         # Caps & Num Lock
-        widget.TextBox(
-            **widget_border_defaults,
-            foreground=COLOR_ACT, text=""),
-        widget.TextBox(
-            **widget_border_defaults,
-            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
-        widget.TextBox(
-            **widget_border_defaults,
-            foreground=COLOR_ACT,
-            text="", background=COLOR_ACC),
+        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+            **widget_border_defaults, foreground=COLOR_ACT, background=None),
+         
+        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+            **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+            
+        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+            **widget_border_defaults, foreground=COLOR_ACT, background=COLOR_ACC),
+            
         FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
             update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
-        widget.TextBox(
-            **widget_border_defaults,
-            foreground=COLOR_ACC, text="", background=None),
+
+        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+            **widget_border_defaults, foreground=COLOR_ACC, background=None),
+            
 
         # Temperature
         widget.TextBox(
@@ -254,7 +249,7 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getTemps, update_interval=1, **widget_defaults,
+        FuncWithClick(func=getTemps, update_interval=5.0, **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
             **widget_border_defaults,
@@ -270,8 +265,9 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        widget.BashCommand(CUSTOM_EXECS['utilization'],
-            foreground=COLOR_TXT, background=COLOR_ACC),
+        FuncWithClick(func=getUtilization, update_interval=3.0,
+            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
+
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACC, text="", background=None),
@@ -299,7 +295,7 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getWlan, update_interval=1.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
             background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
         widget.TextBox(
             **widget_border_defaults,
