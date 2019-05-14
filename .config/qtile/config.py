@@ -124,7 +124,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Iosevka Nerd Font Mono Medium",
+    font="Iosevka Nerd Font Medium Oblique",
     fontsize=15,
     padding=0
 )
@@ -176,7 +176,7 @@ def getWidgets():
             text="", foreground=COLOR_ACT,
         ),
         widget.TextBox(
-            **widget_border_defaults,
+            **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACT, text="",
         ),
         widget.TextBox(
@@ -197,7 +197,7 @@ def getWidgets():
             **widget_border_defaults,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **widget_defaults,
             background=COLOR_ACT, text="",foreground=COLOR_TXT),
         widget.TextBox(
             **widget_border_defaults,
@@ -225,26 +225,25 @@ def getWidgets():
         # Caps & Num Lock
         FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
             **widget_border_defaults, foreground=COLOR_ACT, background=None),
-         
+
         FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-            **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
-            
+            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+
         FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
             **widget_border_defaults, foreground=COLOR_ACT, background=COLOR_ACC),
-            
+
         FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
             update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
 
         FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
             **widget_border_defaults, foreground=COLOR_ACC, background=None),
-            
 
         # Temperature
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACT, text=""),
         widget.TextBox(
             **widget_border_defaults,
@@ -260,7 +259,7 @@ def getWidgets():
             **widget_border_defaults,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACT, text=""),
         widget.TextBox(
             **widget_border_defaults,
@@ -276,7 +275,7 @@ def getWidgets():
         FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
             update_interval=0.5, **widget_border_defaults),
         FuncWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
-            **widget_border_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
         FuncWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
             click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
         FuncWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
@@ -284,22 +283,21 @@ def getWidgets():
         FuncWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
             update_interval=0.5, **widget_border_defaults),
 
-
         # wifi
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **widget_defaults,
             foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
             background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-        widget.TextBox(
-            **widget_border_defaults,
-            foreground=COLOR_ACC, text="", background=None)
+        # widget.TextBox(
+        #     **widget_border_defaults,
+        #     foreground=COLOR_ACC, text="", background=None)
     ]
     return widgets
 

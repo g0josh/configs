@@ -7,18 +7,30 @@ from libqtile.widget import base
 from libqtile.widget.groupbox import _GroupBase
 from libqtile.command import Client, lazy
 
-import iwlib
+from socket import error as socket_error
 import psutil
 
-from socket import error as socket_error
-from mpd import MPDClient, ConnectionError, CommandError
+try:
+    import iwlib
+except ModuleNotFoundError:
+    WLAN = False
+    print("Please install iwlib")
+else:
+    WLAN = True
+    init_time = 0
+    init_speed = (0, 0)
 
-init_time = 0
-init_speed = (0, 0)
-mpd_client = MPDClient()
-mpd_password = None
+try:
+    from mpd import MPDClient, ConnectionError, CommandError
+except ModuleNotFoundError:
+    MPD = False
+    print("Please install mpd")
+else:
+    mpd_client = MPDClient()
+    mpd_password = None
+    MPD = True
+
 cpu_cores = 0
-
 
 def getCpuCores():
     global cpu_cores
@@ -143,18 +155,11 @@ class FuncWithClick(base.ThreadPoolText):
 
 def clickVolume(x, y, button):
     if button in [1,2]:
-        cmd = ["/home/job/.config/qtile/pulse_mute.sh", "toggle"]
+        toggleMuteVolume()
     elif button == 4:
-        cmd = ["/home/job/.config/qtile/pulse_vol.sh", "+5%"]
+        changeVolume("+5%")
     elif button == 5:
-        cmd = ["/home/job/.config/qtile/pulse_vol.sh", "-5%"]
-    else:
-        cmd = None
-
-    if cmd is None:
-        return
-
-    subprocess.call(cmd)
+        changeVolume("-5%")
 
 def isVolumeMuted():
     try:
@@ -162,7 +167,7 @@ def isVolumeMuted():
         muted = subprocess.check_output(cmd, shell=True).strip().decode()
     except subprocess.CalledProcessError as e:
         print (err.output.decode().strip())
-        return 'error' 
+        return 'error'
 
     return muted == 'yes'
 
@@ -212,7 +217,7 @@ def getVolume():
         volume = volume.group().split('/')[-1].strip() + '%'
     else:
         return 'error'
-    return volume 
+    return volume
 
 def toggleMuteVolume():
     sinks = _getPulseSinks()
@@ -232,7 +237,7 @@ def getWlan(interface='wlo1'):
     global init_time, init_speed
     status = iwlib.get_iwconfig(interface)
     essid = status['ESSID'].decode().strip()
-    
+
     if not essid:
         return ""
 
@@ -251,6 +256,10 @@ def getWlan(interface='wlo1'):
     return "{}|{:4.0f} kB/s".format(essid, dl)
 
 def mpd_reconnect(host='localhost', port='6600'):
+    global MPD
+    if not MPD:
+        return False
+
     global mpd_client, mpd_password
     try:
         mpd_client.ping()
@@ -264,32 +273,27 @@ def mpd_reconnect(host='localhost', port='6600'):
     return True
 
 def getMpd(not_connected_text='', host='localhost', port='6600'):
-    global mpd_client
-
-    mpd_connected = mpd_reconnect(host, port)
-
-    if not mpd_connected:
+    if not mpd_reconnect(host, port):
         return not_connected_text
-    else:
-        mpd_client.command_list_ok_begin()
-        mpd_client.status()
-        mpd_client.currentsong()
-        status, current_song = mpd_client.command_list_end()
-        for e in ['artist', 'title']:
-            if e in current_song:
-                if len(current_song[e]) > 15:
-                    current_song[e] = current_song[e][:15] + '...'
-            else:
-                current_song[e] = 'Unknown'
-        for e in ['elapsed', 'duration']:
-            mm, ss = divmod(float(status[e]), 60)
-            status[e] = '{:02.0f}:{:02.0f}'.format(mm, ss)
-        return "{} - {}/{}".format(current_song['title'], status['elapsed'], status['duration'])
+
+    global mpd_client
+    mpd_client.command_list_ok_begin()
+    mpd_client.status()
+    mpd_client.currentsong()
+    status, current_song = mpd_client.command_list_end()
+    for e in ['artist', 'title']:
+        if e in current_song:
+            if len(current_song[e]) > 15:
+                current_song[e] = current_song[e][:15] + '...'
+        else:
+            current_song[e] = 'Unknown'
+    for e in ['elapsed', 'duration']:
+        mm, ss = divmod(float(status[e]), 60)
+        status[e] = '{:02.0f}:{:02.0f}'.format(mm, ss)
+    return "{} - {}/{}".format(current_song['title'], status['elapsed'], status['duration'])
 
 def clickMpd(x, y, button):
-    mpd_connected = mpd_reconnect()
-
-    if not mpd_connected:
+    if not mpd_reconnect():
         return
 
     global mpd_client
@@ -363,7 +367,7 @@ def getUtilization():
     except subprocess.CalledProcessError as e:
         print (err.output.decode().strip())
         return 'error'
-    
+
     result = ""
     _cpu_util = re.search(r'load average:\s(\d+\.\d+),\s(\d+\.\d+)', cpu)
     _gpu_util = re.search(r'Gpu\s+:\s\d+',gpu)
@@ -376,9 +380,3 @@ def getUtilization():
         result = result + '|' + u if result else u
 
     return result
-
-
-
-
-
-
