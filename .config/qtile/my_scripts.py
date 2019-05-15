@@ -2,8 +2,9 @@ import subprocess
 import time
 import re
 
+from libqtile.log_utils import logger
 from libqtile import bar
-from libqtile.widget import base
+from libqtile.widget import base, TextBox
 from libqtile.widget.groupbox import _GroupBase
 from libqtile.command import Client, lazy
 
@@ -30,11 +31,7 @@ else:
     mpd_password = None
     MPD = True
 
-cpu_cores = 0
-
-def getCpuCores():
-    global cpu_cores
-
+def _getCpuCores():
     with open('/proc/cpuinfo', 'r') as f:
         _file = f.read()
 
@@ -44,7 +41,61 @@ def getCpuCores():
     else:
         cpu_cores = 4
 
-getCpuCores()
+    return cpu_cores
+
+def _getPulseSinks():
+    try:
+        output = subprocess.check_output(['pactl','list','short','sinks']).decode()
+    except subprocess.CalledProcessError as e:
+        print (err.output.decode().strip())
+        return []
+    else:
+        return re.findall(r'^\d', output, flags=re.MULTILINE)
+
+cpu_cores = _getCpuCores()
+pulse_sinks = _getPulseSinks()
+
+
+class CTextBox(base._TextBox):
+    """A flexible textbox that can be updated from bound keys, scripts, and qshell"""
+    orientations = base.ORIENTATION_HORIZONTAL
+    defaults = [
+        ("font", "sans", "Text font"),
+        ("fontsize", None, "Font pixel size. Calculated if None."),
+        ("fontshadow", None, "font shadow color, default is None(no shadow)"),
+        ("padding", None, "Padding left and right. Calculated if None."),
+        ("foreground", "#ffffff", "Foreground colour."),
+    ]
+
+    def __init__(self, text=" ", width=bar.CALCULATED, **config):
+        base._TextBox.__init__(self, text=text, width=width, **config)
+
+    def _configure(self, qtile, bar):
+        _TextBox._configure(self, qtile, bar)
+
+    def update(self, text):
+        self.text = text
+        self.bar.draw()
+
+    def cmd_update(self, text):
+        """Update the text in a TextBox widget"""
+        self.update(text)
+
+    def cmd_get(self):
+        """Retrieve the text in a TextBox widget"""
+        return self.text
+
+id_ = 'S'
+def mute(func):
+    global id_
+    # toggleMuteVolume()
+    if id_ == 'S':
+        func.update('N')
+        id_ = 'N'
+    else:
+        # func('S')
+        func.update('S')
+        id_ = 'S'
 
 class GroupTextBox(_GroupBase):
     """A widget that graphically displays the current group"""
@@ -171,15 +222,6 @@ def isVolumeMuted():
 
     return muted == 'yes'
 
-def _getPulseSinks():
-    try:
-        output = subprocess.check_output(['pactl','list','short','sinks']).decode()
-    except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
-        return []
-    else:
-        return re.findall(r'^\d', output, flags=re.MULTILINE)
-
 def getVolumeIcon(muted_icon='婢', icons=['奄', '奔', '墳']):
     # check if muted
     if isVolumeMuted():
@@ -220,17 +262,17 @@ def getVolume():
     return volume
 
 def toggleMuteVolume():
-    sinks = _getPulseSinks()
-    if not sinks:
+    global pulse_sinks
+    if not pulse_sinks:
         return
-    for sink in sinks:
+    for sink in pulse_sinks:
         subprocess.call(['pactl', 'set-sink-mute', sink, 'toggle'])
 
 def changeVolume(value='+5%'):
-    sinks = _getPulseSinks()
-    if not sinks:
+    global pulse_sinks
+    if not pulse_sinks:
         return
-    for sink in sinks:
+    for sink in pulse_sinks:
         subprocess.call(['pactl', 'set-sink-volume', sink, value])
 
 def getWlan(interface='wlo1'):
@@ -332,14 +374,48 @@ def getCapsNumLocks(num_text='NUM', caps_text='CAPS'):
         print(err.output.decode().strip())
         return 'error'
 
-    if output.startswith("Keyboard"):
-        indicators = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
+    # if output.startswith("Keyboard"):
+    indicators = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
+    logger.warning(str(indicators))
     result = ""
     if ('Caps', 'on') in indicators:
         result = caps_text
     if ('Num', 'on') in indicators:
         result = result+' '+num_text if result else num_text
     return result
+
+def locksPressed(widgets, ontexts, offtexts, numlock=False):
+    if not widgets:
+        print ("No widgets passed in for Caps lock pressed")
+        return
+    if not isinstance(widgets, list):
+        print ("Widgets expected to be a list")
+        return
+
+    result = getCapsNumLocks(num_text='1', caps_text='A')
+    to_check = '1' if numlock else 'A'
+    locked = True if to_check in result else False
+
+    if not isinstance(ontexts, list):
+        ontexts = [ontexts]*len(widgets)
+    elif len(ontexts) < len(widgets):
+        ontexts += [ontexts[-1]] * (len(widgets)-len(ontexts))
+
+    if not isinstance(offtexts, list):
+        offtexts = [offtexts]*len(widgets)
+    elif len(offtexts) < len(widgets):
+        offtexts += [offtexts[-1]] * (len(widgets)-len(offtexts))
+
+    logger.warning("({}) ,{},{}".format(result, to_check, locked))
+
+    for index, widget in enumerate(widgets):
+        if not isinstance(widget, TextBox):
+            print ("{} is not a TextBox".format(widget))
+            continue
+        if locked:
+            widget.update(ontexts[index])
+        else:
+            widget.update(offtexts[index])
 
 def getTemps():
     try:

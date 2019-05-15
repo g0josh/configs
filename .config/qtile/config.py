@@ -11,7 +11,8 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match
 from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
 from my_scripts import FuncWithClick, GroupTextBox, getMpd, clickMpd
 from my_scripts import getCapsNumLocks, getTemps, getUtilization
-from my_scripts import toggleMuteVolume, changeVolume
+from my_scripts import toggleMuteVolume, changeVolume, CTextBox
+from my_scripts import locksPressed
 
 MOD = "mod4"
 ALT = "mod1"
@@ -22,6 +23,31 @@ COLOR_ACC = 'a34a20'
 COLOR_INA = '441500'
 COLOR_TXT = '110808'
 COLOR_BG = '0d0b0b'
+
+widget_defaults = dict(
+    font="Iosevka Nerd Font Medium Oblique",
+    fontsize=15,
+    padding=0
+)
+widget_border_defaults = dict(
+    font="Iosevka Nerd Font Mono Medium",
+    fontsize=20,
+    padding=0
+)
+
+s = widget.TextBox(font="Iosevka Nerd Font Mono Medium",fontsize=20,
+    padding=0, foreground=COLOR_ACC, text="S", background=COLOR_ACT)
+
+capslock_header = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
+capslock_text = widget.TextBox(text="", **widget_defaults, foreground=COLOR_TXT,
+    background=COLOR_ACT)
+capslock_footer = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
+
+numlock_header = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
+numlock_text = widget.TextBox(text="", **widget_defaults, foreground=COLOR_TXT,
+    background=COLOR_ACT)
+numlock_footer = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
+
 
 keys = [
     # Switch between windows in current stack pane
@@ -53,7 +79,7 @@ keys = [
     Key([MOD, "control"], "Left", lazy.layout.grow_left()),
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
-     Key([MOD, "control"], "n", lazy.layout.normalize()),
+    Key([MOD, "control"], "n", lazy.layout.normalize()),
     Key([MOD, "control"], "m", lazy.layout.maximize()),
     Key([MOD, "control"], "space", lazy.layout.flip()),
 
@@ -72,14 +98,30 @@ keys = [
     Key([MOD], "Return", lazy.spawn(TERMINAL)),
     Key([MOD], "b", lazy.spawn(BROWSER)),
 
-    # Toggle between different layouts as defined below
+    # Toggle between different layouts
     Key([MOD], "Tab", lazy.next_layout()),
+
     Key([MOD], "w", lazy.window.kill()),
 
+    Key([MOD], "Caps_Lock", lazy.function(lambda x:locksPressed(
+                                                    widgets=[capslock_header,
+                                                    capslock_text, capslock_footer],
+                                                    ontexts=["", "A ", ""],
+                                                    offtexts="1", numlock=False))),
+
+    Key([MOD], "Num_Lock", lazy.function(lambda x:locksPressed([numlock_header,
+                                                    numlock_text, numlock_footer],
+                                                    ontexts=["", "1 ", ""],
+                                                    offtexts="1", numlock=True))),
+
     Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
-    Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
+    Key([MOD, ALT], "Left", lazy.function(lambda x:toggleMuteVolume())),
     Key([], "XF86AudioLowerVolume", lazy.function(lambda x:changeVolume('-5%'))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:changeVolume('-5%'))),
     Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
+    Key([MOD, ALT], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
+
+    Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
 
@@ -123,16 +165,6 @@ layouts = [
     layout.Stack(**configs)
 ]
 
-widget_defaults = dict(
-    font="Iosevka Nerd Font Medium Oblique",
-    fontsize=15,
-    padding=0
-)
-widget_border_defaults = dict(
-    font="Iosevka Nerd Font Mono Medium",
-    fontsize=20,
-    padding=0
-)
 extension_defaults = widget_defaults.copy()
 
 def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
@@ -190,7 +222,7 @@ def getWidgets():
             text="", foreground=COLOR_ACC,
         ),
 
-        widget.Spacer(length=500),
+        widget.Spacer(length=400),
 
         # time
         widget.TextBox(
@@ -221,22 +253,29 @@ def getWidgets():
         widget.Spacer(),
 
         widget.Systray(),
+        # s,
 
         # Caps & Num Lock
-        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-            **widget_border_defaults, foreground=COLOR_ACT, background=None),
+        capslock_header,
+        capslock_text,
+        capslock_footer,
+        numlock_header,
+        numlock_text,
+        numlock_footer,
+        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+        #     **widget_border_defaults, foreground=COLOR_ACT, background=None),
 
-        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
+        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+        #     **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
 
-        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-            **widget_border_defaults, foreground=COLOR_ACT, background=COLOR_ACC),
+        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+        #     **widget_border_defaults, foreground=COLOR_ACT, background=COLOR_ACC),
 
-        FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
-            update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
+        # FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
+        #     update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
 
-        FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-            **widget_border_defaults, foreground=COLOR_ACC, background=None),
+        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
+        #     **widget_border_defaults, foreground=COLOR_ACC, background=None),
 
         # Temperature
         widget.TextBox(
@@ -293,7 +332,7 @@ def getWidgets():
         widget.TextBox(
             **widget_border_defaults,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
             background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
         # widget.TextBox(
         #     **widget_border_defaults,
