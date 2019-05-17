@@ -12,10 +12,11 @@ from socket import error as socket_error
 import psutil
 
 MOUSE_BUTTONS={
-    'LEFT_CLICK':1,
-    'RIGHT_CLICK':2,
-    'SCROLL_UP':4,
-    'SCROLL_DOWN':5
+    'LEFT_CLICK':1,'RIGHT_CLICK':2, 'SCROLL_UP':4, 'SCROLL_DOWN':5
+}
+
+POWER_BUTTONS={
+    'SHUT':0, 'LOGOUT':1, 'LOCK_SCREEN':1
 }
 
 try:
@@ -154,13 +155,15 @@ class FuncWithClick(base.ThreadPoolText):
 
     def button_press(self, x, y, button):
         if self.click_func:
-            self.click_func(x, y, button, **self.click_func_args)
-            self.update(self.poll())
+            result = self.click_func(x, y, button, **self.click_func_args)
+            if result:
+                self.update(result)
 
     def button_release(self, x, y, button):
         if self.release_func:
-            self.release_func(x, y, button, **self.click_func_args)
-            self.update(self.poll())
+            result = self.release_func(x, y, button, **self.click_func_args)
+            if result:
+                self.update(result)
 
     def poll(self):
         if not self.func:
@@ -407,3 +410,42 @@ def getUtilization():
         result = result + '|' + u if result else u
 
     return result
+
+
+# ---------------------------------------------
+# POWER
+# ---------------------------------------------
+
+def showPowerClicked(x, y, button, widgets, ontexts, offtexts):
+    if button not in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
+        return
+    if not isinstance(ontexts, list):
+        ontexts = [ontexts]*len(widgets)
+    elif len(ontexts) < len(widgets):
+        ontexts += [ontexts[-1]] * (len(widgets) - len(ontexts))
+
+    if not isinstance(offtexts, list):
+        offtexts = [offtexts]*len(widgets)
+    elif len(offtexts) < len(widgets):
+        offtexts += [offtexts[-1]] * (len(widgets) - len(offtexts))
+
+    for index, widget in enumerate(widgets):
+        widget.update( ontexts[index] if widget.text==offtexts[index] else offtexts[index])
+
+def powerClicked(x, y, button, widget_button):
+    if button not in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
+        return
+        
+    if widget_button == POWER_BUTTONS['SHUT']:
+        cmd = ['shutdown', 'now']
+    elif widget_button == POWER_BUTTONS['LOGOUT']:
+        cmd = None
+    elif widget_button == POWER_BUTTONS['LOCK_SCREEN']:
+        cmd = None
+    
+    if cmd:
+        try:
+            subprocess.call(cmd)
+        except subprocess.CalledProcessError as e:
+            logger.warning(e.output.decode().strip())
+        

@@ -11,7 +11,8 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
 from my_scripts import FuncWithClick, GroupTextBox
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
-from my_scripts import getlocksStatus, MOUSE_BUTTONS
+from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
+from my_scripts import showPowerClicked, powerClicked
 
 MOD = "mod4"
 ALT = "mod1"
@@ -44,14 +45,38 @@ vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
         update_interval=1000,foreground=COLOR_TXT, background=COLOR_ACT, **icon_font)
 vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
         background=COLOR_ACC, foreground=COLOR_TXT, **default_font)
-vol_icon_widget.click_func_args = {'value_widget':vol_widget}
-vol_widget.click_func_args = {'icon_widget':vol_icon_widget}
+vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
 
 # Lock widgets
 caps_lock_widget = widget.TextBox(text="A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLOR_TXT,
                 background=COLOR_ACC)
 num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLOR_TXT,
                 background=COLOR_ACC)
+
+# power widgets
+power_widget = FuncWithClick(func=lambda:"", click_func=showPowerClicked,
+                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+
+shut_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+shut_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
+                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+
+logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+logout_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOGOUT']},
+                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+
+lock_screen_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+lock_screen_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+lock_screen_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
+                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+power_widget.click_func_args = {'widgets':[power_widget,lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
+                                    logout_widget_header,logout_widget,logout_widget_footer,
+                                    shut_widget_header, shut_widget, shut_widget_footer],
+                                'ontexts':["","","","", "","","","","",""],
+                                'offtexts':["","","","","","","","","",""]}
 
 keys = [
     # Switch between windows in current stack pane
@@ -139,9 +164,9 @@ keys = [
 groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", spawn="code", init=True, layout="monadtall" ),
-    Group(name='4', label="4 ", spawn="urxvt -name ranger -e ranger", init=True, layout="monadwide"),
-    Group(name='5', label="5 ", spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", init=True, layout="monadwide"),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
+    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="monadwide"),
+    Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="monadwide"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 ")
 ]
@@ -300,22 +325,20 @@ def getWidgets():
 
         # Volume
         FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLOR_ACT, update_interval=1000, **border_font),
         vol_icon_widget,
         FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLOR_ACT, background=COLOR_ACC, update_interval=1000,
             **border_font),
         vol_widget,
         FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLOR_ACC, update_interval=1000, **border_font),
 
         # wifi
-        widget.TextBox(
-            **border_font,
-            foreground=COLOR_ACT, text=""),
+        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
         widget.TextBox(
             **icon_font,
             foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
@@ -323,7 +346,16 @@ def getWidgets():
             **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
         FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
-            background=COLOR_ACC, foreground=COLOR_TXT, **default_font)
+            background=COLOR_ACC, foreground=COLOR_TXT, **default_font),
+        widget.TextBox(**border_font,foreground=COLOR_ACC, text=""),
+
+        # power
+        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
+        power_widget,
+        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
+        lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
+        logout_widget_header, logout_widget, logout_widget_footer,
+        shut_widget_header, shut_widget, shut_widget_footer
     ]
     return widgets
 
