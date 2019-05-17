@@ -8,11 +8,10 @@ from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 
-from my_scripts import getWlan, getVolumeIcon, getVolume, clickVolume
-from my_scripts import FuncWithClick, GroupTextBox, getMpd, clickMpd
-from my_scripts import getCapsNumLocks, getTemps, getUtilization
-from my_scripts import toggleMuteVolume, changeVolume, CTextBox
-from my_scripts import locksPressed
+from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
+from my_scripts import FuncWithClick, GroupTextBox
+from my_scripts import getTemps, getUtilization, getMpd, clickMpd
+from my_scripts import getlocksStatus, MOUSE_BUTTONS
 
 MOD = "mod4"
 ALT = "mod1"
@@ -24,30 +23,35 @@ COLOR_INA = '441500'
 COLOR_TXT = '110808'
 COLOR_BG = '0d0b0b'
 
-widget_defaults = dict(
+default_font = dict(
     font="Iosevka Nerd Font Medium Oblique",
     fontsize=15,
     padding=0
-)
-widget_border_defaults = dict(
-    font="Iosevka Nerd Font Mono Medium",
+) 
+border_font = dict(
+    font="Iosevka Nerd Font Mono",
     fontsize=20,
     padding=0
 )
+icon_font = dict(
+    font="Font Awesome 5 Free Solid",
+    fontsize=14,
+    padding=0
+)
 
-s = widget.TextBox(font="Iosevka Nerd Font Mono Medium",fontsize=20,
-    padding=0, foreground=COLOR_ACC, text="S", background=COLOR_ACT)
+# Volume widgets
+vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
+        update_interval=1000,foreground=COLOR_TXT, background=COLOR_ACT, **icon_font)
+vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
+        background=COLOR_ACC, foreground=COLOR_TXT, **default_font)
+vol_icon_widget.click_func_args = {'value_widget':vol_widget}
+vol_widget.click_func_args = {'icon_widget':vol_icon_widget}
 
-capslock_header = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
-capslock_text = widget.TextBox(text="", **widget_defaults, foreground=COLOR_TXT,
-    background=COLOR_ACT)
-capslock_footer = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
-
-numlock_header = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
-numlock_text = widget.TextBox(text="", **widget_defaults, foreground=COLOR_TXT,
-    background=COLOR_ACT)
-numlock_footer = widget.TextBox(text="", **widget_border_defaults, foreground=COLOR_ACT)
-
+# Lock widgets
+caps_lock_widget = widget.TextBox(text="A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLOR_TXT,
+                background=COLOR_ACC)
+num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLOR_TXT,
+                background=COLOR_ACC)
 
 keys = [
     # Switch between windows in current stack pane
@@ -103,42 +107,41 @@ keys = [
 
     Key([MOD], "w", lazy.window.kill()),
 
-    Key([MOD], "Caps_Lock", lazy.function(lambda x:locksPressed(
-                                                    widgets=[capslock_header,
-                                                    capslock_text, capslock_footer],
-                                                    ontexts=["", "A ", ""],
-                                                    offtexts="1", numlock=False))),
+    Key([], "Caps_Lock", lazy.function(lambda x:caps_lock_widget.update( "A" if caps_lock_widget.text == "" else "" ))),
+    Key([], "Num_Lock", lazy.function(lambda x:num_lock_widget.update( " 0" if num_lock_widget.text == "" else "" ))),
 
-    Key([MOD], "Num_Lock", lazy.function(lambda x:locksPressed([numlock_header,
-                                                    numlock_text, numlock_footer],
-                                                    ontexts=["", "1 ", ""],
-                                                    offtexts="1", numlock=True))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
+                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
+    Key([MOD, ALT], "Left", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
+                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
-    Key([MOD, ALT], "Left", lazy.function(lambda x:toggleMuteVolume())),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:changeVolume('-5%'))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:changeVolume('-5%'))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
-    Key([MOD, ALT], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
+                                                    icon_widget=vol_icon_widget, value_widget=vol_widget))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
+                                                    icon_widget=vol_icon_widget, value_widget=vol_widget))),
+
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_UP'],
+                                                icon_widget=vol_icon_widget, value_widget=vol_widget))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_UP'],
+                                                icon_widget=vol_icon_widget, value_widget=vol_widget))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
+    Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
-    Key([MOD], "a", lazy.spawn("rofi -show drun -config /home/job/.config/rofi/conf")),
+    Key([MOD], "a", lazy.spawn("rofi -show drun -config /home/cbarobotics/.config/rofi/conf")),
     Key([], "Print", lazy.spawn("gnome-screenshot"))
 ]
 
 groups = [
-    Group(name='1', label="1 "),
+    Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])] ),
-    Group(name='4', label="4 ", matches=[Match(wm_instance_class=["ranger"])],
-        init=True, spawn="urxvt -name ranger -e ranger"),
-    Group(name='5', label="5 ", matches=[Match(wm_instance_class=["ncmpcpp"])],
-        init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer"),
+    Group(name='3', label="3 ", spawn="code", init=True, layout="monadtall" ),
+    Group(name='4', label="4 ", spawn="urxvt -name ranger -e ranger", init=True, layout="monadwide"),
+    Group(name='5', label="5 ", spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", init=True, layout="monadwide"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 ")
 ]
@@ -158,14 +161,14 @@ configs={
 
 layouts = [
     layout.Columns(**configs),
-    layout.MonadTall(**configs, ratio=0.6),
-    layout.MonadWide(**configs, ratio=0.6),
+    layout.MonadTall(**configs, ratio=0.65),
+    layout.MonadWide(**configs, ratio=0.65),
     layout.Zoomy(**configs),
     layout.Max(),
     layout.Stack(**configs)
 ]
 
-extension_defaults = widget_defaults.copy()
+extension_defaults = default_font.copy()
 
 def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
     inactive_fg, inactive_bg, urgent_fg, urgent_bg, not_empty_fg, not_empty_bg):
@@ -175,24 +178,24 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
             GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
                 active_fg=active_bg, active_bg=COLOR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
+                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **border_font),
             GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
                 active_fg=active_fg, active_bg=active_bg,not_empty_fg=not_empty_fg, not_empty_bg=not_empty_bg,
                 inactive_fg=inactive_fg, inactive_bg=inactive_bg,
-                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **widget_defaults),
+                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **icon_font),
             GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
                 active_fg=active_bg, active_bg=COLOR_BG,not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **widget_border_defaults),
+                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **border_font),
         ]
     return w
 
-def getWidgets():
+def getWidgets(): 
     widgets = [
         # Group box
         widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
         widget.TextBox(
-            **widget_border_defaults,background=COLOR_BG,
+            **border_font,background=COLOR_BG,
             text="", foreground=COLOR_ACT,
         )
     ]
@@ -204,21 +207,21 @@ def getWidgets():
     widgets += [
         # Music
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             text="", foreground=COLOR_ACT,
         ),
         widget.TextBox(
-            **widget_defaults,
+            **icon_font,
             foreground=COLOR_TXT, background=COLOR_ACT, text="",
         ),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text="",  background=COLOR_ACC
         ),
         FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=2.0,
-            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
+            **default_font, foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             text="", foreground=COLOR_ACC,
         ),
 
@@ -226,117 +229,101 @@ def getWidgets():
 
         # time
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_defaults,
+            **icon_font,
             background=COLOR_ACT, text="",foreground=COLOR_TXT),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
         widget.Clock(format='%b %d, %a, %I:%M %p',
-            **widget_defaults,
+            **default_font,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACC, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACC, text=""),
-        widget.Clock(format='%I:%M %p ', timezone='Asia/Kolkata',
-            **widget_defaults,
+        widget.Clock(format='%I:%M %p', timezone='Asia/Kolkata',
+            **default_font,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACC, text=""),
 
         widget.Spacer(),
 
         widget.Systray(),
-        # s,
 
         # Caps & Num Lock
-        capslock_header,
-        capslock_text,
-        capslock_footer,
-        numlock_header,
-        numlock_text,
-        numlock_footer,
-        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-        #     **widget_border_defaults, foreground=COLOR_ACT, background=None),
-
-        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-        #     **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
-
-        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-        #     **widget_border_defaults, foreground=COLOR_ACT, background=COLOR_ACC),
-
-        # FuncWithClick(func=getCapsNumLocks, func_args={'num_text': 'Num', 'caps_text': 'Caps'},
-        #     update_interval=0.5, **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACC),
-
-        # FuncWithClick(func=lambda:"" if getCapsNumLocks() else "", update_interval=0.5,
-        #     **widget_border_defaults, foreground=COLOR_ACC, background=None),
+        widget.TextBox(text="" ,**border_font,  foreground=COLOR_ACT, background=None),
+        widget.TextBox(text="", **icon_font, foreground=COLOR_TXT, background=COLOR_ACT),
+        widget.TextBox(text="" , **border_font, foreground=COLOR_ACT, background=COLOR_ACC),
+        caps_lock_widget,
+        num_lock_widget,
+        widget.TextBox(text="", **border_font, foreground=COLOR_ACC, background=None),
 
         # Temperature
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_defaults,
-            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+            **icon_font,
+            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getTemps, update_interval=5.0, **widget_defaults,
+        FuncWithClick(func=getTemps, update_interval=5.0, **default_font,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACC, text="", background=None),
 
         # Utilization
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_defaults,
+            **icon_font,
             foreground=COLOR_TXT, background=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
         FuncWithClick(func=getUtilization, update_interval=3.0,
-            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
+            background=COLOR_ACC, foreground=COLOR_TXT, **default_font),
 
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACC, text="", background=None),
 
         # Volume
-        FuncWithClick(func=lambda: "", foreground=COLOR_ACT, click_func=clickVolume,
-            update_interval=0.5, **widget_border_defaults),
-        FuncWithClick(func=getVolumeIcon, click_func=clickVolume, update_interval=0.5,
-            **widget_defaults, foreground=COLOR_TXT, background=COLOR_ACT),
-        FuncWithClick(func=lambda: "", foreground=COLOR_ACT, background=COLOR_ACC,
-            click_func=clickVolume, update_interval=0.5, **widget_border_defaults),
-        FuncWithClick(func=getVolume, click_func=clickVolume, update_interval=0.5,
-            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-        FuncWithClick(func=lambda: "", foreground=COLOR_ACC, click_func=clickVolume,
-            update_interval=0.5, **widget_border_defaults),
+        FuncWithClick(func=lambda: "", click_func=volumePressed,
+            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            foreground=COLOR_ACT, update_interval=1000, **border_font),
+        vol_icon_widget,
+        FuncWithClick(func=lambda: "", click_func=volumePressed,
+            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            foreground=COLOR_ACT, background=COLOR_ACC, update_interval=1000,
+            **border_font),
+        vol_widget,
+        FuncWithClick(func=lambda: "", click_func=volumePressed,
+            click_func_args={'icon_widget':vol_icon_widget, 'vol_widget':vol_widget},
+            foreground=COLOR_ACC, update_interval=1000, **border_font),
 
         # wifi
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text=""),
         widget.TextBox(
-            **widget_defaults,
-            foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
+            **icon_font,
+            foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
         widget.TextBox(
-            **widget_border_defaults,
+            **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
         FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
-            background=COLOR_ACC, foreground=COLOR_TXT, **widget_defaults),
-        # widget.TextBox(
-        #     **widget_border_defaults,
-        #     foreground=COLOR_ACC, text="", background=None)
+            background=COLOR_ACC, foreground=COLOR_TXT, **default_font)
     ]
     return widgets
 
@@ -344,7 +331,7 @@ screens = [
     Screen(
         top=bar.Bar(
             getWidgets(),
-            size=widget_border_defaults['fontsize'] - 1,
+            size=border_font['fontsize'] - 1,
             background=COLOR_BG,
             opacity=0.9
         ),
@@ -409,12 +396,12 @@ wmname = "LG3D"
 
 # Autostart
 @hook.subscribe.startup_once
-def autostart():
+def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart_once.sh')
     subprocess.call([start])
 
 @hook.subscribe.startup
-def autostart():
+def start():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
 

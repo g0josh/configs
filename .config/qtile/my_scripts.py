@@ -11,11 +11,18 @@ from libqtile.command import Client, lazy
 from socket import error as socket_error
 import psutil
 
+MOUSE_BUTTONS={
+    'LEFT_CLICK':1,
+    'RIGHT_CLICK':2,
+    'SCROLL_UP':4,
+    'SCROLL_DOWN':5
+}
+
 try:
     import iwlib
 except ModuleNotFoundError:
     WLAN = False
-    print("Please install iwlib")
+    logger.warning("Please install iwlib")
 else:
     WLAN = True
     init_time = 0
@@ -25,7 +32,7 @@ try:
     from mpd import MPDClient, ConnectionError, CommandError
 except ModuleNotFoundError:
     MPD = False
-    print("Please install mpd")
+    logger.warning("Please install mpd")
 else:
     mpd_client = MPDClient()
     mpd_password = None
@@ -47,55 +54,13 @@ def _getPulseSinks():
     try:
         output = subprocess.check_output(['pactl','list','short','sinks']).decode()
     except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
+        logger.warning (e.output.decode().strip())
         return []
     else:
         return re.findall(r'^\d', output, flags=re.MULTILINE)
 
 cpu_cores = _getCpuCores()
 pulse_sinks = _getPulseSinks()
-
-
-class CTextBox(base._TextBox):
-    """A flexible textbox that can be updated from bound keys, scripts, and qshell"""
-    orientations = base.ORIENTATION_HORIZONTAL
-    defaults = [
-        ("font", "sans", "Text font"),
-        ("fontsize", None, "Font pixel size. Calculated if None."),
-        ("fontshadow", None, "font shadow color, default is None(no shadow)"),
-        ("padding", None, "Padding left and right. Calculated if None."),
-        ("foreground", "#ffffff", "Foreground colour."),
-    ]
-
-    def __init__(self, text=" ", width=bar.CALCULATED, **config):
-        base._TextBox.__init__(self, text=text, width=width, **config)
-
-    def _configure(self, qtile, bar):
-        _TextBox._configure(self, qtile, bar)
-
-    def update(self, text):
-        self.text = text
-        self.bar.draw()
-
-    def cmd_update(self, text):
-        """Update the text in a TextBox widget"""
-        self.update(text)
-
-    def cmd_get(self):
-        """Retrieve the text in a TextBox widget"""
-        return self.text
-
-id_ = 'S'
-def mute(func):
-    global id_
-    # toggleMuteVolume()
-    if id_ == 'S':
-        func.update('N')
-        id_ = 'N'
-    else:
-        # func('S')
-        func.update('S')
-        id_ = 'S'
 
 class GroupTextBox(_GroupBase):
     """A widget that graphically displays the current group"""
@@ -174,71 +139,86 @@ class FuncWithClick(base.ThreadPoolText):
     """A generic text widget that polls using poll function to get the text"""
     orientations = base.ORIENTATION_HORIZONTAL
     defaults = [
+        ('label', None, 'Poll Function'),
         ('func', None, 'Poll Function'),
         ('click_func', None, 'click function'),
-        ('release_func', None, 'click release function')
+        ('release_func', None, 'click release function'),
+        ('func_args', {}, 'function arguments'),
+        ('click_func_args', {}, 'function arguments'),
+        ('release_func_args', {}, 'function arguments')
     ]
 
-    def __init__(self, func_args={}, click_func_args={}, **config):
+    def __init__(self, **config):
         base.ThreadedPollText.__init__(self, **config)
         self.add_defaults(FuncWithClick.defaults)
-        self.func_args = func_args
-        self.click_func_args = click_func_args
-        # if self.func:
-        #     self._text = self.func(**self.func_args)
-        # else:
-        #     self._text = ""
 
     def button_press(self, x, y, button):
         if self.click_func:
             self.click_func(x, y, button, **self.click_func_args)
-            self.poll()
+            self.update(self.poll())
 
     def button_release(self, x, y, button):
         if self.release_func:
             self.release_func(x, y, button, **self.click_func_args)
-            self.poll()
+            self.update(self.poll())
 
     def poll(self):
-        if self.func:
-            # self.text = self.func()
-            return self.func(**self.func_args)
+        if not self.func:
+            return None
 
-def clickVolume(x, y, button):
-    if button in [1,2]:
+        if self.label:
+            return self.label if self.func(**self.func_args) else ""
+
+        return self.func(**self.func_args)
+
+# ---------------------------------------------
+# VOLUME
+# ---------------------------------------------
+
+def volumePressed(x, y, mouse_click, icon_widget=None, value_widget=None):
+    if mouse_click in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
         toggleMuteVolume()
-    elif button == 4:
-        changeVolume("+5%")
-    elif button == 5:
-        changeVolume("-5%")
+    elif mouse_click == MOUSE_BUTTONS['SCROLL_UP']:
+        changeVolume('+5%')
+    elif mouse_click == MOUSE_BUTTONS['SCROLL_DOWN']:
+        changeVolume('-5%')
+    else:
+        logger.warning('Uknown mouse click = ',mouse_click)
 
-def isVolumeMuted():
+    if icon_widget:
+        icon_widget.update( icon_widget.poll() )
+
+    if value_widget:
+        value_widget.update( value_widget.poll() )
+
+def isVolumeMuted(reverse=False):
     try:
         cmd = "pacmd list-sinks|grep 'muted'|awk '{print $2}'"
         muted = subprocess.check_output(cmd, shell=True).strip().decode()
     except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
+        logger.warning(e.output.decode().strip())
         return 'error'
 
-    return muted == 'yes'
+    if reverse:
+        return muted == 'no'
+    else:
+        return muted == 'yes'
 
-def getVolumeIcon(muted_icon='婢', icons=['奄', '奔', '墳']):
+def getVolumeIcon(muted_icon='', icons=['', '', ''], volume=None):
     # check if muted
     if isVolumeMuted():
         return muted_icon
 
     # Check volume level
-    try:
-        output = subprocess.check_output(['pactl','list', 'sinks']).decode()
-        volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
-    except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
-        return 'error'
+    if volume is None:
+        try:
+            output = subprocess.check_output(['pactl','list', 'sinks']).decode()
+            volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
+            volume = int(volume.group().split('/')[-1].strip())
+        except subprocess.CalledProcessError as e:
+            logger.warning(e.output.decode().strip())
+            return 'error'
 
-    if volume:
-        volume = int(volume.group().split('/')[-1].strip())
-    else:
-        return 'error'
     margin = 100 / len(icons)
     index, _ = divmod(volume, margin)
     if index >= len(icons):
@@ -252,7 +232,7 @@ def getVolume():
         output = subprocess.check_output(['pactl','list','sinks']).decode()
         volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
     except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
+        logger.warning (e.output.decode().strip())
         return 'error'
 
     if volume:
@@ -275,6 +255,9 @@ def changeVolume(value='+5%'):
     for sink in pulse_sinks:
         subprocess.call(['pactl', 'set-sink-volume', sink, value])
 
+# ---------------------------------------------
+# MPD
+# ---------------------------------------------
 def getWlan(interface='wlo1'):
     global init_time, init_speed
     status = iwlib.get_iwconfig(interface)
@@ -292,7 +275,7 @@ def getWlan(interface='wlo1'):
         init_speed = speed
         init_time = _time
     except Exception as e:
-        print (e)
+        logger.warning (e)
         return 'error'
 
     return "{}|{:4.0f} kB/s".format(essid, dl)
@@ -366,63 +349,31 @@ def clickMpd(x, y, button):
     elif button == keys["next"]:
         mpd_client.next()
 
-def getCapsNumLocks(num_text='NUM', caps_text='CAPS'):
+# ---------------------------------------------
+# MISC
+# ---------------------------------------------
+
+def getlocksStatus():
+    result = {'Caps':False, 'Num':False}
     """Return a list with the current state of the keys."""
     try:
         output = subprocess.check_output(['xset', 'q']).decode()
-    except subprocess.CalledProcessError as err:
-        print(err.output.decode().strip())
-        return 'error'
+        output = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return result
 
-    # if output.startswith("Keyboard"):
-    indicators = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
-    logger.warning(str(indicators))
-    result = ""
-    if ('Caps', 'on') in indicators:
-        result = caps_text
-    if ('Num', 'on') in indicators:
-        result = result+' '+num_text if result else num_text
+    for x, y in output:
+        result[x] = True if y == 'on' else False
+
     return result
-
-def locksPressed(widgets, ontexts, offtexts, numlock=False):
-    if not widgets:
-        print ("No widgets passed in for Caps lock pressed")
-        return
-    if not isinstance(widgets, list):
-        print ("Widgets expected to be a list")
-        return
-
-    result = getCapsNumLocks(num_text='1', caps_text='A')
-    to_check = '1' if numlock else 'A'
-    locked = True if to_check in result else False
-
-    if not isinstance(ontexts, list):
-        ontexts = [ontexts]*len(widgets)
-    elif len(ontexts) < len(widgets):
-        ontexts += [ontexts[-1]] * (len(widgets)-len(ontexts))
-
-    if not isinstance(offtexts, list):
-        offtexts = [offtexts]*len(widgets)
-    elif len(offtexts) < len(widgets):
-        offtexts += [offtexts[-1]] * (len(widgets)-len(offtexts))
-
-    logger.warning("({}) ,{},{}".format(result, to_check, locked))
-
-    for index, widget in enumerate(widgets):
-        if not isinstance(widget, TextBox):
-            print ("{} is not a TextBox".format(widget))
-            continue
-        if locked:
-            widget.update(ontexts[index])
-        else:
-            widget.update(offtexts[index])
 
 def getTemps():
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
     except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
+        logger.warning(e.output.decode().strip())
         return 'error'
 
     result = ""
@@ -441,7 +392,7 @@ def getUtilization():
         cpu = subprocess.check_output(['top','-bn2','-d0.1']).decode()
         gpu = subprocess.check_output(['nvidia-smi','-q','-d', 'UTILIZATION']).decode()
     except subprocess.CalledProcessError as e:
-        print (err.output.decode().strip())
+        logger.warning (e.output.decode().strip())
         return 'error'
 
     result = ""
