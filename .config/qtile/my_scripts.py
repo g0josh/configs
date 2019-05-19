@@ -16,7 +16,7 @@ MOUSE_BUTTONS={
 }
 
 POWER_BUTTONS={
-    'SHUT':0, 'LOGOUT':1, 'LOCK_SCREEN':1
+    'SHUT':0, 'LOGOUT':1, 'LOCK_SCREEN':2
 }
 
 try:
@@ -435,17 +435,17 @@ def showPowerClicked(x, y, button, widgets, ontexts, offtexts):
 def powerClicked(x, y, button, widget_button):
     if button not in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
         return
-        
+
     if widget_button == POWER_BUTTONS['SHUT']:
         cmd = ['shutdown', 'now']
     elif widget_button == POWER_BUTTONS['LOGOUT']:
-        cmd = None
+        cmd = ['qtile-cmd', '-o', 'cmd', '-f', 'shutdown']
     elif widget_button == POWER_BUTTONS['LOCK_SCREEN']:
         cmd = None
-    
+
     if cmd:
         try:
             subprocess.call(cmd)
         except subprocess.CalledProcessError as e:
             logger.warning(e.output.decode().strip())
-        
+

@@ -28,7 +28,7 @@ default_font = dict(
     font="Iosevka Nerd Font Medium Oblique",
     fontsize=15,
     padding=0
-) 
+)
 border_font = dict(
     font="Iosevka Nerd Font Mono",
     fontsize=20,
@@ -157,7 +157,7 @@ keys = [
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
-    Key([MOD], "a", lazy.spawn("rofi -show drun -config /home/cbarobotics/.config/rofi/conf")),
+    Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
     Key([], "Print", lazy.spawn("gnome-screenshot"))
 ]
 
@@ -215,7 +215,7 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
         ]
     return w
 
-def getWidgets(): 
+def getWidgets():
     widgets = [
         # Group box
         widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
@@ -250,7 +250,7 @@ def getWidgets():
             text="", foreground=COLOR_ACC,
         ),
 
-        widget.Spacer(length=400),
+        widget.Spacer(length=500),
 
         # time
         widget.TextBox(
@@ -262,7 +262,7 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        widget.Clock(format='%b %d, %a, %I:%M %p',
+        widget.Clock(format='%b %d, %A, %I:%M %p',
             **default_font,
             foreground=COLOR_TXT, background=COLOR_ACC),
         widget.TextBox(
@@ -345,7 +345,7 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
             background=COLOR_ACC, foreground=COLOR_TXT, **default_font),
         widget.TextBox(**border_font,foreground=COLOR_ACC, text=""),
 
