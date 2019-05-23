@@ -18,8 +18,8 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-COLR_TITLE_BG = '1c5d87'
-COLR_BODY_BG = 'a42f2b'
+COLR_TITLE_BG = 'a42f2b'
+COLR_BODY_BG = '1c5d87'
 COLR_INACTIVE = '441500'
 COLR_TEXT = '110808'
 COLR_BAR_BG = '011234'
@@ -55,11 +55,11 @@ num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", *
                 background=COLR_BODY_BG)
 
 # power widgets
-power_widget = FuncWithClick(func=lambda:"", click_func=showPowerClicked,
+power_widget = FuncWithClick(func=lambda:" ", click_func=showPowerClicked,
                 **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+power_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 
 shut_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-shut_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
                 **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
@@ -72,11 +72,12 @@ lock_screen_widget_header = FuncWithClick(func=lambda:"", **border_font, foregro
 lock_screen_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 lock_screen_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
                 **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-power_widget.click_func_args = {'widgets':[power_widget,lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
+power_widget.click_func_args = {'widgets':[power_widget, power_widget_footer,
+                                    lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
                                     logout_widget_header,logout_widget,logout_widget_footer,
-                                    shut_widget_header, shut_widget, shut_widget_footer],
-                                'ontexts':["","","","", "","","","","",""],
-                                'offtexts':["","","","","","","","","",""]}
+                                    shut_widget_header, shut_widget],
+                                'ontexts':[" ","","","","", "","","",""," "],
+                                'offtexts':["","", "","","","","","","",""]}
 
 keys = [
     # Switch between windows in current stack pane
@@ -354,11 +355,11 @@ def getWidgets():
 
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        power_widget,
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+        power_widget, power_widget_footer,
+        # widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
         logout_widget_header, logout_widget, logout_widget_footer,
-        shut_widget_header, shut_widget, shut_widget_footer
+        shut_widget_header, shut_widget
     ]
     return widgets
 
