@@ -7,41 +7,41 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 ! special
-*.foreground:   #c1c0c0
-*.background:  	[90]#0d0b0b 
-*.cursorColor:  #c1c0c0
+*.foreground:   #c2d7fb
+*.background:   #000e1c
+*.cursorColor:  #c2d7fb
 
 ! black
-*.color0:       #0d0b0b
-*.color8:       #222222
+*.color0:       #011234
+*.color8:       #002459
 
 ! red
-*.color1:       #791c1c
-*.color9:       #ae2d2d
+*.color1:       #cf3d38
+*.color9:       #fd6c67
 
 ! green
-*.color2:       #a34a20
-*.color10:      #b7601e
+*.color2:       #a85a57
+*.color10:      #fd6c67
 
 ! yellow
-*.color3:       #c8840d
-*.color11:      #b29015
+*.color3:       #c85537
+*.color11:      #ef8455
 
 ! blue
-*.color4:       #691919
-*.color12:      #8f1d27
+*.color4:       #004588
+*.color12:      #29a4c0
 
 ! magenta
-*.color5:       #851730
-*.color13:      #ad1835
+*.color5:       #933e3e
+*.color13:      #b76f6f
 
 ! cyan
-*.color6:       #995656
-*.color14:      #cd8383
+*.color6:       #0b8191
+*.color14:      #00c6cf
 
 ! white
 *.color7:       #707880
-*.color15:      #c1c0c0
+*.color15:      #c5c8c6
 
 
 !URxvt----------------------------
@@ -49,6 +49,7 @@ Xft.lcdfilter: lcddefault
 URxvt.font: xft:Iosevka:style=Regular:size=12:antialias=true:hinting=true:minispace=False, xft:FuraCode Nerd Font Mono:style=Regular:size=12:minispace=False
 
 URxvt.depth:                    32
+URxvt.background: 		[80]#000e1c
 URxvt*internalBorder:           20
 URxvt*scrollBar:                false
 URxvt*scrollTtyOutput:          false

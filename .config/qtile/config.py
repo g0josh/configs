@@ -162,7 +162,8 @@ keys = [
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
     Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
-    Key([], "Print", lazy.spawn("gnome-screenshot"))
+    Key([], "Print", lazy.spawn("gnome-screenshot")),
+    Key([MOD], "x", lazy.spawn("i3lock -i ~/Pictures/Lockscreen -t -e -f"))
 ]
 
 groups = [
@@ -185,7 +186,10 @@ for i in groups:
     ])
 
 configs={
-    "margin":10
+    "margin":10,
+    "border_width":4,
+    "border_focus":COLR_TITLE_BG,
+    "border_normal":COLR_INACTIVE
 }
 
 layouts = [
@@ -194,7 +198,6 @@ layouts = [
     layout.MonadWide(**configs, ratio=0.65),
     layout.Zoomy(**configs),
     layout.Max(),
-    layout.Stack(**configs)
 ]
 
 extension_defaults = default_font.copy()
