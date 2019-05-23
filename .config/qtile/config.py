@@ -18,11 +18,11 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-COLOR_ACT = '791c1c'
-COLOR_ACC = 'a34a20'
-COLOR_INA = '441500'
-COLOR_TXT = '110808'
-COLOR_BG = '0d0b0b'
+COLR_TITLE_BG = '1c5d87'
+COLR_BODY_BG = 'a42f2b'
+COLR_INACTIVE = '441500'
+COLR_TEXT = '110808'
+COLR_BAR_BG = '011234'
 
 default_font = dict(
     font="Iosevka Nerd Font Medium Oblique",
@@ -42,36 +42,36 @@ icon_font = dict(
 
 # Volume widgets
 vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
-        update_interval=1000,foreground=COLOR_TXT, background=COLOR_ACT, **icon_font)
+        update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
 vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
-        background=COLOR_ACC, foreground=COLOR_TXT, **default_font)
+        background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
 vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
 vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
 
 # Lock widgets
-caps_lock_widget = widget.TextBox(text="A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLOR_TXT,
-                background=COLOR_ACC)
-num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLOR_TXT,
-                background=COLOR_ACC)
+caps_lock_widget = widget.TextBox(text="A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
+                background=COLR_BODY_BG)
+num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
+                background=COLR_BODY_BG)
 
 # power widgets
 power_widget = FuncWithClick(func=lambda:"", click_func=showPowerClicked,
-                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-shut_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
-shut_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+shut_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+shut_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
-                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
-logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 logout_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOGOUT']},
-                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-lock_screen_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
-lock_screen_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLOR_ACT, update_interval=1000)
+lock_screen_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+lock_screen_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 lock_screen_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
-                **icon_font, foreground=COLOR_TXT, background=COLOR_ACT, update_interval=1000)
+                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 power_widget.click_func_args = {'widgets':[power_widget,lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
                                     logout_widget_header,logout_widget,logout_widget_footer,
                                     shut_widget_header, shut_widget, shut_widget_footer],
@@ -118,6 +118,9 @@ keys = [
 
     # Swap panes of split stack
     Key([MOD, "shift"], "space", lazy.layout.rotate()),
+
+    # Toggle floating
+    Key([MOD, "control"], "space", lazy.window.toggle_floating()),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -201,158 +204,158 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
     for g in groups:
         w += [
             GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLOR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
-                inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **border_font),
+                active_fg=active_bg, active_bg=COLR_BAR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLR_BAR_BG,
+                inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
+                urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
             GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
                 active_fg=active_fg, active_bg=active_bg,not_empty_fg=not_empty_fg, not_empty_bg=not_empty_bg,
                 inactive_fg=inactive_fg, inactive_bg=inactive_bg,
                 urgent_fg=urgent_fg, urgent_bg=urgent_bg, **icon_font),
             GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLOR_BG,not_empty_fg=inactive_bg, not_empty_bg=COLOR_BG,
-                inactive_fg=inactive_bg, inactive_bg=COLOR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLOR_BG, **border_font),
+                active_fg=active_bg, active_bg=COLR_BAR_BG,not_empty_fg=inactive_bg, not_empty_bg=COLR_BAR_BG,
+                inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
+                urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
         ]
     return w
 
 def getWidgets():
     widgets = [
         # Group box
-        widget.CurrentLayoutIcon(background=COLOR_ACT, scale=0.6, foreground=COLOR_INA),
+        widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_INACTIVE),
         widget.TextBox(
-            **border_font,background=COLOR_BG,
-            text="", foreground=COLOR_ACT,
+            **border_font,background=COLR_BAR_BG,
+            text="", foreground=COLR_TITLE_BG,
         )
     ]
 
-    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLOR_TXT, active_bg=COLOR_ACC,
-        inactive_fg=COLOR_INA, inactive_bg=COLOR_TXT, urgent_fg=COLOR_TXT, urgent_bg=COLOR_ACT,
-        not_empty_fg=COLOR_ACC, not_empty_bg=COLOR_TXT)
+    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_BODY_BG,
+        inactive_fg=COLR_INACTIVE, inactive_bg=COLR_TEXT, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
+        not_empty_fg=COLR_BODY_BG, not_empty_bg=COLR_TEXT)
 
     widgets += [
         # Music
         widget.TextBox(
             **border_font,
-            text="", foreground=COLOR_ACT,
+            text="", foreground=COLR_TITLE_BG,
         ),
         widget.TextBox(
             **icon_font,
-            foreground=COLOR_TXT, background=COLOR_ACT, text="",
+            foreground=COLR_TEXT, background=COLR_TITLE_BG, text="",
         ),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text="",  background=COLOR_ACC
+            foreground=COLR_TITLE_BG, text="",  background=COLR_BODY_BG
         ),
         FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=2.0,
-            **default_font, foreground=COLOR_TXT, background=COLOR_ACC),
+            **default_font, foreground=COLR_TEXT, background=COLR_BODY_BG),
         widget.TextBox(
             **border_font,
-            text="", foreground=COLOR_ACC,
+            text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=500),
+        widget.Spacer(length=360),
 
         # time
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text=""),
+            foreground=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **icon_font,
-            background=COLOR_ACT, text="",foreground=COLOR_TXT),
+            background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
         widget.Clock(format='%b %d, %A, %I:%M %p',
             **default_font,
-            foreground=COLOR_TXT, background=COLOR_ACC),
+            foreground=COLR_TEXT, background=COLR_BODY_BG),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACC, text=""),
+            foreground=COLR_BODY_BG, text=""),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACC, text=""),
+            foreground=COLR_BODY_BG, text=""),
         widget.Clock(format='%I:%M %p', timezone='Asia/Kolkata',
             **default_font,
-            foreground=COLOR_TXT, background=COLOR_ACC),
+            foreground=COLR_TEXT, background=COLR_BODY_BG),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACC, text=""),
+            foreground=COLR_BODY_BG, text=""),
 
         widget.Spacer(),
 
         widget.Systray(),
 
         # Caps & Num Lock
-        widget.TextBox(text="" ,**border_font,  foreground=COLOR_ACT, background=None),
-        widget.TextBox(text="", **icon_font, foreground=COLOR_TXT, background=COLOR_ACT),
-        widget.TextBox(text="" , **border_font, foreground=COLOR_ACT, background=COLOR_ACC),
+        widget.TextBox(text="" ,**border_font,  foreground=COLR_TITLE_BG, background=None),
+        widget.TextBox(text="", **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG),
+        widget.TextBox(text="" , **border_font, foreground=COLR_TITLE_BG, background=COLR_BODY_BG),
         caps_lock_widget,
         num_lock_widget,
-        widget.TextBox(text="", **border_font, foreground=COLOR_ACC, background=None),
+        widget.TextBox(text="", **border_font, foreground=COLR_BODY_BG, background=None),
 
         # Temperature
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text=""),
+            foreground=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **icon_font,
-            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+            foreground=COLR_TEXT, background=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
         FuncWithClick(func=getTemps, update_interval=5.0, **default_font,
-            foreground=COLOR_TXT, background=COLOR_ACC),
+            foreground=COLR_TEXT, background=COLR_BODY_BG),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACC, text="", background=None),
+            foreground=COLR_BODY_BG, text="", background=None),
 
         # Utilization
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text=""),
+            foreground=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **icon_font,
-            foreground=COLOR_TXT, background=COLOR_ACT, text=""),
+            foreground=COLR_TEXT, background=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text="", background=COLOR_ACC),
+            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
         FuncWithClick(func=getUtilization, update_interval=3.0,
-            background=COLOR_ACC, foreground=COLOR_TXT, **default_font),
+            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
 
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACC, text="", background=None),
+            foreground=COLR_BODY_BG, text="", background=None),
 
         # Volume
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLOR_ACT, update_interval=1000, **border_font),
+            foreground=COLR_TITLE_BG, update_interval=1000, **border_font),
         vol_icon_widget,
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLOR_ACT, background=COLOR_ACC, update_interval=1000,
+            foreground=COLR_TITLE_BG, background=COLR_BODY_BG, update_interval=1000,
             **border_font),
         vol_widget,
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLOR_ACC, update_interval=1000, **border_font),
+            foreground=COLR_BODY_BG, update_interval=1000, **border_font),
 
         # wifi
-        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         widget.TextBox(
             **icon_font,
-            foreground=COLOR_TXT, background=COLOR_ACT, text="", ),
+            foreground=COLR_TEXT, background=COLR_TITLE_BG, text="", ),
         widget.TextBox(
             **border_font,
-            foreground=COLOR_ACT, text="", background=COLOR_ACC),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
-            background=COLOR_ACC, foreground=COLOR_TXT, **default_font),
-        widget.TextBox(**border_font,foreground=COLOR_ACC, text=""),
+            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
+        FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
+            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
+        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
         # power
-        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         power_widget,
-        widget.TextBox(**border_font,foreground=COLOR_ACT, text=""),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
         logout_widget_header, logout_widget, logout_widget_footer,
         shut_widget_header, shut_widget, shut_widget_footer
@@ -364,7 +367,7 @@ screens = [
         top=bar.Bar(
             getWidgets(),
             size=border_font['fontsize'] - 1,
-            background=COLOR_BG,
+            background=COLR_BAR_BG,
             opacity=0.9
         ),
     ),
