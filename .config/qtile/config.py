@@ -6,7 +6,7 @@ from typing import List
 
 from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
-from libqtile.config import Click, Drag, Group, Key, Screen, Match
+from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
 from my_scripts import FuncWithClick, GroupTextBox
@@ -163,7 +163,7 @@ keys = [
     Key([MOD, "control"], "q", lazy.shutdown()),
     Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
-    Key([MOD], "x", lazy.spawn("i3lock -i ~/Pictures/Lockscreen -t -e -f"))
+    Key([MOD], "x", lazy.spawn("i3lock -i ~/Pictures/Lockscreen -t -e -f")),
 ]
 
 groups = [
@@ -173,30 +173,47 @@ groups = [
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="monadwide"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="monadwide"),
     Group(name='6', label="6 "),
-    Group(name='7', label="7 ")
+    Group(name='7', label="7 "),
+    ScratchPad("scratchpad", [
+        # define a drop down terminal.
+        # it is placed in the upper third of screen by default.
+        DropDown("term", TERMINAL,
+                x=0.05, y=0.008, width=0.9, height=0.7, opacity=0.9,
+                on_focus_lost_hide=True),
+        DropDown("calc", "{} -e python".format(TERMINAL),
+                x=0.05, y=0.59, width=0.9, height=0.4, opacity=0.9,
+                on_focus_lost_hide=True)
+        ],
+        label="")
 ]
 
 for i in groups:
-    keys.extend([
-        # MOD1 + letter of group = switch to group
-        Key([MOD], i.name, lazy.group[i.name].toscreen()),
+    if i.name == 'scratchpad':
+            keys.extend([
+                Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
+                Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
+                Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc'))
+            ])
+    else:
+        keys.extend([
+            # MOD1 + letter of group = switch to group
+            Key([MOD], i.name, lazy.group[i.name].toscreen()),
+            # MOD1 + shift + letter of group = switch to & move focused window to group
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
+        ])
 
-        # MOD1 + shift + letter of group = switch to & move focused window to group
-        Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
-    ])
-
-configs={
+layout_configs={
     "margin":10,
-    "border_width":4,
+    "border_width":3,
     "border_focus":COLR_TITLE_BG,
     "border_normal":COLR_INACTIVE
 }
 
 layouts = [
-    layout.Columns(**configs),
-    layout.MonadTall(**configs, ratio=0.65),
-    layout.MonadWide(**configs, ratio=0.65),
-    layout.Zoomy(**configs),
+    layout.Columns(**layout_configs),
+    layout.MonadTall(**layout_configs, ratio=0.65),
+    layout.MonadWide(**layout_configs, ratio=0.65),
+    layout.Zoomy(**layout_configs),
     layout.Max(),
 ]
 
@@ -206,6 +223,8 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
     inactive_fg, inactive_bg, urgent_fg, urgent_bg, not_empty_fg, not_empty_bg):
     w = []
     for g in groups:
+        if g.name == 'scratchpad':
+            continue
         w += [
             GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
                 active_fg=active_bg, active_bg=COLR_BAR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLR_BAR_BG,
@@ -359,7 +378,6 @@ def getWidgets():
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         power_widget, power_widget_footer,
-        # widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
         logout_widget_header, logout_widget, logout_widget_footer,
         shut_widget_header, shut_widget
@@ -407,7 +425,11 @@ floating_layout = layout.Floating(float_rules=[
     {'wname': 'branchdialog'},  # gitk
     {'wname': 'pinentry'},  # GPG key password entry
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
-])
+    ],
+    border_width=2,
+    border_focus=COLR_BAR_BG,
+    border_normal=COLR_INACTIVE
+)
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
