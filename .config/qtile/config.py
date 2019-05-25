@@ -22,7 +22,8 @@ COLR_TITLE_BG = 'a42f2b'
 COLR_BODY_BG = '1c5d87'
 COLR_INACTIVE = '441500'
 COLR_TEXT = '110808'
-COLR_BAR_BG = '011234'
+#COLR_BAR_BG = '011234'
+COLR_BAR_BG='000212'
 
 default_font = dict(
     font="Iosevka Nerd Font Medium Oblique",
@@ -163,7 +164,7 @@ keys = [
     Key([MOD, "control"], "q", lazy.shutdown()),
     Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
-    Key([MOD], "x", lazy.spawn("i3lock -i ~/Pictures/Lockscreen -t -e -f")),
+    Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
 
 groups = [
@@ -276,7 +277,7 @@ def getWidgets():
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=360),
+        widget.Spacer(length=500),
 
         # time
         widget.TextBox(
@@ -371,7 +372,7 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlp4s0'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
             background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
         widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
