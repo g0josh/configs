@@ -162,7 +162,8 @@ keys = [
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
-    Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
+    # Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
+    Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
@@ -207,7 +208,7 @@ layout_configs={
     "margin":10,
     "border_width":3,
     "border_focus":COLR_TITLE_BG,
-    "border_normal":COLR_INACTIVE
+    "border_normal":COLR_TEXT
 }
 
 layouts = [
@@ -277,27 +278,16 @@ def getWidgets():
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=500),
+        widget.Spacer(length=490),
 
         # time
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **icon_font,
-            background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        widget.Clock(format='%b %d, %A, %I:%M %p',
-            **default_font,
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+        widget.TextBox(**icon_font,background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
+        widget.Clock(format='%b %d, %A, %I:%M %p',**default_font,
             foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_BODY_BG, text=""),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_BODY_BG, text=""),
+        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
+        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
         widget.Clock(format='%I:%M %p', timezone='Asia/Kolkata',
             **default_font,
             foreground=COLR_TEXT, background=COLR_BODY_BG),
@@ -305,6 +295,9 @@ def getWidgets():
             **border_font,
             foreground=COLR_BODY_BG, text=""),
 
+        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
+        widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_BODY_BG),
+        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
         widget.Spacer(),
 
         widget.Systray(),

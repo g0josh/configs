@@ -8,7 +8,7 @@ Xft.lcdfilter: lcddefault
 
 ! special
 *.foreground:   #c2d7fb
-*.background:   #000e1c
+*.background:   #000212
 *.cursorColor:  #c2d7fb
 
 ! black
@@ -49,7 +49,7 @@ Xft.lcdfilter: lcddefault
 URxvt.font: xft:Iosevka:style=Regular:size=12:antialias=true:hinting=true:minispace=False, xft:FuraCode Nerd Font Mono:style=Regular:size=12:minispace=False
 
 URxvt.depth:                    32
-URxvt.background: 		[80]#000e1c
+URxvt.background: 		[80]#000212
 URxvt*internalBorder:           20
 URxvt*scrollBar:                false
 URxvt*scrollTtyOutput:          false
@@ -59,7 +59,7 @@ URxvt*cursorBlink:              true
 URxvt*saveLines:                10000
 !URxvt*fade:			70
 !URxvt*fadeColor:		#0d0b0b
-URxvt*blurRadius:		5
+!URxvt*blurRadius:		5
 
 URxvt.keysym.C-0: command:\033]710;xft:Iosevka:style=Regular:size=12:antialias=true\007
 URxvt.keysym.C-minus: command:\033]710;xft:Iosevka:style=Regular:size=10:antialias=true\007
