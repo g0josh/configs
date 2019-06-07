@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 
 import os
 import subprocess
@@ -20,13 +20,12 @@ TERMINAL = "urxvt"
 BROWSER = "firefox"
 COLR_TITLE_BG = 'a42f2b'
 COLR_BODY_BG = '1c5d87'
-COLR_INACTIVE = '441500'
+COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
-#COLR_BAR_BG = '011234'
 COLR_BAR_BG='000212'
 
 default_font = dict(
-    font="Iosevka Nerd Font Medium Oblique",
+    font="Iosevka Nerd Font Bold Italic",
     fontsize=15,
     padding=0
 )
@@ -172,8 +171,8 @@ groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
-    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="monadwide"),
-    Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="monadwide"),
+    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
+    Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
@@ -229,7 +228,7 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
             continue
         w += [
             GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLR_BAR_BG, not_empty_fg=inactive_bg, not_empty_bg=COLR_BAR_BG,
+                active_fg=active_bg, active_bg=COLR_BAR_BG, not_empty_fg=not_empty_bg, not_empty_bg=COLR_BAR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
                 urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
             GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
@@ -237,7 +236,7 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
                 inactive_fg=inactive_fg, inactive_bg=inactive_bg,
                 urgent_fg=urgent_fg, urgent_bg=urgent_bg, **icon_font),
             GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLR_BAR_BG,not_empty_fg=inactive_bg, not_empty_bg=COLR_BAR_BG,
+                active_fg=active_bg, active_bg=COLR_BAR_BG,not_empty_fg=not_empty_bg, not_empty_bg=COLR_BAR_BG,
                 inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
                 urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
         ]
@@ -254,8 +253,8 @@ def getWidgets():
     ]
 
     widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_BODY_BG,
-        inactive_fg=COLR_INACTIVE, inactive_bg=COLR_TEXT, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
-        not_empty_fg=COLR_BODY_BG, not_empty_bg=COLR_TEXT)
+        inactive_fg=COLR_TEXT, inactive_bg=COLR_INACTIVE, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
+        not_empty_fg=COLR_BODY_BG, not_empty_bg=COLR_INACTIVE)
 
     widgets += [
         # Music
@@ -421,7 +420,7 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
     ],
     border_width=2,
-    border_focus=COLR_BAR_BG,
+    border_focus=COLR_TITLE_BG,
     border_normal=COLR_INACTIVE
 )
 auto_fullscreen = True

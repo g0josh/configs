@@ -300,7 +300,7 @@ def mpd_reconnect(host='localhost', port='6600'):
             return False
     return True
 
-def getMpd(not_connected_text='', host='localhost', port='6600'):
+def getMpd(not_connected_text='', max_len = 12, host='localhost', port='6600'):
     if not mpd_reconnect(host, port):
         return not_connected_text
 
@@ -311,14 +311,14 @@ def getMpd(not_connected_text='', host='localhost', port='6600'):
     status, current_song = mpd_client.command_list_end()
     for e in ['artist', 'title']:
         if e in current_song:
-            if len(current_song[e]) > 15:
-                current_song[e] = current_song[e][:15] + '...'
+            if len(current_song[e]) > max_len:
+                current_song[e] = current_song[e][:max_len] + '...'
         else:
             current_song[e] = 'Unknown'
     for e in ['elapsed', 'duration']:
         mm, ss = divmod(float(status[e]), 60)
         status[e] = '{:02.0f}:{:02.0f}'.format(mm, ss)
-    return "{} - {}/{}".format(current_song['title'], status['elapsed'], status['duration'])
+    return ("{:"+str(max_len+3)+"} - {}/{}").format(current_song['title'], status['elapsed'], status['duration'])
 
 def clickMpd(x, y, button):
     if not mpd_reconnect():
