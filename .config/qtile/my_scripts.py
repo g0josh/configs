@@ -1,6 +1,7 @@
 import subprocess
 import time
 import re
+import os
 
 from libqtile.log_utils import logger
 from libqtile import bar
@@ -39,18 +40,6 @@ else:
     mpd_password = None
     MPD = True
 
-def _getCpuCores():
-    with open('/proc/cpuinfo', 'r') as f:
-        _file = f.read()
-
-    cores = re.search(r'cpu cores\s:\s\d', _file)
-    if cores:
-        cpu_cores = int(cores.group().split(':')[1].strip())
-    else:
-        cpu_cores = 4
-
-    return cpu_cores
-
 def _getPulseSinks():
     try:
         output = subprocess.check_output(['pactl','list','short','sinks']).decode()
@@ -60,7 +49,6 @@ def _getPulseSinks():
     else:
         return re.findall(r'^\d', output, flags=re.MULTILINE)
 
-cpu_cores = _getCpuCores()
 pulse_sinks = _getPulseSinks()
 
 class GroupTextBox(_GroupBase):
@@ -300,7 +288,7 @@ def mpd_reconnect(host='localhost', port='6600'):
             return False
     return True
 
-def getMpd(not_connected_text='', max_len = 12, host='localhost', port='6600'):
+def getMpd(not_connected_text='', host='localhost', port='6600'):
     if not mpd_reconnect(host, port):
         return not_connected_text
 
@@ -311,14 +299,16 @@ def getMpd(not_connected_text='', max_len = 12, host='localhost', port='6600'
     status, current_song = mpd_client.command_list_end()
     for e in ['artist', 'title']:
         if e in current_song:
-            if len(current_song[e]) > max_len:
-                current_song[e] = current_song[e][:max_len] + '...'
+            if len(current_song[e]) > 15:
+                current_song[e] = current_song[e][:12] + '...'
+            elif len(current_song[e]) < 15:
+                current_song[e] = f"{current_song[e]}{' '*(15-len(current_song[e]))}"
         else:
             current_song[e] = 'Unknown'
     for e in ['elapsed', 'duration']:
         mm, ss = divmod(float(status[e]), 60)
         status[e] = '{:02.0f}:{:02.0f}'.format(mm, ss)
-    return ("{:"+str(max_len+3)+"} - {}/{}").format(current_song['title'], status['elapsed'], status['duration'])
+    return "{} - {}/{}".format(current_song['title'], status['elapsed'], status['duration'])
 
 def clickMpd(x, y, button):
     if not mpd_reconnect():
@@ -399,12 +389,11 @@ def getUtilization():
         return 'error'
 
     result = ""
-    _cpu_util = re.search(r'load average:\s(\d+\.\d+),\s(\d+\.\d+)', cpu)
+    _cpu_util = re.search(r'load average:\s(\d+\.\d+)', cpu)
     _gpu_util = re.search(r'Gpu\s+:\s\d+',gpu)
     if _cpu_util:
-        global cpu_cores
-        u = _cpu_util.group().split(',')[-1].strip()
-        result = '{:0.0f}'.format((float(u)*100/cpu_cores))
+        u = _cpu_util.group().split(':')[-1].strip()
+        result = '{:0.0f}'.format((float(u)*100/os.cpu_count()))
     if _gpu_util:
         u = _gpu_util.group().split(':')[-1].strip()
         result = result + '|' + u if result else u

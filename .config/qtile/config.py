@@ -277,7 +277,7 @@ def getWidgets():
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=490),
+        widget.Spacer(length=470),
 
         # time
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
