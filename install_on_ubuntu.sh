@@ -65,7 +65,8 @@ cp configs/.vimrc ~/
 sudo cp Iosevka* /usr/local/share/fonts/
 sudo cp Font\ Awesome* /usr/local/share/fonts/
 fc-cache -fv
-sudo dpkg -i configs/resemsmice.deb
+sudo dpkg -i configs/resemsmice_1.1.3_amd64.deb
+cp configs/Wallpaper ~/Pictures/
 
 sudo apt autoremove
 echo "Please install NVIDIA drivers next"
