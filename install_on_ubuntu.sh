@@ -40,6 +40,7 @@ if [ "$1" == "o" ]; then
     echo "-----------------------------------------------"
     echo "Seting up for Office..."
     echo "-----------------------------------------------"
+    sudo cp qtile.desktop /usr/share/xsessions
 else
     echo "-----------------------------------------------"
     echo "Seting up for Home..."
