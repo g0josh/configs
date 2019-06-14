@@ -1,19 +1,34 @@
 #!/bin/bash
 
-sudo apt install xorg
+echo "Make sure you clone the repo www.github.com/g0josh/configs.git and run this script inside the folder 'configs'"
+read -p 'Continue[y/n] :' cont
+if [ "$cont" == "n" ]; then
+	exit 1
+fi
+read -p 'Office(1) or Home(0): ' office
 
+sudo apt install xorg
+echo ""
+echo "---------------------------------------"
+echo "Installing compton"
+echo "---------------------------------------"
+echo ""
 # compton
 sudo apt install asciidoc --no-install-recommends
-sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc
+sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl
 cd ~/Downloads
 git clone https://github.com/tryone144/compton.git
 cd compton
 make
 make docs
 sudo make install
-sudo apt remove libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev docbook-xml libxml2-utils xsltproc asciidoc
+sudo apt remove libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev docbook-xml libxml2-utils xsltproc asciidoc libxslt1-dev libconfig-dev docbook-xsl
 
-# Qtile
+echo ""
+echo "---------------------------------------"
+echo "Installing Qtile"
+echo "---------------------------------------"
+echo ""
 sudo apt-get install libpangocairo-1.0-0
 pip3 install xcffib cairocffi qtile
 
@@ -28,45 +43,49 @@ sudo apt-get install apt-transport-https
 wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
 sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
 
-curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
-echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
 
 sudo add-apt-repository ppa:codejamninja/jam-os
 
 sudo apt update
-sudo apt install opera-stable code i3lock-color tmux numlockx
+sudo apt install opera-stable code i3lock-color tmux
 
-if [ "$1" == "o" ]; then
+if [ "$office" == "1" ]; then
     echo "-----------------------------------------------"
-    echo "Seting up for Office..."
+    echo "Installing Office tools..."
     echo "-----------------------------------------------"
     sudo cp qtile.desktop /usr/share/xsessions
 else
     echo "-----------------------------------------------"
-    echo "Seting up for Home..."
+    echo "Installing home tools..."
     echo "-----------------------------------------------"
-    sudo apt install syncthing transmission uget mpd nomacs ncmpcpp
+    curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+    echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+    sudo apt install syncthing transmission uget mpd nomacs ncmpcpp numlockx
+    sudo dpkg -i ./resemsmice_1.1.3_amd64.deb
+    cp ./.Xsession ~/
 fi
 
-# get the configs
-cd ~/Downloads
-git clone https://github.com/g0josh.configs.git
+echo ""
+echo "---------------------------------------"
+echo "Setting up configs"
+echo "---------------------------------------"
+echo ""
+
 git checkout sweet
 git pull
 mkdir ~/.config/qtile
 mkdir ~/.config/ranger
-cp configs/.config/qtile/* ~/.config/qtile/
-cp configs/.config/ranger/* ~/.config/ranger/
-cp configs/.config/compton.conf ~/.config/compton.conf
-cp configs/.X* ~/
-cp configs/.bashrc ~/
-cp configs/.tmux.conf ~/
-cp configs/.vimrc ~/
-sudo cp Iosevka* /usr/local/share/fonts/
-sudo cp Font\ Awesome* /usr/local/share/fonts/
+cp ./.config/qtile/* ~/.config/qtile/
+cp ./.config/ranger/* ~/.config/ranger/
+cp ./.config/compton.conf ~/.config/compton.conf
+cp ./.Xresources ~/
+cp ./.bashrc ~/
+cp ./.tmux.conf ~/
+cp ./.vimrc ~/
+sudo cp ./Iosevka* /usr/local/share/fonts/
+sudo cp ./Font\ Awesome* /usr/local/share/fonts/
 fc-cache -fv
-sudo dpkg -i configs/resemsmice_1.1.3_amd64.deb
-cp configs/Wallpaper ~/Pictures/
+cp ./Wallpaper ~/Pictures/
 
 sudo apt autoremove
 echo "Please install NVIDIA drivers next"
