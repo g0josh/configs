@@ -17,12 +17,12 @@ from my_scripts import showPowerClicked, powerClicked
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
-BROWSER = "firefox"
+BROWSER = "opera"
 COLR_TITLE_BG = 'a42f2b'
 COLR_BODY_BG = '1c5d87'
 COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
-COLR_BAR_BG='000212'
+COLR_BAR_BG='090e36'
 
 default_font = dict(
     font="Iosevka Nerd Font Bold Italic",
@@ -294,9 +294,9 @@ def getWidgets():
             **border_font,
             foreground=COLR_BODY_BG, text=""),
 
-        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
-        widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+        widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
+        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         widget.Spacer(),
 
         widget.Systray(),
