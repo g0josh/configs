@@ -173,7 +173,7 @@ groups = [
     Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
-    Group(name='6', label="6 "),
+    Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
         # define a drop down terminal.
@@ -212,7 +212,7 @@ layout_configs={
 
 layouts = [
     layout.Columns(**layout_configs),
-    layout.MonadTall(**layout_configs, ratio=0.65),
+        layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.Zoomy(**layout_configs),
     layout.Max(),
@@ -281,7 +281,7 @@ def getWidgets():
 
         # time
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(**icon_font,background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
+        widget.TextBox(**icon_font, background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
         widget.Clock(format='%b %d, %A, %I:%M %p',**default_font,
             foreground=COLR_TEXT, background=COLR_BODY_BG),

@@ -430,11 +430,11 @@ def powerClicked(x, y, button, widget_button):
     elif widget_button == POWER_BUTTONS['LOGOUT']:
         cmd = ['qtile-cmd', '-o', 'cmd', '-f', 'shutdown']
     elif widget_button == POWER_BUTTONS['LOCK_SCREEN']:
-        cmd = None
+        cmd = [os.path.expanduser("~/.config/qtile/lockscreen.sh")]
 
     if cmd:
         try:
-            subprocess.call(cmd)
+            subprocess.run(cmd)
         except subprocess.CalledProcessError as e:
             logger.warning(e.output.decode().strip())
 
