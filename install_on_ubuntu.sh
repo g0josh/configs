@@ -51,9 +51,8 @@ sudo apt install opera-stable code i3lock-color tmux
 
 if [ "$office" == "1" ]; then
     echo "-----------------------------------------------"
-    echo "Installing Office tools..."
+    echo "Installing Office tools only..."
     echo "-----------------------------------------------"
-    sudo cp qtile.desktop /usr/share/xsessions
 else
     echo "-----------------------------------------------"
     echo "Installing home tools..."
@@ -76,6 +75,7 @@ git pull
 mkdir ~/.config/qtile
 mkdir ~/.config/ranger
 cp ./.config/qtile/* ~/.config/qtile/
+sudo cp qtile.desktop /usr/share/xsessions
 cp ./.config/ranger/* ~/.config/ranger/
 cp ./.config/compton.conf ~/.config/compton.conf
 cp ./.Xresources ~/

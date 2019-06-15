@@ -1,5 +1,5 @@
 #!/bin/sh
 
 compton &
-syncthing &
+syncthing -no-browser &
 mpd
