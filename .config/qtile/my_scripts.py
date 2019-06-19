@@ -249,27 +249,6 @@ def changeVolume(value='+5%'):
 # ---------------------------------------------
 # MPD
 # ---------------------------------------------
-def getWlan(interface='wlo1'):
-    global init_time, init_speed
-    status = iwlib.get_iwconfig(interface)
-    essid = status['ESSID'].decode().strip()
-
-    if not essid:
-        return ""
-
-    speed = ( psutil.net_io_counters(pernic=True)[interface][0],
-                psutil.net_io_counters(pernic=True)[interface][1])
-    _time = time.time()
-    try:
-        ul, dl = [(now - last) / (_time - init_time) / 1024.0
-                for now, last in zip(speed, init_speed)]
-        init_speed = speed
-        init_time = _time
-    except Exception as e:
-        logger.warning (e)
-        return 'error'
-
-    return "{}|{:4.0f} kB/s".format(essid, dl)
 
 def mpd_reconnect(host='localhost', port='6600'):
     global MPD
@@ -346,6 +325,28 @@ def clickMpd(x, y, button):
 # MISC
 # ---------------------------------------------
 
+def getWlan(interface='wlo1'):
+    global init_time, init_speed
+    status = iwlib.get_iwconfig(interface)
+    essid = status['ESSID'].decode().strip()
+
+    if not essid:
+        return ""
+
+    speed = ( psutil.net_io_counters(pernic=True)[interface][0],
+                psutil.net_io_counters(pernic=True)[interface][1])
+    _time = time.time()
+    try:
+        ul, dl = [(now - last) / (_time - init_time) / 1024.0
+                for now, last in zip(speed, init_speed)]
+        init_speed = speed
+        init_time = _time
+    except Exception as e:
+        logger.warning (e)
+        return 'error'
+
+    return "{}|{:3.0f} kB/s".format(essid, dl)
+
 def getlocksStatus():
     result = {'Caps':False, 'Num':False}
     """Return a list with the current state of the keys."""
@@ -400,6 +401,14 @@ def getUtilization():
 
     return result
 
+def getNumScreens():
+    try:
+        o = subprocess.check_output(['xrandr']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return 1
+    else:
+        return len(re.findall(r'\w+ connected \w+', o))
 
 # ---------------------------------------------
 # POWER

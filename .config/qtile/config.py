@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
-from my_scripts import FuncWithClick, GroupTextBox
+from my_scripts import FuncWithClick, GroupTextBox, getNumScreens
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
 from my_scripts import showPowerClicked, powerClicked
@@ -79,6 +79,18 @@ power_widget.click_func_args = {'widgets':[power_widget, power_widget_footer,
                                 'ontexts':[" ","","","","", "","","",""," "],
                                 'offtexts':["","", "","","","","","","",""]}
 
+@lazy.function
+def window_to_prev_group(qtile):
+    if qtile.currentWindow is not None:
+        i = qtile.groups.index(qtile.currentGroup)
+        qtile.currentWindow.togroup(qtile.groups[i - 1].name)
+
+@lazy.function
+def window_to_next_group(qtile):
+    if qtile.currentWindow is not None:
+        i = qtile.groups.index(qtile.currentGroup)
+        qtile.currentWindow.togroup(qtile.groups[i + 1].name)
+
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -141,8 +153,11 @@ keys = [
 
     Key([], "XF86AudioMute", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
                                                      icon_widget=vol_icon_widget, value_widget=vol_widget))),
-    Key([MOD, ALT], "Left", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
+
+    Key([MOD], "z", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
                                                      icon_widget=vol_icon_widget, value_widget=vol_widget))),
+    Key([MOD, "shift", "control"], "Left", lazy.prev_screen()),
+    Key([MOD, "shift", "control"], "Right", lazy.next_screen()),
 
     Key([], "XF86AudioLowerVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
@@ -157,7 +172,12 @@ keys = [
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
+
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
+    Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
+
+    Key([MOD, ALT, "control"], "Right", window_to_next_group),
+    Key([MOD, ALT, "control"], "Left", window_to_prev_group),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
@@ -212,9 +232,11 @@ layout_configs={
 
 layouts = [
     layout.Columns(**layout_configs),
-        layout.MonadTall(**layout_configs, ratio=0.65),
+    layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
-    layout.Zoomy(**layout_configs),
+    layout.TreeTab(**layout_configs, active_bg=COLR_TITLE_BG, inactive_bg=COLR_INACTIVE,
+        active_fg=COLR_TEXT, inactive_fg=COLR_TEXT, bg_color=COLR_BAR_BG,
+        padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
     layout.Max(),
 ]
 
@@ -252,9 +274,9 @@ def getWidgets():
         )
     ]
 
-    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_BODY_BG,
+    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_TITLE_BG,
         inactive_fg=COLR_TEXT, inactive_bg=COLR_INACTIVE, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
-        not_empty_fg=COLR_BODY_BG, not_empty_bg=COLR_INACTIVE)
+        not_empty_fg=COLR_TEXT, not_empty_bg=COLR_BODY_BG)
 
     widgets += [
         # Music
@@ -377,16 +399,16 @@ def getWidgets():
     ]
     return widgets
 
-screens = [
-    Screen(
-        top=bar.Bar(
-            getWidgets(),
-            size=border_font['fontsize'] - 1,
-            background=COLR_BAR_BG,
-            opacity=0.9
-        ),
-    ),
-]
+screens = []
+for n in range(getNumScreens()):
+    screens.append(
+        Screen(
+            top=bar.Bar(
+                getWidgets(), size=border_font['fontsize'] - 1,
+                background=COLR_BAR_BG, opacity=0.9
+            )
+        )
+    )
 
 # Drag floating layouts.
 mouse = [
@@ -447,6 +469,10 @@ wmname = "LG3D"
 #         c.togroup("4")
 #     if c.wm_instance_class == "ncmpcpp_inst":
 #         c.togroup("5")
+
+@hook.subscribe.screen_change
+def restart_on_randr(qtile, ev):
+    qtile.cmd_restart()
 
 # Autostart
 @hook.subscribe.startup_once
