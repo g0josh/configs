@@ -11,6 +11,7 @@ D="`xrdb -query|grep color12:|awk '{print $2}'`aa"	#Default
 W="`xrdb -query|grep color1:|awk '{print $2}'`aa"	#Wrong
 
 i3lock \
+--tiling \
 --image $LOCKIMAGE \
  \
 --radius=90 \
@@ -24,20 +25,20 @@ i3lock \
 --insidevercolor=$C \
 --insidewrongcolor=$C \
 --line-uses-inside \
---indpos="1560:500" \
+--indpos="500:750" \
  \
 --clock \
 --timecolor=$T \
 --timestr="%I:%M %p" \
 --timesize=200 \
 --time-font="Iosevka" \
---timepos="1560:800" \
+--timepos="500:1100" \
  \
 --datestr="%d %b, %A" \
 --datesize=100 \
 --datecolor=$T \
 --date-font="Iosevka" \
---datepos="1560:950" \
+--datepos="500:1200" \
  \
 --veriftext="" \
 --verifcolor=$T \
