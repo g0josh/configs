@@ -22,7 +22,9 @@ COLR_TITLE_BG = 'a42f2b'
 COLR_BODY_BG = '1c5d87'
 COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
-COLR_BAR_BG='090e36'
+COLR_BAR_BG = '090e36'
+
+NUM_SCREENS = getNumScreens()
 
 default_font = dict(
     font="Iosevka Nerd Font Bold Italic",
@@ -40,44 +42,60 @@ icon_font = dict(
     padding=0
 )
 
-# Volume widgets
-vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
-        update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
-vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
-        background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
-vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
-vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+# Create widgets for all screens
+vol_icon_widgets = vol_widgets = []
+numlock_widgets = capslock_widgets = []
+power_widgets = power_tail_widgets = []
+shut_head_widgets = shut_widgets= []
+lock_head_widgets = lock_widgets = lock_tail_widgets = []
+for n in range(NUM_SCREENS):
+    # Volume widgets
+    vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
+            update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
+    vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
+            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
+    vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+    vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+    vol_icon_widgets.append(vol_icon_widget)
+    vol_widgets.append(vol_widget)
 
-# Lock widgets
-num_lock_widget = widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
-                background=COLR_BODY_BG)
-caps_lock_widget = widget.TextBox(text=" A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
-                background=COLR_BODY_BG)
+    # Lock widgets
+    numlock_widgets.append( widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
+                    background=COLR_BODY_BG) )
+    capslock_widgets.append( widget.TextBox(text=" A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
+                    background=COLR_BODY_BG) )
 
-# power widgets
-power_widget = FuncWithClick(func=lambda:" ", click_func=showPowerClicked,
-                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-power_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    # power widgets
+    power_widget = FuncWithClick(func=lambda:" ", click_func=showPowerClicked,
+                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    power_tail_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
 
-shut_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
-                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    shut_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
+                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-logout_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOGOUT']},
-                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    # logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    # logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    # logout_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOGOUT']},
+    #                 **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-lock_screen_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-lock_screen_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-lock_screen_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
-                **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-power_widget.click_func_args = {'widgets':[power_widget, power_widget_footer,
-                                    lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
-                                    logout_widget_header,logout_widget,logout_widget_footer,
-                                    shut_widget_header, shut_widget],
-                                'ontexts':[" ","","","","", "","","",""," "],
-                                'offtexts':["","", "","","","","","","",""]}
+    lock_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    lock_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    lock_tail_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
+                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    power_widget.click_func_args = {'widgets':[power_widget, power_tail_widget,
+                                        lock_head_widget, lock_widget, lock_tail_widget,
+                                        shut_head_widget, shut_widget],
+                                    'ontexts':[" ","","","","", ""," "],
+                                    'offtexts': ["", "", "", "", "", "", ""]}
+    power_widgets.append(power_widget)
+    power_tail_widgets.append(power_tail_widget)
+    shut_head_widgets.append(shut_head_widget)
+    shut_widgets.append(shut_widget)
+    lock_head_widgets.append(lock_head_widget)
+    lock_widgets.append(lock_widget)
+    lock_tail_widgets.append(lock_tail_widget)
+
 
 @lazy.function
 def window_to_prev_group(qtile):
@@ -312,7 +330,7 @@ def getWidgets():
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=370),
+        widget.Spacer(length=470),
 
         # time
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
@@ -399,7 +417,7 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
             background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
         widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
