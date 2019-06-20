@@ -49,9 +49,9 @@ vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_
 vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
 
 # Lock widgets
-caps_lock_widget = widget.TextBox(text="A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
+num_lock_widget = widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
                 background=COLR_BODY_BG)
-num_lock_widget = widget.TextBox(text=" 0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
+caps_lock_widget = widget.TextBox(text=" A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
                 background=COLR_BODY_BG)
 
 # power widgets
@@ -91,6 +91,15 @@ def window_to_next_group(qtile):
         i = qtile.groups.index(qtile.currentGroup)
         qtile.currentWindow.togroup(qtile.groups[i + 1].name)
 
+@lazy.function
+def float_to_front(qtile):
+    """
+    Bring all floating windows of the group to front
+    """
+    for window in qtile.currentGroup.windows:
+        if window.floating:
+            window.cmd_bring_to_front()
+
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -123,17 +132,20 @@ keys = [
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
     Key([MOD, "control"], "m", lazy.layout.maximize()),
-    Key([MOD, "control"], "space", lazy.layout.flip()),
+    Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
     # Switch window focus to other pane(s) of stack
     Key([MOD], "space", lazy.layout.next()),
 
     # Swap panes of split stack
-    Key([MOD, "shift"], "space", lazy.layout.rotate()),
+    # Key([MOD, "shift"], "space", lazy.layout.rotate()),
 
-    # Toggle floating
-    Key([MOD, "control"], "space", lazy.window.toggle_floating()),
+    # Toggle floating n fullscreen
+    Key([MOD, "shift"], "f", lazy.window.toggle_floating()),
+    Key([MOD, "control"], "f", float_to_front),
+    Key([MOD], "f", lazy.window.toggle_fullscreen()),
+
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -148,8 +160,8 @@ keys = [
 
     Key([MOD], "w", lazy.window.kill()),
 
-    Key([], "Caps_Lock", lazy.function(lambda x:caps_lock_widget.update( "A" if caps_lock_widget.text == "" else "" ))),
-    Key([], "Num_Lock", lazy.function(lambda x:num_lock_widget.update( " 0" if num_lock_widget.text == "" else "" ))),
+    Key([], "Caps_Lock", lazy.function(lambda x:caps_lock_widget.update( " A" if caps_lock_widget.text == "" else "" ))),
+    Key([], "Num_Lock", lazy.function(lambda x:num_lock_widget.update( "0" if num_lock_widget.text == "" else "" ))),
 
     Key([], "XF86AudioMute", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
                                                      icon_widget=vol_icon_widget, value_widget=vol_widget))),
@@ -158,6 +170,7 @@ keys = [
                                                      icon_widget=vol_icon_widget, value_widget=vol_widget))),
     Key([MOD, "shift", "control"], "Left", lazy.prev_screen()),
     Key([MOD, "shift", "control"], "Right", lazy.next_screen()),
+    Key([MOD], "u", lazy.next_urgent()),
 
     Key([], "XF86AudioLowerVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
@@ -199,10 +212,10 @@ groups = [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
         DropDown("term", TERMINAL,
-                x=0.05, y=0.008, width=0.9, height=0.7, opacity=0.9,
+                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True),
         DropDown("calc", "{} -e python".format(TERMINAL),
-                x=0.05, y=0.59, width=0.9, height=0.4, opacity=0.9,
+                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True)
         ],
         label="")
@@ -235,7 +248,7 @@ layouts = [
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=COLR_TITLE_BG, inactive_bg=COLR_INACTIVE,
-        active_fg=COLR_TEXT, inactive_fg=COLR_TEXT, bg_color=COLR_BAR_BG,
+        active_fg=COLR_TEXT, inactive_fg=COLR_BODY_BG, bg_color=COLR_BAR_BG,
         padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
     layout.Max(),
 ]
@@ -299,7 +312,7 @@ def getWidgets():
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=470),
+        widget.Spacer(length=370),
 
         # time
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
@@ -327,8 +340,8 @@ def getWidgets():
         widget.TextBox(text="" ,**border_font,  foreground=COLR_TITLE_BG, background=None),
         widget.TextBox(text="", **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG),
         widget.TextBox(text="" , **border_font, foreground=COLR_TITLE_BG, background=COLR_BODY_BG),
-        caps_lock_widget,
         num_lock_widget,
+        caps_lock_widget,
         widget.TextBox(text="", **border_font, foreground=COLR_BODY_BG, background=None),
 
         # Temperature
@@ -386,7 +399,7 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
             background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
         widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
@@ -404,7 +417,8 @@ for n in range(getNumScreens()):
     screens.append(
         Screen(
             top=bar.Bar(
-                getWidgets(), size=border_font['fontsize'] - 1,
+                widgets=getWidgets(),
+                size=border_font['fontsize'] - 1,
                 background=COLR_BAR_BG, opacity=0.9
             )
         )
