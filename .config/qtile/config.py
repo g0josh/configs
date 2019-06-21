@@ -13,6 +13,8 @@ from my_scripts import FuncWithClick, GroupTextBox, getNumScreens
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
 from my_scripts import showPowerClicked, powerClicked
+from libqtile.log_utils import logger
+
 
 MOD = "mod4"
 ALT = "mod1"
@@ -42,12 +44,39 @@ icon_font = dict(
     padding=0
 )
 
+groups = [
+    Group(name='1', label="1 "),
+    Group(name='2', label="2 "),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
+    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
+    Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
+    Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
+    Group(name='7', label="7 "),
+    ScratchPad("scratchpad", [
+        # define a drop down terminal.
+        # it is placed in the upper third of screen by default.
+        DropDown("term", TERMINAL,
+                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
+                on_focus_lost_hide=True),
+        DropDown("calc", "{} -e python".format(TERMINAL),
+                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
+                on_focus_lost_hide=True)
+        ],
+        label="")
+]
+
 # Create widgets for all screens
-vol_icon_widgets = vol_widgets = []
-numlock_widgets = capslock_widgets = []
-power_widgets = power_tail_widgets = []
-shut_head_widgets = shut_widgets= []
-lock_head_widgets = lock_widgets = lock_tail_widgets = []
+vol_icon_widgets = []
+vol_widgets = []
+numlock_widgets = []
+capslock_widgets = []
+power_widgets = []
+power_tail_widgets = []
+lock_head_widgets = []
+lock_widgets = []
+lock_tail_widgets = []
+shut_head_widgets = []
+shut_widgets = []
 for n in range(NUM_SCREENS):
     # Volume widgets
     vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
@@ -96,18 +125,18 @@ for n in range(NUM_SCREENS):
     lock_widgets.append(lock_widget)
     lock_tail_widgets.append(lock_tail_widget)
 
+logger.warn("SCREENS = {}, caps = {}, num = {}".format(NUM_SCREENS, capslock_widgets, numlock_widgets))
+logger.warn('vol icons = {}, vol values = {}'.format(vol_icon_widgets, vol_widgets))
+logger.warn('power = {}'.format(power_widgets))
 
-@lazy.function
-def window_to_prev_group(qtile):
-    if qtile.currentWindow is not None:
-        i = qtile.groups.index(qtile.currentGroup)
-        qtile.currentWindow.togroup(qtile.groups[i - 1].name)
-
-@lazy.function
-def window_to_next_group(qtile):
-    if qtile.currentWindow is not None:
-        i = qtile.groups.index(qtile.currentGroup)
-        qtile.currentWindow.togroup(qtile.groups[i + 1].name)
+def window_to_next_prev_group(next=True):
+    if qtile.currentWindow is None:
+        return
+    i = qtile.groups.index(qtile.currentGroup)
+    i = i+1 if next else i-1
+    if i < 0 or i >= len(groups):
+        return
+    qtile.currentWindow.togroup(qtile.groups[i].name)
 
 @lazy.function
 def float_to_front(qtile):
@@ -117,6 +146,19 @@ def float_to_front(qtile):
     for window in qtile.currentGroup.windows:
         if window.floating:
             window.cmd_bring_to_front()
+
+def toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]):
+    for _widget in widgets:
+        if not isinstance(_widget, widget.TextBox):
+            continue
+        _widget.update(options[0] if _widget.text == options[1] else options[1])
+
+def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_widgets=vol_widgets, vol_icon_widgets=vol_icon_widgets):
+    for x, y in zip(vol_widgets, vol_icon_widgets):
+        logger.warn(x)
+        logger.warn(y)
+        logger.warn("\n")
+        volumePressed(x=0,y=0,mouse_click=action, icon_widget=y, value_widget=x)
 
 keys = [
     # Switch between windows in current stack pane
@@ -178,27 +220,19 @@ keys = [
 
     Key([MOD], "w", lazy.window.kill()),
 
-    Key([], "Caps_Lock", lazy.function(lambda x:caps_lock_widget.update( " A" if caps_lock_widget.text == "" else "" ))),
-    Key([], "Num_Lock", lazy.function(lambda x:num_lock_widget.update( "0" if num_lock_widget.text == "" else "" ))),
+    Key([], "Caps_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]))),
+    Key([], "Num_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=numlock_widgets, options=["0", ""]))),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
-                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
-
-    Key([MOD], "z", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['LEFT_CLICK'],
-                                                     icon_widget=vol_icon_widget, value_widget=vol_widget))),
     Key([MOD, "shift", "control"], "Left", lazy.prev_screen()),
     Key([MOD, "shift", "control"], "Right", lazy.next_screen()),
     Key([MOD], "u", lazy.next_urgent()),
 
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
-                                                    icon_widget=vol_icon_widget, value_widget=vol_widget))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_DOWN'],
-                                                    icon_widget=vol_icon_widget, value_widget=vol_widget))),
-
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_UP'],
-                                                icon_widget=vol_icon_widget, value_widget=vol_widget))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:volumePressed(x=0,y=0,mouse_click=MOUSE_BUTTONS['SCROLL_UP'],
-                                                icon_widget=vol_icon_widget, value_widget=vol_widget))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -207,8 +241,8 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", window_to_next_group),
-    Key([MOD, ALT, "control"], "Left", window_to_prev_group),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(next=True))),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(next=False))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
@@ -216,27 +250,6 @@ keys = [
     Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
-]
-
-groups = [
-    Group(name='1', label="1 "),
-    Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
-    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
-    Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
-    Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
-    Group(name='7', label="7 "),
-    ScratchPad("scratchpad", [
-        # define a drop down terminal.
-        # it is placed in the upper third of screen by default.
-        DropDown("term", TERMINAL,
-                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
-                on_focus_lost_hide=True),
-        DropDown("calc", "{} -e python".format(TERMINAL),
-                x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
-                on_focus_lost_hide=True)
-        ],
-        label="")
 ]
 
 for i in groups:
@@ -295,7 +308,7 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
         ]
     return w
 
-def getWidgets():
+def getWidgets(n=0):
     widgets = [
         # Group box
         widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_INACTIVE),
@@ -358,8 +371,8 @@ def getWidgets():
         widget.TextBox(text="" ,**border_font,  foreground=COLR_TITLE_BG, background=None),
         widget.TextBox(text="", **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG),
         widget.TextBox(text="" , **border_font, foreground=COLR_TITLE_BG, background=COLR_BODY_BG),
-        num_lock_widget,
-        caps_lock_widget,
+        numlock_widgets[n],
+        capslock_widgets[n],
         widget.TextBox(text="", **border_font, foreground=COLR_BODY_BG, background=None),
 
         # Temperature
@@ -399,12 +412,12 @@ def getWidgets():
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLR_TITLE_BG, update_interval=1000, **border_font),
-        vol_icon_widget,
+        vol_icon_widgets[n],
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLR_TITLE_BG, background=COLR_BODY_BG, update_interval=1000,
             **border_font),
-        vol_widget,
+        vol_widgets[n],
         FuncWithClick(func=lambda: "", click_func=volumePressed,
             click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
             foreground=COLR_BODY_BG, update_interval=1000, **border_font),
@@ -417,25 +430,25 @@ def getWidgets():
         widget.TextBox(
             **border_font,
             foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
             background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
         widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        power_widget, power_widget_footer,
-        lock_screen_widget_header, lock_screen_widget, lock_screen_widget_footer,
-        logout_widget_header, logout_widget, logout_widget_footer,
-        shut_widget_header, shut_widget
+        power_widgets[n], power_tail_widgets[n],
+        lock_head_widgets[n], lock_widgets[n], lock_tail_widgets[n],
+        # logout_widget_header, logout_widget, logout_widget_footer,
+        shut_head_widgets[n], shut_widgets[n]
     ]
     return widgets
 
 screens = []
-for n in range(getNumScreens()):
+for n in range(NUM_SCREENS):
     screens.append(
         Screen(
             top=bar.Bar(
-                widgets=getWidgets(),
+                widgets=getWidgets(n),
                 size=border_font['fontsize'] - 1,
                 background=COLR_BAR_BG, opacity=0.9
             )
