@@ -13,7 +13,6 @@ from my_scripts import FuncWithClick, GroupTextBox, getNumScreens
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
 from my_scripts import showPowerClicked, powerClicked
-from libqtile.log_utils import logger
 
 
 MOD = "mod4"
@@ -98,20 +97,14 @@ for n in range(NUM_SCREENS):
     power_widget = FuncWithClick(func=lambda:" ", click_func=showPowerClicked,
                     **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
     power_tail_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-
+    lock_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
+    lock_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
+                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    lock_tail_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
     shut_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
     shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
                     **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
 
-    # logout_widget_header = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    # logout_widget_footer = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    # logout_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOGOUT']},
-    #                 **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-
-    lock_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    lock_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    lock_tail_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
-                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
     power_widget.click_func_args = {'widgets':[power_widget, power_tail_widget,
                                         lock_head_widget, lock_widget, lock_tail_widget,
                                         shut_head_widget, shut_widget],
@@ -119,17 +112,13 @@ for n in range(NUM_SCREENS):
                                     'offtexts': ["", "", "", "", "", "", ""]}
     power_widgets.append(power_widget)
     power_tail_widgets.append(power_tail_widget)
-    shut_head_widgets.append(shut_head_widget)
-    shut_widgets.append(shut_widget)
     lock_head_widgets.append(lock_head_widget)
     lock_widgets.append(lock_widget)
     lock_tail_widgets.append(lock_tail_widget)
+    shut_head_widgets.append(shut_head_widget)
+    shut_widgets.append(shut_widget)
 
-logger.warn("SCREENS = {}, caps = {}, num = {}".format(NUM_SCREENS, capslock_widgets, numlock_widgets))
-logger.warn('vol icons = {}, vol values = {}'.format(vol_icon_widgets, vol_widgets))
-logger.warn('power = {}'.format(power_widgets))
-
-def window_to_next_prev_group(next=True):
+def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
         return
     i = qtile.groups.index(qtile.currentGroup)
@@ -137,6 +126,13 @@ def window_to_next_prev_group(next=True):
     if i < 0 or i >= len(groups):
         return
     qtile.currentWindow.togroup(qtile.groups[i].name)
+
+def next_prev_group(qtile, next=True):
+    i = qtile.groups.index(qtile.currentGroup)
+    i = i+1 if next else i-1
+    if i < 0 or i >= len(groups):
+        return
+    qtile.groups[i].cmd_toscreen()
 
 @lazy.function
 def float_to_front(qtile):
@@ -153,11 +149,9 @@ def toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]):
             continue
         _widget.update(options[0] if _widget.text == options[1] else options[1])
 
-def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_widgets=vol_widgets, vol_icon_widgets=vol_icon_widgets):
+def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']):
+    global vol_icon_widgets, vol_widgets
     for x, y in zip(vol_widgets, vol_icon_widgets):
-        logger.warn(x)
-        logger.warn(y)
-        logger.warn("\n")
         volumePressed(x=0,y=0,mouse_click=action, icon_widget=y, value_widget=x)
 
 keys = [
@@ -223,16 +217,18 @@ keys = [
     Key([], "Caps_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]))),
     Key([], "Num_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=numlock_widgets, options=["0", ""]))),
 
-    Key([MOD, "shift", "control"], "Left", lazy.prev_screen()),
-    Key([MOD, "shift", "control"], "Right", lazy.next_screen()),
+    Key([MOD, "shift", "control"], "Up", lazy.prev_screen()),
+    Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True))),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
-    Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP'], vol_icon_widgets=vol_icon_widgets, vol_widgets=vol_widgets))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
+    Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -241,8 +237,8 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(next=True))),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(next=False))),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
@@ -430,7 +426,7 @@ def getWidgets(n=0):
         widget.TextBox(
             **border_font,
             foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlp2s0'}, update_interval=3.0,
+        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
             background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
         widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
@@ -438,7 +434,6 @@ def getWidgets(n=0):
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         power_widgets[n], power_tail_widgets[n],
         lock_head_widgets[n], lock_widgets[n], lock_tail_widgets[n],
-        # logout_widget_header, logout_widget, logout_widget_footer,
         shut_head_widgets[n], shut_widgets[n]
     ]
     return widgets
