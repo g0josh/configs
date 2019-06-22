@@ -128,7 +128,7 @@ class FuncWithClick(base.ThreadPoolText):
     """A generic text widget that polls using poll function to get the text"""
     orientations = base.ORIENTATION_HORIZONTAL
     defaults = [
-        ('label', None, 'Poll Function'),
+        ('label', None, 'return text if poll function returns anything'),
         ('func', None, 'Poll Function'),
         ('click_func', None, 'click function'),
         ('release_func', None, 'click release function'),
@@ -325,27 +325,56 @@ def clickMpd(x, y, button):
 # MISC
 # ---------------------------------------------
 
-def getWlan(interface='wlo1'):
+def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     global init_time, init_speed
-    status = iwlib.get_iwconfig(interface)
-    essid = status['ESSID'].decode().strip()
+    enabled = True
+    error = False
+
+    try:
+        status = iwlib.get_iwconfig(interface)
+    except AttributeError as e:
+        logger.warning (e)
+        error = True
+        essid = False
+    else:
+        essid = status['ESSID'].decode().strip()
 
     if not essid:
+        enabled = False
+
+    if enabled:
+        speed = ( psutil.net_io_counters(pernic=True)[interface][0],
+                    psutil.net_io_counters(pernic=True)[interface][1])
+        _time = time.time()
+        try:
+            ul, dl = [(now - last) / (_time - init_time) / 1024.0
+                    for now, last in zip(speed, init_speed)]
+            init_speed = speed
+            init_time = _time
+        except Exception as e:
+            logger.warning (e)
+            return error_text
+
+    if widgets:
+        if not isinstance(ontexts, list):
+            ontexts = [ontexts]*len(widgets)
+        elif len(ontexts) < len(widgets):
+            ontexts += [ontexts[-1]] * (len(widgets) - len(ontexts))
+
+        if not isinstance(offtexts, list):
+            offtexts = [offtexts]*len(widgets)
+        elif len(offtexts) < len(widgets):
+            offtexts += [offtexts[-1]] * (len(widgets) - len(offtexts))
+
+        for index, widget in enumerate(widgets):
+            widget.update( ontexts[index] if enabled or error else offtexts[index])
+
+    if enabled:
+        return "{}|{:3.0f} kB/s".format(essid, dl)
+    elif error:
+        return error_text
+    else:
         return ""
-
-    speed = ( psutil.net_io_counters(pernic=True)[interface][0],
-                psutil.net_io_counters(pernic=True)[interface][1])
-    _time = time.time()
-    try:
-        ul, dl = [(now - last) / (_time - init_time) / 1024.0
-                for now, last in zip(speed, init_speed)]
-        init_speed = speed
-        init_time = _time
-    except Exception as e:
-        logger.warning (e)
-        return 'error'
-
-    return "{}|{:3.0f} kB/s".format(essid, dl)
 
 def getlocksStatus():
     result = {'Caps':False, 'Num':False}

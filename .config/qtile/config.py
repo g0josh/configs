@@ -76,6 +76,11 @@ lock_widgets = []
 lock_tail_widgets = []
 shut_head_widgets = []
 shut_widgets = []
+wifi_icon_head_widgets = []
+wifi_icon_widgets = []
+wifi_icon_tail_widgets = []
+wifi_widgets = []
+wifi_tail_widgets = []
 for n in range(NUM_SCREENS):
     # Volume widgets
     vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
@@ -86,6 +91,22 @@ for n in range(NUM_SCREENS):
     vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
     vol_icon_widgets.append(vol_icon_widget)
     vol_widgets.append(vol_widget)
+
+    # Wifi widgets
+    wifi_icon_head_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG)
+    wifi_icon_widget = widget.TextBox(text="", **icon_font,foreground=COLR_TEXT, background=COLR_TITLE_BG)
+    wifi_icon_tail_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG, background=COLR_BODY_BG)
+    wifi_widget = FuncWithClick(background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font, func=getWlan, update_interval=3.0)
+    wifi_tail_widget = widget.TextBox(**border_font,foreground=COLR_BODY_BG, text="")
+    wifi_widget.func_args = {'interface': 'wlo1', 'error_text':'',
+        'widgets': [wifi_icon_head_widget, wifi_icon_widget, wifi_icon_tail_widget, wifi_tail_widget],
+        'ontexts': ["", "", "", ""],
+        'offtexts' : ["", "", "", ""] }
+    wifi_icon_head_widgets.append(wifi_icon_head_widget)
+    wifi_icon_widgets.append(wifi_icon_widget)
+    wifi_icon_tail_widgets.append(wifi_icon_tail_widget)
+    wifi_widgets.append(wifi_widget)
+    wifi_tail_widgets.append(wifi_tail_widget)
 
     # Lock widgets
     numlock_widgets.append( widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
@@ -117,7 +138,7 @@ for n in range(NUM_SCREENS):
     lock_tail_widgets.append(lock_tail_widget)
     shut_head_widgets.append(shut_head_widget)
     shut_widgets.append(shut_widget)
-
+# 
 def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
         return
@@ -339,7 +360,7 @@ def getWidgets(n=0):
             text="", foreground=COLR_BODY_BG,
         ),
 
-        widget.Spacer(length=470),
+        widget.Spacer(length=370),
 
         # time
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
@@ -419,16 +440,18 @@ def getWidgets(n=0):
             foreground=COLR_BODY_BG, update_interval=1000, **border_font),
 
         # wifi
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **icon_font,
-            foreground=COLR_TEXT, background=COLR_TITLE_BG, text="", ),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
-            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
-        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
+        wifi_icon_head_widgets[n], wifi_icon_widgets[n], wifi_icon_tail_widgets[n],
+        wifi_widgets[n], wifi_tail_widgets[n],
+        # widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+        # widget.TextBox(
+        #     **icon_font,
+        #     foreground=COLR_TEXT, background=COLR_TITLE_BG, text="",),
+        # widget.TextBox(
+        #     **border_font,
+        #     foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
+        # FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
+        #     background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
+        # widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
