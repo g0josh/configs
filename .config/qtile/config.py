@@ -9,10 +9,10 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
-from my_scripts import FuncWithClick, GroupTextBox, getNumScreens
+from my_widgets import FuncWithClick, GroupTextBox
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
-from my_scripts import showPowerClicked, powerClicked
+from my_scripts import showPowerClicked, powerClicked, getNumScreens
 
 
 MOD = "mod4"
@@ -442,16 +442,6 @@ def getWidgets(n=0):
         # wifi
         wifi_icon_head_widgets[n], wifi_icon_widgets[n], wifi_icon_tail_widgets[n],
         wifi_widgets[n], wifi_tail_widgets[n],
-        # widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        # widget.TextBox(
-        #     **icon_font,
-        #     foreground=COLR_TEXT, background=COLR_TITLE_BG, text="",),
-        # widget.TextBox(
-        #     **border_font,
-        #     foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        # FuncWithClick(func=getWlan, func_args={'interface':'wlo1'}, update_interval=3.0,
-        #     background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
-        # widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
 
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
