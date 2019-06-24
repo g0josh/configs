@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
-from my_widgets import FuncWithClick, GroupTextBox
+from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
 from my_scripts import showPowerClicked, powerClicked, getNumScreens
@@ -81,6 +81,7 @@ wifi_icon_widgets = []
 wifi_icon_tail_widgets = []
 wifi_widgets = []
 wifi_tail_widgets = []
+
 for n in range(NUM_SCREENS):
     # Volume widgets
     vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
@@ -98,7 +99,7 @@ for n in range(NUM_SCREENS):
     wifi_icon_tail_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG, background=COLR_BODY_BG)
     wifi_widget = FuncWithClick(background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font, func=getWlan, update_interval=3.0)
     wifi_tail_widget = widget.TextBox(**border_font,foreground=COLR_BODY_BG, text="")
-    wifi_widget.func_args = {'interface': 'wlo1', 'error_text':'',
+    wifi_widget.func_args = {'interface': 'wlp2s0', 'error_text':'',
         'widgets': [wifi_icon_head_widget, wifi_icon_widget, wifi_icon_tail_widget, wifi_tail_widget],
         'ontexts': ["", "", "", ""],
         'offtexts' : ["", "", "", ""] }
@@ -107,6 +108,12 @@ for n in range(NUM_SCREENS):
     wifi_icon_tail_widgets.append(wifi_icon_tail_widget)
     wifi_widgets.append(wifi_widget)
     wifi_tail_widgets.append(wifi_tail_widget)
+
+    # wifi_widget = ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
+    #     body_poll_func_args={'interface':'wlps0'}, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+    #     title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+    #     border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+    # wifi_widgets.append(wifi_widget)
 
     # Lock widgets
     numlock_widgets.append( widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
@@ -442,6 +449,7 @@ def getWidgets(n=0):
         # wifi
         wifi_icon_head_widgets[n], wifi_icon_widgets[n], wifi_icon_tail_widgets[n],
         wifi_widgets[n], wifi_tail_widgets[n],
+        # wifi_widgets[n].getWidgets(),
 
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),

@@ -293,7 +293,6 @@ def getTemps():
     if _gpu_temp:
         gpu_temp = _gpu_temp.group().strip()[:-1]
         result = result + '|' + gpu_temp if result else gpu_temp
-
     return result
 
 def getUtilization():
