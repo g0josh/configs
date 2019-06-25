@@ -52,15 +52,15 @@ pulse_sinks = _getPulseSinks()
 # VOLUME
 # ---------------------------------------------
 
-def volumePressed(x, y, mouse_click, icon_widget=None, value_widget=None):
-    if mouse_click in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
+def volumePressed(x, y, button, icon_widget=None, value_widget=None):
+    if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
         toggleMuteVolume()
-    elif mouse_click == MOUSE_BUTTONS['SCROLL_UP']:
+    elif button == MOUSE_BUTTONS['SCROLL_UP']:
         changeVolume('+5%')
-    elif mouse_click == MOUSE_BUTTONS['SCROLL_DOWN']:
+    elif button == MOUSE_BUTTONS['SCROLL_DOWN']:
         changeVolume('-5%')
     else:
-        logger.warning('Uknown mouse click = ',mouse_click)
+        logger.warning('Uknown mouse click = ',button)
 
     if icon_widget:
         icon_widget.update( icon_widget.poll() )

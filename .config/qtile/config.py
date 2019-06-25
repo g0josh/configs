@@ -103,7 +103,7 @@ for n in range(NUM_SCREENS):
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
         body_fg=COLR_TEXT, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
         border_font=border_font['font'],border_font_size=border_font['fontsize'], body_font=default_font['font'],
-        body_font_size=default_font['fontsize'])
+        body_font_size=default_font['fontsize'], update_after_click=True, inactive_disappear=False)
     )
     # Wifi widgets
     # wifi_icon_head_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG)

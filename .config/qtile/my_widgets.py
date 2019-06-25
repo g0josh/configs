@@ -98,15 +98,17 @@ class FuncWithClick(base.ThreadedPollText):
 
     def button_press(self, x, y, button):
         if self.click_func:
-            result = self.click_func(x, y, button, **self.click_func_args)
-            if result:
-                self.update(result)
+            self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+            result = self.click_func(**self.click_func_args)
+            # if result:
+            #     self.update(result)
 
     def button_release(self, x, y, button):
         if self.release_func:
-            result = self.release_func(x, y, button, **self.click_func_args)
-            if result:
-                self.update(result)
+            self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+            result = self.release_func(**self.click_func_args)
+            # if result:
+            #     self.update(result)
 
     def poll(self, text=None):
         if text is not None:
@@ -121,8 +123,8 @@ class FuncWithClick(base.ThreadedPollText):
 
 class ComboWidget(object):
     def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
-                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='000000',
-                click_func=None, click_func_args={}, border_font=None, border_font_size=12, title_font=None,
+                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='000000',click_func=None,
+                click_func_args={},update_after_click=False, border_font=None, border_font_size=12, title_font=None,
                 title_font_size=12, body_font=None, body_font_size=12, collapsible=True, inactive_disappear=True,
                 poll_interval=1000, head="", tail="", ):
 
@@ -140,23 +142,42 @@ class ComboWidget(object):
         self.head_text = head
         self.tail_text = tail
 
+        self.click_func = click_func
+        self.click_func_args = click_func_args
+        self.update_after_click = update_after_click
+        # default_click_func_args = {'x':0, 'y':0, 'button':1}
+        # for key in default_click_func_args:
+        #     if key not in self.click_func_args:
+        #         click_func_args[key] = default_click_func_args[key]
+
         if self.body_func is None and self.update_title:
             title_poll_interval = poll_interval
         logger.warning(title_poll_interval)
-        self.title_head = FuncWithClick(func=lambda:head, click_func=click_func, click_func_args=click_func_args,
+        self.title_head = FuncWithClick(func=lambda:head, click_func=self.click, click_func_args=click_func_args,
             foreground=title_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
-        self.title = FuncWithClick(func=self.poll_title, func_args={},click_func=click_func,
+        self.title = FuncWithClick(func=self.poll_title, func_args={},click_func=self.click,
             click_func_args=click_func_args, foreground=title_fg, background=title_bg,
             update_interval=title_poll_interval, font=title_font, fontsize=title_font_size, padding=0)
-        self.title_tail = FuncWithClick(func=lambda:tail, click_func=click_func, click_func_args=click_func_args,
+        self.title_tail = FuncWithClick(func=lambda:tail, click_func=self.click, click_func_args=click_func_args,
             foreground=title_bg, background=body_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
         if self.body_func is not None:
-            self.body =  FuncWithClick(func=self.poll_body, func_args={},click_func=click_func,
+            self.body =  FuncWithClick(func=self.poll_body, func_args={},click_func=self.click,
             click_func_args=click_func_args, foreground=body_fg, background=body_bg,
             update_interval=poll_interval, font=body_font, fontsize=body_font_size, padding=0)
-            self.body_tail = FuncWithClick(func=lambda:tail, click_func=click_func, click_func_args=click_func_args,
+            self.body_tail = FuncWithClick(func=lambda:tail, click_func=self.click, click_func_args=click_func_args,
                 foreground=body_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+
+    def click(self, x, y, button):
+        if self.click_func is None:
+            return
+        self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+        self.click_func(**self.click_func_args)
+        if self.update_after_click:
+            if self.body_func is None and self.update_title:
+                self.poll_title(force=True)
+            if self.body_func:
+                self.poll_body(force=True)
 
     def getWidgets(self):
         if self.body_func:
@@ -164,15 +185,7 @@ class ComboWidget(object):
         else:
             return [self.title_head, self.title, self.title_tail]
 
-    def hideWidgets(self):
-        for w in self.getWidgets():
-            w.update("")
-
     def poll_title(self, force=False):
-        # if self.body_func and not force:
-        #   return None
-        # if not self.update_title and not force:
-        #     return None
         result = self.title_func(**self.title_func_args)
         if result:
             if not self.title_head.text:
@@ -188,7 +201,7 @@ class ComboWidget(object):
         else:
             return result
 
-    def poll_body(self):
+    def poll_body(self, force=False):
         result = self.body_func(**self.body_func_args)
         logger.warning("result = {}".format(result))
         if result:
@@ -207,7 +220,10 @@ class ComboWidget(object):
             logger.warning("no result update title")
             self.poll_title(force=True)
 
-        return result
+        if force:
+            self.body.update(result)
+        else:
+            return result
 
 
 
