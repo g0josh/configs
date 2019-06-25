@@ -78,7 +78,8 @@ class GroupTextBox(_GroupBase):
         self.drawbox(0, self.label, self.border, self.foreground)
         self.drawer.draw(offsetx=self.offset, width=self.width)
 
-class FuncWithClick(base.ThreadPoolText):
+# class FuncWithClick(base.ThreadPoolText):
+class FuncWithClick(base.ThreadedPollText):
     """A generic text widget that polls using poll function to get the text"""
     orientations = base.ORIENTATION_HORIZONTAL
     defaults = [
@@ -117,39 +118,45 @@ class FuncWithClick(base.ThreadPoolText):
 
         return self.func(**self.func_args)
 
+
 class ComboWidget(object):
-    def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, poll_title=False,
-                body_poll_func=None, body_poll_func_args=None, body_fg='111111', body_bg='000000',
-                click_func=None, click_func_args=None, border_font=None, border_font_size=12, title_font=None,
+    def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
+                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='000000',
+                click_func=None, click_func_args={}, border_font=None, border_font_size=12, title_font=None,
                 title_font_size=12, body_font=None, body_font_size=12, collapsible=True, inactive_disappear=True,
                 poll_interval=1000, head="", tail="", ):
-        self.poll_title = poll_title
+
+        if body_poll_func is None and title_poll_func is None:
+            raise AttributeError("No poll functions provided")
+
+        self.update_title = update_title
         self.title_func = title_poll_func
         self.title_func_args = title_poll_func_args
+        title_poll_interval = None
+
         self.body_func = body_poll_func
         self.body_func_args = body_poll_func_args
         self.inactive_disappear = inactive_disappear
+        self.head_text = head
+        self.tail_text = tail
 
-        if self.body_func is None and self.title_func is None:
-            logger.warning("No poll functions provided")
-        if self.body_func is None and self.poll_title:
-            title_poll_func = self.poll
-            title_poll_func_args = {}
-
+        if self.body_func is None and self.update_title:
+            title_poll_interval = poll_interval
+        logger.warning(title_poll_interval)
         self.title_head = FuncWithClick(func=lambda:head, click_func=click_func, click_func_args=click_func_args,
-            foreground=title_bg, update_interval=10000, font=border_font, fontsize=border_font_size)
-        self.title = FuncWithClick(func=title_poll_func, func_args=title_poll_func_args,
-            click_func=click_func, click_func_args=click_func_args, foreground=title_fg, background=title_bg,
-            update_interval=10000, font=title_font, fontsize=title_font_size)
+            foreground=title_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+        self.title = FuncWithClick(func=self.poll_title, func_args={},click_func=click_func,
+            click_func_args=click_func_args, foreground=title_fg, background=title_bg,
+            update_interval=title_poll_interval, font=title_font, fontsize=title_font_size, padding=0)
         self.title_tail = FuncWithClick(func=lambda:tail, click_func=click_func, click_func_args=click_func_args,
-            foreground=title_bg, background=body_bg, update_interval=10000, font=border_font, fontsize=border_font_size)
+            foreground=title_bg, background=body_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
         if self.body_func is not None:
-            self.body =  FuncWithClick(func=self.poll, func_args={},
-                click_func=click_func, click_func_args=click_func_args, foreground=body_fg, background=body_bg,
-                update_interval=poll_interval, font=body_font, fontsize=body_font_size)
+            self.body =  FuncWithClick(func=self.poll_body, func_args={},click_func=click_func,
+            click_func_args=click_func_args, foreground=body_fg, background=body_bg,
+            update_interval=poll_interval, font=body_font, fontsize=body_font_size, padding=0)
             self.body_tail = FuncWithClick(func=lambda:tail, click_func=click_func, click_func_args=click_func_args,
-                foreground=body_bg, update_interval=10000, font=border_font, fontsize=border_font_size)
+                foreground=body_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
     def getWidgets(self):
         if self.body_func:
@@ -157,20 +164,50 @@ class ComboWidget(object):
         else:
             return [self.title_head, self.title, self.title_tail]
 
-    def poll(self):
-        result = self.body_func(**self.body_func_args) if self.body_func else self.title_func(**self.title_func_args)
+    def hideWidgets(self):
+        for w in self.getWidgets():
+            w.update("")
 
-        if not result:
-            widgets = self.getWidgets() if self.inactive_disappear else [self.body, self.body_tail]
-            for w in widgets:
-                    w.udpate("")
+    def poll_title(self, force=False):
+        # if self.body_func and not force:
+        #   return None
+        # if not self.update_title and not force:
+        #     return None
+        result = self.title_func(**self.title_func_args)
+        if result:
+            if not self.title_head.text:
+                self.title_head.update(self.head_text)
+            if not self.title_tail.text:
+                self.title_tail.update(self.tail_text)
+        elif self.inactive_disappear:
+            self.title_head.update("")
+            self.title_tail.update("")
+
+        if force:
+            self.title.update(result)
         else:
-            if poll_title:
-                text = result if self.body_func is None else self.title_func(**self.title_func_args)
-                self.title.update( text )
-            if self.body_func is not None:
-                self.body.update(result)
+            return result
 
+    def poll_body(self):
+        result = self.body_func(**self.body_func_args)
+        logger.warning("result = {}".format(result))
+        if result:
+            if self.update_title or self.title_head.text != self.head_text:
+                logger.warning("update title")
+                self.poll_title(force=True)
+            if not self.body_tail.text:
+                logger.warning("update tail")
+                self.body_tail.update(self.tail_text)
+        elif self.inactive_disappear:
+            logger.warning("no result disappear")
+            for w in [self.title_head, self.title, self.title_tail, self.body, self.body_tail]:
+                if w.text:
+                    w.update("")
+        elif self.update_title:
+            logger.warning("no result update title")
+            self.poll_title(force=True)
+
+        return result
 
 
 

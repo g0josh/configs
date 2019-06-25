@@ -7,6 +7,7 @@ from typing import List
 from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
+from libqtile.log_utils import logger
 
 from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
 from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
@@ -25,7 +26,8 @@ COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
 COLR_BAR_BG = '090e36'
 
-NUM_SCREENS = getNumScreens()
+# NUM_SCREENS = getNumScreens()
+NUM_SCREENS = 2
 
 default_font = dict(
     font="Iosevka Nerd Font Bold Italic",
@@ -65,7 +67,7 @@ groups = [
 ]
 
 # Create widgets for all screens
-vol_icon_widgets = []
+# vol_icon_widgets = []
 vol_widgets = []
 numlock_widgets = []
 capslock_widgets = []
@@ -76,45 +78,54 @@ lock_widgets = []
 lock_tail_widgets = []
 shut_head_widgets = []
 shut_widgets = []
-wifi_icon_head_widgets = []
-wifi_icon_widgets = []
-wifi_icon_tail_widgets = []
+# wifi_icon_head_widgets = []
+# wifi_icon_widgets = []
+# wifi_icon_tail_widgets = []
 wifi_widgets = []
-wifi_tail_widgets = []
-
+# wifi_tail_widgets = []
+# cb=ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
+#         body_poll_func_args={'interface':'wlps0'}, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+#         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+#         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+# logger.warning(cb.getWidgets())
 for n in range(NUM_SCREENS):
     # Volume widgets
-    vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
-            update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
-    vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
-            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
-    vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
-    vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
-    vol_icon_widgets.append(vol_icon_widget)
-    vol_widgets.append(vol_widget)
+    # vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
+    #         update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
+    # vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
+    #         background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
+    # vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+    # vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
+    # vol_icon_widgets.append(vol_icon_widget)
+    # vol_widgets.append(vol_widget)
 
+    vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
+        body_fg=COLR_TEXT, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
+        border_font=border_font['font'],border_font_size=border_font['fontsize'], body_font=default_font['font'],
+        body_font_size=default_font['fontsize'])
+    )
     # Wifi widgets
-    wifi_icon_head_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG)
-    wifi_icon_widget = widget.TextBox(text="", **icon_font,foreground=COLR_TEXT, background=COLR_TITLE_BG)
-    wifi_icon_tail_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG, background=COLR_BODY_BG)
-    wifi_widget = FuncWithClick(background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font, func=getWlan, update_interval=3.0)
-    wifi_tail_widget = widget.TextBox(**border_font,foreground=COLR_BODY_BG, text="")
-    wifi_widget.func_args = {'interface': 'wlp2s0', 'error_text':'',
-        'widgets': [wifi_icon_head_widget, wifi_icon_widget, wifi_icon_tail_widget, wifi_tail_widget],
-        'ontexts': ["", "", "", ""],
-        'offtexts' : ["", "", "", ""] }
-    wifi_icon_head_widgets.append(wifi_icon_head_widget)
-    wifi_icon_widgets.append(wifi_icon_widget)
-    wifi_icon_tail_widgets.append(wifi_icon_tail_widget)
-    wifi_widgets.append(wifi_widget)
-    wifi_tail_widgets.append(wifi_tail_widget)
-
-    # wifi_widget = ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-    #     body_poll_func_args={'interface':'wlps0'}, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
-    #     title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-    #     border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+    # wifi_icon_head_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG)
+    # wifi_icon_widget = widget.TextBox(text="", **icon_font,foreground=COLR_TEXT, background=COLR_TITLE_BG)
+    # wifi_icon_tail_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG, background=COLR_BODY_BG)
+    # wifi_widget = FuncWithClick(background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font, func=getWlan, update_interval=3.0)
+    # wifi_tail_widget = widget.TextBox(**border_font,foreground=COLR_BODY_BG, text="")
+    # wifi_widget.func_args = {'interface': 'wlp2s0', 'error_text':'',
+    #     'widgets': [wifi_icon_head_widget, wifi_icon_widget, wifi_icon_tail_widget, wifi_tail_widget],
+    #     'ontexts': ["", "", "", ""],
+    #     'offtexts' : ["", "", "", ""] }
+    # wifi_icon_head_widgets.append(wifi_icon_head_widget)
+    # wifi_icon_widgets.append(wifi_icon_widget)
+    # wifi_icon_tail_widgets.append(wifi_icon_tail_widget)
     # wifi_widgets.append(wifi_widget)
+    # wifi_tail_widgets.append(wifi_tail_widget)
 
+    wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
+        body_poll_func_args={'interface':'wlp2s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+    )
     # Lock widgets
     numlock_widgets.append( widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
                     background=COLR_BODY_BG) )
@@ -145,6 +156,7 @@ for n in range(NUM_SCREENS):
     lock_tail_widgets.append(lock_tail_widget)
     shut_head_widgets.append(shut_head_widget)
     shut_widgets.append(shut_widget)
+
 # 
 def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
@@ -177,10 +189,10 @@ def toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]):
             continue
         _widget.update(options[0] if _widget.text == options[1] else options[1])
 
-def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']):
-    global vol_icon_widgets, vol_widgets
-    for x, y in zip(vol_widgets, vol_icon_widgets):
-        volumePressed(x=0,y=0,mouse_click=action, icon_widget=y, value_widget=x)
+# def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']):
+#     global vol_icon_widgets, vol_widgets
+#     for x, y in zip(vol_widgets, vol_icon_widgets):
+#         volumePressed(x=0,y=0,mouse_click=action, icon_widget=y, value_widget=x)
 
 keys = [
     # Switch between windows in current stack pane
@@ -251,12 +263,12 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
-    Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
+    # Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
+    # Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
+    # Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    # Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    # Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
+    # Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -332,7 +344,7 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
         ]
     return w
 
-def getWidgets(n=0):
+def getWidgets(screen=0):
     widgets = [
         # Group box
         widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_INACTIVE),
@@ -395,8 +407,8 @@ def getWidgets(n=0):
         widget.TextBox(text="" ,**border_font,  foreground=COLR_TITLE_BG, background=None),
         widget.TextBox(text="", **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG),
         widget.TextBox(text="" , **border_font, foreground=COLR_TITLE_BG, background=COLR_BODY_BG),
-        numlock_widgets[n],
-        capslock_widgets[n],
+        numlock_widgets[screen],
+        capslock_widgets[screen],
         widget.TextBox(text="", **border_font, foreground=COLR_BODY_BG, background=None),
 
         # Temperature
@@ -433,29 +445,30 @@ def getWidgets(n=0):
             foreground=COLR_BODY_BG, text="", background=None),
 
         # Volume
-        FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLR_TITLE_BG, update_interval=1000, **border_font),
-        vol_icon_widgets[n],
-        FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLR_TITLE_BG, background=COLR_BODY_BG, update_interval=1000,
-            **border_font),
-        vol_widgets[n],
-        FuncWithClick(func=lambda: "", click_func=volumePressed,
-            click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-            foreground=COLR_BODY_BG, update_interval=1000, **border_font),
-
+        # FuncWithClick(func=lambda: "", click_func=volumePressed,
+        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
+        #     foreground=COLR_TITLE_BG, update_interval=1000, **border_font),
+        # vol_icon_widgets[screen],
+        # FuncWithClick(func=lambda: "", click_func=volumePressed,
+        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
+        #     foreground=COLR_TITLE_BG, background=COLR_BODY_BG, update_interval=1000,
+        #     **border_font),
+        # vol_widgets[screen],
+        # FuncWithClick(func=lambda: "", click_func=volumePressed,
+        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
+        #     foreground=COLR_BODY_BG, update_interval=1000, **border_font),
         # wifi
-        wifi_icon_head_widgets[n], wifi_icon_widgets[n], wifi_icon_tail_widgets[n],
-        wifi_widgets[n], wifi_tail_widgets[n],
-        # wifi_widgets[n].getWidgets(),
-
+        # wifi_icon_head_widgets[screen], wifi_icon_widgets[screen], wifi_icon_tail_widgets[screen],
+        # wifi_widgets[screen], wifi_tail_widgets[screen],
+    ]
+    widgets += vol_widgets[screen].getWidgets()
+    widgets += wifi_widgets[screen].getWidgets()
+    widgets += [
         # power
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        power_widgets[n], power_tail_widgets[n],
-        lock_head_widgets[n], lock_widgets[n], lock_tail_widgets[n],
-        shut_head_widgets[n], shut_widgets[n]
+        power_widgets[screen], power_tail_widgets[screen],
+        lock_head_widgets[screen], lock_widgets[screen], lock_tail_widgets[screen],
+        shut_head_widgets[screen], shut_widgets[screen]
     ]
     return widgets
 
