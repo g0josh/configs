@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os
+import os, time
 import subprocess
 from typing import List
 
@@ -25,8 +25,7 @@ COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
 COLR_BAR_BG = '090e36'
 
-NUM_SCREENS = 2
-# NUM_SCREENS = getNumScreens()
+NUM_SCREENS = getNumScreens()
 
 default_font = dict(
     font="Iosevka Nerd Font Bold Italic",
@@ -94,7 +93,7 @@ for n in range(NUM_SCREENS):
     )
 
     wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-        body_poll_func_args={'interface':'wlp2s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        body_poll_func_args={'interface':'wlo1'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
     )
@@ -106,17 +105,17 @@ for n in range(NUM_SCREENS):
     )
 
     lock_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['LOCK_SCREEN']})
+        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']},body_bg=COLR_BAR_BG)
     shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['SHUT_DOWN']})
+        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['SHUT_DOWN']},body_bg=COLR_TITLE_BG)
     power_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]})
+        click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]},body_bg=COLR_BAR_BG)
     lock_widgets.append(lock_widget)
     shut_widgets.append(shut_widget)
     power_widgets.append(power_widget)
@@ -158,7 +157,7 @@ def toggle_lock_widgets(caps=True):
             locks.append(to_find)
         w.update(body_text=" ".join(locks).strip())
 
-def update_volume(qtile, button):
+def update_volume(button):
     global vol_widgets
     volumePressed(x=0, y=0, button=button)
     for w in vol_widgets:
@@ -344,7 +343,7 @@ def getWidgets(screen=0):
     widgets += ComboWidget(title_poll_func=getTime, title_poll_func_args={'format':'%I:%M %p', 'timezone':'Asia/Kolkata'},
         update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_TEXT,poll_interval=30.0,
         title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
-        border_font_size=border_font['fontsize'],head="", tail="").getWidgets()
+        border_font_size=border_font['fontsize'],head="", tail="", body_bg=COLR_BAR_BG).getWidgets()
 
     # Prompt and systray
     widgets += [
@@ -446,9 +445,6 @@ wmname = "LG3D"
 #         c.togroup("4")
 #     if c.wm_instance_class == "ncmpcpp_inst":
 #         c.togroup("5")
-
-# for lock_w, shut_w in zip(lock_widgets, shut_widgets):
-#     show_hide_power_widgets(widgets=[lock_w, shut_w])
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):

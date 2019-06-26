@@ -302,7 +302,7 @@ def getlocksStatus():
         result.append('0')
     return " ".join(result)
 
-def getTemps(x=0,y=0,button=1):
+def getTemps(x=0,y=0,button=1, threshold=40):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -310,17 +310,18 @@ def getTemps(x=0,y=0,button=1):
         logger.warning(e.output.decode().strip())
         return 'error'
 
-    result = ""
     _cpu_temp = re.search(r'\d+\.\d+°C', cpu, flags=re.UNICODE)
     _gpu_temp = re.search(r'\s\d+C\s', gpu)
+    cpu_temp = gpu_temp = 0
     if _cpu_temp:
-        result = _cpu_temp.group()[:-4]
+        cpu_temp = _cpu_temp.group()[:-4]
     if _gpu_temp:
         gpu_temp = _gpu_temp.group().strip()[:-1]
-        result = result + '|' + gpu_temp if result else gpu_temp
-    return result
 
-def getUtilization(x=0,y=0,button=1):
+    if int(cpu_temp) > threshold or int(gpu_temp) > threshold:
+        return '{}|{}'.format(cpu_temp, gpu_temp)
+
+def getUtilization(x=0,y=0,button=1,threshold=10):
     try:
         cpu = subprocess.check_output(['top','-bn2','-d0.1']).decode()
         gpu = subprocess.check_output(['nvidia-smi','-q','-d', 'UTILIZATION']).decode()
@@ -328,17 +329,17 @@ def getUtilization(x=0,y=0,button=1):
         logger.warning (e.output.decode().strip())
         return 'error'
 
-    result = ""
     _cpu_util = re.search(r'load average:\s(\d+\.\d+)', cpu)
-    _gpu_util = re.search(r'Gpu\s+:\s\d+',gpu)
+    _gpu_util = re.search(r'Gpu\s+:\s\d+', gpu)
+    cpu_util = gpu_util = 0
     if _cpu_util:
         u = _cpu_util.group().split(':')[-1].strip()
-        result = '{:0.0f}'.format((float(u)*100/os.cpu_count()))
+        cpu_util = '{:0.0f}'.format(float(u) * 100 / os.cpu_count())
     if _gpu_util:
-        u = _gpu_util.group().split(':')[-1].strip()
-        result = result + '|' + u if result else u
+        gpu_util = _gpu_util.group().split(':')[-1].strip()
 
-    return result
+    if int(cpu_util) > threshold or int(gpu_util) > threshold:
+        return "{}|{}".format(cpu_util, gpu_util)
 
 def getNumScreens():
     try:
