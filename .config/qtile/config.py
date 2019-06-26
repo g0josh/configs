@@ -13,8 +13,7 @@ from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
 from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
-from my_scripts import showPowerClicked, powerClicked, getNumScreens
-
+from my_scripts import powerClicked, getNumScreens, getTime
 
 MOD = "mod4"
 ALT = "mod1"
@@ -26,8 +25,8 @@ COLR_INACTIVE = '15232b'
 COLR_TEXT = '110808'
 COLR_BAR_BG = '090e36'
 
-# NUM_SCREENS = getNumScreens()
 NUM_SCREENS = 2
+# NUM_SCREENS = getNumScreens()
 
 default_font = dict(
     font="Iosevka Nerd Font Bold Italic",
@@ -66,96 +65,61 @@ groups = [
         label="")
 ]
 
+def show_hide_power_widgets(x=0, y=0, button=1, widgets=[]):
+    if button != MOUSE_BUTTONS['LEFT_CLICK']:
+        return
+    for w in widgets:
+        if not isinstance(w, ComboWidget):
+            logger.warning("Cannot hide {} type widget".format(type(w)))
+            continue
+        w.show(w.isHidden())
+
+    global power_widgets
+    for w in power_widgets:
+        w.update(title_text="" if widgets[0].isHidden() else "")
+
 # Create widgets for all screens
-# vol_icon_widgets = []
 vol_widgets = []
-numlock_widgets = []
 capslock_widgets = []
 power_widgets = []
-power_tail_widgets = []
-lock_head_widgets = []
 lock_widgets = []
-lock_tail_widgets = []
-shut_head_widgets = []
 shut_widgets = []
-# wifi_icon_head_widgets = []
-# wifi_icon_widgets = []
-# wifi_icon_tail_widgets = []
 wifi_widgets = []
-# wifi_tail_widgets = []
-# cb=ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-#         body_poll_func_args={'interface':'wlps0'}, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
-#         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-#         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
-# logger.warning(cb.getWidgets())
 for n in range(NUM_SCREENS):
-    # Volume widgets
-    # vol_icon_widget = FuncWithClick(func=getVolumeIcon, click_func=volumePressed,
-    #         update_interval=1000,foreground=COLR_TEXT, background=COLR_TITLE_BG, **icon_font)
-    # vol_widget = FuncWithClick(func=getVolume, click_func=volumePressed, update_interval=1000,
-    #         background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font)
-    # vol_icon_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
-    # vol_widget.click_func_args = {'value_widget':vol_widget, 'icon_widget':vol_icon_widget}
-    # vol_icon_widgets.append(vol_icon_widget)
-    # vol_widgets.append(vol_widget)
-
     vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
         body_fg=COLR_TEXT, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
         border_font=border_font['font'],border_font_size=border_font['fontsize'], body_font=default_font['font'],
-        body_font_size=default_font['fontsize'], update_after_click=True, inactive_disappear=False)
+        body_font_size=default_font['fontsize'], update_after_click=True, inactive_hide=False, update_title=True)
     )
-    # Wifi widgets
-    # wifi_icon_head_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG)
-    # wifi_icon_widget = widget.TextBox(text="", **icon_font,foreground=COLR_TEXT, background=COLR_TITLE_BG)
-    # wifi_icon_tail_widget = widget.TextBox(text="", **border_font,foreground=COLR_TITLE_BG, background=COLR_BODY_BG)
-    # wifi_widget = FuncWithClick(background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font, func=getWlan, update_interval=3.0)
-    # wifi_tail_widget = widget.TextBox(**border_font,foreground=COLR_BODY_BG, text="")
-    # wifi_widget.func_args = {'interface': 'wlp2s0', 'error_text':'',
-    #     'widgets': [wifi_icon_head_widget, wifi_icon_widget, wifi_icon_tail_widget, wifi_tail_widget],
-    #     'ontexts': ["", "", "", ""],
-    #     'offtexts' : ["", "", "", ""] }
-    # wifi_icon_head_widgets.append(wifi_icon_head_widget)
-    # wifi_icon_widgets.append(wifi_icon_widget)
-    # wifi_icon_tail_widgets.append(wifi_icon_tail_widget)
-    # wifi_widgets.append(wifi_widget)
-    # wifi_tail_widgets.append(wifi_tail_widget)
 
     wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
         body_poll_func_args={'interface':'wlp2s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
     )
-    # Lock widgets
-    numlock_widgets.append( widget.TextBox(text="0" if getlocksStatus()['Num'] else "", **default_font, foreground=COLR_TEXT,
-                    background=COLR_BODY_BG) )
-    capslock_widgets.append( widget.TextBox(text=" A" if getlocksStatus()['Caps'] else "", **default_font, foreground=COLR_TEXT,
-                    background=COLR_BODY_BG) )
 
-    # power widgets
-    power_widget = FuncWithClick(func=lambda:" ", click_func=showPowerClicked,
-                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-    power_tail_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    lock_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    lock_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['LOCK_SCREEN']},
-                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
-    lock_tail_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    shut_head_widget = FuncWithClick(func=lambda:"", **border_font, foreground=COLR_TITLE_BG, update_interval=1000)
-    shut_widget = FuncWithClick(func=lambda:"", click_func=powerClicked, click_func_args={'widget_button':POWER_BUTTONS['SHUT']},
-                    **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, update_interval=1000)
+    capslock_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], update_title=False, poll_interval=None,
+        body_poll_func=getlocksStatus, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT, body_font=default_font['font'],
+        body_font_size=default_font['fontsize'],border_font=border_font['font'],border_font_size=border_font['fontsize'])
+    )
 
-    power_widget.click_func_args = {'widgets':[power_widget, power_tail_widget,
-                                        lock_head_widget, lock_widget, lock_tail_widget,
-                                        shut_head_widget, shut_widget],
-                                    'ontexts':[" ","","","","", ""," "],
-                                    'offtexts': ["", "", "", "", "", "", ""]}
-    power_widgets.append(power_widget)
-    power_tail_widgets.append(power_tail_widget)
-    lock_head_widgets.append(lock_head_widget)
+    lock_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
+        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['LOCK_SCREEN']})
+    shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
+        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['SHUT_DOWN']})
+    power_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
+        click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]})
     lock_widgets.append(lock_widget)
-    lock_tail_widgets.append(lock_tail_widget)
-    shut_head_widgets.append(shut_head_widget)
     shut_widgets.append(shut_widget)
+    power_widgets.append(power_widget)
 
 # 
 def window_to_next_prev_group(qtile, next=True):
@@ -183,16 +147,22 @@ def float_to_front(qtile):
         if window.floating:
             window.cmd_bring_to_front()
 
-def toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]):
-    for _widget in widgets:
-        if not isinstance(_widget, widget.TextBox):
-            continue
-        _widget.update(options[0] if _widget.text == options[1] else options[1])
+def toggle_lock_widgets(caps=True):
+    global capslock_widgets
+    for w in capslock_widgets:
+        locks = w.text.split()
+        to_find = 'A' if caps else '0'
+        if to_find in locks:
+            locks[locks.index(to_find)] = ""
+        else:
+            locks.append(to_find)
+        w.update(body_text=" ".join(locks).strip())
 
-# def update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']):
-#     global vol_icon_widgets, vol_widgets
-#     for x, y in zip(vol_widgets, vol_icon_widgets):
-#         volumePressed(x=0,y=0,mouse_click=action, icon_widget=y, value_widget=x)
+def update_volume(qtile, button):
+    global vol_widgets
+    volumePressed(x=0, y=0, button=button)
+    for w in vol_widgets:
+        w.update()
 
 keys = [
     # Switch between windows in current stack pane
@@ -254,8 +224,8 @@ keys = [
 
     Key([MOD], "w", lazy.window.kill()),
 
-    Key([], "Caps_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=capslock_widgets, options=[" A", ""]))),
-    Key([], "Num_Lock", lazy.function(lambda x:toggle_text_widgets(widgets=numlock_widgets, options=["0", ""]))),
+    Key([], "Caps_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=True))),
+    Key([], "Num_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=False))),
 
     Key([MOD, "shift", "control"], "Up", lazy.prev_screen()),
     Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
@@ -263,12 +233,12 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
-    # Key([], "XF86AudioMute", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
-    # Key([MOD], "z", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['LEFT_CLICK']))),
-    # Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    # Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    # Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
-    # Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume_widgets(action=MOUSE_BUTTONS['SCROLL_UP']))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
+    Key([MOD], "z", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -345,131 +315,64 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
     return w
 
 def getWidgets(screen=0):
+    # Layout Icon
     widgets = [
-        # Group box
         widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_INACTIVE),
         widget.TextBox(
             **border_font,background=COLR_BAR_BG,
             text="", foreground=COLR_TITLE_BG,
         )
     ]
-
+    # Groups
     widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_TITLE_BG,
         inactive_fg=COLR_TEXT, inactive_bg=COLR_INACTIVE, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
         not_empty_fg=COLR_TEXT, not_empty_bg=COLR_BODY_BG)
+    # Music
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, body_poll_func_args={'not_connected_text':""},
+        poll_interval=2.0,click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
+        body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
+        head="", tail="").getWidgets()
 
+    widgets += [widget.Spacer(length=370)]
+
+    # Time
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTime,poll_interval=30.0,
+        body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],body_font_size=default_font['fontsize'],
+        border_font=border_font['font'], border_font_size=border_font['fontsize'],head="", tail="",center="").getWidgets()
+    widgets += ComboWidget(title_poll_func=getTime, title_poll_func_args={'format':'%I:%M %p', 'timezone':'Asia/Kolkata'},
+        update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_TEXT,poll_interval=30.0,
+        title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
+        border_font_size=border_font['fontsize'],head="", tail="").getWidgets()
+
+    # Prompt and systray
     widgets += [
-        # Music
-        widget.TextBox(
-            **border_font,
-            text="", foreground=COLR_TITLE_BG,
-        ),
-        widget.TextBox(
-            **icon_font,
-            foreground=COLR_TEXT, background=COLR_TITLE_BG, text="",
-        ),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text="",  background=COLR_BODY_BG
-        ),
-        FuncWithClick(func=getMpd, click_func=clickMpd, update_interval=2.0,
-            **default_font, foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(
-            **border_font,
-            text="", foreground=COLR_BODY_BG,
-        ),
-
-        widget.Spacer(length=370),
-
-        # time
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(**icon_font, background=COLR_TITLE_BG, text="",foreground=COLR_TEXT),
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        widget.Clock(format='%b %d, %A, %I:%M %p',**default_font,
-            foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
-        widget.TextBox(**border_font,foreground=COLR_BODY_BG, text=""),
-        widget.Clock(format='%I:%M %p', timezone='Asia/Kolkata',
-            **default_font,
-            foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_BODY_BG, text=""),
-
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
         widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         widget.Spacer(),
 
         widget.Systray(),
-
-        # Caps & Num Lock
-        widget.TextBox(text="" ,**border_font,  foreground=COLR_TITLE_BG, background=None),
-        widget.TextBox(text="", **icon_font, foreground=COLR_TEXT, background=COLR_TITLE_BG),
-        widget.TextBox(text="" , **border_font, foreground=COLR_TITLE_BG, background=COLR_BODY_BG),
-        numlock_widgets[screen],
-        capslock_widgets[screen],
-        widget.TextBox(text="", **border_font, foreground=COLR_BODY_BG, background=None),
-
-        # Temperature
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **icon_font,
-            foreground=COLR_TEXT, background=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getTemps, update_interval=5.0, **default_font,
-            foreground=COLR_TEXT, background=COLR_BODY_BG),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_BODY_BG, text="", background=None),
-
-        # Utilization
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **icon_font,
-            foreground=COLR_TEXT, background=COLR_TITLE_BG, text=""),
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_TITLE_BG, text="", background=COLR_BODY_BG),
-        FuncWithClick(func=getUtilization, update_interval=3.0,
-            background=COLR_BODY_BG, foreground=COLR_TEXT, **default_font),
-
-        widget.TextBox(
-            **border_font,
-            foreground=COLR_BODY_BG, text="", background=None),
-
-        # Volume
-        # FuncWithClick(func=lambda: "", click_func=volumePressed,
-        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-        #     foreground=COLR_TITLE_BG, update_interval=1000, **border_font),
-        # vol_icon_widgets[screen],
-        # FuncWithClick(func=lambda: "", click_func=volumePressed,
-        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-        #     foreground=COLR_TITLE_BG, background=COLR_BODY_BG, update_interval=1000,
-        #     **border_font),
-        # vol_widgets[screen],
-        # FuncWithClick(func=lambda: "", click_func=volumePressed,
-        #     click_func_args={'icon_widget':vol_icon_widget, 'value_widget':vol_widget},
-        #     foreground=COLR_BODY_BG, update_interval=1000, **border_font),
-        # wifi
-        # wifi_icon_head_widgets[screen], wifi_icon_widgets[screen], wifi_icon_tail_widgets[screen],
-        # wifi_widgets[screen], wifi_tail_widgets[screen],
     ]
-    widgets += vol_widgets[screen].getWidgets()
-    widgets += wifi_widgets[screen].getWidgets()
-    widgets += [
-        # power
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        power_widgets[screen], power_tail_widgets[screen],
-        lock_head_widgets[screen], lock_widgets[screen], lock_tail_widgets[screen],
-        shut_head_widgets[screen], shut_widgets[screen]
-    ]
+    # Caps and Numlock
+    widgets += capslock_widgets[screen].getWidgets()
+    # Temperature
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTemps, poll_interval=5.0,
+        click_func=getTemps, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
+        body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
+    # Utilization
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+            title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getUtilization, poll_interval=5.0,
+            click_func=getUtilization, update_after_click=True, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT, body_font=default_font['font'],
+            body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
+    # Volume
+    widgets += vol_widgets[screen].getWidgets() + wifi_widgets[screen].getWidgets()
+    # Power
+    widgets += power_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
+    widgets += shut_widgets[screen].getWidgets()
+
     return widgets
 
 screens = []
@@ -544,6 +447,9 @@ wmname = "LG3D"
 #     if c.wm_instance_class == "ncmpcpp_inst":
 #         c.togroup("5")
 
+# for lock_w, shut_w in zip(lock_widgets, shut_widgets):
+#     show_hide_power_widgets(widgets=[lock_w, shut_w])
+
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
     qtile.cmd_restart()
@@ -558,5 +464,3 @@ def startOnce():
 def start():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
-
-

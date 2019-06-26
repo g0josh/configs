@@ -1,7 +1,9 @@
 import subprocess
 import time
+from datetime import datetime, timedelta
 import re
 import os
+from contextlib import contextmanager
 
 from libqtile.log_utils import logger
 
@@ -13,7 +15,7 @@ MOUSE_BUTTONS={
 }
 
 POWER_BUTTONS={
-    'SHUT':0, 'LOGOUT':1, 'LOCK_SCREEN':2
+    'SHUT_DOWN':0, 'LOG_OUT':1, 'LOCK_SCREEN':2
 }
 
 try:
@@ -47,6 +49,18 @@ def _getPulseSinks():
 
 pulse_sinks = _getPulseSinks()
 
+# Setting a time zone
+@contextmanager
+def setTimeZone(the_tz):
+    orig = os.environ.get('TZ')
+    os.environ['TZ'] = the_tz
+    time.tzset()
+    yield
+    if orig is not None:
+        os.environ['TZ'] = orig
+    else:
+        del os.environ['TZ']
+    time.tzset()
 
 # ---------------------------------------------
 # VOLUME
@@ -211,6 +225,17 @@ def clickMpd(x, y, button):
 # MISC
 # ---------------------------------------------
 
+def getTime(format='%b %d, %A, %I:%M %p', timezone=None):
+    def _get_time():
+        now = datetime.now().astimezone()
+        return (now + timedelta(seconds=0.5)).strftime(format)
+
+    if timezone is not None:
+        with setTimeZone(timezone):
+            return _get_time()
+    else:
+        return _get_time()
+
 def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     global init_time, init_speed
     enabled = True
@@ -263,21 +288,21 @@ def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=
         return ""
 
 def getlocksStatus():
-    result = {'Caps':False, 'Num':False}
-    """Return a list with the current state of the keys."""
+    result = []
     try:
         output = subprocess.check_output(['xset', 'q']).decode()
         output = re.findall(r"(Caps|Num)\s+Lock:\s*(\w*)", output)
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
-        return result
+        return ""
 
-    for x, y in output:
-        result[x] = True if y == 'on' else False
+    if ('Caps', 'on') in output:
+        result.append('A')
+    if ('Num', 'on') in output:
+        result.append('0')
+    return " ".join(result)
 
-    return result
-
-def getTemps():
+def getTemps(x=0,y=0,button=1):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -295,7 +320,7 @@ def getTemps():
         result = result + '|' + gpu_temp if result else gpu_temp
     return result
 
-def getUtilization():
+def getUtilization(x=0,y=0,button=1):
     try:
         cpu = subprocess.check_output(['top','-bn2','-d0.1']).decode()
         gpu = subprocess.check_output(['nvidia-smi','-q','-d', 'UTILIZATION']).decode()
@@ -324,35 +349,15 @@ def getNumScreens():
     else:
         return len(re.findall(r'\w+ connected \w+', o))
 
-# ---------------------------------------------
-# POWER
-# ---------------------------------------------
-
-def showPowerClicked(x, y, button, widgets, ontexts, offtexts):
-    if button not in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
-        return
-    if not isinstance(ontexts, list):
-        ontexts = [ontexts]*len(widgets)
-    elif len(ontexts) < len(widgets):
-        ontexts += [ontexts[-1]] * (len(widgets) - len(ontexts))
-
-    if not isinstance(offtexts, list):
-        offtexts = [offtexts]*len(widgets)
-    elif len(offtexts) < len(widgets):
-        offtexts += [offtexts[-1]] * (len(widgets) - len(offtexts))
-
-    for index, widget in enumerate(widgets):
-        widget.update( ontexts[index] if widget.text==offtexts[index] else offtexts[index])
-
-def powerClicked(x, y, button, widget_button):
-    if button not in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
+def powerClicked(x, y, button, power_button):
+    if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
 
-    if widget_button == POWER_BUTTONS['SHUT']:
+    if power_button == POWER_BUTTONS['SHUT_DOWN']:
         cmd = ['shutdown', 'now']
-    elif widget_button == POWER_BUTTONS['LOGOUT']:
+    elif power_button == POWER_BUTTONS['LOG_OUT']:
         cmd = ['qtile-cmd', '-o', 'cmd', '-f', 'shutdown']
-    elif widget_button == POWER_BUTTONS['LOCK_SCREEN']:
+    elif power_button == POWER_BUTTONS['LOCK_SCREEN']:
         cmd = [os.path.expanduser("~/.config/qtile/lockscreen.sh")]
 
     if cmd:
