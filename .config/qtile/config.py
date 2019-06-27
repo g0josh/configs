@@ -75,7 +75,12 @@ def show_hide_power_widgets(x=0, y=0, button=1, widgets=[]):
 
     global power_widgets
     for w in power_widgets:
-        w.update(title_text="" if widgets[0].isHidden() else "")
+        if widgets[0].isHidden():
+            w.update(title_text=" ")
+            w.center_text = ""
+        else:
+            w.update(title_text="")
+            w.center_text = ""
 
 # Create widgets for all screens
 vol_widgets = []
@@ -108,12 +113,12 @@ for n in range(NUM_SCREENS):
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']},body_bg=COLR_BAR_BG)
-    shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
+    shut_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button':POWER_BUTTONS['SHUT_DOWN']},body_bg=COLR_TITLE_BG)
-    power_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
+        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']}, tail_text="")
+    power_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
+        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],tail_text="",
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]},body_bg=COLR_BAR_BG)
     lock_widgets.append(lock_widget)
@@ -331,7 +336,7 @@ def getWidgets(screen=0):
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, body_poll_func_args={'not_connected_text':""},
         poll_interval=2.0,click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
-        head="", tail="").getWidgets()
+        head_text="", tail_text="").getWidgets()
 
     widgets += [widget.Spacer(length=370)]
 
@@ -339,11 +344,11 @@ def getWidgets(screen=0):
     widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTime,poll_interval=30.0,
         body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],body_font_size=default_font['fontsize'],
-        border_font=border_font['font'], border_font_size=border_font['fontsize'],head="", tail="",center="").getWidgets()
+        border_font=border_font['font'], border_font_size=border_font['fontsize'],head_text="", tail_text="",center_text="").getWidgets()
     widgets += ComboWidget(title_poll_func=getTime, title_poll_func_args={'format':'%I:%M %p', 'timezone':'Asia/Kolkata'},
         update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_TEXT,poll_interval=30.0,
         title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
-        border_font_size=border_font['fontsize'],head="", tail="", body_bg=COLR_BAR_BG).getWidgets()
+        border_font_size=border_font['fontsize'],head_text="", tail_text="", body_bg=COLR_BAR_BG).getWidgets()
 
     # Prompt and systray
     widgets += [
