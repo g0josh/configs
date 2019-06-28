@@ -264,7 +264,7 @@ def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=
     if error:
         return error_text
     elif not essid:
-        return False
+        return ""
 
     #get speeds
     global net_speed_objects
@@ -295,7 +295,7 @@ def getLan(interface='enp2s0', error_text=''):
         with open(_file, 'r') as f:
             up.append( f.read().strip().lower() )
     if up != ['up', '1']:
-        return False
+        return ""
 
     #get speeds
     global net_speed_objects

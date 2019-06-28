@@ -147,7 +147,6 @@ class ComboWidget(object):
         self.click_func_args = click_func_args
         self.update_after_click = update_after_click
 
-
         if self.body_poll_func is None and self.update_title:
             title_poll_interval = poll_interval
 
