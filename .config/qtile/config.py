@@ -13,7 +13,7 @@ from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
 from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
-from my_scripts import powerClicked, getNumScreens, getTime
+from my_scripts import powerClicked, getNumScreens, getTime, getLan
 
 MOD = "mod4"
 ALT = "mod1"
@@ -89,6 +89,8 @@ power_widgets = []
 lock_widgets = []
 shut_widgets = []
 wifi_widgets = []
+lan1_widgets = []
+lan2_widgets = []
 for n in range(NUM_SCREENS):
     vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
@@ -98,7 +100,17 @@ for n in range(NUM_SCREENS):
     )
 
     wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-        body_poll_func_args={'interface':'wlo1'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        body_poll_func_args={'interface':'wlp4s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+    )
+    lan1_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getLan,
+        body_poll_func_args={'interface':'enp2s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+    )
+    lan2_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getLan,
+        body_poll_func_args={'interface':'enp3s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
     )
@@ -372,7 +384,9 @@ def getWidgets(screen=0):
             click_func=getUtilization, update_after_click=True, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT, body_font=default_font['font'],
             body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
     # Volume
-    widgets += vol_widgets[screen].getWidgets() + wifi_widgets[screen].getWidgets()
+    widgets += vol_widgets[screen].getWidgets()
+    # Ethernet/Wifi
+    widgets += wifi_widgets[screen].getWidgets() + lan1_widgets[screen].getWidgets() + lan2_widgets[screen].getWidgets()
     # Power
     widgets += power_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
     widgets += shut_widgets[screen].getWidgets()

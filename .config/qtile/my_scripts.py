@@ -21,12 +21,26 @@ POWER_BUTTONS={
 try:
     import iwlib
 except ModuleNotFoundError:
-    WLAN = False
     logger.warning("Please install iwlib")
-else:
-    WLAN = True
-    init_time = 0
-    init_speed = (0, 0)
+
+net_speed_objects = []
+
+class NetSpeeds(object):
+    def __init__(self, interface="wlp2s0"):
+        self.init_time = 0
+        self.init_bytes_tx_rx = (0,0)
+        self.interface = interface
+
+    def getSpeed(self):
+        bytes_tx_rx = ( psutil.net_io_counters(pernic=True)[self.interface][0],
+                    psutil.net_io_counters(pernic=True)[self.interface][1])
+        _time = time.time()
+        speeds = [ (x - y) / (_time - self.init_time)
+                    for x, y in zip(bytes_tx_rx, self.init_bytes_tx_rx)]
+        self.init_bytes_tx_rx = bytes_tx_rx
+        self.init_time = _time
+        speeds = ["{:3.0f} kB/s".format(x/1e3) if x<1e6 else "{:2.1f} MB/s".format(x/1e6) for x in speeds]
+        return {'upload':speeds[0], 'download':speeds[1]}
 
 try:
     from mpd import MPDClient, ConnectionError, CommandError
@@ -74,7 +88,7 @@ def volumePressed(x, y, button, icon_widget=None, value_widget=None):
     elif button == MOUSE_BUTTONS['SCROLL_DOWN']:
         changeVolume('-5%')
     else:
-        logger.warning('Uknown mouse click = ',button)
+        logger.warning('Uknown mouse click = {}'.format(button))
 
     if icon_widget:
         icon_widget.update( icon_widget.poll() )
@@ -237,55 +251,70 @@ def getTime(format='%b %d, %A, %I:%M %p', timezone=None):
         return _get_time()
 
 def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
-    global init_time, init_speed
-    enabled = True
-    error = False
-
     try:
         status = iwlib.get_iwconfig(interface)
-    except AttributeError as e:
+    except (AttributeError,NameError) as e:
         logger.warning (e)
         error = True
         essid = False
     else:
+        error = False
         essid = status['ESSID'].decode().strip()
 
-    if not essid:
-        enabled = False
-
-    if enabled:
-        speed = ( psutil.net_io_counters(pernic=True)[interface][0],
-                    psutil.net_io_counters(pernic=True)[interface][1])
-        _time = time.time()
-        try:
-            ul, dl = [(now - last) / (_time - init_time) / 1024.0
-                    for now, last in zip(speed, init_speed)]
-            init_speed = speed
-            init_time = _time
-        except Exception as e:
-            logger.warning (e)
-            return error_text
-
-    if widgets:
-        if not isinstance(ontexts, list):
-            ontexts = [ontexts]*len(widgets)
-        elif len(ontexts) < len(widgets):
-            ontexts += [ontexts[-1]] * (len(widgets) - len(ontexts))
-
-        if not isinstance(offtexts, list):
-            offtexts = [offtexts]*len(widgets)
-        elif len(offtexts) < len(widgets):
-            offtexts += [offtexts[-1]] * (len(widgets) - len(offtexts))
-
-        for index, widget in enumerate(widgets):
-            widget.update( ontexts[index] if enabled or error else offtexts[index])
-
-    if enabled:
-        return "{}|{:3.0f} kB/s".format(essid, dl)
-    elif error:
+    if error:
         return error_text
+    elif not essid:
+        return False
+
+    #get speeds
+    global net_speed_objects
+    speed_obj = None
+    for o in net_speed_objects:
+        if o.interface == interface:
+            speed_obj = o
+
+    if speed_obj is None:
+        speed_obj = NetSpeeds(interface=interface)
+        net_speed_objects.append(speed_obj)
+
+    try:
+        speed = speed_obj.getSpeed()['download']
+    except Exception as e:
+        logger.warning(e)
+        return "  0 kb/s"
     else:
-        return ""
+        return "{}|{}".format(essid, speed)
+
+def getLan(interface='enp2s0', error_text=''):
+    #check if enabled:
+    up = []
+    for _file in ['/sys/class/net/{}/operstate'.format(interface),
+                   '/sys/class/net/{}/carrier'.format(interface)]:
+        if not os.path.exists(_file):
+            return error_text
+        with open(_file, 'r') as f:
+            up.append( f.read().strip().lower() )
+    if up != ['up', '1']:
+        return False
+
+    #get speeds
+    global net_speed_objects
+    speed_obj = None
+    for o in net_speed_objects:
+        if o.interface == interface:
+            speed_obj = o
+
+    if speed_obj is None:
+        speed_obj = NetSpeeds(interface=interface)
+        net_speed_objects.append(speed_obj)
+
+    try:
+        speed = speed_obj.getSpeed()['download']
+    except Exception as e:
+        logger.warning(e)
+        return "  0 kb/s"
+    else:
+        return speed
 
 def getlocksStatus():
     result = []
