@@ -90,7 +90,6 @@ lock_widgets = []
 shut_widgets = []
 wifi_widgets = []
 lan1_widgets = []
-lan2_widgets = []
 for n in range(NUM_SCREENS):
     vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
@@ -100,17 +99,12 @@ for n in range(NUM_SCREENS):
     )
 
     wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-        body_poll_func_args={'interface':'wlp4s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        body_poll_func_args={'interface':'wlo1'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
     )
     lan1_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getLan,
-        body_poll_func_args={'interface':'enp2s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
-    )
-    lan2_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getLan,
-        body_poll_func_args={'interface':'enp3s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        body_poll_func_args={'interface':'enp24s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
         border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
     )
@@ -137,7 +131,6 @@ for n in range(NUM_SCREENS):
     shut_widgets.append(shut_widget)
     power_widgets.append(power_widget)
 
-# 
 def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
         return
@@ -159,9 +152,13 @@ def float_to_front(qtile):
     """
     Bring all floating windows of the group to front
     """
+    global floating_windows
+    floating_windows = []
     for window in qtile.currentGroup.windows:
         if window.floating:
             window.cmd_bring_to_front()
+            floating_windows.append(window)
+    floating_windows[-1].cmd_focus()
 
 def toggle_lock_widgets(caps=True):
     global capslock_widgets
@@ -386,7 +383,7 @@ def getWidgets(screen=0):
     # Volume
     widgets += vol_widgets[screen].getWidgets()
     # Ethernet/Wifi
-    widgets += wifi_widgets[screen].getWidgets() + lan1_widgets[screen].getWidgets() + lan2_widgets[screen].getWidgets()
+    widgets += wifi_widgets[screen].getWidgets() + lan1_widgets[screen].getWidgets()
     # Power
     widgets += power_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
     widgets += shut_widgets[screen].getWidgets()
@@ -418,8 +415,8 @@ dgroups_key_binder = None
 dgroups_app_rules: List = []
 main = None
 follow_mouse_focus = True
-bring_front_click = False
-cursor_warp = False
+bring_front_click = True
+cursor_warp = True
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
