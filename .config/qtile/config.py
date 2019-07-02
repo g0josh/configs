@@ -19,7 +19,7 @@ from my_scripts import getInterfaces, getLan, getWlan
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
-BROWSER = "opera"
+BROWSER = "firefox"
 COLR_TITLE_BG = 'a42f2b'
 COLR_BODY_BG = '1c5d87'
 COLR_INACTIVE = '15232b'
@@ -135,8 +135,6 @@ for n in range(NUM_SCREENS):
     lock_widgets.append(lock_widget)
     shut_widgets.append(shut_widget)
     power_widgets.append(power_widget)
-
-logger.warning("2, wifi-{}, lan-{}".format(wifi_widgets, lan_widgets))
 
 def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
@@ -354,7 +352,7 @@ def getWidgets(screen=0):
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
         head_text="", tail_text="").getWidgets()
 
-    widgets += [widget.Spacer(length=370)]
+    widgets += [widget.Spacer(length=400)]
 
     # Time
     widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
