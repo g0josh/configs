@@ -1,0 +1,13 @@
+#TabsToolbar {
+  visibility: collapse !important;
+}
+#sidebar-header {
+  visibility: collapse !important;
+} 
+
+#nav-bar {
+  color: #a42f2b !important;
+  background-color: #090e36 !important;
+  margin-top: -2px !important;
+  height: 30px !important;
+}
