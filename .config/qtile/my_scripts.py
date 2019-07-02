@@ -250,6 +250,9 @@ def getTime(format='%b %d, %A, %I:%M %p', timezone=None):
     else:
         return _get_time()
 
+def getInterfaces():
+    return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl','enp'])]
+
 def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     try:
         status = iwlib.get_iwconfig(interface)

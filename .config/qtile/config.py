@@ -9,11 +9,12 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
-from my_scripts import getWlan, getVolumeIcon, getVolume, volumePressed
+from my_scripts import getVolumeIcon, getVolume, volumePressed
 from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
-from my_scripts import powerClicked, getNumScreens, getTime, getLan
+from my_scripts import powerClicked, getNumScreens, getTime
+from my_scripts import getInterfaces, getLan, getWlan
 
 MOD = "mod4"
 ALT = "mod1"
@@ -89,7 +90,7 @@ power_widgets = []
 lock_widgets = []
 shut_widgets = []
 wifi_widgets = []
-lan1_widgets = []
+lan_widgets = []
 for n in range(NUM_SCREENS):
     vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
@@ -98,16 +99,20 @@ for n in range(NUM_SCREENS):
         body_font_size=default_font['fontsize'], update_after_click=True, inactive_hide=False, update_title=True)
     )
 
-    wifi_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getWlan,
-        body_poll_func_args={'interface':'wlo1'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
-    )
-    lan1_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=getLan,
-        body_poll_func_args={'interface':'enp24s0'}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-        border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
-    )
+    # Since computers can have multiple net interfaces
+    _wifi_widgets = []
+    _lan_widgets = []
+    for interface in getInterfaces():
+        title = (lambda:"") if 'wl' in interface else (lambda:"")
+        func = getWlan if 'wl' in interface else getLan
+        w_list = _wifi_widgets if 'wl' in interface else _lan_widgets
+        w_list.append( ComboWidget(title_poll_func=title, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=func,
+            body_poll_func_args={'interface':interface}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+            title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
+            border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
+        )
+    wifi_widgets.append(_wifi_widgets)
+    lan_widgets.append(_lan_widgets)
 
     capslock_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], update_title=False, poll_interval=None,
@@ -130,6 +135,8 @@ for n in range(NUM_SCREENS):
     lock_widgets.append(lock_widget)
     shut_widgets.append(shut_widget)
     power_widgets.append(power_widget)
+
+logger.warning("2, wifi-{}, lan-{}".format(wifi_widgets, lan_widgets))
 
 def window_to_next_prev_group(qtile, next=True):
     if qtile.currentWindow is None:
@@ -382,8 +389,13 @@ def getWidgets(screen=0):
             body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
     # Volume
     widgets += vol_widgets[screen].getWidgets()
+
     # Ethernet/Wifi
-    widgets += wifi_widgets[screen].getWidgets() + lan1_widgets[screen].getWidgets()
+    for w in wifi_widgets[screen]:
+        widgets += w.getWidgets()
+    for w in lan_widgets[screen]:
+        widgets += w.getWidgets()
+
     # Power
     widgets += power_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
     widgets += shut_widgets[screen].getWidgets()
