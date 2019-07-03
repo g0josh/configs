@@ -14,7 +14,7 @@ from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
 from my_scripts import getTemps, getUtilization, getMpd, clickMpd
 from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
 from my_scripts import powerClicked, getNumScreens, getTime
-from my_scripts import getInterfaces, getLan, getWlan
+from my_scripts import getInterfaces, getLan, getWlan, setupMonitors
 
 MOD = "mod4"
 ALT = "mod1"
@@ -474,9 +474,11 @@ wmname = "LG3D"
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
+    setupMonitors()
     qtile.cmd_restart()
 
-# Autostart
+hook.subscribe.startup_once(setupMonitors)
+
 @hook.subscribe.startup_once
 def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart_once.sh')

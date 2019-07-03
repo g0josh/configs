@@ -23,34 +23,9 @@ try:
 except ModuleNotFoundError:
     logger.warning("Please install iwlib")
 
-net_speed_objects = []
-
-class NetSpeeds(object):
-    def __init__(self, interface="wlp2s0"):
-        self.init_time = 0
-        self.init_bytes_tx_rx = (0,0)
-        self.interface = interface
-
-    def getSpeed(self):
-        bytes_tx_rx = ( psutil.net_io_counters(pernic=True)[self.interface][0],
-                    psutil.net_io_counters(pernic=True)[self.interface][1])
-        _time = time.time()
-        speeds = [ (x - y) / (_time - self.init_time)
-                    for x, y in zip(bytes_tx_rx, self.init_bytes_tx_rx)]
-        self.init_bytes_tx_rx = bytes_tx_rx
-        self.init_time = _time
-        speeds = ["{:3.0f} kB/s".format(x/1e3) if x<1e6 else "{:2.1f} MB/s".format(x/1e6) for x in speeds]
-        return {'upload':speeds[0], 'download':speeds[1]}
-
-try:
-    from mpd import MPDClient, ConnectionError, CommandError
-except ModuleNotFoundError:
-    MPD = False
-    logger.warning("Please install mpd")
-else:
-    mpd_client = MPDClient()
-    mpd_password = None
-    MPD = True
+# ---------------------------------------------
+# VOLUME
+# ---------------------------------------------
 
 def _getPulseSinks():
     try:
@@ -62,23 +37,6 @@ def _getPulseSinks():
         return re.findall(r'^\d', output, flags=re.MULTILINE)
 
 pulse_sinks = _getPulseSinks()
-
-# Setting a time zone
-@contextmanager
-def setTimeZone(the_tz):
-    orig = os.environ.get('TZ')
-    os.environ['TZ'] = the_tz
-    time.tzset()
-    yield
-    if orig is not None:
-        os.environ['TZ'] = orig
-    else:
-        del os.environ['TZ']
-    time.tzset()
-
-# ---------------------------------------------
-# VOLUME
-# ---------------------------------------------
 
 def volumePressed(x, y, button, icon_widget=None, value_widget=None):
     if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
@@ -164,6 +122,16 @@ def changeVolume(value='+5%'):
 # MPD
 # ---------------------------------------------
 
+try:
+    from mpd import MPDClient, ConnectionError, CommandError
+except ModuleNotFoundError:
+    MPD = False
+    logger.warning("Please install mpd")
+else:
+    mpd_client = MPDClient()
+    mpd_password = None
+    MPD = True
+
 def mpd_reconnect(host='localhost', port='6600'):
     global MPD
     if not MPD:
@@ -236,19 +204,27 @@ def clickMpd(x, y, button):
         mpd_client.next()
 
 # ---------------------------------------------
-# MISC
+# Internet
 # ---------------------------------------------
 
-def getTime(format='%b %d, %A, %I:%M %p', timezone=None):
-    def _get_time():
-        now = datetime.now().astimezone()
-        return (now + timedelta(seconds=0.5)).strftime(format)
+net_speed_objects = []
 
-    if timezone is not None:
-        with setTimeZone(timezone):
-            return _get_time()
-    else:
-        return _get_time()
+class NetSpeeds(object):
+    def __init__(self, interface="wlp2s0"):
+        self.init_time = 0
+        self.init_bytes_tx_rx = (0,0)
+        self.interface = interface
+
+    def getSpeed(self):
+        bytes_tx_rx = ( psutil.net_io_counters(pernic=True)[self.interface][0],
+                    psutil.net_io_counters(pernic=True)[self.interface][1])
+        _time = time.time()
+        speeds = [ (x - y) / (_time - self.init_time)
+                    for x, y in zip(bytes_tx_rx, self.init_bytes_tx_rx)]
+        self.init_bytes_tx_rx = bytes_tx_rx
+        self.init_time = _time
+        speeds = ["{:3.0f} kB/s".format(x/1e3) if x<1e6 else "{:2.1f} MB/s".format(x/1e6) for x in speeds]
+        return {'upload':speeds[0], 'download':speeds[1]}
 
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl','enp'])]
@@ -319,6 +295,34 @@ def getLan(interface='enp2s0', error_text=''):
     else:
         return speed
 
+# ---------------------------------------------
+# MISC
+# ---------------------------------------------
+
+# Setting a time zone
+@contextmanager
+def setTimeZone(the_tz):
+    orig = os.environ.get('TZ')
+    os.environ['TZ'] = the_tz
+    time.tzset()
+    yield
+    if orig is not None:
+        os.environ['TZ'] = orig
+    else:
+        del os.environ['TZ']
+    time.tzset()
+
+def getTime(format='%b %d, %A, %I:%M %p', timezone=None):
+    def _get_time():
+        now = datetime.now().astimezone()
+        return (now + timedelta(seconds=0.5)).strftime(format)
+
+    if timezone is not None:
+        with setTimeZone(timezone):
+            return _get_time()
+    else:
+        return _get_time()
+
 def getlocksStatus():
     result = []
     try:
@@ -373,14 +377,6 @@ def getUtilization(x=0,y=0,button=1,threshold=10):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-def getNumScreens():
-    try:
-        o = subprocess.check_output(['xrandr']).decode()
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
-        return 1
-    else:
-        return len(re.findall(r'\w+ connected \w+', o))
 
 def powerClicked(x, y, button, power_button):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
@@ -398,4 +394,37 @@ def powerClicked(x, y, button, power_button):
             subprocess.run(cmd)
         except subprocess.CalledProcessError as e:
             logger.warning(e.output.decode().strip())
+
+def getNumScreens():
+    try:
+        o = subprocess.check_output(['xrandr']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return 1
+    else:
+        return len(re.findall(r'\w+ connected \w+', o))
+
+def setupMonitors():
+    try:
+        d = subprocess.check_output(['xrandr']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return
+
+    cmd = ["xrandr"]
+    x = 0
+    for entry in [x for x in d.split('\n') if 'connected' in x]:
+        name, status, res = entry.split()[:3]
+        if status == 'connected':
+            cmd += ['--output', name, '--mode', res.split('+')[0],
+                    '--pos', "{}x{}".format(x, 0), '--rotate', 'normal']
+            x += int(res.split('x')[0])
+        else:
+            cmd += ['--output', name, '--off']
+
+    try:
+        subprocess.run(cmd)
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+
 
