@@ -430,5 +430,3 @@ def setupMonitors():
         subprocess.run(cmd)
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
-
-
