@@ -477,10 +477,9 @@ def restart_on_randr(qtile, ev):
     setupMonitors()
     qtile.cmd_restart()
 
-hook.subscribe.startup_once(setupMonitors)
-
 @hook.subscribe.startup_once
 def startOnce():
+    setupMonitors()
     start = os.path.expanduser('~/.config/qtile/autostart_once.sh')
     subprocess.call([start])
 

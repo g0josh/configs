@@ -406,20 +406,24 @@ def getNumScreens():
 
 def setupMonitors():
     try:
-        d = subprocess.check_output(['xrandr']).decode()
+        o = subprocess.check_output(['xrandr']).decode()
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
         return
 
     cmd = ["xrandr"]
     x = 0
-    for entry in [x for x in d.split('\n') if 'connected' in x]:
-        name, status, res = entry.split()[:3]
-        if status == 'connected':
-            cmd += ['--output', name, '--mode', res.split('+')[0],
-                    '--pos', "{}x{}".format(x, 0), '--rotate', 'normal']
+    for i,e in enumerate(o.split('\n')):
+        if not 'connected' in e:
+            continue
+
+        name = e.strip().split()[0]
+        if ' connected' in e:
+            res = o.split('\n')[i+1].strip().split()[0]
+            cmd += ['--output', name, '--mode', res,
+                '--pos', "{}x{}".format(x, 0), '--rotate', 'normal']
             x += int(res.split('x')[0])
-        else:
+        elif 'disconnected' in e:
             cmd += ['--output', name, '--off']
 
     try:
