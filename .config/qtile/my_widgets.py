@@ -122,7 +122,7 @@ class FuncWithClick(base.ThreadedPollText):
 
 class ComboWidget(object):
     def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
-                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='000000',click_func=None,
+                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='',click_func=None,
                 click_func_args={},update_after_click=False, border_font=None, border_font_size=12, title_font=None,
                 title_font_size=12, body_font=None, body_font_size=12, collapsible=True, inactive_hide=True,
                 poll_interval=1000, head_text="", tail_text="",center_text=None, hide=False):

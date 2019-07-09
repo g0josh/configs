@@ -2,7 +2,7 @@
 
 LOCKIMAGE=~/Pictures/Lockscreen
 if [ ! -f "$LOCKIMAGE" ]; then
-  convert ~/Pictures/Wallpaper -filter Gaussian -resize 5% -define filter:sigma=2.5 -resize 4000% ~/Pictures/Lockscreen
+  convert ~/Pictures/Wallpaper -filter Gaussian -resize 5% -define filter:sigma=2.5 -resize 5000% ~/Pictures/Lockscreen
 fi
 
 C=#00000000
@@ -32,13 +32,13 @@ i3lock \
 --timestr="%I:%M %p" \
 --timesize=200 \
 --time-font="Iosevka" \
---timepos="500:1050" \
+--timepos="500:1100" \
  \
 --datestr="%d %b, %A" \
 --datesize=100 \
 --datecolor=$T \
 --date-font="Iosevka" \
---datepos="500:1150" \
+--datepos="500:1200" \
  \
 --veriftext="" \
 --verifcolor=$T \

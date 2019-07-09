@@ -47,7 +47,7 @@ icon_font = dict(
 groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
@@ -78,10 +78,8 @@ def show_hide_power_widgets(x=0, y=0, button=1, widgets=[]):
     for w in power_widgets:
         if widgets[0].isHidden():
             w.update(title_text=" ")
-            w.center_text = ""
         else:
-            w.update(title_text="")
-            w.center_text = ""
+            w.update(title_text=" ")
 
 # Create widgets for all screens
 vol_widgets = []
@@ -124,10 +122,10 @@ for n in range(NUM_SCREENS):
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']},body_bg=COLR_BAR_BG)
-    shut_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
+    shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']}, tail_text="")
+        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']})
     power_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
         title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],tail_text="",
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
@@ -352,7 +350,7 @@ def getWidgets(screen=0):
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
         head_text="", tail_text="").getWidgets()
 
-    widgets += [widget.Spacer(length=400)]
+    widgets += [widget.Spacer(length=470)]
 
     # Time
     widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
@@ -364,13 +362,16 @@ def getWidgets(screen=0):
         title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
         border_font_size=border_font['fontsize'],head_text="", tail_text="", body_bg=COLR_BAR_BG).getWidgets()
 
-    # Prompt and systray
+    # Prompt
+    if screen == 0:
+        widgets += [
+            widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+            widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
+            widget.TextBox(**border_font, foreground=COLR_TITLE_BG, text="")
+        ]
+    # systray
     widgets += [
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-        widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
-        widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
         widget.Spacer(),
-
         widget.Systray(),
     ]
     # Caps and Numlock
@@ -395,8 +396,8 @@ def getWidgets(screen=0):
         widgets += w.getWidgets()
 
     # Power
-    widgets += power_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
-    widgets += shut_widgets[screen].getWidgets()
+    widgets += shut_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
+    widgets += power_widgets[screen].getWidgets()
 
     return widgets
 
@@ -426,7 +427,7 @@ dgroups_app_rules: List = []
 main = None
 follow_mouse_focus = True
 bring_front_click = True
-cursor_warp = True
+cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
