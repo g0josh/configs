@@ -28,7 +28,7 @@ class GroupTextBox(_GroupBase):
 
     def button_press(self, x, y, button):
         if self.tracking_group:
-            self.bar.screen.setGroup(self.tracking_group)
+            self.bar.screen.set_group(self.tracking_group)
 
     def calculate_length(self):
         width, _ = self.drawer.max_layout_size(
@@ -61,7 +61,7 @@ class GroupTextBox(_GroupBase):
         self.tracking_group = tracking_group
         # self.text = self.tracking_group.label if self.text == 'NA' else self.text
         # self.label = self._label
-        if self.tracking_group == self.qtile.currentGroup:
+        if self.tracking_group == self.qtile.current_group:
             self.foreground = self.active_fg
             self.background = self.active_bg
         elif self.group_has_urgent(self.tracking_group):

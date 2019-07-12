@@ -47,7 +47,7 @@ icon_font = dict(
 groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="columns" ),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], init=True, spawn="code", layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
