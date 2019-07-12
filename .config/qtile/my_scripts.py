@@ -8,7 +8,6 @@ from contextlib import contextmanager
 from libqtile.log_utils import logger
 
 from socket import error as socket_error
-import psutil
 
 MOUSE_BUTTONS={
     'LEFT_CLICK':1,'RIGHT_CLICK':2, 'SCROLL_UP':4, 'SCROLL_DOWN':5
@@ -17,11 +16,6 @@ MOUSE_BUTTONS={
 POWER_BUTTONS={
     'SHUT_DOWN':0, 'LOG_OUT':1, 'LOCK_SCREEN':2
 }
-
-try:
-    import iwlib
-except ModuleNotFoundError:
-    logger.warning("Please install iwlib")
 
 # ---------------------------------------------
 # VOLUME
@@ -122,60 +116,20 @@ def changeVolume(value='+5%'):
 # MPD
 # ---------------------------------------------
 
-try:
-    from mpd import MPDClient, ConnectionError, CommandError
-except ModuleNotFoundError:
-    MPD = False
-    logger.warning("Please install mpd")
-else:
-    mpd_client = MPDClient()
-    mpd_password = None
-    MPD = True
-
-def mpd_reconnect(host='localhost', port='6600'):
-    global MPD
-    if not MPD:
-        return False
-
-    global mpd_client, mpd_password
+def getMpd(not_connected_text='', max_title_len=15):
     try:
-        mpd_client.ping()
-    except(socket_error, ConnectionError):
-        try:
-            mpd_client.connect(host, port)
-            if mpd_password:
-                mpd_client.password(mpd_password)
-        except (socket_error, ConnectionError, CommandError):
-            return False
-    return True
-
-def getMpd(not_connected_text='', host='localhost', port='6600'):
-    if not mpd_reconnect(host, port):
-        return not_connected_text
-
-    global mpd_client
-    mpd_client.command_list_ok_begin()
-    mpd_client.status()
-    mpd_client.currentsong()
-    status, current_song = mpd_client.command_list_end()
-    for e in ['artist', 'title']:
-        if e in current_song:
-            if len(current_song[e]) > 15:
-                current_song[e] = current_song[e][:12] + '...'
-            elif len(current_song[e]) < 15:
-                current_song[e] = f"{current_song[e]}{' '*(15-len(current_song[e]))}"
-        else:
-            current_song[e] = 'Unknown'
-    for e in ['elapsed', 'duration']:
-        mm, ss = divmod(float(status[e]), 60)
-        status[e] = '{:02.0f}:{:02.0f}'.format(mm, ss)
-    return "{} - {}/{}".format(current_song['title'], status['elapsed'], status['duration'])
+        output = subprocess.check_output(['mpc']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning (e.output.decode().strip())
+        return error_text
+    else:
+        output = output.split('\n')
+    title = output[0].split('-')[-1].strip()
+    title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
+    time = output[1].split()[-2]
+    return "{} - {}".format(title, time)
 
 def clickMpd(x, y, button):
-    if not mpd_reconnect():
-        return
-
-    global mpd_client
     keys = {
         # Left mouse button
         "toggle": 1,
@@ -188,20 +142,19 @@ def clickMpd(x, y, button):
         # User defined command
         "command": None
     }
+    cmd = ['mpc']
     if button == keys["toggle"]:
-        status = mpd_client.status()
-        play_status = status['state']
-
-        if play_status == 'play':
-            mpd_client.pause()
-        else:
-            mpd_client.play()
+        cmd.append('toggle')
     elif button == keys["stop"]:
-        mpd_client.stop()
+        cmd.append('stop')
     elif button == keys["previous"]:
-        mpd_client.previous()
+        cmd.append('prev')
     elif button == keys["next"]:
-        mpd_client.next()
+        cmd.append('next')
+    try:
+        subprocess.run(cmd)
+    except subprocess.CalledProcessError as e:
+        logger.warning (e.output.decode().strip())
 
 # ---------------------------------------------
 # Internet
@@ -212,12 +165,15 @@ net_speed_objects = []
 class NetSpeeds(object):
     def __init__(self, interface="wlp2s0"):
         self.init_time = 0
-        self.init_bytes_tx_rx = (0,0)
+        self.init_bytes_tx_rx = [0,0]
         self.interface = interface
 
     def getSpeed(self):
-        bytes_tx_rx = ( psutil.net_io_counters(pernic=True)[self.interface][0],
-                    psutil.net_io_counters(pernic=True)[self.interface][1])
+        bytes_tx_rx = []
+        for f in ['/sys/class/net/{}/statistics/tx_bytes'.format(self.interface),
+            '/sys/class/net/{}/statistics/rx_bytes'.format(self.interface)]:
+            with open(f, 'r') as fo:
+                bytes_tx_rx.append(int(fo.read()))
         _time = time.time()
         speeds = [ (x - y) / (_time - self.init_time)
                     for x, y in zip(bytes_tx_rx, self.init_bytes_tx_rx)]
@@ -231,19 +187,16 @@ def getInterfaces():
 
 def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     try:
-        status = iwlib.get_iwconfig(interface)
-    except (AttributeError,NameError) as e:
-        logger.warning (e)
-        error = True
-        essid = False
-    else:
-        error = False
-        essid = status['ESSID'].decode().strip()
-
-    if error:
+        output = subprocess.check_output(['connmanctl', 'services']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning (e.output.decode().strip())
         return error_text
-    elif not essid:
+    else:
+        services = [x for x in output.split('\n') if x.startswith('*AO') and 'wifi' in x]
+    
+    if not services:
         return ""
+    essid = services[0].split()[1]
 
     #get speeds
     global net_speed_objects
@@ -264,15 +217,19 @@ def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=
     else:
         return "{}|{}".format(essid, speed)
 
-def getLan(interface='enp2s0', error_text=''):
+def getLan(interface='enp24s0', error_text=''):
     #check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
                    '/sys/class/net/{}/carrier'.format(interface)]:
         if not os.path.exists(_file):
+            print('error')
             return error_text
-        with open(_file, 'r') as f:
-            up.append( f.read().strip().lower() )
+        try:
+            with open(_file, 'r') as f:
+                up.append( f.read().strip().lower() )
+        except:
+            up.append("-1")
     if up != ['up', '1']:
         return ""
 
