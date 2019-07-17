@@ -247,14 +247,20 @@ keys = [
     Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
     Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True))),
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
+    Key([MOD, "shift", "control"], "k", lazy.prev_screen()),
+    Key([MOD, "shift", "control"], "j", lazy.next_screen()),
+    Key([MOD, "shift", "control"], "l", lazy.function(lambda x:next_prev_group(x, next=True))),
+    Key([MOD, "shift", "control"], "h", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
     Key([], "XF86AudioMute", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
     Key([MOD], "z", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
     Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
     Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
+    Key([MOD, ALT], "j", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
     Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
     Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
+    Key([MOD, ALT], "k", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -262,9 +268,13 @@ keys = [
 
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
+    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
+    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
 
     Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
     Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
+    Key([MOD, ALT, "control"], "l", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
+    Key([MOD, ALT, "control"], "h", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
