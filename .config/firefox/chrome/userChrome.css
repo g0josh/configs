@@ -1,13 +1,30 @@
 #TabsToolbar {
-  visibility: collapse !important;
+  /* visibility: collapse !important; */
+  height: 3px !important;
+  margin-left: 0px !important;
+  --tab-min-height: 3px !important;
 }
+#TabsToolbar .tabbrowser-tab .tab-line {
+  background-color:#43C2DA  !important;
+}
+.tabbrowser-tab .tab-icon-image,
+.tabbrowser-tab .tab-throbber { display:none!important; }
 #sidebar-header {
   visibility: collapse !important;
-} 
-
+}
+#menubar{
+  background-color: #211938 !important;
+  color: #43C2DA !important;
+}
+#urlbar {
+  background-color: #211938 !important;
+  color: #43C2DA !important;
+  border-color: #211938 !important;
+  border-width: 0px !important;
+}
 #nav-bar {
-  color: #a42f2b !important;
-  background-color: #090e36 !important;
+  color: #b61e32 !important;
+  background-color: #0e0527 !important;
   margin-top: -2px !important;
   height: 30px !important;
 }
