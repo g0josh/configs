@@ -8,7 +8,7 @@
 function parse_git_branch { 
    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1 /' 
 } 
-export PS1="\[\e[30;41m\]\A\[\e[0m\] \[\e[30;41m\]\u@\h\[\e[0m\] \[\e[0;45m\]\w\[\e[m\] \[\e[30;46m\]\$(parse_git_branch)\[\e[0m\]\n"
+export PS1="\[\e[30;41m\] \A \[\e[0m\] \[\e[30;41m\]\u@\h\[\e[0m\] \[\e[0;45m\]\w\[\e[m\] \[\e[30;46m\]\$(parse_git_branch)\[\e[0m\]\n"
 
 alias shut='shutdown now'
 

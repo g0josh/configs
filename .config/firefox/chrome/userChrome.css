@@ -3,10 +3,9 @@
   height: 3px !important;
   margin-left: 0px !important;
   --tab-min-height: 3px !important;
-  background-color: #211938 !important;
 }
 #TabsToolbar .tabbrowser-tab .tab-line {
-  background-color:#43C2DA  !important;
+  background-color:#4499A8  !important;
 }
 .tabbrowser-tab .tab-icon-image,
 .tabbrowser-tab .tab-throbber { display:none!important; }
@@ -14,24 +13,23 @@
   visibility: collapse !important;
 }
 #menubar{
-  background-color: #211938 !important;
-  color: #43C2DA !important;
+  background-color: #030327 !important;
+  color: #4499A8 !important;
 }
 #urlbar {
-  background-color: #211938 !important;
-  color: #43C2DA !important;
-  border-color: #211938 !important;
+  background-color: #030327 !important;
+  color: #4499A8 !important;
+  border-color: #030327 !important;
   border-width: 0px !important;
 }
 #nav-bar {
-  color: #941829 !important;
-  background-color: #0f072e !important;
+  color: #b61e32 !important;
+  background-color: #0e0527 !important;
   margin-top: -2px !important;
-  margin-bottom: -2px !important;
   height: 30px !important;
 }
 /*change color of popup menus */
-/* .popup-internal-box {background: #211938 !important;}
+.popup-internal-box {background: #030327 !important;}
 menupopup > menu,
 menupopup > menuitem,popup > menu,
-popup > menuitem {color: #b41026 !important;} */
+popup > menuitem {color: #4499A8 !important;}
