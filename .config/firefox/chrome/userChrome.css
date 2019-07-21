@@ -2,6 +2,8 @@
   /* visibility: collapse !important; */
   height: 3px !important;
   margin-left: 0px !important;
+  margin-top: -2px !important;
+  margin-bottom: -2px !important;
   --tab-min-height: 3px !important;
 }
 #TabsToolbar .tabbrowser-tab .tab-line {
@@ -26,10 +28,11 @@
   color: #b61e32 !important;
   background-color: #0e0527 !important;
   margin-top: -2px !important;
+  margin-bottom: -2px !important;
   height: 30px !important;
 }
 /*change color of popup menus */
 .popup-internal-box {background: #030327 !important;}
 menupopup > menu,
 menupopup > menuitem,popup > menu,
-popup > menuitem {color: #4499A8 !important;}
+popup > menuitem {color: #b61e32 !important;}
