@@ -120,14 +120,18 @@ def getMpd(not_connected_text='', max_title_len=15):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
-        logger.warning (e.output.decode().strip())
-        return error_text
+        return not_connected_text
     else:
         output = output.split('\n')
-    title = output[0].split('-')[-1].strip()
-    title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
-    time = output[1].split()[-2]
-    return "{} - {}".format(title, time)
+    try:    
+        title = output[0].split('-')[-1].strip()
+        title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
+        time = output[1].split()[-2]
+    except Exception as e:
+        logger.warning(e)
+        return ""
+    else:
+        return "{} - {}".format(title, time)
 
 def clickMpd(x, y, button):
     keys = {

@@ -45,12 +45,13 @@ icon_font = dict(
 )
 
 groups = [
-    Group(name='1', label="1 ", layout='treetab'),
+    Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], init=True, spawn="code", layout="monadtall" ),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], init=True, spawn="code", layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
-    Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
+    #Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
+    Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
         # define a drop down terminal.
@@ -247,20 +248,14 @@ keys = [
     Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
     Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True))),
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
-    Key([MOD, "shift", "control"], "k", lazy.prev_screen()),
-    Key([MOD, "shift", "control"], "j", lazy.next_screen()),
-    Key([MOD, "shift", "control"], "l", lazy.function(lambda x:next_prev_group(x, next=True))),
-    Key([MOD, "shift", "control"], "h", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
     Key([], "XF86AudioMute", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
     Key([MOD], "z", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
     Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
     Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    Key([MOD, ALT], "j", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
     Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
     Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
-    Key([MOD, ALT], "k", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -268,13 +263,9 @@ keys = [
 
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
-    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
-    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
 
     Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
     Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
-    Key([MOD, ALT, "control"], "l", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
-    Key([MOD, ALT, "control"], "h", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "control"], "q", lazy.shutdown()),
@@ -354,13 +345,13 @@ def getWidgets(screen=0):
         inactive_fg=COLR_TEXT, inactive_bg=COLR_INACTIVE, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
         not_empty_fg=COLR_TEXT, not_empty_bg=COLR_BODY_BG)
     # Music
-    # widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
-    #     title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, body_poll_func_args={'not_connected_text':""},
-    #     poll_interval=2.0,click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
-    #     body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
-    #     head_text="", tail_text="").getWidgets()
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, poll_interval=2.0,
+        click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
+        body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
+        head_text="", tail_text="").getWidgets()
 
-    widgets += [widget.Spacer(length=400)]
+    widgets += [widget.Spacer(length=470)]
 
     # Time
     widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
@@ -371,15 +362,16 @@ def getWidgets(screen=0):
         update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_TEXT,poll_interval=30.0,
         title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
         border_font_size=border_font['fontsize'],head_text="", tail_text="", body_bg=COLR_BAR_BG).getWidgets()
+
     # Prompt
     if screen == 0:
         widgets += [
-                widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-                widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
-                widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text="")
+            widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
+            widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
+            widget.TextBox(**border_font, foreground=COLR_TITLE_BG, text="")
         ]
-    # Systray
-    widgets += [widget.Spacer(),widget.Systray()]
+    # systray
+    widgets += [widget.Spacer(), widget.Systray()]
     # Caps and Numlock
     widgets += capslock_widgets[screen].getWidgets()
     # Temperature
@@ -432,7 +424,7 @@ dgroups_key_binder = None
 dgroups_app_rules: List = []
 main = None
 follow_mouse_focus = True
-bring_front_click = True
+bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
@@ -486,8 +478,6 @@ def restart_on_randr(qtile, ev):
 
 @hook.subscribe.startup_once
 def startOnce():
-    start = os.path.expanduser('~/.config/qtile/autostart_once.sh')
-    subprocess.call([start])
     setupMonitors()
 
 @hook.subscribe.startup
