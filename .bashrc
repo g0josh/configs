@@ -10,7 +10,12 @@ function parse_git_branch {
 } 
 export PS1="\[\e[30;41m\]\A\[\e[0m\] \[\e[30;41m\]\u@\h\[\e[0m\] \[\e[0;45m\]\w\[\e[m\] \[\e[30;46m\]\$(parse_git_branch)\[\e[0m\]\n"
 
+
 alias shut='shutdown now'
+alias ls='ls --color'
+alias vim='nvim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # ROS
 alias roslocal='source ~/dev/catkin_ws/devel/setup.bash;export ROS_MASTER_URI=http://localhost:11311'

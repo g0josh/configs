@@ -192,13 +192,20 @@ def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl','enp'])]
 
 def getWlan(interface='wlo1', error_text=''):
+    active, essid = 'no', ''
     try:
-        active_essid = subprocess.check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi']).decode()
+        essids = subprocess.check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi']).decode()
     except subprocess.CalledProcessError as e:
         logger.warning (traceback.format_exc())
         return error_text
     else:
-        active, essid = active_essid.split(':')
+        essids = essids.split('\n')
+        for _essid in essids:
+            active, essid = _essid.split(':')
+            if active == 'yes':
+                break
+            else:
+                continue
 
     if active != 'yes':
         return ""

@@ -432,7 +432,7 @@ dgroups_key_binder = None
 dgroups_app_rules: List = []
 main = None
 follow_mouse_focus = True
-bring_front_click = True
+bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
