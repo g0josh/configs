@@ -46,7 +46,7 @@ Xft.lcdfilter: lcddefault
 
 !URxvt----------------------------
 !URxvt.letterSpace:0
-URxvt.font: xft:Iosevka:style=Regular:size=12:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=12:minispace=False
+URxvt.font: xft:Iosevka Nerd Font Mono:style=Oblique:size=12:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=12:minispace=False
 
 URxvt.depth:                    32
 URxvt.background: 		[80]#000212
