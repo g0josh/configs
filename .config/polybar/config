@@ -121,10 +121,8 @@ format = <label-indicator>
 label-indicator-padding = 0
 label-indicator-margin = 0
 
-label-indicator-on-capslock = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}A %{F-}%{B-}%{F#791c1c}%{F-}"
-;label-indicator-off-capslock =
-label-indicator-on-numlock = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}1 %{F-}%{B-}%{F#791c1c}%{F-}"
-;label-indicator-off-numlock =
+label-indicator-on-capslock = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{B#1c5d87}%{F-}%{B-}%{B#1c5d87}%{F#0d0b0b}A%{F-}%{B-}%{F#1c5d87}%{F-}"
+label-indicator-on-numlock = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{B#1c5d87}%{F-}%{B-}%{B#1c5d87}%{F#0d0b0b}0%{F-}%{B-}%{F#1c5d87}%{F-}"
 
 [module/pulseaudio]
 type = internal/pulseaudio
