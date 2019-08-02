@@ -182,6 +182,7 @@ bindsym $MOD+Shift+0 move container to workspace $ws10
 #bindsym $MOD+Control+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $MOD+Control+r restart
+bindsym $MOD+Control+m exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
 # exit i3 (logs you out of your X session)
 #bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $MOD+Shift+Control+q exit
@@ -232,10 +233,9 @@ bindsym $MOD+b exec --no-startup-id $BROWSER
 #}
 
 # misc startup
-exec --no-startup-id polybar example
+exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
-exec_always --no-startup-id $HOME/.config/i3/detect_load_monitors.sh 
 
 #exec --no-startup-id code
 assign [class="Code"] $ws3
