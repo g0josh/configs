@@ -133,7 +133,7 @@ use-ui-max = 100
 format-prefix =  "%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
 
 format-volume = "%{F#791c1c}%{F-}<ramp-volume>%{F#791c1c}%{B#1c5d87}%{F-}%{B-}<label-volume>%{F#1c5d87}%{F-}"
-label-volume = %percentage%%
+label-volume = %percentage%
 label-volume-foreground = #0d0b0b
 label-volume-background = #1c5d87
 

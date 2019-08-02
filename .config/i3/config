@@ -94,14 +94,14 @@ bindsym $MOD+Shift+Up move up
 bindsym $MOD+Shift+Right move right
 
 # focus on differnet monitors/outputs
-bindsym $MOD+Control+Shift+Left move workspace output left
-bindsym $MOD+Control+Shift+Right move workspace output right
-bindsym $MOD+Control+Shift+Up move workspace output up
-bindsym $MOD+Control+Shift+Down move workspace output down
+bindsym $MOD_ALT+Control+Shift+Left move workspace to output left
+bindsym $MOD_ALT+Control+Shift+Right move workspace to output right
+bindsym $MOD_ALT+Control+Shift+Up move workspace to output up
+bindsym $MOD_ALT+Control+Shift+Down move workspace to output down
 
 # move focussed window to next/prev workspace
-bindsym $MOD_ALT+Shift+Left move to workspace prev
-bindsym $MOD_ALT+Shift+Right move to workspace next
+bindsym $MOD+Control+Shift+Left move to workspace prev
+bindsym $MOD+Control+Shift+Right move to workspace next
 
 # split in horizontal orientation
 bindsym $MOD+h split h
@@ -185,7 +185,7 @@ bindsym $MOD+Control+r restart
 # exit i3 (logs you out of your X session)
 #bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $MOD+Shift+Control+q exit
-bindsym $MOD+x	exec --no-startup-id i3lock -i ~/Pictures/Lockscreen -t -e -f 
+bindsym $MOD+x	exec --no-startup-id $HOME/.config/i3/lockscreen.sh 
 #bindsym $MOD+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 
 # resize window (you can also use the mouse for that)
@@ -235,6 +235,8 @@ bindsym $MOD+b exec --no-startup-id $BROWSER
 exec --no-startup-id polybar example
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
+exec_always --no-startup-id $HOME/.config/i3/detect_load_monitors.sh 
+
 #exec --no-startup-id code
 assign [class="Code"] $ws3
 #exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
