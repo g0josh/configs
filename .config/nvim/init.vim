@@ -7,8 +7,9 @@ set cursorline
 set t_Co=256
 set clipboard=unnamedplus
 set ruler
+set path+=**
 
-set foldmethod=manual
+set foldmethod=indent
 
 "Tabs and spacing
 set autoindent
@@ -18,9 +19,8 @@ set expandtab
 set shiftwidth=4
 set smarttab
 nnoremap tn :tabnew<Space>
-nnoremap tk :tabnext<CR>
-nnoremap tj :tabprev<CR>
-nnoremap th :tabfirst<CR>
+nnoremap <S-Tab> :tabn<CR>
+nnoremap tf :tabfirst<CR>
 nnoremap tl :tablast<CR>
 
 "Search
@@ -28,11 +28,5 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-set diffopt +=iwhite
-
-" easy split movement
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+"set diffopt +=iwhite
 

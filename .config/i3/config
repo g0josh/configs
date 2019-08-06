@@ -121,7 +121,7 @@ bindsym $MOD+e layout toggle split
 bindsym $MOD+Shift+f floating toggle
 
 # change focus between tiling / floating windows
-bindsym $MOD+Control+f  mode_toggle
+bindsym $MOD+Control+f focus mode_toggle
 
 # focus the parent container
 bindsym $MOD+p focus parent
