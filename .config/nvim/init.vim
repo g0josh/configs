@@ -19,7 +19,8 @@ set expandtab
 set shiftwidth=4
 set smarttab
 nnoremap tn :tabnew<Space>
-nnoremap <S-Tab> :tabn<CR>
+nnoremap <C-Tab> :tabn<CR>
+nnoremap <C-S-Tab> :tabp<CR>
 nnoremap tf :tabfirst<CR>
 nnoremap tl :tablast<CR>
 

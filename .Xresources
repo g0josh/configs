@@ -65,9 +65,14 @@ URxvt.keysym.C-0: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size
 URxvt.keysym.C-minus: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size=10:antialias=true\007
 URxvt.keysym.C-equal: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size=15:antialias=true\007
 
+!Pass on Ctrl Tab correctly
+URxvt.keysym.Control-ISO_Left_Tab:             \033[27;5;9~
+URxvt.keysym.Control-Shift-ISO_Left_Tab:       \033[27;6;9~
+
 ! Normal copy-paste keybindings without perls
-URxvt.iso14755:                   false
-URxvt.keysym.Shift-Control-V:     eval:paste_clipboard
-URxvt.keysym.Shift-Control-C:     eval:selection_to_clipboard
-URxvt.keysym.Shift-Up: 		  command:\033]720;5\007
-URxvt.keysym.Shift-Down: 	  command:\033]721;5\007
+URxvt.iso14755:                 false
+URxvt.iso14755_52:              false
+URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
+URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
+URxvt.keysym.Shift-Up:          command:\033]720;5\007
+URxvt.keysym.Shift-Down:        command:\033]721;5\007
