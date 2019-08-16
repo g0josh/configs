@@ -27,5 +27,5 @@ killall -q polybar
 while prep -u $UID -x polybar >/dev/null; do sleep 0.2;done
 for i in "${POLY_MONITORS[@]}"
 do
-    POLY_MONITOR=$i polybar --reload example &
+    POLY_MONITOR=$i polybar --reload island &
 done

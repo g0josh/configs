@@ -14,8 +14,8 @@ set $TERM urxvt
 set $TERM_NAME URxvt
 set $BROWSER firefox
 
-gaps inner 20
-#gaps outer 5 
+gaps inner 18
+#gaps outer 15 
 #smart_gaps on
 smart_borders on
 bindsym $MOD+g		gaps inner current plus 5

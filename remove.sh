@@ -2,7 +2,7 @@
 
 echo "This will uninstall all the custom configuration"
 read -p 'Continue[y/n] :' cont
-if [ "$cont" == "n" ]; then
+if [ "$cont" != "y" ]; then
 	exit 1
 fi
 
