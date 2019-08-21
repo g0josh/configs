@@ -239,17 +239,16 @@ exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 #exec --no-startup-id code
 assign [class="Code"] $ws3
-#exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
-#assign [class=$TERM_NAME instance="tmux_inst"] $ws3
+exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
+assign [class=$TERM_NAME instance="tmux_inst"] $ws3
 exec --no-startup-id $TERM -name ranger_inst -e ranger
 assign [class=$TERM_NAME instance="ranger_inst"] $ws4
 exec --no-startup-id $TERM -name scratch
 for_window [class=$TERM_NAME instance="scratch"] move scratchpad
 
 # Music Controls
-#exec --no-startup-id mpd
-#exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
-#assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
+exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
+assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym $MOD_ALT+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
@@ -257,7 +256,7 @@ bindsym $MOD_ALT+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
 bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
 bindsym $MOD_ALT+z exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
-#bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-#bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-#bindsym $MOD_ALT+Right exec mpc next
-#bindsym $MOD_ALT+Left exec mpc prev
+bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $MOD_ALT+Right exec mpc next
+bindsym $MOD_ALT+Left exec mpc prev
