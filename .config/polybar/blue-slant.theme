@@ -1,0 +1,14 @@
+titlefgcolor=#181838
+titlebgcolor=#0b8191
+bodyfgcolor=#0b8191
+#bodyfgcolor=#fcd7cf
+bodybgcolor=#181838
+activecolor=#fcd7cf
+urgentcolor=#fd6c67
+background=#00000000
+leftmoduleprefix=
+leftmodulesuffix=
+rightmoduleprefix= 
+rightmodulesuffix=
+titlepadding=0
+bodypadding=1
