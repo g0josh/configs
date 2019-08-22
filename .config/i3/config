@@ -14,12 +14,12 @@ set $TERM urxvt
 set $TERM_NAME URxvt
 set $BROWSER firefox
 
-gaps inner 20
-#gaps outer 5 
+gaps inner 18
+#gaps outer 15 
 #smart_gaps on
 smart_borders on
-bindsym $MOD+z		gaps inner current plus 5
-bindsym $MOD+Shift+z 	gaps inner current minus 5
+bindsym $MOD+g		gaps inner current plus 5
+bindsym $MOD+Shift+g 	gaps inner current minus 5
 
 hide_edge_borders both
 default_border pixel 2
@@ -59,7 +59,7 @@ floating_modifier $MOD
 bindsym $MOD+Return exec $TERM 
 
 # kill focused window
-bindsym $MOD+Shift+q kill
+bindsym $MOD+q kill
 
 # start dmenu (a program launcher)
 bindsym $MOD+a exec rofi -show drun -config $HOME/.config/rofi/conf
@@ -70,10 +70,10 @@ bindsym $MOD+a exec rofi -show drun -config $HOME/.config/rofi/conf
 # bindsym $MOD+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $MOD+j focus left
-bindsym $MOD+k focus down
-bindsym $MOD+l focus up
-bindsym $MOD+semicolon focus right
+bindsym $MOD+j focus down
+bindsym $MOD+k focus up
+bindsym $MOD+l focus right
+bindsym $MOD+h focus left
 
 # alternatively, you can use the cursor keys:
 bindsym $MOD+Left focus left
@@ -82,10 +82,10 @@ bindsym $MOD+Up focus up
 bindsym $MOD+Right focus right
 
 # move focused window
-bindsym $MOD+Shift+j move left
-bindsym $MOD+Shift+k move down
-bindsym $MOD+Shift+l move up
-bindsym $MOD+Shift+semicolon move right
+bindsym $MOD+Shift+j move down
+bindsym $MOD+Shift+k move up
+bindsym $MOD+Shift+l move right
+bindsym $MOD+Shift+h move left
 
 # alternatively, you can use the cursor keys:
 bindsym $MOD+Shift+Left move left
@@ -93,11 +93,21 @@ bindsym $MOD+Shift+Down move down
 bindsym $MOD+Shift+Up move up
 bindsym $MOD+Shift+Right move right
 
+# focus on differnet monitors/outputs
+bindsym $MOD_ALT+Control+Shift+Left move workspace to output left
+bindsym $MOD_ALT+Control+Shift+Right move workspace to output right
+bindsym $MOD_ALT+Control+Shift+Up move workspace to output up
+bindsym $MOD_ALT+Control+Shift+Down move workspace to output down
+
+# move focussed window to next/prev workspace
+bindsym $MOD+Control+Shift+Left move to workspace prev
+bindsym $MOD+Control+Shift+Right move to workspace next
+
 # split in horizontal orientation
-bindsym $MOD+h split h
+bindsym $MOD+backslash split h
 
 # split in vertical orientation
-bindsym $MOD+v split v
+bindsym $MOD+bracketright split v
 
 # enter fullscreen mode for the focused container
 bindsym $MOD+f fullscreen toggle
@@ -108,10 +118,10 @@ bindsym $MOD+t layout tabbed
 bindsym $MOD+e layout toggle split
 
 # toggle tiling / floating
-bindsym $MOD+Shift+space floating toggle
+bindsym $MOD+Shift+f floating toggle
 
 # change focus between tiling / floating windows
-bindsym $MOD+space focus mode_toggle
+bindsym $MOD+Control+f focus mode_toggle
 
 # focus the parent container
 bindsym $MOD+p focus parent
@@ -169,13 +179,14 @@ bindsym $MOD+Shift+9 move container to workspace $ws9
 bindsym $MOD+Shift+0 move container to workspace $ws10
 
 # reload the configuration file
-bindsym $MOD+Shift+c reload
+#bindsym $MOD+Control+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $MOD+Shift+r restart
+bindsym $MOD+Control+r restart
+bindsym $MOD+Control+m exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
 # exit i3 (logs you out of your X session)
 #bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $MOD+Shift+e exit
-bindsym $MOD+x	exec --no-startup-id i3lock -i ~/Pictures/Lockscreen -t -e -f 
+bindsym $MOD+Shift+Control+q exit
+bindsym $MOD+x	exec --no-startup-id $HOME/.config/i3/lockscreen.sh 
 #bindsym $MOD+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 
 # resize window (you can also use the mouse for that)
@@ -203,7 +214,7 @@ mode "resize" {
         bindsym $MOD+r mode "default"
 }
 
-bindsym $MOD+r mode "resize"
+bindsym $MOD+z mode "resize"
 bindsym $MOD+b exec --no-startup-id $BROWSER
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -222,20 +233,20 @@ bindsym $MOD+b exec --no-startup-id $BROWSER
 #}
 
 # misc startup
-exec --no-startup-id polybar example
-exec --no-startup-id compton --config $HOME/.config/compton/conf
+exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
+exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
+
 #exec --no-startup-id code
 assign [class="Code"] $ws3
-#exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
-#assign [class=$TERM_NAME instance="tmux_inst"] $ws3
+exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
+assign [class=$TERM_NAME instance="tmux_inst"] $ws3
 exec --no-startup-id $TERM -name ranger_inst -e ranger
 assign [class=$TERM_NAME instance="ranger_inst"] $ws4
 exec --no-startup-id $TERM -name scratch
 for_window [class=$TERM_NAME instance="scratch"] move scratchpad
 
 # Music Controls
-exec --no-startup-id mpd
 exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
 assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
@@ -244,6 +255,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh 
 bindsym $MOD_ALT+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
 bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
+bindsym $MOD_ALT+z exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
 bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 bindsym $MOD_ALT+Right exec mpc next

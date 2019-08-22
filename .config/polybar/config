@@ -1,54 +1,56 @@
-;==========================================================
-;
-;
-;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
-;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
-;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
-;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
-;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
-;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-;
-;
-;   To learn more about how to configure Polybar
-;   go to https://github.com/jaagr/polybar
-;
-;   The README contains alot of information
-;
-;==========================================================
+[vars]
+titlefgcolor = #181838
+titlebgcolor = #0b8191
+bodyfgcolor  = #0b8191
+#bodyfgcolor  = #fcd7cf
+bodybgcolor  = #181838
+activecolor  = #fcd7cf
+urgentcolor  = #fd6c67
+background = #00000000
+leftmoduleprefix  = 
+leftmodulesuffix  = 
+rightmoduleprefix =  
+rightmodulesuffix = 
+titlepadding = 0
+bodypadding  = 1
 
-[bar/example]
-#monitor = ${env:MONITOR:HDMI-1}
+[module/sep]
+type = custom/text
+content = 
+content-foreground = ${vars.background}
+content-background = ${vars.background}
+
+[bar/island]
+monitor = ${env:POLY_MONITOR}
+monitor-fallback = HDMI-0
 width = 100%
-height = 20
-#offset-x = 10%
-#offset-y = 10%
+height = 18
 radius = 0
 fixed-center = true
-background = #00000000
+background = ${vars.background}
 
-#line-size = 1
-#line-color = #f00
+line-size = 1
 
 border-top-size = 0
 border-left-size = 0
 border-right-size = 0
 border-bottom-size = 0
 
-padding-left =0
-padding-right =0
+padding-left = 0
+padding-right = 0
 
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka:style=Medium Oblique:pixelsize=11;1
-font-1 = Font Awesome 5 Free: style=Regular:pixelsize=11;1
-font-2 = Font Awesome 5 Free: style=Solid:pixelsize=11;1
-font-3 = Font Awesome 5 Brands: pixelsize=11;1
-font-4 = FuraCode Nerd Font Mono: style=Regular:pixelsize=18;1
+font-0 = Iosevka:style=Medium Oblique:pixelsize=11;3:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
+font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
-modules-left = i3 mpd
-modules-center = date timeIndia
-modules-right = xkeyboard wlan lan pulseaudio utilization temp powermenu
+modules-left = i3Prefix i3 i3Suffix sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-center = timePrefix time sep timeIndia 
+#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
 tray-position = right
 tray-padding = 2
 
@@ -57,9 +59,11 @@ wm-restack = i3
 scroll-up = i3wm-wsnext
 scroll-down = i3wm-wsprev
 
-cursor-click = pointer
-cursor-scroll = ns-resize
+#cursor-click = pointer
+#cursor-scroll = ns-resize
 
+
+#i3---------------------------------------------------------------------------
 [module/i3]
 type = internal/i3
 index-sort = true
@@ -72,156 +76,375 @@ ws-icon-3 = 4;
 ws-icon-4 = 5;
 
 ws-icon-default = 
-format = <label-state> <label-mode>
-  
-; Only show workspaces on the same output as the bar
-;pin-workspaces = true
-label-mode = %mode%
-label-mode-padding = 0
-# label-mode-foreground = ${colors.foreground}
-# label-mode-background = ${colors.background}
+format = <label-state>
 
-; focused = Active workspace on focused monitor
-label-focused = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%index% %icon%%{F-}%{B-}%{F#791c1c}%{F-}"
+#focused = activecolor workspace on focused monitor
+label-focused = "%index% %icon%"
+label-focused-foreground = ${vars.activecolor}
+label-focused-background = ${vars.bodybgcolor}
+label-focused-padding = ${vars.bodypadding}
+label-focused-underline = ${vars.activecolor}
 
-; unfocused = Inactive workspace on any monitor
-label-unfocused = "%{F#110808}%{F-}%{F#a34a20}%{B#110808}%index% %icon%%{F-}%{B-}%{F#110808}%{F-}"
+#unfocused = Inactivecolor workspace on any monitor
+label-unfocused = " %index% %icon% "
+label-unfocused-foreground = ${vars.bodyfgcolor}
+label-unfocused-background = ${vars.bodybgcolor}
+label-unfocused-padding = ${vars.bodypadding}
 
-; visible = Active workspace on unfocused monitor
-label-visible = "%{F#110808}%{F-}%{F#791c1c}%{B#110808}%index% %icon%%{F-}%{B-}%{F#110808}%{F-}"
+#visible = activecolor workspace on unfocused monitor
+label-visible = " %index% %icon% "
+label-visible-foreground = ${vars.activecolor}
+label-visible-background = ${vars.bodybgcolor}
+label-visible-padding = ${vars.bodypadding}
 
-; urgent = Workspace with urgency hint set
-label-urgent = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%index% %icon%%{F-}%{B-}%{F#a34a20}%{F-}"
+#urgentcolor = Workspace with urgency hint set
+label-urgent = " %index% %icon% "
+label-urgent-foreground = ${vars.urgentcolor}
+label-urgent-background = ${vars.bodybgcolor}
+label-urgent-padding = ${vars.bodypadding}
+
+[module/i3Prefix]
+type = custom/script
+interval = 1600
+exec = echo "|"
+format-prefix = ${vars.leftmoduleprefix}
+format-prefix-foreground = ${vars.titlebgcolor}
+format-suffix = ${vars.leftmodulesuffix}
+format-suffix-foreground = ${vars.titlebgcolor}
+format-suffix-background = ${vars.bodybgcolor}
+label-foreground = ${vars.titlefgcolor}
+label-background = ${vars.titlebgcolor}
+label-padding = ${vars.titlepadding}
+
+[module/i3Suffix]
+type = custom/text
+content = ${vars.leftmodulesuffix}
+content-foreground = ${vars.bodybgcolor}
+
+#MPD--------------------------------------------------------------------------
+[module/mpdPrefix]
+type = internal/mpd
+
+format-online-prefix = ${vars.leftmoduleprefix}
+format-online-suffix = ${vars.leftmodulesuffix}
+format-online-prefix-foreground = ${vars.titlebgcolor}
+format-online-prefix-background = ${vars.background}
+format-online-suffix-foreground = ${vars.titlebgcolor}
+format-online-suffix-background = ${vars.bodybgcolor}
+format-offline-prefix = ${vars.leftmoduleprefix}
+format-offline-suffix = ${vars.leftmodulesuffix}
+format-offline-prefix-foreground = ${vars.titlebgcolor}
+format-offline-prefix-background = ${vars.background}
+format-offline-suffix-foreground = ${vars.titlebgcolor}
+format-offline-suffix-background = ${vars.background}
+
+format-online = 
+format-offline =  
+format-offline-foreground = ${vars.titlefgcolor}
+format-offline-background = ${vars.titlebgcolor}
+format-online-foreground = ${vars.titlefgcolor}
+format-online-background = ${vars.titlebgcolor}
 
 [module/mpd]
 type = internal/mpd
-format-online = <label-song><label-time><icon-prev><toggle><icon-next>
 
-format-playing-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#a34a20}%{B#791c1c}%{F-}%{B-}"
-format-paused-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#a34a20}%{B#791c1c}%{F-}%{B-}"
-format-stopped-prefix = "  %{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{F-}"
+format-online = <label-song> <label-time>
+format-online-foreground = ${vars.bodyfgcolor}
+format-online-background = ${vars.bodybgcolor}
+label-song = %title%
+label-song-padding = ${vars.bodypadding}
+label-time = %elapsed% / %total% 
+label-time-padding = ${vars.bodypadding}
+label-song-maxlen = 30
+label-song-ellipsis = true
 
-label-song = "%{F#0d0b0b}%{B#a34a20}%title% %{F-}%{B-}"
-label-time = "%{F#0d0b0b}%{B#a34a20} %elapsed% / %total%%{F-}%{B-}%{F#a34a20}%{F-}"
-icon-prev = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-icon-stop = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-icon-play = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-icon-pause = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-icon-next = "%{F#a34a20}%{F-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#a34a20}%{F-}"
-label-song-maxlen = 60
-label-song-ellipsis = false
+format-online-suffix = ${vars.leftmodulesuffix}
+format-online-suffix-foreground = ${vars.bodybgcolor}
+format-online-suffix-background = ${vars.background}
 
-format-offline = <label-offline>
-label-offline = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#0d0b0b}%{B#a34a20}%{F-}%{B-}%{F#000000}%{F-}"
+[module/mpdPrev]
+type = internal/mpd
 
-[module/xkeyboard]
+format-online-prefix = ${vars.leftmoduleprefix}
+format-online-suffix = ${vars.leftmodulesuffix}
+format-online-prefix-foreground = ${vars.titlebgcolor}
+format-online-prefix-background = ${vars.background}
+format-online-suffix-foreground = ${vars.titlebgcolor}
+format-online-suffix-background = ${vars.background}
+format-online = <icon-prev> 
+icon-prev= 
+format-online-foreground = ${vars.titlefgcolor}
+format-online-background = ${vars.titlebgcolor}
+
+[module/mpdPlayPause]
+type = internal/mpd
+
+format-online-prefix = ${vars.leftmoduleprefix}
+format-online-suffix = ${vars.leftmodulesuffix}
+format-online-prefix-foreground = ${vars.titlebgcolor}
+format-online-prefix-background = ${vars.background}
+format-online-suffix-foreground = ${vars.titlebgcolor}
+format-online-suffix-background = ${vars.background}
+format-online = <toggle>
+icon-pause = 
+icon-play = 
+format-online-foreground = ${vars.titlefgcolor}
+format-online-background = ${vars.titlebgcolor}
+
+[module/mpdNext]
+type = internal/mpd
+
+format-online-prefix = ${vars.leftmoduleprefix}
+format-online-suffix = ${vars.leftmodulesuffix}
+format-online-prefix-foreground = ${vars.titlebgcolor}
+format-online-prefix-background = ${vars.background}
+format-online-suffix-foreground = ${vars.titlebgcolor}
+format-online-suffix-background = ${vars.background}
+format-online = <icon-next>
+icon-next = 
+format-online-foreground = ${vars.titlefgcolor}
+format-online-background = ${vars.titlebgcolor}
+#TIME--------------------------------------------------------------------------
+[module/timePrefix]
+type = custom/script
+interval = 1600
+exec = echo 
+format-prefix = ${vars.leftmoduleprefix}
+format-prefix-foreground = ${vars.titlebgcolor}
+format-suffix = ${vars.leftmodulesuffix}
+format-suffix-foreground = ${vars.titlebgcolor}
+format-suffix-background = ${vars.bodybgcolor}
+label-foreground = ${vars.titlefgcolor}
+label-background = ${vars.titlebgcolor}
+label-padding = ${vars.titlepadding}
+
+[module/time]
+type = internal/date
+interval = 60
+date = %h %d, %A
+time = %I:%M %p
+label = "%date%, %time%"
+label-foreground = ${vars.bodyfgcolor}
+label-background = ${vars.bodybgcolor}
+label-padding = ${vars.bodypadding}
+format-suffix= ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.bodybgcolor}
+
+[module/timeIndia]
+type = custom/script
+interval = 60
+exec = TZ=Asia/Kolkata date +"%I:%M %p"
+label-foreground = ${vars.bodyfgcolor}
+label-background = ${vars.bodybgcolor}
+label-padding = ${vars.bodypadding}
+format = <label>
+format-prefix= ${vars.rightmoduleprefix}
+format-prefix-foreground = ${vars.bodybgcolor}
+format-suffix= ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.bodybgcolor}
+
+#CAPS NUM LOCK-----------------------------------------------------------------
+[module/capsNumLock]
 type = internal/xkeyboard
 format = <label-indicator>
+format-spacing = 0
+format-prefix= ${vars.rightmoduleprefix}
+format-prefix-foreground = ${vars.titlebgcolor}
+format-suffix= ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.titlebgcolor}
+indicator-icon-0 = caps lock;;CAPS
+indicator-icon-1 = num lock;;NUM
+label-indicator-on = %icon%
+label-indicator-on-foreground = ${vars.titlefgcolor}
+label-indicator-on-background = ${vars.titlebgcolor}
+label-indicator-on-padding = 1
 
-label-indicator ="%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%name%%{F-}%{B-}%{F#791c1c}%{F-}"
-label-indicator-padding = 0
-label-indicator-margin = 0
-
-[module/pulseaudio]
+#VOLUME-----------------------------------------------------------------------
+[module/volume]
 type = internal/pulseaudio
 use-ui-max = 100
 
-format-prefix =  "%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
+format-volume = <label-volume>
+format-volume-suffix= ${vars.rightmodulesuffix}
+format-volume-suffix-foreground = ${vars.bodybgcolor}
+label-volume = %percentage%
+label-volume-foreground = ${vars.bodyfgcolor}
+label-volume-background = ${vars.bodybgcolor}
+label-volume-padding = ${vars.bodypadding}
 
-format-volume = "%{F#791c1c}%{F-}<ramp-volume>%{F#791c1c}%{B#a34a20}%{F-}%{B-}<label-volume>%{F#a34a20}%{F-}"
-label-volume = %percentage%%
-label-volume-foreground = #0d0b0b
-label-volume-background = #a34a20
+format-muted = 
 
-format-muted = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{F-}"
+[module/volumePrefix]
+type = internal/pulseaudio
+format-volume = <ramp-volume>
+format-volume-prefix = ${vars.rightmoduleprefix}
+format-volume-prefix-foreground = ${vars.titlebgcolor}
+format-volume-prefix-background = #00000000
+format-volume-suffix = ${vars.rightmodulesuffix}
+format-volume-suffix-foreground = ${vars.titlebgcolor}
+format-volume-suffix-background = ${vars.bodybgcolor}
 
-; Only applies if <ramp-volume> is used
+format-muted = <label-muted>
+label-muted = 
+label-muted-foreground = ${vars.titlefgcolor}
+label-muted-background = ${vars.titlebgcolor}
+label-muted-padding = ${vars.titlepadding}
+format-muted-prefix = ${vars.rightmoduleprefix}
+format-muted-prefix-foreground = ${vars.titlebgcolor}
+format-muted-prefix-background = #00000000
+format-muted-suffix = ${vars.rightmodulesuffix}
+format-muted-suffix-foreground = ${vars.titlebgcolor}
+
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
 ramp-volume-3 = 
 ramp-volume-4 = 
-ramp-volume-foreground = #0d0b0b
-ramp-volume-background = #791c1c
+ramp-volume-foreground = ${vars.titlefgcolor}
+ramp-volume-background = ${vars.titlebgcolor}
+ramp-volume-padding = ${vars.titlepadding}
+
+#UTILIZATION------------------------------------------------------------------
+[module/utilizationPrefix]
+type = custom/script
+interval = 1600
+exec = echo 
+format-prefix = ${vars.rightmoduleprefix}
+format-prefix-foreground = ${vars.titlebgcolor}
+format-suffix = ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.titlebgcolor}
+format-suffix-background = ${vars.bodybgcolor}
+label-foreground = ${vars.titlefgcolor}
+label-background = ${vars.titlebgcolor}
+label-padding = ${vars.titlepadding}
 
 [module/utilization]
 type = custom/script
 interval = 5
 exec = bash $HOME/.config/polybar/utilization.sh
-label-foreground = #0d0b0b
-label-background = #a34a20
-format = "%{F#a34a20}%{B#791c1c}%{F-}%{B-}<label>%{F#a34a20}%{F-}"
-format-foreground = #a34a20
-format-prefix =  "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
+format-suffix = ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.bodybgcolor}
+label-foreground = ${vars.bodyfgcolor}
+label-background = ${vars.bodybgcolor}
+label-padding = ${vars.bodypadding}
+
+#TEMPERATURES-----------------------------------------------------------------
+[module/tempPrefix]
+type = custom/script
+interval = 1600
+exec = echo 
+format-prefix = ${vars.rightmoduleprefix}
+format-prefix-foreground = ${vars.titlebgcolor}
+format-suffix = ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.titlebgcolor}
+format-suffix-background = ${vars.bodybgcolor}
+label-foreground = ${vars.titlefgcolor}
+label-background = ${vars.titlebgcolor}
+label-padding = ${vars.titlepadding}
 
 [module/temp]
 type = custom/script
-interval = 5
+interval = 5.0
 exec = bash $HOME/.config/polybar/gettemp.sh
-label-foreground = #0d0b0b
-label-background = #a34a20
-format = "%{F#a34a20}%{B#791c1c}%{F-}%{B-}<label>%{F#a34a20}%{F-}"
-format-foreground = #a34a20
-format-prefix =  "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
+format-suffix = ${vars.rightmodulesuffix}
+format-suffix-foreground = ${vars.bodybgcolor}
+label-foreground = ${vars.bodyfgcolor}
+label-background = ${vars.bodybgcolor}
+label-padding = ${vars.bodypadding}
+
+#WIFI-------------------------------------------------------------------------
+[module/wlanPrefix]
+type = internal/network
+interface = wlo1
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${vars.rightmoduleprefix}
+format-connected-prefix-foreground = ${vars.titlebgcolor}
+format-connected-prefix-background = #00000000
+format-connected-suffix = ${vars.rightmodulesuffix}
+format-connected-suffix-foreground = ${vars.titlebgcolor}
+format-connected-suffix-background = ${vars.bodybgcolor}
+label-connected = 
+label-connected-foreground = ${vars.titlefgcolor}
+label-connected-background = ${vars.titlebgcolor}
+label-connected-padding = ${vars.titlepadding}
 
 [module/wlan]
 type = internal/network
 interface = wlo1
 interval = 3.0
 
+format-connected = <label-connected>
+format-connected-suffix = ${vars.rightmodulesuffix}
+format-connected-suffix-foreground = ${vars.bodybgcolor}
 label-connected = %essid%|%downspeed%
-label-connected-foreground = #0d0b0b
-label-connected-background = #a34a20
-format-connected = "%{F#a34a20}%{B#791c1c}%{F-}%{B-}<label-connected>%{F#a34a20}%{F-}"
-format-connected-prefix =  "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
+label-connected-foreground = ${vars.bodyfgcolor}
+label-connected-background = ${vars.bodybgcolor}
+label-connected-padding = ${vars.bodypadding}
+
+#LAN--------------------------------------------------------------------------
+[module/lanPrefix]
+type = internal/network
+interface = enp34s0
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${vars.rightmoduleprefix}
+format-connected-prefix-foreground = ${vars.titlebgcolor}
+format-connected-prefix-background = #00000000
+format-connected-suffix = ${vars.rightmodulesuffix}
+format-connected-suffix-foreground = ${vars.titlebgcolor}
+format-connected-suffix-background = ${vars.bodybgcolor}
+label-connected = 
+label-connected-foreground = ${vars.titlefgcolor}
+label-connected-background = ${vars.titlebgcolor}
+label-connected-padding = ${vars.titlepadding}
 
 [module/lan]
 type = internal/network
-interface = enp24s0
+interface = enp34s0
 interval = 3.0
-
+format-connected = <label-connected>
+format-connected-suffix = ${vars.rightmodulesuffix}
+format-connected-suffix-foreground = ${vars.bodybgcolor}
 label-connected = %downspeed%
-label-connected-foreground = #0d0b0b
-label-connected-background = #a34a20
-format-connected = "%{F#a34a20}%{B#791c1c}%{F-}%{B-}<label-connected>%{F#a34a20}%{F-}"
-format-connected-prefix =  "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}"
+label-connected-foreground = ${vars.bodyfgcolor}
+label-connected-background = ${vars.bodybgcolor}
+label-connected-padding = ${vars.bodypadding}
 
-[module/date]
-type = internal/date
-interval = 5
-
-format = "%{F#791c1c}%{F-}%{F#0d0b0b}%{B#791c1c}%{F-}%{B-}%{F#791c1c}%{B#a34a20}%{F-}%{B-}<label>%{F#a34a20}%{F-}"
-
-date = %h %d, %A
-time = %I:%M %p
-label = "%date%, %time%"
-label-background = #a34a20
-label-foreground = #0d0b0b
-
-[module/timeIndia]
-type = custom/script
-interval = 5
-exec = TZ=Asia/Kolkata date +"%I:%M %p"
-label-foreground = #0d0b0b
-label-background = #a34a20
-format = "%{F#a34a20}%{F-}<label>%{F#a34a20}%{F-}"
-
+#POWER------------------------------------------------------------------------
 [module/powermenu]
 type = custom/menu
-expand-right = true
-# format-spacing = 0
+expand-right = false
 
-label-open = "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}%{F#791c1c}%{F-}"
-label-close = "%{F#791c1c}%{F-}%{B#791c1c}%{F#0d0b0b}%{F-}%{B-}%{F#791c1c}%{F-}"
+label-open = 
+label-open-foreground = ${vars.titlefgcolor}
+label-open-background = ${vars.titlebgcolor}
+label-open-padding = ${vars.titlepadding}
+label-close = 
+label-close-foreground = ${vars.titlefgcolor}
+label-close-background = ${vars.titlebgcolor}
+label-close-padding = ${vars.titlepadding}
+label-separator = " "
 
-menu-0-0 = "%{F#a34a20}%{F-}%{B#a34a20}%{F#0d0b0b}Reboot%{F-}%{B-}%{F#a34a20}%{F-}"
+menu-0-0 = "Reboot"
+menu-0-0-foreground = ${vars.titlefgcolor}
+menu-0-0-background = ${vars.titlebgcolor}
+menu-0-0-padding = {vars.bodypadding}
 menu-0-0-exec = menu-open-1
-menu-0-1 = "%{F#a34a20}%{F-}%{B#a34a20}%{F#0d0b0b}Power-off%{F-}%{B-}%{F#a34a20}%{F-}"
+menu-0-1 = "Shutdown"
+menu-0-1-foreground = ${vars.titlefgcolor}
+menu-0-1-background = ${vars.titlebgcolor}
+menu-0-1-padding = {vars.bodypadding}
 menu-0-1-exec = menu-open-2
 
-menu-1-0 = "%{F#a34a20}%{F-}%{B#a34a20}%{F#0d0b0b}Reboot?%{F-}%{B-}%{F#a34a20}%{F-}"
+menu-1-0 = "Reboot?"
+menu-1-0-foreground = ${vars.titlefgcolor}
+menu-1-0-background = ${vars.titlebgcolor}
+menu-1-0-padding = {vars.bodypadding}
 menu-1-0-exec = reboot
 
-menu-2-0 = "%{F#a34a20}%{F-}%{B#a34a20}%{F#0d0b0b}Power-off?%{F-}%{B-}%{F#a34a20}%{F-}"
-menu-2-0-exec = poweroff
-
+menu-2-0 = "Shutdown?"
+menu-2-0-foreground = ${vars.titlefgcolor}
+menu-2-0-background = ${vars.titlebgcolor}
+menu-2-0-padding = {vars.bodypadding}
+menu-2-0-exec = poweroff 
