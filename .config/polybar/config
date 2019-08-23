@@ -12,24 +12,27 @@ leftmodulesuffix  = 
 rightmoduleprefix =  
 rightmodulesuffix = 
 titlepadding = 0
-bodypadding  = 1
+bodypadding  = 0
 
 [module/sep]
 type = custom/text
-content = 
+content = ""
+#content-padding = ${vars.modulemargin}
 content-foreground = ${vars.background}
 content-background = ${vars.background}
 
 [bar/island]
-monitor = ${env:POLY_MONITOR}
-monitor-fallback = HDMI-0
+#monitor = ${env:POLY_MONITOR}
+#monitor-fallback = HDMI-0
 width = 100%
 height = 18
 radius = 0
 fixed-center = true
 background = ${vars.background}
+enable-ipc = true
 
 line-size = 1
+#line-color = #f00
 
 border-top-size = 0
 border-left-size = 0
@@ -42,15 +45,14 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka:style=Medium Oblique:pixelsize=11;2:antialias=true
-font-1 = Font Awesome 5 Free: style=Regular:pixelsize=11;2:antialias=true
-font-2 = Font Awesome 5 Free: style=Solid:pixelsize=11;2:antialias=true
+font-0 = Iosevka:style=Medium Oblique:pixelsize=12;2:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=11;2
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=11;2
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=11;2:antialias=true
 
-modules-left = i3Prefix i3 i3Suffix sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = i3Prefix i3 i3Suffix
 modules-center = timePrefix time sep timeIndia 
-#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
 tray-position = right
 tray-padding = 2
 
@@ -98,23 +100,23 @@ label-visible-background = ${vars.bodybgcolor}
 label-visible-padding = ${vars.bodypadding}
 
 #urgentcolor = Workspace with urgency hint set
-label-urgent = " %index% %icon% "
-label-urgent-foreground = ${vars.urgentcolor}
-label-urgent-background = ${vars.bodybgcolor}
-label-urgent-padding = ${vars.bodypadding}
+label-urgentcolor = " %index% %icon% "
+label-urgentcolor-foreground = ${vars.bodyfgcolor}
+label-urgentcolor-background = ${vars.urgent}
+label-urgentcolor-padding = ${vars.bodypadding}
 
 [module/i3Prefix]
-type = custom/script
-interval = 1600
-exec = echo "|"
+type = custom/ipc
+hook-0 = python ~/.config/i3/split_status.py get
+initial = 0
 format-prefix = ${vars.leftmoduleprefix}
 format-prefix-foreground = ${vars.titlebgcolor}
 format-suffix = ${vars.leftmodulesuffix}
 format-suffix-foreground = ${vars.titlebgcolor}
 format-suffix-background = ${vars.bodybgcolor}
-label-foreground = ${vars.titlefgcolor}
-label-background = ${vars.titlebgcolor}
-label-padding = ${vars.titlepadding}
+format-background = ${vars.titlebgcolor}
+format-foreground = ${vars.titlefgcolor}
+format-padding = ${vars.titlepadding}
 
 [module/i3Suffix]
 type = custom/text
@@ -122,88 +124,30 @@ content = ${vars.leftmodulesuffix}
 content-foreground = ${vars.bodybgcolor}
 
 #MPD--------------------------------------------------------------------------
-[module/mpdPrefix]
-type = internal/mpd
-
-format-online-prefix = ${vars.leftmoduleprefix}
-format-online-suffix = ${vars.leftmodulesuffix}
-format-online-prefix-foreground = ${vars.titlebgcolor}
-format-online-prefix-background = ${vars.background}
-format-online-suffix-foreground = ${vars.titlebgcolor}
-format-online-suffix-background = ${vars.bodybgcolor}
-format-offline-prefix = ${vars.leftmoduleprefix}
-format-offline-suffix = ${vars.leftmodulesuffix}
-format-offline-prefix-foreground = ${vars.titlebgcolor}
-format-offline-prefix-background = ${vars.background}
-format-offline-suffix-foreground = ${vars.titlebgcolor}
-format-offline-suffix-background = ${vars.background}
-
-format-online = 
-format-offline =  
-format-offline-foreground = ${vars.titlefgcolor}
-format-offline-background = ${vars.titlebgcolor}
-format-online-foreground = ${vars.titlefgcolor}
-format-online-background = ${vars.titlebgcolor}
-
 [module/mpd]
 type = internal/mpd
 
-format-online = <label-song> <label-time>
-format-online-foreground = ${vars.bodyfgcolor}
-format-online-background = ${vars.bodybgcolor}
+format-online-prefix = 
+format-online-prefix-foreground = ${vars.titlefgcolor}
+format-online-prefix-background = ${vars.titlefgcolor}
+
+format-offline-prefix = 
+format-offline-prefix-foreground = ${vars.titlefgcolor}
+format-offline-prefix-background = ${vars.titlebgcolor}
+
+format-online = <label-song><label-time>
+format-online-foreground = ${vars.titlefgcolor}
+format-online-background = ${vars.titlebgcolor}
 label-song = %title%
-label-song-padding = ${vars.bodypadding}
-label-time = %elapsed% / %total% 
-label-time-padding = ${vars.bodypadding}
+label-time = %elapsed% / %total%
 label-song-maxlen = 30
 label-song-ellipsis = true
 
-format-online-suffix = ${vars.leftmodulesuffix}
-format-online-suffix-foreground = ${vars.bodybgcolor}
-format-online-suffix-background = ${vars.background}
+format-offline = <label-offline>
+format-offline-foreground = ${vars.bodyfgcolor}
+format-offline-background = ${vars.urgentcolor}
+label-offline = 
 
-[module/mpdPrev]
-type = internal/mpd
-
-format-online-prefix = ${vars.leftmoduleprefix}
-format-online-suffix = ${vars.leftmodulesuffix}
-format-online-prefix-foreground = ${vars.titlebgcolor}
-format-online-prefix-background = ${vars.background}
-format-online-suffix-foreground = ${vars.titlebgcolor}
-format-online-suffix-background = ${vars.background}
-format-online = <icon-prev> 
-icon-prev= 
-format-online-foreground = ${vars.titlefgcolor}
-format-online-background = ${vars.titlebgcolor}
-
-[module/mpdPlayPause]
-type = internal/mpd
-
-format-online-prefix = ${vars.leftmoduleprefix}
-format-online-suffix = ${vars.leftmodulesuffix}
-format-online-prefix-foreground = ${vars.titlebgcolor}
-format-online-prefix-background = ${vars.background}
-format-online-suffix-foreground = ${vars.titlebgcolor}
-format-online-suffix-background = ${vars.background}
-format-online = <toggle>
-icon-pause = 
-icon-play = 
-format-online-foreground = ${vars.titlefgcolor}
-format-online-background = ${vars.titlebgcolor}
-
-[module/mpdNext]
-type = internal/mpd
-
-format-online-prefix = ${vars.leftmoduleprefix}
-format-online-suffix = ${vars.leftmodulesuffix}
-format-online-prefix-foreground = ${vars.titlebgcolor}
-format-online-prefix-background = ${vars.background}
-format-online-suffix-foreground = ${vars.titlebgcolor}
-format-online-suffix-background = ${vars.background}
-format-online = <icon-next>
-icon-next = 
-format-online-foreground = ${vars.titlefgcolor}
-format-online-background = ${vars.titlebgcolor}
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
 type = custom/script
@@ -355,7 +299,7 @@ label-padding = ${vars.bodypadding}
 #WIFI-------------------------------------------------------------------------
 [module/wlanPrefix]
 type = internal/network
-interface = wlo1
+interface = wlp4s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${vars.rightmoduleprefix}
@@ -371,7 +315,7 @@ label-connected-padding = ${vars.titlepadding}
 
 [module/wlan]
 type = internal/network
-interface = wlo1
+interface = wlp4s0
 interval = 3.0
 
 format-connected = <label-connected>
@@ -385,7 +329,7 @@ label-connected-padding = ${vars.bodypadding}
 #LAN--------------------------------------------------------------------------
 [module/lanPrefix]
 type = internal/network
-interface = enp34s0
+interface = enp3s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${vars.rightmoduleprefix}
@@ -401,7 +345,7 @@ label-connected-padding = ${vars.titlepadding}
 
 [module/lan]
 type = internal/network
-interface = enp34s0
+interface = enp3s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${vars.rightmodulesuffix}
