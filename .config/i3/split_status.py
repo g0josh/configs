@@ -3,7 +3,7 @@ import sys
 import os
 import subprocess
 
-status = {'tabbed':'T', 'split':'L', 'stacking':'S',
+status = {'tabbed':'', 'split':'L', 'stacking':'',
         'splitv':'|','splith':'-'}
 status_file = '/tmp/i3-split-mode'
 

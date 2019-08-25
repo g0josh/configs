@@ -1,5 +1,5 @@
 [theme]
-include-file = /home/job/.config/polybar/feathers.theme
+include-file = /home/job/.config/polybar/blue-red.theme
 
 [module/sep]
 type = custom/text
@@ -220,14 +220,14 @@ type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
 format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.bodybgcolor}
 format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.bodybgcolor}
 indicator-icon-0 = caps lock;;CAPS
 indicator-icon-1 = num lock;;NUM
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${theme.titlefgcolor}
-label-indicator-on-background = ${theme.titlebgcolor}
+label-indicator-on-foreground = ${theme.bodyfgcolor}
+label-indicator-on-background = ${theme.bodybgcolor}
 label-indicator-on-padding = 1
 
 #VOLUME-----------------------------------------------------------------------
