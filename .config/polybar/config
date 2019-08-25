@@ -1,5 +1,5 @@
 [theme]
-include-file = /home/job/.config/polybar/blue-slant.theme
+include-file = /home/job/.config/polybar/feathers.theme
 
 [module/sep]
 type = custom/text
@@ -14,13 +14,14 @@ width = 100%
 height = 18
 radius = 0
 fixed-center = true
+enable-ipc = true
 background = ${theme.background}
 
 line-size = 1
 
 border-top-size = 0
-border-left-size = 0
-border-right-size = 0
+border-left-size = 12
+border-right-size = 12
 border-bottom-size = 0
 
 padding-left = 0
@@ -34,7 +35,7 @@ font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
-modules-left = i3Prefix i3 i3Suffix sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 #modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
@@ -66,47 +67,30 @@ ws-icon-default = 
 format = <label-state>
 
 #focused = activecolor workspace on focused monitor
-label-focused = "%index% %icon%"
-label-focused-foreground = ${theme.activecolor}
-label-focused-background = ${theme.bodybgcolor}
-label-focused-padding = ${theme.bodypadding}
-label-focused-underline = ${theme.activecolor}
+label-focused = ${env:POLY_FOCUSED}
 
 #unfocused = Inactivecolor workspace on any monitor
-label-unfocused = " %index% %icon% "
-label-unfocused-foreground = ${theme.bodyfgcolor}
-label-unfocused-background = ${theme.bodybgcolor}
-label-unfocused-padding = ${theme.bodypadding}
+label-unfocused = ${env:POLY_UNFOCUSED}
 
 #visible = activecolor workspace on unfocused monitor
-label-visible = " %index% %icon% "
-label-visible-foreground = ${theme.activecolor}
-label-visible-background = ${theme.bodybgcolor}
-label-visible-padding = ${theme.bodypadding}
+label-visible = ${env:POLY_VISIBLE}
 
 #urgentcolor = Workspace with urgency hint set
-label-urgent = " %index% %icon% "
-label-urgent-foreground = ${theme.urgentcolor}
-label-urgent-background = ${theme.bodybgcolor}
-label-urgent-padding = ${theme.bodypadding}
+label-urgent = ${env:POLY_URGENT}
 
 [module/i3Prefix]
-type = custom/script
-interval = 1600
-exec = echo "|"
+type = custom/ipc
+hook-0 = python ~/.config/i3/split_status.py get
+initial = 1
 format-prefix = ${theme.leftmoduleprefix}
 format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-background = ${theme.background}
 format-suffix = ${theme.leftmodulesuffix}
 format-suffix-foreground = ${theme.titlebgcolor}
-format-suffix-background = ${theme.bodybgcolor}
-label-foreground = ${theme.titlefgcolor}
-label-background = ${theme.titlebgcolor}
-label-padding = ${theme.titlepadding}
-
-[module/i3Suffix]
-type = custom/text
-content = ${theme.leftmodulesuffix}
-content-foreground = ${theme.bodybgcolor}
+format-suffix-background = ${theme.background}
+format-foreground = ${theme.titlefgcolor}
+format-background = ${theme.titlebgcolor}
+format-padding = ${theme.titlepadding}
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
@@ -125,7 +109,7 @@ format-offline-prefix-background = ${theme.background}
 format-offline-suffix-foreground = ${theme.titlebgcolor}
 format-offline-suffix-background = ${theme.background}
 
-format-online = 
+format-online =  
 format-offline =  
 format-offline-foreground = ${theme.titlefgcolor}
 format-offline-background = ${theme.titlebgcolor}
