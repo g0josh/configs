@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CT=`sensors|grep temp1:|cut -d'+' -f 2 | cut -d'(' -f 1`
+CT=`sensors|grep CPUTIN|awk '{print $2}'`
 GT=`nvidia-smi -q -d TEMPERATURE |grep  "GPU Current Temp"| awk '{print $5}'`
 
-echo "${CT::2}|${GT}"
+echo "${CT:1:2}|${GT}"

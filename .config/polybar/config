@@ -1,5 +1,5 @@
 [theme]
-include-file = /home/job/.config/polybar/blue-red.theme
+include-file = /home/job/.config/polybar/feathers.theme
 
 [module/sep]
 type = custom/text
@@ -37,8 +37,8 @@ font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
+#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
 tray-position = right
 tray-padding = 2
 
