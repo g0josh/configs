@@ -102,8 +102,10 @@ if __name__ == '__main__':
             os.environ['POLY_URGENT'] = poly_vars['urgent']
             os.environ['POLY_THEME_FILE'] = theme_path
             if sys.version_info[0] < 3:
+                subprocess.call(['killall', '-q', 'polybar'])
                 subprocess.call(['polybar', '--reload', 'island'])
             else:
+                subprocess.run(['killall', '-q', 'polybar'])
                 subprocess.run(['polybar', '--reload', 'island'])
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())

@@ -37,8 +37,7 @@ font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
-#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep lanPrefix2 lan2 
 tray-position = right
 tray-padding = 2
 
@@ -326,7 +325,7 @@ label-padding = ${theme.bodypadding}
 #WIFI-------------------------------------------------------------------------
 [module/wlanPrefix]
 type = internal/network
-interface = wlo1
+interface = wlp4s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
@@ -342,7 +341,7 @@ label-connected-padding = ${theme.titlepadding}
 
 [module/wlan]
 type = internal/network
-interface = wlo1
+interface = wlp4s0
 interval = 3.0
 
 format-connected = <label-connected>
@@ -354,9 +353,9 @@ label-connected-background = ${theme.bodybgcolor}
 label-connected-padding = ${theme.bodypadding}
 
 #LAN--------------------------------------------------------------------------
-[module/lanPrefix]
+[module/lanPrefix1]
 type = internal/network
-interface = enp34s0
+interface = enp4s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
@@ -370,9 +369,37 @@ label-connected-foreground = ${theme.titlefgcolor}
 label-connected-background = ${theme.titlebgcolor}
 label-connected-padding = ${theme.titlepadding}
 
-[module/lan]
+[module/lan1]
 type = internal/network
-interface = enp34s0
+interface = enp4s0
+interval = 3.0
+format-connected = <label-connected>
+format-connected-suffix = ${theme.rightmodulesuffix}
+format-connected-suffix-foreground = ${theme.bodybgcolor}
+label-connected = %downspeed%
+label-connected-foreground = ${theme.bodyfgcolor}
+label-connected-background = ${theme.bodybgcolor}
+label-connected-padding = ${theme.bodypadding}
+
+[module/lanPrefix2]
+type = internal/network
+interface = enp3s0
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${theme.rightmoduleprefix}
+format-connected-prefix-foreground = ${theme.titlebgcolor}
+format-connected-prefix-background = #00000000
+format-connected-suffix = ${theme.rightmodulesuffix}
+format-connected-suffix-foreground = ${theme.titlebgcolor}
+format-connected-suffix-background = ${theme.bodybgcolor}
+label-connected = 
+label-connected-foreground = ${theme.titlefgcolor}
+label-connected-background = ${theme.titlebgcolor}
+label-connected-padding = ${theme.titlepadding}
+
+[module/lan2]
+type = internal/network
+interface = enp3s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
