@@ -95,27 +95,19 @@ bindsym $MOD+Shift+Right move right
 
 # focus on differnet monitors/outputs
 bindsym $MOD_ALT+Control+Shift+Left move workspace to output left
-bindsym $MOD_ALT+Control+Shift+Right move workspace to output right
-bindsym $MOD_ALT+Control+Shift+Up move workspace to output up
-bindsym $MOD_ALT+Control+Shift+Down move workspace to output down
-
-# move focussed window to next/prev workspace
-bindsym $MOD+Control+Shift+Left move to workspace prev
-bindsym $MOD+Control+Shift+Right move to workspace next
-
 # split in horizontal orientation
-bindsym $MOD+backslash split h ; exec --no-startup-id python $HOME/.config/i3/split_status.py set '|'
+bindsym $MOD+backslash layout default ; split h ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splitv
 
 # split in vertical orientation
-bindsym $MOD+bracketright split v ; exec --no-startup-id python $HOME/.config/i3/split_status.py set '--'
+bindsym $MOD+bracketright layout default ; split v ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splith
 
 # enter fullscreen mode for the focused container
 bindsym $MOD+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $MOD+s layout stacking
-bindsym $MOD+t layout tabbed
-bindsym $MOD+e layout toggle split
+bindsym $MOD+s layout stacking ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set stacking
+bindsym $MOD+t layout tabbed ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set tabbed
+bindsym $MOD+e layout default ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set split
 
 # toggle tiling / floating
 bindsym $MOD+Shift+f floating toggle
@@ -182,7 +174,7 @@ bindsym $MOD+Shift+0 move container to workspace $ws10
 #bindsym $MOD+Control+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $MOD+Control+r restart
-bindsym $MOD+Control+m exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
+bindsym $MOD+Control+m exec --no-startup-id python3 $HOME/.config/i3/detect_monitors_load_bar.py
 # exit i3 (logs you out of your X session)
 #bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $MOD+Shift+Control+q exit
@@ -230,26 +222,25 @@ bindsym $MOD+b exec --no-startup-id $BROWSER
 #        status_command ~/.config/i3/i3status.sh
 #        position top
 #	tray_padding 2 
-#}
+#}/
 
 # misc startup
-exec --no-startup-id $HOME/.config/i3/detect_monitors_load_bar.sh 
+exec --no-startup-id python3 $HOME/.config/i3/detect_monitors_load_bar.py
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 #exec --no-startup-id code
 assign [class="Code"] $ws3
-#exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
-#assign [class=$TERM_NAME instance="tmux_inst"] $ws3
+exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
+assign [class=$TERM_NAME instance="tmux_inst"] $ws3
 exec --no-startup-id $TERM -name ranger_inst -e ranger
 assign [class=$TERM_NAME instance="ranger_inst"] $ws4
 exec --no-startup-id $TERM -name scratch
 for_window [class=$TERM_NAME instance="scratch"] move scratchpad
 
 # Music Controls
-#exec --no-startup-id mpd
-#exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
-#assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
+exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
+assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
 bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym $MOD_ALT+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
@@ -257,7 +248,7 @@ bindsym $MOD_ALT+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
 # Valid args are 0, 1 toggle
 bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
 bindsym $MOD_ALT+z exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
-#bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-#bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-#bindsym $MOD_ALT+Right exec mpc next
-#bindsym $MOD_ALT+Left exec mpc prev
+bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym $MOD_ALT+Right exec mpc next
+bindsym $MOD_ALT+Left exec mpc prev

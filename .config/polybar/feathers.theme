@@ -1,0 +1,16 @@
+bodyfgcolor=#c495b5
+bodybgcolor=#331f4d
+titlefgcolor=#1f034d
+titlebgcolor=#bd3545
+focusedfgcolor=#1f034d
+focusedbgcolor=#d23c4d
+urgentfgcolor=#1f034d
+urgentbgcolor=#e37b83
+i3wspadding=0
+background=#00000000
+leftmoduleprefix=
+leftmodulesuffix=
+rightmoduleprefix= 
+rightmodulesuffix=
+titlepadding=0
+bodypadding=1
