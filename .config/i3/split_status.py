@@ -17,10 +17,11 @@ def main():
         return
     if sys.argv[1] == 'set' and len(sys.argv) < 3:
         return
+    curr_status = ''
     if os.path.exists(status_file):
         with open(status_file, 'r') as f:
             curr_status = f.read()
-    else:
+    if not curr_status:
         curr_status = 'L|'
     print(curr_status)
     if sys.argv[1] == 'set':
