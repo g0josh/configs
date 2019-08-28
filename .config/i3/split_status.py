@@ -47,7 +47,7 @@ def main():
                 pass 
     else:
         if not os.path.exists(status_file):
-            return status['splith']
+            return status['splitv']
         else:
             with open(status_file, 'r') as f:
                 result = f.read()
