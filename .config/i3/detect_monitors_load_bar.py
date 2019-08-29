@@ -108,33 +108,33 @@ if __name__ == '__main__':
             " "*vars['titlepadding']," "*vars['titlepadding'],vars['background'],
             vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power00']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['reboot']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power01']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['power']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power02']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['logout']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power03']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['lock']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power10']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['reboot']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power20']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['power']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     poly_vars['power30']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['rightmoduleprefix'],vars['bodybg'],vars['bodyfg'],
+            vars['titlebg'],vars['rightmoduleprefix'],vars['titlebg'],vars['titlefg'],
             " "*vars['bodypadding'],POWER_ICONS['logout']," "*vars['bodypadding'],vars['background'],
-            vars['bodybg'],vars['rightmodulesuffix'])
+            vars['titlebg'],vars['rightmodulesuffix'])
     for i in poly_vars:
         poly_vars[i] = poly_vars[i].replace('[','{')
         poly_vars[i] = poly_vars[i].replace(']','}')
