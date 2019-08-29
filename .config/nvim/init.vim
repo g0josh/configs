@@ -1,5 +1,7 @@
 syntax on
 set backspace=2
+"set background=dark
+hi Folded ctermbg=0
 filetype plugin indent on
 set encoding=utf-8
 set number relativenumber
