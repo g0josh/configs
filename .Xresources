@@ -76,3 +76,21 @@ URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
 URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
 URxvt.keysym.Shift-Up:          command:\033]720;5\007
 URxvt.keysym.Shift-Down:        command:\033]721;5\007
+
+! Rofi-------------------------------------------------------------------------
+rofi.fullscreen: false
+rofi.modi: run,ssh
+rofi.font: Iosevka Medium Oblique 18
+rofi.show-icons: true
+rofi.hide-scrollbar: true
+rofi.separator-style: solid
+rofi.terminal: urxvt
+rofi.eh: 1
+rofi.bw: 0
+rofi.padding: 50
+
+!window             bg          border      separator
+rofi.color-window:	#a0331f4d,	#bd3545,	#bd3545
+
+! State	        	'bg',		'fg',		'altbg',	'hlbg',		'hlfg'
+rofi.color-normal:	#00000000,	#bd3545,	#00000000,	#bd3545,	#331f4d

@@ -1,5 +1,5 @@
 [theme]
-include-file = /home/job/.config/polybar/feathers.theme
+include-file = ~/.config/polybar/feathers.theme
 
 [module/sep]
 type = custom/text
@@ -37,8 +37,7 @@ font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix lan 
-#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix lan 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -57,8 +56,8 @@ type = internal/i3
 index-sort = true
 wrapping-scroll = false
 
-ws-icon-0 = 1;
-ws-icon-1 = 2;
+ws-icon-0 = 1;
+ws-icon-1 = 2;
 ws-icon-2 = 3;
 ws-icon-3 = 4;
 ws-icon-4 = 5;
@@ -80,7 +79,7 @@ label-urgent = ${env:POLY_URGENT}
 
 [module/i3Prefix]
 type = custom/ipc
-hook-0 = python ~/.config/i3/split_status.py get
+hook-0 = python3 ~/.config/i3/split_status.py get
 initial = 1
 format-prefix = ${theme.leftmoduleprefix}
 format-prefix-foreground = ${theme.titlebgcolor}
@@ -220,14 +219,14 @@ type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
 format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.bodybgcolor}
+format-prefix-foreground = ${theme.titlebgcolor}
 format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybgcolor}
+format-suffix-foreground = ${theme.titlebgcolor}
 indicator-icon-0 = caps lock;;CAPS
 indicator-icon-1 = num lock;;NUM
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${theme.bodyfgcolor}
-label-indicator-on-background = ${theme.bodybgcolor}
+label-indicator-on-foreground = ${theme.titlefgcolor}
+label-indicator-on-background = ${theme.titlebgcolor}
 label-indicator-on-padding = 1
 
 #VOLUME-----------------------------------------------------------------------
@@ -354,7 +353,7 @@ label-connected-background = ${theme.bodybgcolor}
 label-connected-padding = ${theme.bodypadding}
 
 #LAN--------------------------------------------------------------------------
-[module/lanPrefix]
+[module/lanPrefix1]
 type = internal/network
 interface = enp34s0
 interval = 3.0
@@ -370,9 +369,37 @@ label-connected-foreground = ${theme.titlefgcolor}
 label-connected-background = ${theme.titlebgcolor}
 label-connected-padding = ${theme.titlepadding}
 
-[module/lan]
+[module/lan1]
 type = internal/network
 interface = enp34s0
+interval = 3.0
+format-connected = <label-connected>
+format-connected-suffix = ${theme.rightmodulesuffix}
+format-connected-suffix-foreground = ${theme.bodybgcolor}
+label-connected = %downspeed%
+label-connected-foreground = ${theme.bodyfgcolor}
+label-connected-background = ${theme.bodybgcolor}
+label-connected-padding = ${theme.bodypadding}
+
+[module/lanPrefix2]
+type = internal/network
+interface = enp3s0
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${theme.rightmoduleprefix}
+format-connected-prefix-foreground = ${theme.titlebgcolor}
+format-connected-prefix-background = #00000000
+format-connected-suffix = ${theme.rightmodulesuffix}
+format-connected-suffix-foreground = ${theme.titlebgcolor}
+format-connected-suffix-background = ${theme.bodybgcolor}
+label-connected = 
+label-connected-foreground = ${theme.titlefgcolor}
+label-connected-background = ${theme.titlebgcolor}
+label-connected-padding = ${theme.titlepadding}
+
+[module/lan2]
+type = internal/network
+interface = enp3s0
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
@@ -387,35 +414,27 @@ label-connected-padding = ${theme.bodypadding}
 type = custom/menu
 expand-right = false
 
-label-open = 
-label-open-foreground = ${theme.titlefgcolor}
-label-open-background = ${theme.titlebgcolor}
-label-open-padding = ${theme.titlepadding}
-label-close = 
-label-close-foreground = ${theme.titlefgcolor}
-label-close-background = ${theme.titlebgcolor}
-label-close-padding = ${theme.titlepadding}
-label-separator = " "
+label-open = ${env:POLY_POWER_OPEN}
+label-close = ${env:POLY_POWER_CLOSE}
+#label-separator = " "
 
-menu-0-0 = "Reboot"
-menu-0-0-foreground = ${theme.titlefgcolor}
-menu-0-0-background = ${theme.titlebgcolor}
-menu-0-0-padding = {theme.bodypadding}
+menu-0-0 = ${env:POLY_POWER_0-0}
 menu-0-0-exec = menu-open-1
-menu-0-1 = "Shutdown"
-menu-0-1-foreground = ${theme.titlefgcolor}
-menu-0-1-background = ${theme.titlebgcolor}
-menu-0-1-padding = {theme.bodypadding}
+
+menu-0-1 = ${env:POLY_POWER_0-1}
 menu-0-1-exec = menu-open-2
 
-menu-1-0 = "Reboot?"
-menu-1-0-foreground = ${theme.titlefgcolor}
-menu-1-0-background = ${theme.titlebgcolor}
-menu-1-0-padding = {theme.bodypadding}
+menu-0-2 = ${env:POLY_POWER_0-2}
+menu-0-2-exec = menu-open-3
+
+menu-0-3 = ${env:POLY_POWER_0-3}
+menu-0-3-exec = ~/.config/i3/lockscreen.sh
+
+menu-1-0 = ${env:POLY_POWER_1-0}
 menu-1-0-exec = reboot
 
-menu-2-0 = "Shutdown?"
-menu-2-0-foreground = ${theme.titlefgcolor}
-menu-2-0-background = ${theme.titlebgcolor}
-menu-2-0-padding = {theme.bodypadding}
+menu-2-0 = ${env:POLY_POWER_2-0}
 menu-2-0-exec = poweroff 
+
+menu-3-0 = ${env:POLY_POWER_3-0}
+menu-3-0-exec = i3-msg exit

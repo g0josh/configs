@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
 import sys
 import os
 import subprocess
@@ -14,10 +17,11 @@ def main():
         return
     if sys.argv[1] == 'set' and len(sys.argv) < 3:
         return
+    curr_status = ''
     if os.path.exists(status_file):
         with open(status_file, 'r') as f:
             curr_status = f.read()
-    else:
+    if not curr_status:
         curr_status = 'L|'
     print(curr_status)
     if sys.argv[1] == 'set':
@@ -43,7 +47,7 @@ def main():
                 pass 
     else:
         if not os.path.exists(status_file):
-            return status['splith']
+            return status['splitv']
         else:
             with open(status_file, 'r') as f:
                 result = f.read()
