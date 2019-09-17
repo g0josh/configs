@@ -24,13 +24,14 @@ BROWSER = "firefox"
 # Status bar config
 COLR_TITLE_BG = 'bd3545'
 COLR_TITLE_FG = '1f034d'
-COLR_BODY_BG = '331f4d'
+#COLR_BODY_BG = '220231'
+COLR_BODY_BG = '1d022c'
 COLR_BODY_FG= 'c495b5'
 COLR_URGENT_BG= 'd23c4d'
 COLR_URGENT_FG= '1f034d'
 COLR_EMPTY_BG= '331f4d'
 COLR_EMPTY_FG= '110808'
-COLR_BAR_BG = '090e36'
+COLR_BAR_BG = '540f3c'
 LEFT_MODULE_PREFIX = ""
 LEFT_MODULE_SUFFIX = ""
 RIGHT_MODULE_PREFIX = ""
@@ -363,7 +364,7 @@ def getWidgets(screen=0):
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
         head_text="", tail_text="").getWidgets()
 
-    widgets += [widget.Spacer(length=470)]
+    widgets += [widget.Spacer(length=570)]
 
     # Time
     widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
@@ -416,7 +417,7 @@ for n in range(NUM_SCREENS):
         Screen(
             top=bar.Bar(
                 widgets=getWidgets(n),
-                size=border_font['fontsize'] - 1,
+                size=border_font['fontsize'],
                 background=COLR_BAR_BG, opacity=0.9
             )
         )
