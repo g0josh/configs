@@ -20,37 +20,49 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-COLR_TITLE_BG = 'a42f2b'
-COLR_BODY_BG = '1c5d87'
-COLR_INACTIVE = '15232b'
-COLR_TEXT = '110808'
+
+# Status bar config
+COLR_TITLE_BG = 'bd3545'
+COLR_TITLE_FG = '1f034d'
+COLR_BODY_BG = '331f4d'
+COLR_BODY_FG= 'c495b5'
+COLR_URGENT_BG= 'd23c4d'
+COLR_URGENT_FG= '1f034d'
+COLR_EMPTY_BG= '331f4d'
+COLR_EMPTY_FG= '110808'
 COLR_BAR_BG = '090e36'
+LEFT_MODULE_PREFIX = ""
+LEFT_MODULE_SUFFIX = ""
+RIGHT_MODULE_PREFIX = ""
+RIGHT_MODULE_SUFFIX = ""
+TITLE_PADDING = 0
+BODY_PADDING = 0
 
 NUM_SCREENS = getNumScreens()
 
 default_font = dict(
-    font="Iosevka Nerd Font Bold Italic",
-    fontsize=15,
+    font="Iosevka Medium Oblique",
+    fontsize=14,
     padding=0
 )
 border_font = dict(
     font="Iosevka Nerd Font Mono",
-    fontsize=20,
+    fontsize=16,
     padding=0
 )
 icon_font = dict(
     font="Font Awesome 5 Free Solid",
-    fontsize=14,
+    fontsize=12,
     padding=0
 )
 
 groups = [
     Group(name='1', label="1 "),
-    Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], init=True, spawn="code", layout="columns" ),
+    Group(name='2', label="2 "),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger", layout="columns"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name ncmpcpp -e ncmpcpp -s visualizer", layout="columns"),
-    #Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
+    # Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
@@ -91,9 +103,9 @@ shut_widgets = []
 wifi_widgets = []
 lan_widgets = []
 for n in range(NUM_SCREENS):
-    vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
         body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
-        body_fg=COLR_TEXT, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
+        body_fg=COLR_BODY_FG, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
         border_font=border_font['font'],border_font_size=border_font['fontsize'], body_font=default_font['font'],
         body_font_size=default_font['fontsize'], update_after_click=True, inactive_hide=False, update_title=True)
     )
@@ -105,30 +117,30 @@ for n in range(NUM_SCREENS):
         title = (lambda:"") if 'wl' in interface else (lambda:"")
         func = getWlan if 'wl' in interface else getLan
         w_list = _wifi_widgets if 'wl' in interface else _lan_widgets
-        w_list.append( ComboWidget(title_poll_func=title, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT, body_poll_func=func,
-            body_poll_func_args={'interface':interface}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,
+        w_list.append( ComboWidget(title_poll_func=title, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG, body_poll_func=func,
+            body_poll_func_args={'interface':interface}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,
             title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
             border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
         )
     wifi_widgets.append(_wifi_widgets)
     lan_widgets.append(_lan_widgets)
 
-    capslock_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    capslock_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'], update_title=False, poll_interval=None,
-        body_poll_func=getlocksStatus, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT, body_font=default_font['font'],
+        body_poll_func=getlocksStatus, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG, body_font=default_font['font'],
         body_font_size=default_font['fontsize'],border_font=border_font['font'],border_font_size=border_font['fontsize'])
     )
 
     lock_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
+        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']},body_bg=COLR_BAR_BG)
     shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
+        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']})
     power_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TEXT, title_font=icon_font['font'], title_font_size=icon_font['fontsize'], tail_text="",
+        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'], tail_text="",
         poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
         click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]},body_bg=COLR_BAR_BG)
     lock_widgets.append(lock_widget)
@@ -136,16 +148,16 @@ for n in range(NUM_SCREENS):
     power_widgets.append(power_widget)
 
 def window_to_next_prev_group(qtile, next=True):
-    if qtile.currentWindow is None:
+    if qtile.current_window is None:
         return
-    i = qtile.groups.index(qtile.currentGroup)
+    i = qtile.groups.index(qtile.current_group)
     i = i+1 if next else i-1
     if i < 0 or i >= len(groups):
         return
-    qtile.currentWindow.togroup(qtile.groups[i].name)
+    qtile.current_window.togroup(qtile.groups[i].name)
 
 def next_prev_group(qtile, next=True):
-    i = qtile.groups.index(qtile.currentGroup)
+    i = qtile.groups.index(qtile.current_group)
     i = i+1 if next else i-1
     if i < 0 or i >= len(groups):
         return
@@ -158,7 +170,7 @@ def float_to_front(qtile):
     """
     global floating_windows
     floating_windows = []
-    for window in qtile.currentGroup.windows:
+    for window in qtile.current_group.windows:
         if window.floating:
             window.cmd_bring_to_front()
             floating_windows.append(window)
@@ -239,7 +251,7 @@ keys = [
     # Toggle between different layouts
     Key([MOD], "Tab", lazy.next_layout()),
 
-    Key([MOD], "w", lazy.window.kill()),
+    Key([MOD], "q", lazy.window.kill()),
 
     Key([], "Caps_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=True))),
     Key([], "Num_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=False))),
@@ -268,7 +280,7 @@ keys = [
     Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
 
     Key([MOD, "control"], "r", lazy.restart()),
-    Key([MOD, "control"], "q", lazy.shutdown()),
+    Key([MOD, "shift", "control"], "q", lazy.shutdown()),
     # Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
     Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
@@ -294,15 +306,15 @@ layout_configs={
     "margin":10,
     "border_width":3,
     "border_focus":COLR_TITLE_BG,
-    "border_normal":COLR_TEXT
+    "border_normal":COLR_BAR_BG
 }
 
 layouts = [
     layout.Columns(**layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
-    layout.TreeTab(**layout_configs, active_bg=COLR_TITLE_BG, inactive_bg=COLR_INACTIVE,
-        active_fg=COLR_TEXT, inactive_fg=COLR_BODY_BG, bg_color=COLR_BAR_BG,
+    layout.TreeTab(**layout_configs, active_bg=COLR_TITLE_BG, inactive_bg=COLR_EMPTY_BG,
+        active_fg=COLR_TITLE_FG, inactive_fg=COLR_BODY_FG, bg_color=COLR_BAR_BG,
         padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
     layout.Max(),
 ]
@@ -334,32 +346,32 @@ def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
 def getWidgets(screen=0):
     # Layout Icon
     widgets = [
-        widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_INACTIVE),
+        widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_TITLE_FG),
         widget.TextBox(
             **border_font,background=COLR_BAR_BG,
             text="", foreground=COLR_TITLE_BG,
         )
     ]
     # Groups
-    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TEXT, active_bg=COLR_TITLE_BG,
-        inactive_fg=COLR_TEXT, inactive_bg=COLR_INACTIVE, urgent_fg=COLR_TEXT, urgent_bg=COLR_TITLE_BG,
-        not_empty_fg=COLR_TEXT, not_empty_bg=COLR_BODY_BG)
+    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TITLE_FG, active_bg=COLR_TITLE_BG,
+        inactive_fg=COLR_EMPTY_FG, inactive_bg=COLR_EMPTY_BG, urgent_fg=COLR_URGENT_FG, urgent_bg=COLR_URGENT_BG,
+        not_empty_fg=COLR_BODY_FG, not_empty_bg=COLR_BODY_BG)
     # Music
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, poll_interval=2.0,
-        click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
+        click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
         head_text="", tail_text="").getWidgets()
 
     widgets += [widget.Spacer(length=470)]
 
     # Time
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTime,poll_interval=30.0,
-        body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],body_font_size=default_font['fontsize'],
+        body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],body_font_size=default_font['fontsize'],
         border_font=border_font['font'], border_font_size=border_font['fontsize'],head_text="", tail_text="",center_text="").getWidgets()
     widgets += ComboWidget(title_poll_func=getTime, title_poll_func_args={'format':'%I:%M %p', 'timezone':'Asia/Kolkata'},
-        update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_TEXT,poll_interval=30.0,
+        update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_BODY_FG,poll_interval=30.0,
         title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
         border_font_size=border_font['fontsize'],head_text="", tail_text="", body_bg=COLR_BAR_BG).getWidgets()
 
@@ -367,7 +379,7 @@ def getWidgets(screen=0):
     if screen == 0:
         widgets += [
             widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-            widget.Prompt(**default_font, foreground=COLR_TEXT, background=COLR_TITLE_BG, prompt=" "),
+            widget.Prompt(**default_font, foreground=COLR_TITLE_FG, background=COLR_TITLE_BG, prompt=" "),
             widget.TextBox(**border_font, foreground=COLR_TITLE_BG, text="")
         ]
     # systray
@@ -375,14 +387,14 @@ def getWidgets(screen=0):
     # Caps and Numlock
     widgets += capslock_widgets[screen].getWidgets()
     # Temperature
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTemps, poll_interval=5.0,
-        click_func=getTemps, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_TEXT,body_font=default_font['font'],
+        click_func=getTemps, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],
         body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
     # Utilization
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TEXT,
+    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
             title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getUtilization, poll_interval=5.0,
-            click_func=getUtilization, update_after_click=True, body_bg=COLR_BODY_BG, body_fg=COLR_TEXT, body_font=default_font['font'],
+            click_func=getUtilization, update_after_click=True, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG, body_font=default_font['font'],
             body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
     # Volume
     widgets += vol_widgets[screen].getWidgets()
@@ -398,7 +410,6 @@ def getWidgets(screen=0):
     widgets += power_widgets[screen].getWidgets()
 
     return widgets
-
 screens = []
 for n in range(NUM_SCREENS):
     screens.append(
@@ -444,7 +455,7 @@ floating_layout = layout.Floating(float_rules=[
     ],
     border_width=2,
     border_focus=COLR_TITLE_BG,
-    border_normal=COLR_INACTIVE
+    border_normal=COLR_BAR_BG
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -479,8 +490,12 @@ def restart_on_randr(qtile, ev):
 @hook.subscribe.startup_once
 def startOnce():
     setupMonitors()
+    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([start])
 
+'''
 @hook.subscribe.startup
 def start():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
+'''
