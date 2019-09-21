@@ -16,12 +16,14 @@ radius = 0
 fixed-center = true
 enable-ipc = true
 background = ${theme.background}
+override-redirect = false
+bottom = false
 
 line-size = 1
 
 border-top-size = 0
-border-left-size = 12
-border-right-size = 12
+border-left-size = 4
+border-right-size = 4
 border-bottom-size = 0
 
 padding-left = 0
@@ -35,7 +37,8 @@ font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
-modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+;modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
@@ -49,6 +52,28 @@ scroll-down = i3wm-wsprev
 #cursor-click = pointer
 #cursor-scroll = ns-resize
 
+# ewmh------------------------------------------------------------------------
+[module/ewmh]
+type = internal/xworkspaces
+pin-workspaces = false
+enable-click = true
+enable-scroll = true
+
+icon-0 = 1;
+icon-1 = 2;
+icon-2 = 3;
+icon-3 = 4;
+icon-4 = 5;
+
+icon-default = 
+format = <label-state>
+#label-monitor = %name%
+
+label-active = ${env:POLY_EWMHACTIVE}
+label-occupied = ${env:POLY_EWMHOCCUPIED}
+label-urgent = ${env:POLY_EWMHURGENT}
+#label-empty = ${env:POLY_EWMHEMPTY}
+label-empty = 
 
 #i3---------------------------------------------------------------------------
 [module/i3]
@@ -66,16 +91,16 @@ ws-icon-default = 
 format = <label-state>
 
 #focused = activecolor workspace on focused monitor
-label-focused = ${env:POLY_FOCUSED}
+label-focused = ${env:POLY_I3FOCUSED}
 
 #unfocused = Inactivecolor workspace on any monitor
-label-unfocused = ${env:POLY_UNFOCUSED}
+label-unfocused = ${env:POLY_I3UNFOCUSED}
 
 #visible = activecolor workspace on unfocused monitor
-label-visible = ${env:POLY_VISIBLE}
+label-visible = ${env:POLY_I3VISIBLE}
 
 #urgentcolor = Workspace with urgency hint set
-label-urgent = ${env:POLY_URGENT}
+label-urgent = ${env:POLY_I3URGENT}
 
 [module/i3Prefix]
 type = custom/ipc
@@ -222,8 +247,8 @@ format-prefix= ${theme.rightmoduleprefix}
 format-prefix-foreground = ${theme.titlebgcolor}
 format-suffix= ${theme.rightmodulesuffix}
 format-suffix-foreground = ${theme.titlebgcolor}
-indicator-icon-0 = caps lock;;CAPS
-indicator-icon-1 = num lock;;NUM
+indicator-icon-0 = caps lock;; A
+indicator-icon-1 = num lock;; 1
 label-indicator-on = %icon%
 label-indicator-on-foreground = ${theme.titlefgcolor}
 label-indicator-on-background = ${theme.titlebgcolor}

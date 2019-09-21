@@ -9,18 +9,14 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
-from my_scripts import getVolumeIcon, getVolume, volumePressed
-from my_widgets import FuncWithClick, GroupTextBox, ComboWidget
-from my_scripts import getTemps, getUtilization, getMpd, clickMpd
-from my_scripts import getlocksStatus, MOUSE_BUTTONS, POWER_BUTTONS
-from my_scripts import powerClicked, getNumScreens, getTime
-from my_scripts import getInterfaces, getLan, getWlan, setupMonitors
+from my_scripts import changeVolume, toggleMuteVolume
 
 MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
 
+#Get colors from the polybar theme file
 with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r') as f:
      for l in f:
         if 'include-file' in l:
@@ -28,18 +24,12 @@ with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r
             break
      if not theme_path:
          logger.warn("Could not find polybar theme file")
-         exit(1)
      if '~' in theme_path:
          theme_path = theme_path.replace('~', os.path.expanduser('~'))
      with open(theme_path, 'r') as f:                                                                                                               
          COLORS = {'titlefg':'#000000','titlebg':'#000000',                                                                                        
                  'bodyfg':'#000000','bodybg':'#000000',                                                                                          
-                 'urgentbg':'#000000','urgentfg':'#000000',                                                                                      
-                 'focusedbg':'#000000','focusedfg':'#000000',                                                                                    
-                 'leftmoduleprefix':"",'leftmodulesuffix':"",                                                                                    
-                 'rightmoduleprefix':"",'rightmodulesuffix':"",                                                                                  
-                 'background':'#00000000', 'wspadding':0,                                                                                        
-                 'titlepadding':0, 'borderfocused':0, 'borderunfocused':0}                                                                                                               
+                 'borderfocused':0, 'borderunfocused':0}                                                                                                               
          for i, l in enumerate(f):                                                                                                                  
              l=l.strip()                                                                                                                         
              if l.startswith('#'):                                                                                                               
@@ -48,24 +38,6 @@ with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r
                  if var in l:                                                                                                                  
                      COLORS[var] = l.split('=')[-1].strip()
                      break 
-
-# Status bar config
-COLR_TITLE_BG = 'bd3545'
-COLR_TITLE_FG = '1f034d'
-#COLR_BODY_BG = '220231'
-COLR_BODY_BG = '1d022c'
-COLR_BODY_FG= 'c495b5'
-COLR_URGENT_BG= 'd23c4d'
-COLR_URGENT_FG= '1f034d'
-COLR_EMPTY_BG= '331f4d'
-COLR_EMPTY_FG= '110808'
-COLR_BAR_BG = '540f3c'
-LEFT_MODULE_PREFIX = ""
-LEFT_MODULE_SUFFIX = ""
-RIGHT_MODULE_PREFIX = ""
-RIGHT_MODULE_SUFFIX = ""
-TITLE_PADDING = 0
-BODY_PADDING = 0
 
 default_font = dict(
     font="Iosevka Medium Oblique",
@@ -104,76 +76,7 @@ groups = [
         ],
         label="")
 ]
-'''
-def show_hide_power_widgets(x=0, y=0, button=1, widgets=[]):
-    if button != MOUSE_BUTTONS['LEFT_CLICK']:
-        return
-    for w in widgets:
-        if not isinstance(w, ComboWidget):
-            logger.warning("Cannot hide {} type widget".format(type(w)))
-            continue
-        w.show(w.isHidden())
 
-    global power_widgets
-    for w in power_widgets:
-        if widgets[0].isHidden():
-            w.update(title_text=" ")
-        else:
-            w.update(title_text=" ")
-
-# Create widgets for all screens
-vol_widgets = []
-capslock_widgets = []
-power_widgets = []
-lock_widgets = []
-shut_widgets = []
-wifi_widgets = []
-lan_widgets = []
-for n in range(NUM_SCREENS):
-    vol_widgets.append( ComboWidget(title_poll_func=getVolumeIcon, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-        body_poll_func=getVolume, click_func=volumePressed, poll_interval=None, body_bg=COLR_BODY_BG,
-        body_fg=COLR_BODY_FG, title_font=icon_font['font'],title_font_size=icon_font['fontsize'],
-        border_font=border_font['font'],border_font_size=border_font['fontsize'], body_font=default_font['font'],
-        body_font_size=default_font['fontsize'], update_after_click=True, inactive_hide=False, update_title=True)
-    )
-
-    # Since computers can have multiple net interfaces
-    _wifi_widgets = []
-    _lan_widgets = []
-    for interface in getInterfaces():
-        title = (lambda:"") if 'wl' in interface else (lambda:"")
-        func = getWlan if 'wl' in interface else getLan
-        w_list = _wifi_widgets if 'wl' in interface else _lan_widgets
-        w_list.append( ComboWidget(title_poll_func=title, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG, body_poll_func=func,
-            body_poll_func_args={'interface':interface}, poll_interval=5, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,
-            title_font=icon_font['font'], title_font_size=icon_font['fontsize'], border_font=border_font['font'],
-            border_font_size=border_font['fontsize'], body_font=default_font['font'], body_font_size=default_font['fontsize'])
-        )
-    wifi_widgets.append(_wifi_widgets)
-    lan_widgets.append(_lan_widgets)
-
-    capslock_widgets.append( ComboWidget(title_poll_func=lambda:"", title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'], update_title=False, poll_interval=None,
-        body_poll_func=getlocksStatus, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG, body_font=default_font['font'],
-        body_font_size=default_font['fontsize'],border_font=border_font['font'],border_font_size=border_font['fontsize'])
-    )
-
-    lock_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
-        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']},body_bg=COLR_BAR_BG)
-    shut_widget = ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'],hide=True,
-        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']})
-    power_widget = ComboWidget(title_poll_func=lambda:" ", update_title=False, title_bg=COLR_TITLE_BG,
-        title_fg=COLR_TITLE_FG, title_font=icon_font['font'], title_font_size=icon_font['fontsize'], tail_text="",
-        poll_interval=None, border_font=border_font['font'],border_font_size=border_font['fontsize'],
-        click_func=show_hide_power_widgets, click_func_args={'widgets':[lock_widget, shut_widget]},body_bg=COLR_BAR_BG)
-    lock_widgets.append(lock_widget)
-    shut_widgets.append(shut_widget)
-    power_widgets.append(power_widget)
-'''
 def window_to_next_prev_group(qtile, next=True):
     if qtile.current_window is None:
         return
@@ -191,12 +94,6 @@ def next_prev_group(qtile, next=True):
     qtile.groups[i].cmd_toscreen()
 
 @lazy.function
-def refresh_screens(qtile):
-    setupMonitors()
-    start = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.call([start])
-
-@lazy.function
 def float_to_front(qtile):
     """
     Bring all floating windows of the group to front
@@ -208,24 +105,7 @@ def float_to_front(qtile):
             window.cmd_bring_to_front()
             floating_windows.append(window)
     floating_windows[-1].cmd_focus()
-'''
-def toggle_lock_widgets(caps=True):
-    global capslock_widgets
-    for w in capslock_widgets:
-        locks = w.text.split()
-        to_find = 'A' if caps else '0'
-        if to_find in locks:
-            locks[locks.index(to_find)] = ""
-        else:
-            locks.append(to_find)
-        w.update(body_text=" ".join(locks).strip())
 
-def update_volume(button):
-    global vol_widgets
-    volumePressed(x=0, y=0, button=button)
-    for w in vol_widgets:
-        w.update()
-'''
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -257,7 +137,7 @@ keys = [
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
-    Key([MOD, "control"], "m", refresh_screens),
+    Key([MOD, "control"], "m", lazy.spawn('~/.config/qtile/autostart.sh')),
     Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
@@ -295,12 +175,12 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
     Key([MOD], "u", lazy.next_urgent()),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
-    Key([MOD], "z", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['LEFT_CLICK']))),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_DOWN']))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:update_volume(button=MOUSE_BUTTONS['SCROLL_UP']))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
+    Key([MOD], "z", lazy.function(lambda x:toggleMuteVolume())),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:changeVolume('-5%'))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:changeVolume('-5%'))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:changeVolume('+5%'))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -353,110 +233,10 @@ layouts = [
 ]
 
 extension_defaults = default_font.copy()
-'''
-def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
-    inactive_fg, inactive_bg, urgent_fg, urgent_bg, not_empty_fg, not_empty_bg):
-    w = []
-    for g in groups:
-        if g.name == 'scratchpad':
-            continue
-        w += [
-            GroupTextBox(track_group=g.name, label=border_text_l, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLR_BAR_BG, not_empty_fg=not_empty_bg, not_empty_bg=COLR_BAR_BG,
-                inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
-            GroupTextBox(track_group=g.name, label=g.label, center_aligned=True, borderwidth=0,
-                active_fg=active_fg, active_bg=active_bg,not_empty_fg=not_empty_fg, not_empty_bg=not_empty_bg,
-                inactive_fg=inactive_fg, inactive_bg=inactive_bg,
-                urgent_fg=urgent_fg, urgent_bg=urgent_bg, **icon_font),
-            GroupTextBox(track_group=g.name, label=border_text_r, center_aligned=True, borderwidth=0,
-                active_fg=active_bg, active_bg=COLR_BAR_BG,not_empty_fg=not_empty_bg, not_empty_bg=COLR_BAR_BG,
-                inactive_fg=inactive_bg, inactive_bg=COLR_BAR_BG,
-                urgent_fg=urgent_bg, urgent_bg=COLR_BAR_BG, **border_font),
-        ]
-    return w
 
-def getWidgets(screen=0):
-    # Layout Icon
-    widgets = [
-        widget.CurrentLayoutIcon(background=COLR_TITLE_BG, scale=0.6, foreground=COLR_TITLE_FG),
-        widget.TextBox(
-            **border_font,background=COLR_BAR_BG,
-            text="", foreground=COLR_TITLE_BG,
-        )
-    ]
-    # Groups
-    widgets += getGroupBoxWidgets(border_text_l="", border_text_r="", active_fg=COLR_TITLE_FG, active_bg=COLR_TITLE_BG,
-        inactive_fg=COLR_EMPTY_FG, inactive_bg=COLR_EMPTY_BG, urgent_fg=COLR_URGENT_FG, urgent_bg=COLR_URGENT_BG,
-        not_empty_fg=COLR_BODY_FG, not_empty_bg=COLR_BODY_BG)
-    # Music
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getMpd, poll_interval=2.0,
-        click_func=clickMpd, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],
-        body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize'],
-        head_text="", tail_text="").getWidgets()
-
-    widgets += [widget.Spacer(length=570)]
-
-    # Time
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTime,poll_interval=30.0,
-        body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],body_font_size=default_font['fontsize'],
-        border_font=border_font['font'], border_font_size=border_font['fontsize'],head_text="", tail_text="",center_text="").getWidgets()
-    widgets += ComboWidget(title_poll_func=getTime, title_poll_func_args={'format':'%I:%M %p', 'timezone':'Asia/Kolkata'},
-        update_title=True, title_bg=COLR_BODY_BG, title_fg=COLR_BODY_FG,poll_interval=30.0,
-        title_font=default_font['font'], title_font_size=default_font['fontsize'],border_font=border_font['font'],
-        border_font_size=border_font['fontsize'],head_text="", tail_text="", body_bg=COLR_BAR_BG).getWidgets()
-
-    # Prompt
-    if screen == 0:
-        widgets += [
-            widget.TextBox(**border_font,foreground=COLR_TITLE_BG, text=""),
-            widget.Prompt(**default_font, foreground=COLR_TITLE_FG, background=COLR_TITLE_BG, prompt=" "),
-            widget.TextBox(**border_font, foreground=COLR_TITLE_BG, text="")
-        ]
-    # systray
-    widgets += [widget.Spacer(), widget.Systray()]
-    # Caps and Numlock
-    widgets += capslock_widgets[screen].getWidgets()
-    # Temperature
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getTemps, poll_interval=5.0,
-        click_func=getTemps, update_after_click=True,body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG,body_font=default_font['font'],
-        body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
-    # Utilization
-    widgets += ComboWidget(title_poll_func=lambda:"", update_title=False, title_bg=COLR_TITLE_BG, title_fg=COLR_TITLE_FG,
-            title_font=icon_font['font'], title_font_size=icon_font['fontsize'],body_poll_func=getUtilization, poll_interval=5.0,
-            click_func=getUtilization, update_after_click=True, body_bg=COLR_BODY_BG, body_fg=COLR_BODY_FG, body_font=default_font['font'],
-            body_font_size=default_font['fontsize'], border_font=border_font['font'], border_font_size=border_font['fontsize']).getWidgets()
-    # Volume
-    widgets += vol_widgets[screen].getWidgets()
-
-    # Ethernet/Wifi
-    for w in wifi_widgets[screen]:
-        widgets += w.getWidgets()
-    for w in lan_widgets[screen]:
-        widgets += w.getWidgets()
-
-    # Power
-    widgets += shut_widgets[screen].getWidgets() + lock_widgets[screen].getWidgets()
-    widgets += power_widgets[screen].getWidgets()
-
-    return widgets
-'''
+#No bar as we are using polybar
 screens = []
-'''
-for n in range(NUM_SCREENS):
-    screens.append(
-        Screen(
-            top=bar.Bar(
-                widgets=getWidgets(n),
-                size=border_font['fontsize'],
-                background=COLR_BAR_BG, opacity=0.9
-            )
-        )
-    )
-'''
+
 # Drag floating layouts.
 mouse = [
     Drag([MOD], "Button1", lazy.window.set_position_floating(),
@@ -519,13 +299,11 @@ wmname = "LG3D"
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
-    setupMonitors()
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
 
 @hook.subscribe.startup_once
 def startOnce():
-    setupMonitors()
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
 
