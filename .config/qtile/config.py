@@ -21,6 +21,34 @@ ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
 
+with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r') as f:
+     for l in f:
+        if 'include-file' in l:
+            theme_path = l.split('=')[-1].strip()
+            break
+     if not theme_path:
+         logger.warn("Could not find polybar theme file")
+         exit(1)
+     if '~' in theme_path:
+         theme_path = theme_path.replace('~', os.path.expanduser('~'))
+     with open(theme_path, 'r') as f:                                                                                                               
+         COLORS = {'titlefg':'#000000','titlebg':'#000000',                                                                                        
+                 'bodyfg':'#000000','bodybg':'#000000',                                                                                          
+                 'urgentbg':'#000000','urgentfg':'#000000',                                                                                      
+                 'focusedbg':'#000000','focusedfg':'#000000',                                                                                    
+                 'leftmoduleprefix':"",'leftmodulesuffix':"",                                                                                    
+                 'rightmoduleprefix':"",'rightmodulesuffix':"",                                                                                  
+                 'background':'#00000000', 'wspadding':0,                                                                                        
+                 'titlepadding':0, 'borderfocused':0, 'borderunfocused':0}                                                                                                               
+         for i, l in enumerate(f):                                                                                                                  
+             l=l.strip()                                                                                                                         
+             if l.startswith('#'):                                                                                                               
+                 continue                                                                                                                        
+             for var in COLORS: 
+                 if var in l:                                                                                                                  
+                     COLORS[var] = l.split('=')[-1].strip()
+                     break 
+
 # Status bar config
 COLR_TITLE_BG = 'bd3545'
 COLR_TITLE_FG = '1f034d'
@@ -38,8 +66,6 @@ RIGHT_MODULE_PREFIX = ""
 RIGHT_MODULE_SUFFIX = ""
 TITLE_PADDING = 0
 BODY_PADDING = 0
-
-NUM_SCREENS = getNumScreens()
 
 default_font = dict(
     font="Iosevka Medium Oblique",
@@ -78,7 +104,7 @@ groups = [
         ],
         label="")
 ]
-
+'''
 def show_hide_power_widgets(x=0, y=0, button=1, widgets=[]):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
@@ -147,7 +173,7 @@ for n in range(NUM_SCREENS):
     lock_widgets.append(lock_widget)
     shut_widgets.append(shut_widget)
     power_widgets.append(power_widget)
-
+'''
 def window_to_next_prev_group(qtile, next=True):
     if qtile.current_window is None:
         return
@@ -165,6 +191,12 @@ def next_prev_group(qtile, next=True):
     qtile.groups[i].cmd_toscreen()
 
 @lazy.function
+def refresh_screens(qtile):
+    setupMonitors()
+    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([start])
+
+@lazy.function
 def float_to_front(qtile):
     """
     Bring all floating windows of the group to front
@@ -176,7 +208,7 @@ def float_to_front(qtile):
             window.cmd_bring_to_front()
             floating_windows.append(window)
     floating_windows[-1].cmd_focus()
-
+'''
 def toggle_lock_widgets(caps=True):
     global capslock_widgets
     for w in capslock_widgets:
@@ -193,7 +225,7 @@ def update_volume(button):
     volumePressed(x=0, y=0, button=button)
     for w in vol_widgets:
         w.update()
-
+'''
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -225,7 +257,7 @@ keys = [
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
-    Key([MOD, "control"], "m", lazy.layout.maximize()),
+    Key([MOD, "control"], "m", refresh_screens),
     Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
@@ -282,8 +314,8 @@ keys = [
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
-    # Key([MOD], "a", lazy.spawn("rofi -show drun -config {}".format(os.path.expanduser('~/.config/rofi/conf')))),
-    Key([MOD], 'a', lazy.spawncmd()),
+    Key([MOD], "a", lazy.spawn("rofi -show drun")),
+    # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
@@ -305,23 +337,23 @@ for i in groups:
 
 layout_configs={
     "margin":10,
-    "border_width":3,
-    "border_focus":COLR_TITLE_BG,
-    "border_normal":COLR_BAR_BG
+    "border_width":2,
+    "border_focus":COLORS['borderfocused'],
+    "border_normal":COLORS['borderunfocused']
 }
 
 layouts = [
-    layout.Columns(**layout_configs),
+    layout.Columns(num_columns=3, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
-    layout.TreeTab(**layout_configs, active_bg=COLR_TITLE_BG, inactive_bg=COLR_EMPTY_BG,
-        active_fg=COLR_TITLE_FG, inactive_fg=COLR_BODY_FG, bg_color=COLR_BAR_BG,
+    layout.TreeTab(**layout_configs, active_bg=COLORS['borderfocused'], inactive_bg=COLORS['borderunfocused'],
+        active_fg=COLORS['titlefg'], inactive_fg=COLORS['bodyfg'], bg_color=COLORS['borderunfocused'],
         padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
-    layout.Max(),
+    layout.Max()
 ]
 
 extension_defaults = default_font.copy()
-
+'''
 def getGroupBoxWidgets(border_text_l, border_text_r,active_fg, active_bg,
     inactive_fg, inactive_bg, urgent_fg, urgent_bg, not_empty_fg, not_empty_bg):
     w = []
@@ -411,7 +443,9 @@ def getWidgets(screen=0):
     widgets += power_widgets[screen].getWidgets()
 
     return widgets
+'''
 screens = []
+'''
 for n in range(NUM_SCREENS):
     screens.append(
         Screen(
@@ -422,7 +456,7 @@ for n in range(NUM_SCREENS):
             )
         )
     )
-
+'''
 # Drag floating layouts.
 mouse = [
     Drag([MOD], "Button1", lazy.window.set_position_floating(),
@@ -455,8 +489,8 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
     ],
     border_width=2,
-    border_focus=COLR_TITLE_BG,
-    border_normal=COLR_BAR_BG
+    border_focus=COLORS['borderfocused'],
+    border_normal=COLORS['borderunfocused']
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -486,7 +520,8 @@ wmname = "LG3D"
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
     setupMonitors()
-    qtile.cmd_restart()
+    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([start])
 
 @hook.subscribe.startup_once
 def startOnce():
