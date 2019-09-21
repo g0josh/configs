@@ -7,11 +7,11 @@ set encoding=utf-8
 set number relativenumber
 set cursorline
 set t_Co=256
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 set ruler
 set path+=**
 
-set foldmethod=indent
+set foldmethod=syntax
 
 "Tabs and spacing
 set autoindent

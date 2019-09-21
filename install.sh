@@ -14,6 +14,7 @@ echo ""
 
 mkdir ~/.config
 cp ./.config/i3 ~/.config -r
+cp ./.config/qtile ~/.config -r
 cp ./.config/polybar ~/.config -r
 cp ./.config/rofi ~/.config -r
 cp ./.config/ranger ~/.config -r
@@ -36,7 +37,7 @@ echo "---------------------------------------"
 echo "Installing all I need"
 echo "---------------------------------------"
 echo ""
-sudo pacman -Syu xorg-server xorg-xset xorg-xrandr xorg-xinit mpd mpc ncmpcpp pulseaudio pulseaudio-alsa pavucontrol ranger neovim i3-gaps firefox rxvt-unicode uget transmission-gtk tmux numlockx syncthing feh nvidia nvidia-settings connman gtk2 vlc mpc
+sudo pacman -Syu xorg-server xorg-xset xorg-xrandr xorg-xinit mpd mpc ncmpcpp pulseaudio pulseaudio-alsa pavucontrol ranger neovim i3-gaps firefox rxvt-unicode uget transmission-gtk tmux numlockx syncthing feh nvidia nvidia-settings connman gtk2 vlc mpc qtile xclip
 
 echo ""
 echo "---------------------------------------"
