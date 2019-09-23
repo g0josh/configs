@@ -137,7 +137,7 @@ keys = [
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
-    Key([MOD, "control"], "m", lazy.spawn('~/.config/qtile/autostart.sh')),
+    Key([MOD, "control"], "m", lazy.spawn(os.path.expanduser('~/.config/qtile/autostart.sh'))),
     Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
@@ -165,9 +165,6 @@ keys = [
     Key([MOD], "Tab", lazy.next_layout()),
 
     Key([MOD], "q", lazy.window.kill()),
-
-    Key([], "Caps_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=True))),
-    Key([], "Num_Lock", lazy.function(lambda x:toggle_lock_widgets(caps=False))),
 
     Key([MOD, "shift", "control"], "Up", lazy.prev_screen()),
     Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
