@@ -350,7 +350,7 @@ label-padding = ${theme.bodypadding}
 #WIFI-------------------------------------------------------------------------
 [module/wlanPrefix]
 type = internal/network
-interface = wlo1
+interface = ${env:POLY_WLAN}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
@@ -366,7 +366,7 @@ label-connected-padding = ${theme.titlepadding}
 
 [module/wlan]
 type = internal/network
-interface = wlo1
+interface = ${env:POLY_WLAN}
 interval = 3.0
 
 format-connected = <label-connected>
@@ -380,7 +380,7 @@ label-connected-padding = ${theme.bodypadding}
 #LAN--------------------------------------------------------------------------
 [module/lanPrefix1]
 type = internal/network
-interface = enp34s0
+interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
@@ -396,7 +396,7 @@ label-connected-padding = ${theme.titlepadding}
 
 [module/lan1]
 type = internal/network
-interface = enp34s0
+interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
@@ -408,7 +408,7 @@ label-connected-padding = ${theme.bodypadding}
 
 [module/lanPrefix2]
 type = internal/network
-interface = enp3s0
+interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
@@ -424,7 +424,7 @@ label-connected-padding = ${theme.titlepadding}
 
 [module/lan2]
 type = internal/network
-interface = enp3s0
+interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
@@ -453,7 +453,7 @@ menu-0-2 = ${env:POLY_POWER_0-2}
 menu-0-2-exec = menu-open-3
 
 menu-0-3 = ${env:POLY_POWER_0-3}
-menu-0-3-exec = ~/.config/i3/lockscreen.sh
+menu-0-3-exec = ~/.config/lockscreen.sh
 
 menu-1-0 = ${env:POLY_POWER_1-0}
 menu-1-0-exec = reboot
@@ -462,4 +462,4 @@ menu-2-0 = ${env:POLY_POWER_2-0}
 menu-2-0-exec = poweroff 
 
 menu-3-0 = ${env:POLY_POWER_3-0}
-menu-3-0-exec = i3-msg exit
+menu-3-0-exec = ~/.config/logout.sh

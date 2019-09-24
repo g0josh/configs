@@ -7,6 +7,18 @@ import sys
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 'logout':''}
 
+def getInterfaces():
+    lan1 = lan2 = wlan = ""
+    for w in os.listdir('/sys/class/net'):
+        if w.startswith('w'):
+            wlan = w
+        elif w.startswith('e'):
+            if lan1:
+                lan2 = w
+            else:
+                lan1 = w
+    return lan1, lan2, wlan
+
 def setupMonitors():
     try:
         o = subprocess.check_output(['xrandr']).decode()
@@ -157,6 +169,7 @@ if __name__ == '__main__':
     for i in poly_vars:
         poly_vars[i] = poly_vars[i].replace('[','{')
         poly_vars[i] = poly_vars[i].replace(']','}')
+    lan1, lan2, wlan = getInterfaces()
     for monitor in connected:
         try:
             os.environ['POLY_MONITOR'] = monitor
@@ -178,6 +191,9 @@ if __name__ == '__main__':
             os.environ['POLY_POWER_1-0'] = poly_vars['power10']
             os.environ['POLY_POWER_2-0'] = poly_vars['power20']
             os.environ['POLY_POWER_3-0'] = poly_vars['power30']
+            os.environ['POLY_WLAN'] = wlan
+            os.environ['POLY_LAN1'] = lan1
+            os.environ['POLY_LAN2'] = lan2
             if sys.version_info[0] < 3:
                 subprocess.call(['killall', '-q', 'polybar'])
                 subprocess.call(['polybar', '--reload', 'island'])
