@@ -28,7 +28,7 @@ class GroupTextBox(_GroupBase):
 
     def button_press(self, x, y, button):
         if self.tracking_group:
-            self.bar.screen.setGroup(self.tracking_group)
+            self.bar.screen.set_group(self.tracking_group)
 
     def calculate_length(self):
         width, _ = self.drawer.max_layout_size(
@@ -61,7 +61,7 @@ class GroupTextBox(_GroupBase):
         self.tracking_group = tracking_group
         # self.text = self.tracking_group.label if self.text == 'NA' else self.text
         # self.label = self._label
-        if self.tracking_group == self.qtile.currentGroup:
+        if self.tracking_group == self.qtile.current_group:
             self.foreground = self.active_fg
             self.background = self.active_bg
         elif self.group_has_urgent(self.tracking_group):
@@ -122,7 +122,7 @@ class FuncWithClick(base.ThreadedPollText):
 
 class ComboWidget(object):
     def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
-                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='000000',click_func=None,
+                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='',click_func=None,
                 click_func_args={},update_after_click=False, border_font=None, border_font_size=12, title_font=None,
                 title_font_size=12, body_font=None, body_font_size=12, collapsible=True, inactive_hide=True,
                 poll_interval=1000, head_text="", tail_text="",center_text=None, hide=False):

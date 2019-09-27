@@ -8,7 +8,6 @@ from contextlib import contextmanager
 from libqtile.log_utils import logger
 
 from socket import error as socket_error
-import traceback
 
 MOUSE_BUTTONS={
     'LEFT_CLICK':1,'RIGHT_CLICK':2, 'SCROLL_UP':4, 'SCROLL_DOWN':5
@@ -17,7 +16,6 @@ MOUSE_BUTTONS={
 POWER_BUTTONS={
     'SHUT_DOWN':0, 'LOG_OUT':1, 'LOCK_SCREEN':2
 }
-
 
 # ---------------------------------------------
 # VOLUME
@@ -122,17 +120,18 @@ def getMpd(not_connected_text='', max_title_len=15):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
-        logger.warning (e.output.decode().strip())
-        return error_text
-    except FileNotFoundError:
-        logger.warning('Please install mpc and mpd')
-        return None
+        return not_connected_text
     else:
         output = output.split('\n')
-    title = output[0].split('-')[-1].strip()
-    title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
-    time = output[1].split()[-2]
-    return "{} - {}".format(title, time)
+    try:    
+        title = output[0].split('-')[-1].strip()
+        title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
+        time = output[1].split()[-2]
+    except Exception as e:
+        logger.warning(e)
+        return ""
+    else:
+        return "{} - {}".format(title, time)
 
 def clickMpd(x, y, button):
     keys = {
@@ -160,7 +159,6 @@ def clickMpd(x, y, button):
         subprocess.run(cmd)
     except subprocess.CalledProcessError as e:
         logger.warning (e.output.decode().strip())
-
 
 # ---------------------------------------------
 # Internet
@@ -191,24 +189,18 @@ class NetSpeeds(object):
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl','enp'])]
 
-def getWlan(interface='wlo1', error_text=''):
-    active, essid = 'no', ''
+def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     try:
-        essids = subprocess.check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi']).decode()
+        output = subprocess.check_output(['connmanctl', 'services']).decode()
     except subprocess.CalledProcessError as e:
-        logger.warning (traceback.format_exc())
+        logger.warning (e.output.decode().strip())
         return error_text
     else:
-        essids = essids.split('\n')
-        for _essid in essids:
-            active, essid = _essid.split(':')
-            if active == 'yes':
-                break
-            else:
-                continue
-
-    if active != 'yes':
+        services = [x for x in output.split('\n') if x.startswith('*AO') and 'wifi' in x]
+    
+    if not services:
         return ""
+    essid = services[0].split()[1]
 
     #get speeds
     global net_speed_objects
@@ -227,9 +219,9 @@ def getWlan(interface='wlo1', error_text=''):
         logger.warning(e)
         return "  0 kb/s"
     else:
-        return "{}|{}".format(essid.strip(), speed)
+        return "{}|{}".format(essid, speed)
 
-def getLan(interface='enp2s0', error_text=''):
+def getLan(interface='enp24s0', error_text=''):
     #check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
