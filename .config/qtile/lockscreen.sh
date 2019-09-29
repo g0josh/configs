@@ -25,20 +25,20 @@ i3lock \
 --insidevercolor=$C \
 --insidewrongcolor=$C \
 --line-uses-inside \
---indpos="500:750" \
+--indpos="500:550" \
  \
 --clock \
 --timecolor=$T \
 --timestr="%I:%M %p" \
 --timesize=200 \
 --time-font="Iosevka" \
---timepos="500:1050" \
+--timepos="500:850" \
  \
 --datestr="%d %b, %A" \
 --datesize=100 \
 --datecolor=$T \
 --date-font="Iosevka" \
---datepos="500:1150" \
+--datepos="500:950" \
  \
 --veriftext="" \
 --verifcolor=$T \
