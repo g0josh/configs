@@ -38,7 +38,7 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 ;modules-left = i3Prefix i3 sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-modules-left = ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = qtilePrefix ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
@@ -53,6 +53,20 @@ scroll-down = i3wm-wsprev
 #cursor-scroll = ns-resize
 
 # ewmh------------------------------------------------------------------------
+[module/qtilePrefix]
+type = custom/ipc
+hook-0 = python3 ~/.config/polybar/get_qtile_layout.py
+initial = 1
+format-prefix = ${theme.leftmoduleprefix}
+format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-background = ${theme.background}
+format-suffix = ${theme.leftmodulesuffix}
+format-suffix-foreground = ${theme.titlebgcolor}
+format-suffix-background = ${theme.background}
+format-foreground = ${theme.titlefgcolor}
+format-background = ${theme.titlebgcolor}
+format-padding = ${theme.titlepadding}
+
 [module/ewmh]
 type = internal/xworkspaces
 pin-workspaces = false

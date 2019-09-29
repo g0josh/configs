@@ -4,6 +4,7 @@
 import subprocess
 import os
 import sys
+import json
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 'logout':''}
 
@@ -170,7 +171,8 @@ if __name__ == '__main__':
         poly_vars[i] = poly_vars[i].replace('[','{')
         poly_vars[i] = poly_vars[i].replace(']','}')
     lan1, lan2, wlan = getInterfaces()
-    for monitor in connected:
+    _connected = {}
+    for i, monitor in enumerate(connected):
         try:
             os.environ['POLY_MONITOR'] = monitor
             os.environ['POLY_I3FOCUSED'] = poly_vars['i3focused']
@@ -199,7 +201,9 @@ if __name__ == '__main__':
                 subprocess.call(['polybar', '--reload', 'island'])
             else:
                 subprocess.run(['killall', '-q', 'polybar'])
-                subprocess.run(['polybar', '--reload', 'island'])
+                o = subprocess.Popen(['polybar', '--reload', 'island'])
+                _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
-
+    with open('/tmp/polybars', 'w') as f:
+        f.write(json.dumps(_connected))
