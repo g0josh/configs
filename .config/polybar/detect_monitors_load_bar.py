@@ -173,36 +173,35 @@ if __name__ == '__main__':
     lan1, lan2, wlan = getInterfaces()
     _connected = {}
     for i, monitor in enumerate(connected):
+        os.environ['POLY_MONITOR'] = monitor
+        os.environ['POLY_I3FOCUSED'] = poly_vars['i3focused']
+        os.environ['POLY_I3UNFOCUSED'] = poly_vars['i3unfocused']
+        os.environ['POLY_I3VISIBLE'] = poly_vars['i3visible']
+        os.environ['POLY_I3URGENT'] = poly_vars['i3urgent']
+        os.environ['POLY_EWMHACTIVE'] = poly_vars['ewmhactive']
+        os.environ['POLY_EWMHOCCUPIED'] = poly_vars['ewmhoccupied']
+        os.environ['POLY_EWMHEMPTY'] = poly_vars['ewmhempty']
+        os.environ['POLY_EWMHURGENT'] = poly_vars['ewmhurgent']
+        os.environ['POLY_THEME_FILE'] = theme_path
+        os.environ['POLY_POWER_OPEN'] = poly_vars['poweropen']
+        os.environ['POLY_POWER_CLOSE'] = poly_vars['powerclose']
+        os.environ['POLY_POWER_0-0'] = poly_vars['power00']
+        os.environ['POLY_POWER_0-1'] = poly_vars['power01']
+        os.environ['POLY_POWER_0-2'] = poly_vars['power02']
+        os.environ['POLY_POWER_0-3'] = poly_vars['power03']
+        os.environ['POLY_POWER_1-0'] = poly_vars['power10']
+        os.environ['POLY_POWER_2-0'] = poly_vars['power20']
+        os.environ['POLY_POWER_3-0'] = poly_vars['power30']
+        os.environ['POLY_WLAN'] = wlan
+        os.environ['POLY_LAN1'] = lan1
+        os.environ['POLY_LAN2'] = lan2
         try:
-            os.environ['POLY_MONITOR'] = monitor
-            os.environ['POLY_I3FOCUSED'] = poly_vars['i3focused']
-            os.environ['POLY_I3UNFOCUSED'] = poly_vars['i3unfocused']
-            os.environ['POLY_I3VISIBLE'] = poly_vars['i3visible']
-            os.environ['POLY_I3URGENT'] = poly_vars['i3urgent']
-            os.environ['POLY_EWMHACTIVE'] = poly_vars['ewmhactive']
-            os.environ['POLY_EWMHOCCUPIED'] = poly_vars['ewmhoccupied']
-            os.environ['POLY_EWMHEMPTY'] = poly_vars['ewmhempty']
-            os.environ['POLY_EWMHURGENT'] = poly_vars['ewmhurgent']
-            os.environ['POLY_THEME_FILE'] = theme_path
-            os.environ['POLY_POWER_OPEN'] = poly_vars['poweropen']
-            os.environ['POLY_POWER_CLOSE'] = poly_vars['powerclose']
-            os.environ['POLY_POWER_0-0'] = poly_vars['power00']
-            os.environ['POLY_POWER_0-1'] = poly_vars['power01']
-            os.environ['POLY_POWER_0-2'] = poly_vars['power02']
-            os.environ['POLY_POWER_0-3'] = poly_vars['power03']
-            os.environ['POLY_POWER_1-0'] = poly_vars['power10']
-            os.environ['POLY_POWER_2-0'] = poly_vars['power20']
-            os.environ['POLY_POWER_3-0'] = poly_vars['power30']
-            os.environ['POLY_WLAN'] = wlan
-            os.environ['POLY_LAN1'] = lan1
-            os.environ['POLY_LAN2'] = lan2
             if sys.version_info[0] < 3:
                 subprocess.call(['killall', '-q', 'polybar'])
-                subprocess.call(['polybar', '--reload', 'island'])
             else:
                 subprocess.run(['killall', '-q', 'polybar'])
-                o = subprocess.Popen(['polybar', '--reload', 'island'])
-                _connected[i] = {'name':monitor, 'pid':o.pid}
+            o = subprocess.Popen(['polybar', '--reload', 'island'])
+            _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
     with open('/tmp/polybars', 'w') as f:
