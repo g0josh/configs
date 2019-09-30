@@ -3,6 +3,7 @@
 import os, time
 import subprocess
 from typing import List
+import json
 
 from libqtile import bar, layout, widget, hook
 from libqtile.command import lazy
@@ -15,6 +16,7 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
+POLYBAR_PID_PATH = '/tmp/polybars'
 
 #Get colors from the polybar theme file
 with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r') as f:
@@ -106,6 +108,18 @@ def float_to_front(qtile):
             floating_windows.append(window)
     floating_windows[-1].cmd_focus()
 
+@lazy.function
+def polybar_hook(qtile):
+    with open(POLYBAR_PID_PATH, 'r') as f:
+        info = json.loads(f.read())
+        curr_screen = str(qtile.current_group.info()['screen'])
+        pid = str(info[curr_screen]['pid'])
+    logger.warn(pid)
+    try:
+        subprocess.call(['polybar-msg', '-p', pid, 'hook', 'qtilePrefix', '1'])
+    except subprocess.CalledProcessError as e:
+        logger.warn("error while hooking polybar - {}".format(e))
+
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -162,7 +176,7 @@ keys = [
     Key([MOD], "b", lazy.spawn(BROWSER)),
 
     # Toggle between different layouts
-    Key([MOD], "Tab", lazy.next_layout()),
+    Key([MOD], "Tab", lazy.next_layout(), polybar_hook),
 
     Key([MOD], "q", lazy.window.kill()),
 
@@ -197,6 +211,7 @@ keys = [
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
 
+
 for i in groups:
     if i.name == 'scratchpad':
             keys.extend([
@@ -207,7 +222,7 @@ for i in groups:
     else:
         keys.extend([
             # MOD1 + letter of group = switch to group
-            Key([MOD], i.name, lazy.group[i.name].toscreen()),
+            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook),
             # MOD1 + shift + letter of group = switch to & move focused window to group
             Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
         ])
@@ -220,7 +235,7 @@ layout_configs={
 }
 
 layouts = [
-    layout.Columns(num_columns=3, **layout_configs),
+    layout.Columns(num_columns=2, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=COLORS['borderfocused'], inactive_bg=COLORS['borderunfocused'],

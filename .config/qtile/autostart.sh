@@ -1,3 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg &
+feh --bg-fill ~/Pictures/Wallpaper --no-fehbg
+python ~/.config/polybar/detect_monitors_load_bar.py &
+killall compton
+compton &
+
