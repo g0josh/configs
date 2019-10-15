@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-import os, time
+import os
 import subprocess
 from typing import List
 import json
 
-from libqtile import bar, layout, widget, hook
+from libqtile import layout, hook
 from libqtile.command import lazy
-from libqtile.config import Click, Drag, Group, Key, Screen, Match, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
 from my_scripts import changeVolume, toggleMuteVolume
@@ -16,9 +16,11 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "urxvt"
 BROWSER = "firefox"
-POLYBAR_PID_PATH = '/tmp/polybars'
+POLYBAR_PID_INFO_PATH = '/tmp/polybar_pids'
+POLYBAR_PIDS = {}
+WS_FIFO_PATHS = [] 
 
-#Get colors from the polybar theme file
+# Get theme from the polybar theme file
 with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r') as f:
      for l in f:
         if 'include-file' in l:
@@ -28,18 +30,20 @@ with open(os.path.join(os.path.expanduser('~'),'.config','polybar','config'), 'r
          logger.warn("Could not find polybar theme file")
      if '~' in theme_path:
          theme_path = theme_path.replace('~', os.path.expanduser('~'))
-     with open(theme_path, 'r') as f:                                                                                                               
-         COLORS = {'titlefg':'#000000','titlebg':'#000000',                                                                                        
-                 'bodyfg':'#000000','bodybg':'#000000',                                                                                          
-                 'borderfocused':0, 'borderunfocused':0}                                                                                                               
-         for i, l in enumerate(f):                                                                                                                  
-             l=l.strip()                                                                                                                         
-             if l.startswith('#'):                                                                                                               
-                 continue                                                                                                                        
-             for var in COLORS: 
-                 if var in l:                                                                                                                  
-                     COLORS[var] = l.split('=')[-1].strip()
+     with open(theme_path, 'r') as f:
+         THEME = {'titlefg':'#000000','titlebg':'#000000','bodyfg':'#000000',
+                 'bodybg':'#000000','focusedwindowborder':"#000000",
+                 'windowborder':"#000000", 'leftmoduleprefix':'',
+                 'leftmodulesuffix':''}
+         for i, l in enumerate(f):
+             l=l.strip()
+             if l.startswith('#'):
+                 continue
+             for var in THEME: 
+                 if var in l:
+                     THEME[var] = l.split('=')[-1].strip()
                      break 
+
 
 default_font = dict(
     font="Iosevka Medium Oblique",
@@ -51,6 +55,7 @@ border_font = dict(
     fontsize=16,
     padding=0
 )
+
 icon_font = dict(
     font="Font Awesome 5 Free Solid",
     fontsize=12,
@@ -109,13 +114,27 @@ def float_to_front(qtile):
     floating_windows[-1].cmd_focus()
 
 @lazy.function
-def polybar_hook(qtile):
+def polybar_layout_hook(qtile):
     with open(POLYBAR_PID_PATH, 'r') as f:
         info = json.loads(f.read())
         curr_screen = str(qtile.current_group.info()['screen'])
         pid = str(info[curr_screen]['pid'])
     try:
         subprocess.call(['polybar-msg', '-p', pid, 'hook', 'qtilePrefix', '1'])
+    except subprocess.CalledProcessError as e:
+        logger.warn("error while hooking polybar - {}".format(e))
+
+def polybars_ws_hook(qtile, ws):
+    curr_group = qtile.current_group.name
+    logger.warn("{}, {}".format(curr_group, ws))
+    qtile.groups[int(ws)].cmd_toscreen()
+    try:
+        pids = subprocess.check_output(['pgrep','polybar']).decode().split()
+        for p in pids:
+            for w in [ws,curr_group]:
+                a = ['polybar-msg', 'hook', 'qtileWs{}'.format(w), '1']
+                logger.warn(a)
+                subprocess.call(a)
     except subprocess.CalledProcessError as e:
         logger.warn("error while hooking polybar - {}".format(e))
 
@@ -175,7 +194,7 @@ keys = [
     Key([MOD], "b", lazy.spawn(BROWSER)),
 
     # Toggle between different layouts
-    Key([MOD], "Tab", lazy.next_layout(), polybar_hook),
+    Key([MOD], "Tab", lazy.next_layout(), polybar_layout_hook),
 
     Key([MOD], "q", lazy.window.kill()),
 
@@ -207,38 +226,85 @@ keys = [
     Key([MOD], "a", lazy.spawn("rofi -show drun")),
     # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
-    Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
+    Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
+    
 ]
 
+@lazy.function
+def poly_ws_hook(qtile):
+    global PRV_GROUP
+    curr_group = qtile.current_group.name
+    #if PRV_GROUP == curr_group:
+    #    return
+    logger.warn("{}, {}".format(PRV_GROUP, curr_group))
+    try:
+        pids = subprocess.check_output(['pgrep','polybar']).decode().split()
+        cmd = []
+        for w in [PRV_GROUP, curr_group]:
+            #cmd = ['/usr/bin/polybar-msg', 'hook', 'qtileWs{}'.format(w), '1']
+            cmd = " ".join(['echo', 'hook:module/qtileWs{}1'.format(w), '>', '/tmp/polybar_mqueue.*'] )
+            logger.warn(cmd)
+            lazy.spawn(cmd)
+            #a = subprocess.run(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+            #logger.warn("{}".format(a))
+        PRV_GROUP = curr_group
+    except Exception as e:
+        logger.warn("error while hooking polybar - {}".format(e))
 
-for i in groups:
-    if i.name == 'scratchpad':
-            keys.extend([
-                Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
-                Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
-                Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc'))
-            ])
-    else:
-        keys.extend([
-            # MOD1 + letter of group = switch to group
-            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook),
-            # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
-        ])
 
+keys += [
+    Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
+    Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
+    Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc')),
+    
+    #Key([MOD], "1", lazy.group["1"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    Key([MOD], "1", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 1"), polybar_layout_hook),
+
+    #Key([MOD], "2", lazy.group["2"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    Key([MOD], "2", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 2"), polybar_layout_hook),
+    Key([MOD], "3", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 3"), polybar_layout_hook),
+    Key([MOD], "4", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 4"), polybar_layout_hook),
+    Key([MOD], "5", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 5"), polybar_layout_hook),
+    Key([MOD], "6", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 6"), polybar_layout_hook),
+    Key([MOD], "7", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 7"), polybar_layout_hook),
+    #Key([MOD], "3", lazy.group["3"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    #Key([MOD], "4", lazy.group["4"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    #Key([MOD], "5", lazy.group["5"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    #Key([MOD], "6", lazy.group["6"].toscreen(), poly_ws_hook, polybar_layout_hook),
+    #Key([MOD], "7", lazy.group["7"].toscreen(), poly_ws_hook, polybar_layout_hook)
+    ]
+#ws_hooks = ['0']
+#For i in groups:
+#    if i.name == 'scratchpad':
+#            keys.extend([
+#                Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
+#                Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
+#                Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc'))
+#            ])
+#    else:
+#        logger.warn('set {}'.format(i.name))
+#        ws_hook = polybar_ws_hook(i.name)
+#        keys.extend([
+#            # MOD1 + letter of group = switch to group
+#            Key([MOD], i.name, lazy.function(lambda x:ws_hook.run(x)), polybar_layout_hook),
+#            #Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_layout_hook),
+#            # MOD1 + shift + letter of group = switch to & move focused window to group
+#            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
+#        ])
+#Logger.warn(ws_hooks)
 layout_configs={
     "margin":10,
     "border_width":2,
-    "border_focus":COLORS['borderfocused'],
-    "border_normal":COLORS['borderunfocused']
+    "border_focus":THEME['focusedwindowborder'],
+    "border_normal":THEME['windowborder']
 }
 
 layouts = [
     layout.Columns(num_columns=3, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
-    layout.TreeTab(**layout_configs, active_bg=COLORS['borderfocused'], inactive_bg=COLORS['borderunfocused'],
-        active_fg=COLORS['titlefg'], inactive_fg=COLORS['bodyfg'], bg_color=COLORS['borderunfocused'],
+    layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
+        active_fg=THEME['titlefg'], inactive_fg=THEME['bodyfg'], bg_color=THEME['windowborder'],
         padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
     layout.Max()
 ]
@@ -280,8 +346,8 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
     ],
     border_width=2,
-    border_focus=COLORS['borderfocused'],
-    border_normal=COLORS['borderunfocused']
+    border_focus=THEME['focusedwindowborder'],
+    border_normal=THEME['windowborder']
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -308,15 +374,30 @@ wmname = "LG3D"
 #     if c.wm_instance_class == "ncmpcpp_inst":
 #         c.togroup("5")
 
+def get_polybar_pids():
+    global POLYBAR_PIDS, WS_FIFO_PATHS
+    with open(POLYBAR_PID_INFO_PATH, 'r') as fh:
+        POLYBAR_PIDS = json.loads(fh.read())
+    for path in WS_FIFO_PATHS:
+        if os.path.exists(path):
+            os.remove(path)
+    WS_FIFO_PATHS = []
+    for screen in POLYBAR_PIDS:
+        path = '/tmp/qtile_ws_' + str(POLYBAR_PIDS[screen]['pid'])
+        os.mkfifo(path)
+        WS_FIFO_PATHS.append(path)
+
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
+    get_polybar_pids()
 
 @hook.subscribe.startup_once
 def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
+    get_polybar_pids()
 
 '''
 @hook.subscribe.startup
