@@ -1,5 +1,5 @@
 [theme]
-include-file = ~/.config/polybar/feathers.theme
+include-file = ~/.config/themes/feathers.theme
 
 [module/sep]
 type = custom/text
@@ -37,8 +37,8 @@ font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
-#modules-left = qtilePrefix ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-modules-left = ts qtilePrefix qtileWs1 qtileWs2 qtileWs3 qtileWs4 qtileWs5 qtileWs6 qtileWs7 ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = ts qtilePrefix ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+#modules-left = ts qtilePrefix qtileWs1 qtileWs2 qtileWs3 qtileWs4 qtileWs5 qtileWs6 qtileWs7 ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
@@ -55,8 +55,8 @@ scroll-down = i3wm-wsprev
 
 [module/ts]
 type = custom/script
-exec = tail -F /tmp/fifo
-exec-if = [ -p /tmp/fifo ]
+exec = ${env:POLY_WS_FIFO_PATH}
+exec-if = ${env:POLY_WS_FIFO_CHECK}
 tail = true
 
 # qtile workspaces------------------------------------------------------------
@@ -108,13 +108,13 @@ type = custom/ipc
 hook-0 = python3 ~/.config/polybar/get_qtile_layout.py
 initial = 1
 format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-prefix-background = ${theme.background}
 format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
 format-suffix-background = ${theme.background}
-format-foreground = ${theme.titlefgcolor}
-format-background = ${theme.titlebgcolor}
+format-foreground = ${theme.titlefg}
+format-background = ${theme.titlebg}
 format-padding = ${theme.titlepadding}
 
 [module/ewmh]
@@ -134,8 +134,8 @@ format = <label-state>
 #label-monitor = %name%
 
 label-active = ${env:POLY_EWMHACTIVE}
-label-occupied = ${env:POLY_EWMHOCCUPIED}
-label-urgent = ${env:POLY_EWMHURGENT}
+#label-occupied = ${env:POLY_EWMHOCCUPIED}
+#label-urgent = ${env:POLY_EWMHURGENT}
 #label-empty = ${env:POLY_EWMHEMPTY}
 label-empty = 
 
@@ -171,13 +171,13 @@ type = custom/ipc
 hook-0 = python3 ~/.config/i3/split_status.py get
 initial = 1
 format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-prefix-background = ${theme.background}
 format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
 format-suffix-background = ${theme.background}
-format-foreground = ${theme.titlefgcolor}
-format-background = ${theme.titlebgcolor}
+format-foreground = ${theme.titlefg}
+format-background = ${theme.titlebg}
 format-padding = ${theme.titlepadding}
 
 #MPD--------------------------------------------------------------------------
@@ -186,30 +186,30 @@ type = internal/mpd
 
 format-online-prefix = ${theme.leftmoduleprefix}
 format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebgcolor}
+format-online-prefix-foreground = ${theme.titlebg}
 format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebgcolor}
-format-online-suffix-background = ${theme.bodybgcolor}
+format-online-suffix-foreground = ${theme.titlebg}
+format-online-suffix-background = ${theme.bodybg}
 format-offline-prefix = ${theme.leftmoduleprefix}
 format-offline-suffix = ${theme.leftmodulesuffix}
-format-offline-prefix-foreground = ${theme.titlebgcolor}
+format-offline-prefix-foreground = ${theme.titlebg}
 format-offline-prefix-background = ${theme.background}
-format-offline-suffix-foreground = ${theme.titlebgcolor}
+format-offline-suffix-foreground = ${theme.titlebg}
 format-offline-suffix-background = ${theme.background}
 
 format-online =  
 format-offline =  
-format-offline-foreground = ${theme.titlefgcolor}
-format-offline-background = ${theme.titlebgcolor}
-format-online-foreground = ${theme.titlefgcolor}
-format-online-background = ${theme.titlebgcolor}
+format-offline-foreground = ${theme.titlefg}
+format-offline-background = ${theme.titlebg}
+format-online-foreground = ${theme.titlefg}
+format-online-background = ${theme.titlebg}
 
 [module/mpd]
 type = internal/mpd
 
 format-online = <label-song> <label-time>
-format-online-foreground = ${theme.bodyfgcolor}
-format-online-background = ${theme.bodybgcolor}
+format-online-foreground = ${theme.bodyfg}
+format-online-background = ${theme.bodybg}
 label-song = %title%
 label-song-padding = ${theme.bodypadding}
 label-time = %elapsed% / %total% 
@@ -218,7 +218,7 @@ label-song-maxlen = 30
 label-song-ellipsis = true
 
 format-online-suffix = ${theme.leftmodulesuffix}
-format-online-suffix-foreground = ${theme.bodybgcolor}
+format-online-suffix-foreground = ${theme.bodybg}
 format-online-suffix-background = ${theme.background}
 
 [module/mpdPrev]
@@ -226,55 +226,55 @@ type = internal/mpd
 
 format-online-prefix = ${theme.leftmoduleprefix}
 format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebgcolor}
+format-online-prefix-foreground = ${theme.titlebg}
 format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebgcolor}
+format-online-suffix-foreground = ${theme.titlebg}
 format-online-suffix-background = ${theme.background}
 format-online = <icon-prev> 
 icon-prev= 
-format-online-foreground = ${theme.titlefgcolor}
-format-online-background = ${theme.titlebgcolor}
+format-online-foreground = ${theme.titlefg}
+format-online-background = ${theme.titlebg}
 
 [module/mpdPlayPause]
 type = internal/mpd
 
 format-online-prefix = ${theme.leftmoduleprefix}
 format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebgcolor}
+format-online-prefix-foreground = ${theme.titlebg}
 format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebgcolor}
+format-online-suffix-foreground = ${theme.titlebg}
 format-online-suffix-background = ${theme.background}
 format-online = <toggle>
 icon-pause = 
 icon-play = 
-format-online-foreground = ${theme.titlefgcolor}
-format-online-background = ${theme.titlebgcolor}
+format-online-foreground = ${theme.titlefg}
+format-online-background = ${theme.titlebg}
 
 [module/mpdNext]
 type = internal/mpd
 
 format-online-prefix = ${theme.leftmoduleprefix}
 format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebgcolor}
+format-online-prefix-foreground = ${theme.titlebg}
 format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebgcolor}
+format-online-suffix-foreground = ${theme.titlebg}
 format-online-suffix-background = ${theme.background}
 format-online = <icon-next>
 icon-next = 
-format-online-foreground = ${theme.titlefgcolor}
-format-online-background = ${theme.titlebgcolor}
+format-online-foreground = ${theme.titlefg}
+format-online-background = ${theme.titlebg}
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
 type = custom/script
 interval = 1600
 exec = echo 
 format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
-format-suffix-background = ${theme.bodybgcolor}
-label-foreground = ${theme.titlefgcolor}
-label-background = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
+format-suffix-background = ${theme.bodybg}
+label-foreground = ${theme.titlefg}
+label-background = ${theme.titlebg}
 label-padding = ${theme.titlepadding}
 
 [module/time]
@@ -283,24 +283,24 @@ interval = 60
 date = %h %d, %A
 time = %I:%M %p
 label = "%date%, %time%"
-label-foreground = ${theme.bodyfgcolor}
-label-background = ${theme.bodybgcolor}
+label-foreground = ${theme.bodyfg}
+label-background = ${theme.bodybg}
 label-padding = ${theme.bodypadding}
 format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybgcolor}
+format-suffix-foreground = ${theme.bodybg}
 
 [module/timeIndia]
 type = custom/script
 interval = 60
 exec = TZ=Asia/Kolkata date +"%I:%M %p"
-label-foreground = ${theme.bodyfgcolor}
-label-background = ${theme.bodybgcolor}
+label-foreground = ${theme.bodyfg}
+label-background = ${theme.bodybg}
 label-padding = ${theme.bodypadding}
 format = <label>
 format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.bodybgcolor}
+format-prefix-foreground = ${theme.bodybg}
 format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybgcolor}
+format-suffix-foreground = ${theme.bodybg}
 
 #CAPS NUM LOCK-----------------------------------------------------------------
 [module/capsNumLock]
@@ -308,14 +308,14 @@ type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
 format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
 indicator-icon-0 = caps lock;; A
 indicator-icon-1 = num lock;; 1
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${theme.titlefgcolor}
-label-indicator-on-background = ${theme.titlebgcolor}
+label-indicator-on-foreground = ${theme.titlefg}
+label-indicator-on-background = ${theme.titlebg}
 label-indicator-on-padding = 1
 
 #VOLUME-----------------------------------------------------------------------
@@ -325,10 +325,10 @@ use-ui-max = 100
 
 format-volume = <label-volume>
 format-volume-suffix= ${theme.rightmodulesuffix}
-format-volume-suffix-foreground = ${theme.bodybgcolor}
+format-volume-suffix-foreground = ${theme.bodybg}
 label-volume = %percentage%
-label-volume-foreground = ${theme.bodyfgcolor}
-label-volume-background = ${theme.bodybgcolor}
+label-volume-foreground = ${theme.bodyfg}
+label-volume-background = ${theme.bodybg}
 label-volume-padding = ${theme.bodypadding}
 
 format-muted = 
@@ -337,30 +337,30 @@ format-muted =
 type = internal/pulseaudio
 format-volume = <ramp-volume>
 format-volume-prefix = ${theme.rightmoduleprefix}
-format-volume-prefix-foreground = ${theme.titlebgcolor}
+format-volume-prefix-foreground = ${theme.titlebg}
 format-volume-prefix-background = #00000000
 format-volume-suffix = ${theme.rightmodulesuffix}
-format-volume-suffix-foreground = ${theme.titlebgcolor}
-format-volume-suffix-background = ${theme.bodybgcolor}
+format-volume-suffix-foreground = ${theme.titlebg}
+format-volume-suffix-background = ${theme.bodybg}
 
 format-muted = <label-muted>
 label-muted = 
-label-muted-foreground = ${theme.titlefgcolor}
-label-muted-background = ${theme.titlebgcolor}
+label-muted-foreground = ${theme.titlefg}
+label-muted-background = ${theme.titlebg}
 label-muted-padding = ${theme.titlepadding}
 format-muted-prefix = ${theme.rightmoduleprefix}
-format-muted-prefix-foreground = ${theme.titlebgcolor}
+format-muted-prefix-foreground = ${theme.titlebg}
 format-muted-prefix-background = #00000000
 format-muted-suffix = ${theme.rightmodulesuffix}
-format-muted-suffix-foreground = ${theme.titlebgcolor}
+format-muted-suffix-foreground = ${theme.titlebg}
 
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
 ramp-volume-3 = 
 ramp-volume-4 = 
-ramp-volume-foreground = ${theme.titlefgcolor}
-ramp-volume-background = ${theme.titlebgcolor}
+ramp-volume-foreground = ${theme.titlefg}
+ramp-volume-background = ${theme.titlebg}
 ramp-volume-padding = ${theme.titlepadding}
 
 #UTILIZATION------------------------------------------------------------------
@@ -369,12 +369,12 @@ type = custom/script
 interval = 1600
 exec = echo 
 format-prefix = ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
-format-suffix-background = ${theme.bodybgcolor}
-label-foreground = ${theme.titlefgcolor}
-label-background = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
+format-suffix-background = ${theme.bodybg}
+label-foreground = ${theme.titlefg}
+label-background = ${theme.titlebg}
 label-padding = ${theme.titlepadding}
 
 [module/utilization]
@@ -382,9 +382,9 @@ type = custom/script
 interval = 5
 exec = bash $HOME/.config/polybar/utilization.sh
 format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybgcolor}
-label-foreground = ${theme.bodyfgcolor}
-label-background = ${theme.bodybgcolor}
+format-suffix-foreground = ${theme.bodybg}
+label-foreground = ${theme.bodyfg}
+label-background = ${theme.bodybg}
 label-padding = ${theme.bodypadding}
 
 #TEMPERATURES-----------------------------------------------------------------
@@ -393,12 +393,12 @@ type = custom/script
 interval = 1600
 exec = echo 
 format-prefix = ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebgcolor}
+format-prefix-foreground = ${theme.titlebg}
 format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebgcolor}
-format-suffix-background = ${theme.bodybgcolor}
-label-foreground = ${theme.titlefgcolor}
-label-background = ${theme.titlebgcolor}
+format-suffix-foreground = ${theme.titlebg}
+format-suffix-background = ${theme.bodybg}
+label-foreground = ${theme.titlefg}
+label-background = ${theme.titlebg}
 label-padding = ${theme.titlepadding}
 
 [module/temp]
@@ -406,9 +406,9 @@ type = custom/script
 interval = 5.0
 exec = bash $HOME/.config/polybar/gettemp.sh
 format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybgcolor}
-label-foreground = ${theme.bodyfgcolor}
-label-background = ${theme.bodybgcolor}
+format-suffix-foreground = ${theme.bodybg}
+label-foreground = ${theme.bodyfg}
+label-background = ${theme.bodybg}
 label-padding = ${theme.bodypadding}
 
 #WIFI-------------------------------------------------------------------------
@@ -418,14 +418,14 @@ interface = ${env:POLY_WLAN}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebgcolor}
+format-connected-prefix-foreground = ${theme.titlebg}
 format-connected-prefix-background = #00000000
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebgcolor}
-format-connected-suffix-background = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.titlebg}
+format-connected-suffix-background = ${theme.bodybg}
 label-connected = 
-label-connected-foreground = ${theme.titlefgcolor}
-label-connected-background = ${theme.titlebgcolor}
+label-connected-foreground = ${theme.titlefg}
+label-connected-background = ${theme.titlebg}
 label-connected-padding = ${theme.titlepadding}
 
 [module/wlan]
@@ -435,10 +435,10 @@ interval = 3.0
 
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.bodybg}
 label-connected = %essid%|%downspeed%
-label-connected-foreground = ${theme.bodyfgcolor}
-label-connected-background = ${theme.bodybgcolor}
+label-connected-foreground = ${theme.bodyfg}
+label-connected-background = ${theme.bodybg}
 label-connected-padding = ${theme.bodypadding}
 
 #LAN--------------------------------------------------------------------------
@@ -448,14 +448,14 @@ interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebgcolor}
+format-connected-prefix-foreground = ${theme.titlebg}
 format-connected-prefix-background = #00000000
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebgcolor}
-format-connected-suffix-background = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.titlebg}
+format-connected-suffix-background = ${theme.bodybg}
 label-connected = 
-label-connected-foreground = ${theme.titlefgcolor}
-label-connected-background = ${theme.titlebgcolor}
+label-connected-foreground = ${theme.titlefg}
+label-connected-background = ${theme.titlebg}
 label-connected-padding = ${theme.titlepadding}
 
 [module/lan1]
@@ -464,10 +464,10 @@ interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.bodybg}
 label-connected = %downspeed%
-label-connected-foreground = ${theme.bodyfgcolor}
-label-connected-background = ${theme.bodybgcolor}
+label-connected-foreground = ${theme.bodyfg}
+label-connected-background = ${theme.bodybg}
 label-connected-padding = ${theme.bodypadding}
 
 [module/lanPrefix2]
@@ -476,14 +476,14 @@ interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebgcolor}
+format-connected-prefix-foreground = ${theme.titlebg}
 format-connected-prefix-background = #00000000
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebgcolor}
-format-connected-suffix-background = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.titlebg}
+format-connected-suffix-background = ${theme.bodybg}
 label-connected = 
-label-connected-foreground = ${theme.titlefgcolor}
-label-connected-background = ${theme.titlebgcolor}
+label-connected-foreground = ${theme.titlefg}
+label-connected-background = ${theme.titlebg}
 label-connected-padding = ${theme.titlepadding}
 
 [module/lan2]
@@ -492,10 +492,10 @@ interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybgcolor}
+format-connected-suffix-foreground = ${theme.bodybg}
 label-connected = %downspeed%
-label-connected-foreground = ${theme.bodyfgcolor}
-label-connected-background = ${theme.bodybgcolor}
+label-connected-foreground = ${theme.bodyfg}
+label-connected-background = ${theme.bodybg}
 label-connected-padding = ${theme.bodypadding}
 
 #POWER------------------------------------------------------------------------
