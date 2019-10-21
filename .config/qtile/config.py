@@ -91,17 +91,6 @@ def float_to_front(qtile):
     floating_windows[-1].cmd_focus()
 
 @lazy.function
-def polybar_layout_hook(qtile):
-    with open(POLYBAR_PID_INFO_PATH, 'r') as f:
-        info = json.loads(f.read())
-        curr_screen = str(qtile.current_group.info()['screen'])
-        pid = str(info[curr_screen]['pid'])
-    try:
-        subprocess.call(['polybar-msg', '-p', pid, 'hook', 'qtilePrefix', '1'])
-    except subprocess.CalledProcessError as e:
-        logger.warn("error while hooking polybar - {}".format(e))
-
-@lazy.function
 def polybar_hook(qtile):
     global POLYBAR_INFO, THEME
     groups = qtile.groups
@@ -115,8 +104,8 @@ def polybar_hook(qtile):
             continue
         if group.name == curr_group.name:
             for s in POLYBAR_INFO:
-                if s == group.screen:
-                    POLYBAR_INFO[s]['ws_format'] += THEME['layout'].replace('%label%',LAYOUT_ICONS[group.layout])
+                if s == group.screen.index:
+                    POLYBAR_INFO[s]['ws_format'] = THEME['layoutWs'].replace('%label%',LAYOUT_ICONS[group.layout.name]) + POLYBAR_INFO[s]['ws_format']
                     POLYBAR_INFO[s]['ws_format'] += THEME['activeWs'].replace('%label%',group.label)
                 else:
                     POLYBAR_INFO[s]['ws_format'] += THEME['activeWsOther'].replace('%label%',group.label)
@@ -133,9 +122,7 @@ def polybar_hook(qtile):
 
     # write to fifo
     for s in POLYBAR_INFO:
-        logger.warn(s)
         with open(POLYBAR_INFO[s]['ws_fifo_path'], 'w') as fh:
-            logger.warn(POLYBAR_INFO[s]['ws_format'])
             fh.write(POLYBAR_INFO[s]['ws_format'] + '\n')
 
 keys = [
@@ -194,7 +181,7 @@ keys = [
     Key([MOD], "b", lazy.spawn(BROWSER)),
 
     # Toggle between different layouts
-    Key([MOD], "Tab", lazy.next_layout(), polybar_layout_hook),
+    Key([MOD], "Tab", lazy.next_layout(), polybar_hook),
 
     Key([MOD], "q", lazy.window.kill()),
 
@@ -229,26 +216,7 @@ keys = [
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
     
 ]
-"""
-keys += [
-    Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
-    Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
-    Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc')),
 
-    Key([MOD], "1", lazy.group["1"].toscreen()),
-    Key([MOD], "2", lazy.group["2"].toscreen(), polybar_hook),
-    Key([MOD], "3", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 3")),
-    Key([MOD], "4", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 4")),
-    Key([MOD], "5", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 5")),
-    Key([MOD], "6", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 6")),
-    Key([MOD], "7", lazy.spawn("python3 /home/job/.config/polybar/get_qtile_ws.py set 7")),
-    #Key([MOD], "3", lazy.group["3"].toscreen(), poly_ws_hook),
-    #Key([MOD], "4", lazy.group["4"].toscreen(), poly_ws_hook),
-    #Key([MOD], "5", lazy.group["5"].toscreen(), poly_ws_hook),
-    #Key([MOD], "6", lazy.group["6"].toscreen(), poly_ws_hook),
-    #Key([MOD], "7", lazy.group["7"].toscreen(), poly_ws_hook)
-    ]
-"""
 for i in groups:
     if i.name == 'scratchpad':
             keys.extend([
@@ -261,7 +229,7 @@ for i in groups:
             # MOD1 + letter of group = switch to group
             Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook),
             # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name)),
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), polybar_hook),
         ])
 
 layout_configs={
@@ -353,7 +321,6 @@ def launch_polybar():
         if os.path.exists(POLYBAR_INFO[s]['ws_fifo_path']):
             os.remove(POLYBAR_INFO[s]['ws_fifo_path'])
         os.mkfifo(POLYBAR_INFO[s]['ws_fifo_path'])
-    logger.warn(POLYBAR_INFO)
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):

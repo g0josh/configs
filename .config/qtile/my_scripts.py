@@ -378,6 +378,7 @@ def getTheme(path):
             key, value = l.split('=')
             result[key.strip().lower()] = int(value.strip()) if value.strip().isdigit() else value.strip()
     result['activeWs'] = f'%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["focusedbg"]}]%[F{result["focusedfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
+    result['layoutWs'] = f'%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["titlebg"]}]%[F{result["titlefg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
     result['activeWsOther'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["focusedbg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
     result['occupiedWs'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["bodyfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
     result['visibleWs'] = f'%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["altbg"]}]%[F{result["altfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
@@ -387,8 +388,6 @@ def getTheme(path):
         if isinstance(result[x], str) and 'Ws' in x:
             result[x] = result[x].replace('[', '{')
             result[x] = result[x].replace(']', '}')
-        else:
-            logger.warn('{}, {}'.format(x, type(result[x])))
     return result
 
 def setupMonitors():
@@ -495,7 +494,7 @@ def startPolybar(theme_path):
         try:
             subprocess.run(['killall', '-q', 'polybar'])
             o = subprocess.Popen('polybar -r island', shell=True)
-            poly_screens[str(i)] = {'name':monitor, 'pid':o.pid, 
+            poly_screens[i] = {'name':monitor, 'pid':o.pid, 
                     'ws_fifo_path':f'/tmp/qtile_ws_{i}', 'ws_format':'', 'layout_format':''}
         except subprocess.CalledProcessError as e:
             logger.warn(e.output.decode().strip())

@@ -37,7 +37,7 @@ font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
-modules-left = ts qtilePrefix ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 #modules-left = ts qtilePrefix qtileWs1 qtileWs2 qtileWs3 qtileWs4 qtileWs5 qtileWs6 qtileWs7 ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
@@ -53,70 +53,14 @@ scroll-down = i3wm-wsprev
 #cursor-scroll = ns-resize
 
 
-[module/ts]
+# qtile workspaces and layout-------------------------------------------------
+[module/qtileWs]
 type = custom/script
 exec = ${env:POLY_WS_FIFO_PATH}
 exec-if = ${env:POLY_WS_FIFO_CHECK}
 tail = true
 
-# qtile workspaces------------------------------------------------------------
-[module/qtileWs1]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 1 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 1
-
-[module/qtileWs2]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 2 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 2
-
-[module/qtileWs3]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 3 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 3
-
-[module/qtileWs4]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 4 %pid% 
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 4
-
-[module/qtileWs5]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 5 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 5
-
-[module/qtileWs6]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 6 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 6
-
-[module/qtileWs7]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_ws.py get 7 %pid%
-initial = 1
-click-left = python3 ~/.config/polybar/get_qtile_ws.py set 7
-
 # ewmh------------------------------------------------------------------------
-[module/qtilePrefix]
-type = custom/ipc
-hook-0 = python3 ~/.config/polybar/get_qtile_layout.py
-initial = 1
-format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-prefix-background = ${theme.background}
-format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
-format-suffix-background = ${theme.background}
-format-foreground = ${theme.titlefg}
-format-background = ${theme.titlebg}
-format-padding = ${theme.titlepadding}
-
 [module/ewmh]
 type = internal/xworkspaces
 pin-workspaces = false
