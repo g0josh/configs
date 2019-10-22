@@ -71,6 +71,7 @@ if __name__ == '__main__':
     with open(theme_path, 'r') as f:
         vars = {'titlefg':'#000000','titlebg':'#000000',
                 'bodyfg':'#000000','bodybg':'#000000',
+                'altbg':'#000000','altfg':'#000000',
                 'urgentbg':'#000000','urgentfg':'#000000',
                 'focusedbg':'#000000','focusedfg':'#000000',
                 'leftmoduleprefix':"",'leftmodulesuffix':"",
@@ -95,16 +96,20 @@ if __name__ == '__main__':
         vars['titlepadding'] = 0
         vars['bodypadding'] = 0
     # i3 workspace widgets
-    poly_vars['i3focused'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+    poly_vars['active'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
             vars['focusedbg'],vars['leftmoduleprefix'],vars['focusedbg'],vars['focusedfg'],
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],vars['focusedbg'],
+            vars['leftmodulesuffix'])
+    poly_vars['activeother'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+            vars['bodybg'],vars['leftmoduleprefix'],vars['bodybg'],vars['focusedbg'],
+            " "*vars['wspadding']," "*vars['wspadding'],vars['background'],vars['bodybg'],
             vars['leftmodulesuffix'])
     poly_vars['ewmhactive'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
             vars['focusedbg'],vars['leftmoduleprefix'],vars['focusedbg'],vars['focusedfg'],
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],vars['focusedbg'],
             vars['leftmodulesuffix'])
 
-    poly_vars['i3unfocused'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+    poly_vars['occupied'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
             vars['bodybg'],vars['leftmoduleprefix'],vars['bodybg'],vars['bodyfg'],
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
             vars['bodybg'],vars['leftmodulesuffix'])
@@ -113,8 +118,12 @@ if __name__ == '__main__':
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
             vars['bodybg'],vars['leftmodulesuffix'])
 
-    poly_vars['i3visible']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
-            vars['bodybg'],vars['leftmoduleprefix'],vars['bodybg'],vars['focusedfg'],
+    poly_vars['visible']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+            vars['altbg'],vars['leftmoduleprefix'],vars['altbg'],vars['altfg'],
+            " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
+            vars['altbg'],vars['leftmodulesuffix'])
+    poly_vars['visibleother']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+            vars['bodybg'],vars['leftmoduleprefix'],vars['bodybg'],vars['altfg'],
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
             vars['bodybg'],vars['leftmodulesuffix'])
     poly_vars['ewmhempty']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
@@ -122,7 +131,7 @@ if __name__ == '__main__':
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
             vars['bodybg'],vars['leftmodulesuffix'])
 
-    poly_vars['i3urgent']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%index% %icon%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
+    poly_vars['urgent']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}%name%{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(vars['background'],
             vars['urgentbg'],vars['leftmoduleprefix'],vars['urgentbg'],vars['urgentfg'],
             " "*vars['wspadding']," "*vars['wspadding'],vars['background'],
             vars['urgentbg'],vars['leftmodulesuffix'])
@@ -173,37 +182,39 @@ if __name__ == '__main__':
     lan1, lan2, wlan = getInterfaces()
     _connected = {}
     for i, monitor in enumerate(connected):
-        os.environ['POLY_MONITOR'] = monitor
-        os.environ['POLY_I3FOCUSED'] = poly_vars['i3focused']
-        os.environ['POLY_I3UNFOCUSED'] = poly_vars['i3unfocused']
-        os.environ['POLY_I3VISIBLE'] = poly_vars['i3visible']
-        os.environ['POLY_I3URGENT'] = poly_vars['i3urgent']
-        os.environ['POLY_EWMHACTIVE'] = poly_vars['ewmhactive']
-        os.environ['POLY_EWMHOCCUPIED'] = poly_vars['ewmhoccupied']
-        os.environ['POLY_EWMHEMPTY'] = poly_vars['ewmhempty']
-        os.environ['POLY_EWMHURGENT'] = poly_vars['ewmhurgent']
-        os.environ['POLY_THEME_FILE'] = theme_path
-        os.environ['POLY_POWER_OPEN'] = poly_vars['poweropen']
-        os.environ['POLY_POWER_CLOSE'] = poly_vars['powerclose']
-        os.environ['POLY_POWER_0-0'] = poly_vars['power00']
-        os.environ['POLY_POWER_0-1'] = poly_vars['power01']
-        os.environ['POLY_POWER_0-2'] = poly_vars['power02']
-        os.environ['POLY_POWER_0-3'] = poly_vars['power03']
-        os.environ['POLY_POWER_1-0'] = poly_vars['power10']
-        os.environ['POLY_POWER_2-0'] = poly_vars['power20']
-        os.environ['POLY_POWER_3-0'] = poly_vars['power30']
-        os.environ['POLY_WLAN'] = wlan
-        os.environ['POLY_LAN1'] = lan1
-        os.environ['POLY_LAN2'] = lan2
         try:
+            os.environ['POLY_MONITOR'] = monitor
+            os.environ['POLY_I3FOCUSED'] = poly_vars['active']
+            os.environ['POLY_I3UNFOCUSED'] = poly_vars['occupied']
+            os.environ['POLY_I3VISIBLE'] = poly_vars['visible']
+            os.environ['POLY_I3URGENT'] = poly_vars['urgent']
+            os.environ['POLY_EWMHACTIVE'] = poly_vars['ewmhactive']
+            os.environ['POLY_EWMHOCCUPIED'] = poly_vars['ewmhoccupied']
+            os.environ['POLY_EWMHEMPTY'] = poly_vars['ewmhempty']
+            os.environ['POLY_EWMHURGENT'] = poly_vars['ewmhurgent']
+            os.environ['POLY_THEME_FILE'] = theme_path
+            os.environ['POLY_POWER_OPEN'] = poly_vars['poweropen']
+            os.environ['POLY_POWER_CLOSE'] = poly_vars['powerclose']
+            os.environ['POLY_POWER_0-0'] = poly_vars['power00']
+            os.environ['POLY_POWER_0-1'] = poly_vars['power01']
+            os.environ['POLY_POWER_0-2'] = poly_vars['power02']
+            os.environ['POLY_POWER_0-3'] = poly_vars['power03']
+            os.environ['POLY_POWER_1-0'] = poly_vars['power10']
+            os.environ['POLY_POWER_2-0'] = poly_vars['power20']
+            os.environ['POLY_POWER_3-0'] = poly_vars['power30']
+            os.environ['POLY_WLAN'] = wlan
+            os.environ['POLY_LAN1'] = lan1
+            os.environ['POLY_LAN2'] = lan2
             if sys.version_info[0] < 3:
                 subprocess.call(['killall', '-q', 'polybar'])
+                subprocess.call(['polybar', '--reload', 'island'])
             else:
                 subprocess.run(['killall', '-q', 'polybar'])
-            o = subprocess.Popen(['polybar', '--reload', 'island'])
-            _connected[i] = {'name':monitor, 'pid':o.pid}
-            print(_connected)
+                o = subprocess.Popen('polybar -r island', shell=True)
+                _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
-    with open('/tmp/polybars', 'w') as f:
+    with open('/tmp/polybar_pids', 'w') as f:
         f.write(json.dumps(_connected))
+    with open('/tmp/polybar_ws_formats', 'w') as f:
+        f.write(json.dumps(poly_vars))
