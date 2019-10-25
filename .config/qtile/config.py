@@ -16,7 +16,8 @@ from my_scripts import LAYOUT_ICONS
 
 MOD = "mod4"
 ALT = "mod1"
-TERMINAL = "alacritty"
+#TERMINAL = "alacritty"
+TERMINAL = "urxvt"
 BROWSER = "firefox"
 THEME_PATH = os.path.expanduser("~/.config/themes/feathers.theme")
 THEME = getTheme(THEME_PATH)
