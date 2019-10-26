@@ -2,28 +2,28 @@ alt_send_esc: true
 background_opacity: 0.95
 colors:
   bright:
-    black: '#009cc9'
-    blue: '#308cba'
-    cyan: '#ff919d'
-    green: '#f4dca5'
-    magenta: '#ae636b'
-    red: '#da6bac'
-    white: '#e4838d'
-    yellow: '#eac066'
+    black: '#434b53'
+    blue: '#1bbcdd'
+    cyan: '#87acb4'
+    green: '#628d98'
+    magenta: '#bbe3ee'
+    red: '#d48678'
+    white: '#fee4ce'
+    yellow: '#fdd39f'
   indexed_colors: []
   normal:
-    black: '#000507'
-    blue: '#883cdc'
-    cursor: '#dafaff'
-    cyan: '#c1b8b7'
-    green: '#2ab250'
-    magenta: '#ececec'
-    red: '#d94085'
-    white: '#fff8de'
-    yellow: '#ffd16f'
+    black: '#17384c'
+    blue: '#1e4950'
+    cursor: '#deb88d'
+    cyan: '#50a3b5'
+    green: '#027c9b'
+    magenta: '#68d4f1'
+    red: '#d15123'
+    white: '#deb88d'
+    yellow: '#fca02f'
   primary:
-    background: '#1f1726'
-    foreground: '#dafaff'
+    background: '#09141b'
+    foreground: '#deb88d'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -38,14 +38,14 @@ dynamic_title: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: Iosevka
-    style: Medium Oblique
+    family: Iosevka Nerd Font
+    style: Medium
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: Iosevka Nerd Font Mono
-    style: Oblique
+    family: Iosevka Medium Oblique
+    style: Medium Oblique
   normal:
     family: Iosevka Nerd Font Mono
     style: Regular

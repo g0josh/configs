@@ -1,11 +1,8 @@
-[theme]
-include-file = ~/.config/themes/feathers.theme
-
 [module/sep]
 type = custom/text
-content = 
-content-foreground = ${theme.background}
-content-background = ${theme.background}
+content = ${env:POLY_SEPARATOR}
+content-foreground = ${env:POLY_BACKGROUND}
+content-background = ${env:POLY_BACKGROUND}
 
 [bar/island]
 monitor = ${env:POLY_MONITOR}
@@ -15,7 +12,7 @@ height = 18
 radius = 0
 fixed-center = true
 enable-ipc = true
-background = ${theme.background}
+background = ${env:POLY_BACKGROUND}
 override-redirect = false
 bottom = false
 
@@ -55,10 +52,14 @@ scroll-down = i3wm-wsprev
 
 # qtile workspaces and layout-------------------------------------------------
 [module/qtileWs]
-type = custom/script
-exec = ${env:POLY_WS_FIFO_PATH}
-exec-if = ${env:POLY_WS_FIFO_CHECK}
-tail = true
+type = custom/ipc
+hook-0 = python3 ~/.config/polybar/qtile_ws.py get %pid%
+initial = 1
+click-left = python3 ~/.config/polybar/qtile_ws.py set next
+click-right = python3 ~/.config/polybar/qtile_ws.py set prev
+scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
+scroll-down = python3 ~/.config/polybar/qtile_ws.py set next
+
 
 # ewmh------------------------------------------------------------------------
 [module/ewmh]
@@ -114,112 +115,112 @@ label-urgent = ${env:POLY_I3URGENT}
 type = custom/ipc
 hook-0 = python3 ~/.config/i3/split_status.py get
 initial = 1
-format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-prefix-background = ${theme.background}
-format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
-format-suffix-background = ${theme.background}
-format-foreground = ${theme.titlefg}
-format-background = ${theme.titlebg}
-format-padding = ${theme.titlepadding}
+format-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_TITLEBG}
+format-prefix-background = ${env:POLY_BACKGROUND}
+format-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_TITLEBG}
+format-suffix-background = ${env:POLY_BACKGROUND}
+format-foreground = ${env:POLY_TITLEFG}
+format-background = ${env:POLY_TITLEBG}
+format-padding = ${env:POLY_TITLEPADDING}
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
 type = internal/mpd
 
-format-online-prefix = ${theme.leftmoduleprefix}
-format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebg}
-format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebg}
-format-online-suffix-background = ${theme.bodybg}
-format-offline-prefix = ${theme.leftmoduleprefix}
-format-offline-suffix = ${theme.leftmodulesuffix}
-format-offline-prefix-foreground = ${theme.titlebg}
-format-offline-prefix-background = ${theme.background}
-format-offline-suffix-foreground = ${theme.titlebg}
-format-offline-suffix-background = ${theme.background}
+format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-online-prefix-foreground = ${env:POLY_TITLEBG}
+format-online-prefix-background = ${env:POLY_BACKGROUND}
+format-online-suffix-foreground = ${env:POLY_TITLEBG}
+format-online-suffix-background = ${env:POLY_BODYBG}
+format-offline-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-offline-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-offline-prefix-foreground = ${env:POLY_TITLEBG}
+format-offline-prefix-background = ${env:POLY_BACKGROUND}
+format-offline-suffix-foreground = ${env:POLY_TITLEBG}
+format-offline-suffix-background = ${env:POLY_BACKGROUND}
 
 format-online =  
 format-offline =  
-format-offline-foreground = ${theme.titlefg}
-format-offline-background = ${theme.titlebg}
-format-online-foreground = ${theme.titlefg}
-format-online-background = ${theme.titlebg}
+format-offline-foreground = ${env:POLY_TITLEFG}
+format-offline-background = ${env:POLY_TITLEBG}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 
 [module/mpd]
 type = internal/mpd
 
 format-online = <label-song> <label-time>
-format-online-foreground = ${theme.bodyfg}
-format-online-background = ${theme.bodybg}
+format-online-foreground = ${env:POLY_BODYFG}
+format-online-background = ${env:POLY_BODYBG}
 label-song = %title%
-label-song-padding = ${theme.bodypadding}
+label-song-padding = ${env:POLY_BODYPADDING}
 label-time = %elapsed% / %total% 
-label-time-padding = ${theme.bodypadding}
+label-time-padding = ${env:POLY_BODYPADDING}
 label-song-maxlen = 30
 label-song-ellipsis = true
 
-format-online-suffix = ${theme.leftmodulesuffix}
-format-online-suffix-foreground = ${theme.bodybg}
-format-online-suffix-background = ${theme.background}
+format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-online-suffix-foreground = ${env:POLY_BODYBG}
+format-online-suffix-background = ${env:POLY_BACKGROUND}
 
 [module/mpdPrev]
 type = internal/mpd
 
-format-online-prefix = ${theme.leftmoduleprefix}
-format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebg}
-format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebg}
-format-online-suffix-background = ${theme.background}
+format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-online-prefix-foreground = ${env:POLY_TITLEBG}
+format-online-prefix-background = ${env:POLY_BACKGROUND}
+format-online-suffix-foreground = ${env:POLY_TITLEBG}
+format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <icon-prev> 
 icon-prev= 
-format-online-foreground = ${theme.titlefg}
-format-online-background = ${theme.titlebg}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 
 [module/mpdPlayPause]
 type = internal/mpd
 
-format-online-prefix = ${theme.leftmoduleprefix}
-format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebg}
-format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebg}
-format-online-suffix-background = ${theme.background}
+format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-online-prefix-foreground = ${env:POLY_TITLEBG}
+format-online-prefix-background = ${env:POLY_BACKGROUND}
+format-online-suffix-foreground = ${env:POLY_TITLEBG}
+format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <toggle>
 icon-pause = 
 icon-play = 
-format-online-foreground = ${theme.titlefg}
-format-online-background = ${theme.titlebg}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 
 [module/mpdNext]
 type = internal/mpd
 
-format-online-prefix = ${theme.leftmoduleprefix}
-format-online-suffix = ${theme.leftmodulesuffix}
-format-online-prefix-foreground = ${theme.titlebg}
-format-online-prefix-background = ${theme.background}
-format-online-suffix-foreground = ${theme.titlebg}
-format-online-suffix-background = ${theme.background}
+format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-online-prefix-foreground = ${env:POLY_TITLEBG}
+format-online-prefix-background = ${env:POLY_BACKGROUND}
+format-online-suffix-foreground = ${env:POLY_TITLEBG}
+format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <icon-next>
 icon-next = 
-format-online-foreground = ${theme.titlefg}
-format-online-background = ${theme.titlebg}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
 type = custom/script
 interval = 1600
 exec = echo 
-format-prefix = ${theme.leftmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-suffix = ${theme.leftmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
-format-suffix-background = ${theme.bodybg}
-label-foreground = ${theme.titlefg}
-label-background = ${theme.titlebg}
-label-padding = ${theme.titlepadding}
+format-prefix = ${env:POLY_LEFTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_TITLEBG}
+format-suffix = ${env:POLY_LEFTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_TITLEBG}
+format-suffix-background = ${env:POLY_BODYBG}
+label-foreground = ${env:POLY_TITLEFG}
+label-background = ${env:POLY_TITLEBG}
+label-padding = ${env:POLY_TITLEPADDING}
 
 [module/time]
 type = internal/date
@@ -227,39 +228,39 @@ interval = 60
 date = %h %d, %A
 time = %I:%M %p
 label = "%date%, %time%"
-label-foreground = ${theme.bodyfg}
-label-background = ${theme.bodybg}
-label-padding = ${theme.bodypadding}
-format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybg}
+label-foreground = ${env:POLY_BODYFG}
+label-background = ${env:POLY_BODYBG}
+label-padding = ${env:POLY_BODYPADDING}
+format-suffix= ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
 
 [module/timeIndia]
 type = custom/script
 interval = 60
 exec = TZ=Asia/Kolkata date +"%I:%M %p"
-label-foreground = ${theme.bodyfg}
-label-background = ${theme.bodybg}
-label-padding = ${theme.bodypadding}
+label-foreground = ${env:POLY_BODYFG}
+label-background = ${env:POLY_BODYBG}
+label-padding = ${env:POLY_BODYPADDING}
 format = <label>
-format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.bodybg}
-format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybg}
+format-prefix= ${env:POLY_RIGHTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_BODYBG}
+format-suffix= ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
 
 #CAPS NUM LOCK-----------------------------------------------------------------
 [module/capsNumLock]
 type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
-format-prefix= ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-suffix= ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
+format-prefix= ${env:POLY_RIGHTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_TITLEBG}
+format-suffix= ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_TITLEBG}
 indicator-icon-0 = caps lock;; A
 indicator-icon-1 = num lock;; 1
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${theme.titlefg}
-label-indicator-on-background = ${theme.titlebg}
+label-indicator-on-foreground = ${env:POLY_TITLEFG}
+label-indicator-on-background = ${env:POLY_TITLEBG}
 label-indicator-on-padding = 1
 
 #VOLUME-----------------------------------------------------------------------
@@ -268,92 +269,92 @@ type = internal/pulseaudio
 use-ui-max = 100
 
 format-volume = <label-volume>
-format-volume-suffix= ${theme.rightmodulesuffix}
-format-volume-suffix-foreground = ${theme.bodybg}
+format-volume-suffix= ${env:POLY_RIGHTMODULESUFFIX}
+format-volume-suffix-foreground = ${env:POLY_BODYBG}
 label-volume = %percentage%
-label-volume-foreground = ${theme.bodyfg}
-label-volume-background = ${theme.bodybg}
-label-volume-padding = ${theme.bodypadding}
+label-volume-foreground = ${env:POLY_BODYFG}
+label-volume-background = ${env:POLY_BODYBG}
+label-volume-padding = ${env:POLY_BODYPADDING}
 
 format-muted = 
 
 [module/volumePrefix]
 type = internal/pulseaudio
 format-volume = <ramp-volume>
-format-volume-prefix = ${theme.rightmoduleprefix}
-format-volume-prefix-foreground = ${theme.titlebg}
+format-volume-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-volume-prefix-foreground = ${env:POLY_TITLEBG}
 format-volume-prefix-background = #00000000
-format-volume-suffix = ${theme.rightmodulesuffix}
-format-volume-suffix-foreground = ${theme.titlebg}
-format-volume-suffix-background = ${theme.bodybg}
+format-volume-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-volume-suffix-foreground = ${env:POLY_TITLEBG}
+format-volume-suffix-background = ${env:POLY_BODYBG}
 
 format-muted = <label-muted>
 label-muted = 
-label-muted-foreground = ${theme.titlefg}
-label-muted-background = ${theme.titlebg}
-label-muted-padding = ${theme.titlepadding}
-format-muted-prefix = ${theme.rightmoduleprefix}
-format-muted-prefix-foreground = ${theme.titlebg}
+label-muted-foreground = ${env:POLY_TITLEFG}
+label-muted-background = ${env:POLY_TITLEBG}
+label-muted-padding = ${env:POLY_TITLEPADDING}
+format-muted-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-muted-prefix-foreground = ${env:POLY_TITLEBG}
 format-muted-prefix-background = #00000000
-format-muted-suffix = ${theme.rightmodulesuffix}
-format-muted-suffix-foreground = ${theme.titlebg}
+format-muted-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-muted-suffix-foreground = ${env:POLY_TITLEBG}
 
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
 ramp-volume-3 = 
 ramp-volume-4 = 
-ramp-volume-foreground = ${theme.titlefg}
-ramp-volume-background = ${theme.titlebg}
-ramp-volume-padding = ${theme.titlepadding}
+ramp-volume-foreground = ${env:POLY_TITLEFG}
+ramp-volume-background = ${env:POLY_TITLEBG}
+ramp-volume-padding = ${env:POLY_TITLEPADDING}
 
 #UTILIZATION------------------------------------------------------------------
 [module/utilizationPrefix]
 type = custom/script
 interval = 1600
 exec = echo 
-format-prefix = ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
-format-suffix-background = ${theme.bodybg}
-label-foreground = ${theme.titlefg}
-label-background = ${theme.titlebg}
-label-padding = ${theme.titlepadding}
+format-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_TITLEBG}
+format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_TITLEBG}
+format-suffix-background = ${env:POLY_BODYBG}
+label-foreground = ${env:POLY_TITLEFG}
+label-background = ${env:POLY_TITLEBG}
+label-padding = ${env:POLY_TITLEPADDING}
 
 [module/utilization]
 type = custom/script
 interval = 5
 exec = bash $HOME/.config/polybar/utilization.sh
-format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybg}
-label-foreground = ${theme.bodyfg}
-label-background = ${theme.bodybg}
-label-padding = ${theme.bodypadding}
+format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
+label-foreground = ${env:POLY_BODYFG}
+label-background = ${env:POLY_BODYBG}
+label-padding = ${env:POLY_BODYPADDING}
 
 #TEMPERATURES-----------------------------------------------------------------
 [module/tempPrefix]
 type = custom/script
 interval = 1600
 exec = echo 
-format-prefix = ${theme.rightmoduleprefix}
-format-prefix-foreground = ${theme.titlebg}
-format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.titlebg}
-format-suffix-background = ${theme.bodybg}
-label-foreground = ${theme.titlefg}
-label-background = ${theme.titlebg}
-label-padding = ${theme.titlepadding}
+format-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-prefix-foreground = ${env:POLY_TITLEBG}
+format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_TITLEBG}
+format-suffix-background = ${env:POLY_BODYBG}
+label-foreground = ${env:POLY_TITLEFG}
+label-background = ${env:POLY_TITLEBG}
+label-padding = ${env:POLY_TITLEPADDING}
 
 [module/temp]
 type = custom/script
 interval = 5.0
 exec = bash $HOME/.config/polybar/gettemp.sh
-format-suffix = ${theme.rightmodulesuffix}
-format-suffix-foreground = ${theme.bodybg}
-label-foreground = ${theme.bodyfg}
-label-background = ${theme.bodybg}
-label-padding = ${theme.bodypadding}
+format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
+label-foreground = ${env:POLY_BODYFG}
+label-background = ${env:POLY_BODYBG}
+label-padding = ${env:POLY_BODYPADDING}
 
 #WIFI-------------------------------------------------------------------------
 [module/wlanPrefix]
@@ -361,16 +362,16 @@ type = internal/network
 interface = ${env:POLY_WLAN}
 interval = 3.0
 format-connected = <label-connected>
-format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebg}
+format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-connected-prefix-foreground = ${env:POLY_TITLEBG}
 format-connected-prefix-background = #00000000
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebg}
-format-connected-suffix-background = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_TITLEBG}
+format-connected-suffix-background = ${env:POLY_BODYBG}
 label-connected = 
-label-connected-foreground = ${theme.titlefg}
-label-connected-background = ${theme.titlebg}
-label-connected-padding = ${theme.titlepadding}
+label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-background = ${env:POLY_TITLEBG}
+label-connected-padding = ${env:POLY_TITLEPADDING}
 
 [module/wlan]
 type = internal/network
@@ -378,12 +379,12 @@ interface = ${env:POLY_WLAN}
 interval = 3.0
 
 format-connected = <label-connected>
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_BODYBG}
 label-connected = %essid%|%downspeed%
-label-connected-foreground = ${theme.bodyfg}
-label-connected-background = ${theme.bodybg}
-label-connected-padding = ${theme.bodypadding}
+label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-background = ${env:POLY_BODYBG}
+label-connected-padding = ${env:POLY_BODYPADDING}
 
 #LAN--------------------------------------------------------------------------
 [module/lanPrefix1]
@@ -391,56 +392,56 @@ type = internal/network
 interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
-format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebg}
+format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-connected-prefix-foreground = ${env:POLY_TITLEBG}
 format-connected-prefix-background = #00000000
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebg}
-format-connected-suffix-background = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_TITLEBG}
+format-connected-suffix-background = ${env:POLY_BODYBG}
 label-connected = 
-label-connected-foreground = ${theme.titlefg}
-label-connected-background = ${theme.titlebg}
-label-connected-padding = ${theme.titlepadding}
+label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-background = ${env:POLY_TITLEBG}
+label-connected-padding = ${env:POLY_TITLEPADDING}
 
 [module/lan1]
 type = internal/network
 interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_BODYBG}
 label-connected = %downspeed%
-label-connected-foreground = ${theme.bodyfg}
-label-connected-background = ${theme.bodybg}
-label-connected-padding = ${theme.bodypadding}
+label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-background = ${env:POLY_BODYBG}
+label-connected-padding = ${env:POLY_BODYPADDING}
 
 [module/lanPrefix2]
 type = internal/network
 interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
-format-connected-prefix = ${theme.rightmoduleprefix}
-format-connected-prefix-foreground = ${theme.titlebg}
+format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-connected-prefix-foreground = ${env:POLY_TITLEBG}
 format-connected-prefix-background = #00000000
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.titlebg}
-format-connected-suffix-background = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_TITLEBG}
+format-connected-suffix-background = ${env:POLY_BODYBG}
 label-connected = 
-label-connected-foreground = ${theme.titlefg}
-label-connected-background = ${theme.titlebg}
-label-connected-padding = ${theme.titlepadding}
+label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-background = ${env:POLY_TITLEBG}
+label-connected-padding = ${env:POLY_TITLEPADDING}
 
 [module/lan2]
 type = internal/network
 interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
-format-connected-suffix = ${theme.rightmodulesuffix}
-format-connected-suffix-foreground = ${theme.bodybg}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_BODYBG}
 label-connected = %downspeed%
-label-connected-foreground = ${theme.bodyfg}
-label-connected-background = ${theme.bodybg}
-label-connected-padding = ${theme.bodypadding}
+label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-background = ${env:POLY_BODYBG}
+label-connected-padding = ${env:POLY_BODYPADDING}
 
 #POWER------------------------------------------------------------------------
 [module/powermenu]
@@ -449,25 +450,16 @@ expand-right = false
 
 label-open = ${env:POLY_POWER_OPEN}
 label-close = ${env:POLY_POWER_CLOSE}
-#label-separator = " "
+label-separator = ${env:POLY_SEPARATOR}
 
-menu-0-0 = ${env:POLY_POWER_0-0}
-menu-0-0-exec = menu-open-1
+menu-0-0 = ${env:POLY_REBOOT}
+menu-0-0-exec = reboot
 
-menu-0-1 = ${env:POLY_POWER_0-1}
-menu-0-1-exec = menu-open-2
+menu-0-1 = ${env:POLY_POWEROFF}
+menu-0-1-exec = poweroff
 
-menu-0-2 = ${env:POLY_POWER_0-2}
-menu-0-2-exec = menu-open-3
+menu-0-2 = ${env:POLY_LOGOUT}
+menu-0-2-exec = ~/.config/logout.sh
 
-menu-0-3 = ${env:POLY_POWER_0-3}
+menu-0-3 = ${env:POLY_LOCK}
 menu-0-3-exec = ~/.config/lockscreen.sh
-
-menu-1-0 = ${env:POLY_POWER_1-0}
-menu-1-0-exec = reboot
-
-menu-2-0 = ${env:POLY_POWER_2-0}
-menu-2-0-exec = poweroff 
-
-menu-3-0 = ${env:POLY_POWER_3-0}
-menu-3-0-exec = ~/.config/logout.sh

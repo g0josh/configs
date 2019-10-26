@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import re
 import os
 from contextlib import contextmanager
+import json
 
 from libqtile.log_utils import logger
 
@@ -335,7 +336,6 @@ def getUtilization(x=0,y=0,button=1,threshold=10):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-
 def powerClicked(x, y, button, power_button):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
@@ -363,32 +363,13 @@ def getNumScreens():
         return len(re.findall(r'\w+ connected \w+', o))
 
 def getTheme(path):
-    result = {'titlefg':'#000000','titlebg':'#000000','bodyfg':'#000000',
-             'bodybg':'#000000','focusedwindowborder':"#000000",
-             'windowborder':"#000000", 'leftmoduleprefix':'',
-             'leftmodulesuffix':''}
-    if not os.path.exists(path):
-        logger.warn('Theme path does not exist- {}'.format(path))
+    try:
+        with open(path, 'r') as fh:
+            result = json.load(fh)
+    except Exception as e:
+        logger.warn(e)
+    else:
         return result
-    with open(path, 'r') as fh:
-        for l in fh:
-            l=l.strip()
-            if l.startswith('#'):
-                continue
-            key, value = l.split('=')
-            result[key.strip().lower()] = int(value.strip()) if value.strip().isdigit() else value.strip()
-    result['activeWs'] = f'%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["focusedbg"]}]%[F{result["focusedfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['layoutWs'] = f'%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["titlebg"]}]%[F{result["titlefg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['activeWsOther'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["focusedbg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['occupiedWs'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["bodyfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['visibleWs'] = f'%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["altbg"]}]%[F{result["altfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['visibleWsOther'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["altbg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['UrgetWs'] = f'%[B{result["background"]}]%[F{result["urgentbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["urgentbg"]}]%[F{result["urgentfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["urgentbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    for x in result:
-        if isinstance(result[x], str) and 'Ws' in x:
-            result[x] = result[x].replace('[', '{')
-            result[x] = result[x].replace(']', '}')
-    return result
 
 def setupMonitors():
     try:

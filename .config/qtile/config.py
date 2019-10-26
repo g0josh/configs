@@ -18,7 +18,7 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "alacritty"
 BROWSER = "firefox"
-THEME_PATH = os.path.expanduser("~/.config/themes/feathers.theme")
+THEME_PATH = os.path.expanduser("~/.config/themes/current.theme")
 THEME = getTheme(THEME_PATH)
 POLYBAR_INFO = {}
 
@@ -92,38 +92,11 @@ def float_to_front(qtile):
 
 @lazy.function
 def polybar_hook(qtile):
-    global POLYBAR_INFO, THEME
-    groups = qtile.groups
-    curr_group = qtile.current_group
-    # delete prv ws format
-    for s in POLYBAR_INFO:
-        POLYBAR_INFO[s]['ws_format'] = ''
-    # build new format
-    for group in groups:
-        if group.name == 'scratchpad':
-            continue
-        if group.name == curr_group.name:
-            for s in POLYBAR_INFO:
-                if s == group.screen.index:
-                    POLYBAR_INFO[s]['ws_format'] = THEME['layoutWs'].replace('%label%',LAYOUT_ICONS[group.layout.name]) + POLYBAR_INFO[s]['ws_format']
-                    POLYBAR_INFO[s]['ws_format'] += THEME['activeWs'].replace('%label%',group.label)
-                else:
-                    POLYBAR_INFO[s]['ws_format'] += THEME['activeWsOther'].replace('%label%',group.label)
-        elif group.screen:
-            for s in POLYBAR_INFO:
-                if s == group.screen:
-                    POLYBAR_INFO[s]['ws_format'] += THEME['layout'].replace('%label%',LAYOUT_ICONS[group.layout])
-                    POLYBAR_INFO[s]['ws_format'] += THEME['visibleWs'].replace('%label%',group.label)
-                else:
-                    POLYBAR_INFO[s]['ws_format'] += THEME['visibleWsOther'].replace('%label%',group.label)
-        elif group.windows:
-            for s in POLYBAR_INFO:
-                POLYBAR_INFO[s]['ws_format'] += THEME['occupiedWs'].replace('%label%',group.label)
-
-    # write to fifo
-    for s in POLYBAR_INFO:
-        with open(POLYBAR_INFO[s]['ws_fifo_path'], 'w') as fh:
-            fh.write(POLYBAR_INFO[s]['ws_format'] + '\n')
+    try:
+        subprocess.call(['polybar-msg','hook','qtileWs','1'])
+    except subprocess.CalledProcessError as e:
+        logger.warn(e)
+        return
 
 keys = [
     # Switch between windows in current stack pane
@@ -326,13 +299,13 @@ def launch_polybar():
 def restart_on_randr(qtile, ev):
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
-    launch_polybar()
+    #launch_polybar()
 
 @hook.subscribe.startup_once
 def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
-    launch_polybar()
+    #launch_polybar()
 
 '''
 @hook.subscribe.startup
