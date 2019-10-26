@@ -1,29 +1,29 @@
 alt_send_esc: true
-background_opacity: 0.95
+background_opacity: 0.9
 colors:
   bright:
-    black: '#434b53'
-    blue: '#1bbcdd'
-    cyan: '#87acb4'
-    green: '#628d98'
-    magenta: '#bbe3ee'
-    red: '#d48678'
-    white: '#fee4ce'
-    yellow: '#fdd39f'
+    black: '#002459'
+    blue: '#29a4c0'
+    cyan: '#00c6cf'
+    green: '#fd6c67'
+    magenta: '#b76f6f'
+    red: '#fd6c67'
+    white: '#c5c8c6'
+    yellow: '#ef8455'
   indexed_colors: []
   normal:
-    black: '#17384c'
-    blue: '#1e4950'
-    cursor: '#deb88d'
-    cyan: '#50a3b5'
-    green: '#027c9b'
-    magenta: '#68d4f1'
-    red: '#d15123'
-    white: '#deb88d'
-    yellow: '#fca02f'
+    black: '#011234'
+    blue: '#004588'
+    cursor: '#fcd7cf'
+    cyan: '#0b8191'
+    green: '#a85a57'
+    magenta: '#933e3e'
+    red: '#cf3d38'
+    white: '#707880'
+    yellow: '#c85537'
   primary:
-    background: '#09141b'
-    foreground: '#deb88d'
+    background: '#000212'
+    foreground: '#fcd7cf'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -38,21 +38,21 @@ dynamic_title: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: Iosevka Nerd Font
-    style: Medium
+    family: Iosevka
+    style: Medium Oblique
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: Iosevka Medium Oblique
-    style: Medium Oblique
+    family: Iosevka Nerd Font Mono
+    style: Oblique
   normal:
     family: Iosevka Nerd Font Mono
     style: Regular
   offset:
     x: 0
     y: 0
-  size: 13.0
+  size: 12.0
   use_thin_strokes: false
 key_bindings:
 - action: Paste
@@ -412,7 +412,7 @@ window:
     lines: 0
   dynamic_padding: false
   padding:
-    x: 0
-    y: 0
+    x: 5
+    y: 5
   startup_mode: Windowed
 working_directory: None
