@@ -1,6 +1,6 @@
 [module/sep]
 type = custom/text
-content = ${env:POLY_SEPARATOR}
+content = ${env:POLY_MODULESEPARATOR:}
 content-foreground = ${env:POLY_BACKGROUND}
 content-background = ${env:POLY_BACKGROUND}
 
@@ -35,7 +35,6 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-#modules-left = ts qtilePrefix qtileWs1 qtileWs2 qtileWs3 qtileWs4 qtileWs5 qtileWs6 qtileWs7 ewmh sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
@@ -450,7 +449,7 @@ expand-right = false
 
 label-open = ${env:POLY_POWER_OPEN}
 label-close = ${env:POLY_POWER_CLOSE}
-label-separator = ${env:POLY_SEPARATOR}
+label-separator = ${env:POLY_MODULESEPARATOR:}
 
 menu-0-0 = ${env:POLY_REBOOT}
 menu-0-0-exec = reboot

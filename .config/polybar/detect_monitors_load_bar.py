@@ -95,11 +95,11 @@ if __name__ == '__main__':
             os.environ['POLY_WLAN'] = wlan
             os.environ['POLY_LAN1'] = lan1
             os.environ['POLY_LAN2'] = lan2
-            os.environ['POLY_SEPARATOR'] = theme['moduleseparator']
             for key in theme:
                 _key = str('POLY_'+key.upper())
                 os.environ[_key] = str(theme[key])
-            subprocess.run(['killall', '-q', 'polybar'])
+            print("separator - ",os.environ.get('POLY_MODULESEPARATOR'))
+            subprocess.call(['killall', 'polybar'])
             o = subprocess.Popen('polybar -r island', shell=True)
             _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:

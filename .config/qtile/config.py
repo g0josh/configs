@@ -158,11 +158,11 @@ keys = [
 
     Key([MOD], "q", lazy.window.kill()),
 
-    Key([MOD, "shift", "control"], "Up", lazy.prev_screen()),
-    Key([MOD, "shift", "control"], "Down", lazy.next_screen()),
-    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True))),
-    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False))),
-    Key([MOD], "u", lazy.next_urgent()),
+    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), polybar_hook),
+    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), polybar_hook),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), polybar_hook),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), polybar_hook),
+    Key([MOD], "u", lazy.next_urgent(), polybar_hook),
 
     Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
     Key([MOD], "z", lazy.function(lambda x:toggleMuteVolume())),
@@ -178,8 +178,8 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True))),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False))),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), polybar_hook),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), polybar_hook),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
