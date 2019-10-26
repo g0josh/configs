@@ -8,7 +8,7 @@ ALACRITTY_CONF_PATH = os.path.expanduser('~/.config/alacritty/alacritty.yml')
 NAMES = ["Sea Shells", "Crayon Pony Fish", "Royal",
         "Gooey", "Gotham", "Wryan", "Wild Cherry", "Grape",
         "Spacedust", "Oceanic Next", "Fistank", "One Half Black",
-        "Elio", "Dracula", "Cobalt", "Ciapre", "feathers"
+        "Elio", "Dracula", "Cobalt", "Ciapre", "feathers",
         "Pencil Light", "One Light", "Hemisu Light"]
 def get_colors(name="Sea Shells"):
     if name == "Sea Shells":
