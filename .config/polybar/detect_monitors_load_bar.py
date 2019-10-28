@@ -8,7 +8,7 @@ import json
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
-FORMAT_PATH = '/tmp/poly_ws_formats'
+POLY_INFO_PATH = '/tmp/polybar_info'
 
 def getInterfaces():
     lan1 = lan2 = wlan = ""
@@ -72,17 +72,14 @@ if __name__ == '__main__':
     formats['visibleWsOther'] = f'%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["bodybg"]}}}%{{F{theme["altbg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['urgetWs'] = f'%{{B{theme["background"]}}}%{{F{theme["urgentbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["urgentbg"]}}}%{{F{theme["urgentfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["urgentbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     
-    #Save formats for qtile and other scripts to access
-    with open(FORMAT_PATH, 'w') as fh:
-        json.dump(formats, fh)
     poly_vars = {}
     # power menu widgets
-    poly_vars["poweropen"]= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["titlepadding"]}{POWER_ICONS["power"]}{" "*theme["titlepadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}'
+    poly_vars["poweropen"]= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["titlepadding"]}{POWER_ICONS["power"]}{" "*theme["titlepadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
     poly_vars['powerclose']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["titlepadding"]}{" "*theme["titlepadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
-    poly_vars['power00']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["reboot"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
-    poly_vars['power01']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["power"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
-    poly_vars['power02']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["logout"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
-    poly_vars['power03']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["lock"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
+    poly_vars['reboot']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["reboot"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
+    poly_vars['poweroff']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["power"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
+    poly_vars['logout']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["logout"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
+    poly_vars['lock']= f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["bodypadding"]}{POWER_ICONS["lock"]}{" "*theme["bodypadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["rightmodulesuffix"]}%{{F-}}%{{B-}}'
     lan1, lan2, wlan = getInterfaces()
     connected = setupMonitors()
     _connected = {}
@@ -91,24 +88,22 @@ if __name__ == '__main__':
             os.environ['POLY_MONITOR'] = monitor
             os.environ['POLY_POWER_OPEN'] = poly_vars['poweropen']
             os.environ['POLY_POWER_CLOSE'] = poly_vars['powerclose']
-            os.environ['POLY_POWER_0-0'] = poly_vars['power00']
-            os.environ['POLY_POWER_0-1'] = poly_vars['power01']
-            os.environ['POLY_POWER_0-2'] = poly_vars['power02']
-            os.environ['POLY_POWER_0-3'] = poly_vars['power03']
+            os.environ['POLY_POWEROFF'] = poly_vars['poweroff']
+            os.environ['POLY_REBOOT'] = poly_vars['reboot']
+            os.environ['POLY_LOGOUT'] = poly_vars['logout']
+            os.environ['POLY_LOCK'] = poly_vars['lock']
             os.environ['POLY_WLAN'] = wlan
             os.environ['POLY_LAN1'] = lan1
             os.environ['POLY_LAN2'] = lan2
             for key in theme:
-                print(key.upper(), theme[key])
-                os.environ['POLY_'+key.upper()] = str(theme[key])
-            print(poly_vars)
-            print(theme)
-            #if sys.version_info[0] < 3:
-            #    subprocess.call(['killall', '-q', 'polybar'])
-            #    subprocess.call(['polybar', '--reload', 'island'])
-            #else:
-            #    subprocess.run(['killall', '-q', 'polybar'])
-            #    o = subprocess.Popen('polybar -r island', shell=True)
-            #    _connected[i] = {'name':monitor, 'pid':o.pid}
+                _key = str('POLY_'+key.upper())
+                os.environ[_key] = str(theme[key])
+            print("separator - ",os.environ.get('POLY_MODULESEPARATOR'))
+            subprocess.call(['killall', 'polybar'])
+            o = subprocess.Popen(['polybar', '-r', 'island'])
+            _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
+    with open(POLY_INFO_PATH, 'w') as fh:
+        json.dump({'formats':formats,
+            'screens':_connected,'separator':theme['moduleseparator']}, fh)

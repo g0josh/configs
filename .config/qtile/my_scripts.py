@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import re
 import os
 from contextlib import contextmanager
+import json
 
 from libqtile.log_utils import logger
 
@@ -335,7 +336,6 @@ def getUtilization(x=0,y=0,button=1,threshold=10):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-
 def powerClicked(x, y, button, power_button):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
@@ -363,32 +363,13 @@ def getNumScreens():
         return len(re.findall(r'\w+ connected \w+', o))
 
 def getTheme(path):
-    result = {'titlefg':'#000000','titlebg':'#000000','bodyfg':'#000000',
-             'bodybg':'#000000','focusedwindowborder':"#000000",
-             'windowborder':"#000000", 'leftmoduleprefix':'',
-             'leftmodulesuffix':''}
-    if not os.path.exists(path):
-        logger.warn('Theme path does not exist- {}'.format(path))
+    try:
+        with open(path, 'r') as fh:
+            result = json.load(fh)
+    except Exception as e:
+        logger.warn(e)
+    else:
         return result
-    with open(path, 'r') as fh:
-        for l in fh:
-            l=l.strip()
-            if l.startswith('#'):
-                continue
-            key, value = l.split('=')
-            result[key.strip().lower()] = int(value.strip()) if value.strip().isdigit() else value.strip()
-    result['activeWs'] = f'%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["focusedbg"]}]%[F{result["focusedfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["focusedbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['layoutWs'] = f'%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["titlebg"]}]%[F{result["titlefg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["titlebg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['activeWsOther'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["focusedbg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['occupiedWs'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["bodyfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['visibleWs'] = f'%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["altbg"]}]%[F{result["altfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["altbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['visibleWsOther'] = f'%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["bodybg"]}]%[F{result["altbg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["bodybg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    result['UrgetWs'] = f'%[B{result["background"]}]%[F{result["urgentbg"]}]{result["leftmoduleprefix"]}%[F-]%[B-]%[B{result["urgentbg"]}]%[F{result["urgentfg"]}]{" "*result["wspadding"]}%label%{" "*result["wspadding"]}%[F-]%[B-]%[B{result["background"]}]%[F{result["urgentbg"]}]{result["leftmodulesuffix"]}%[F-]%[B-]'
-    for x in result:
-        if isinstance(result[x], str) and 'Ws' in x:
-            result[x] = result[x].replace('[', '{')
-            result[x] = result[x].replace(']', '}')
-    return result
 
 def setupMonitors():
     try:
@@ -424,16 +405,16 @@ def setupMonitors():
 def startPolybar(theme_path):
     monitors = setupMonitors()
     theme = getTheme(theme_path)
-    poly_theme = {}
-    poly_theme['poly_wlan'] = poly_theme['poly_lan1'] = ""
-    poly_theme['poly_lan2'] = ""
+    os.environ['POLY_WLAN'] = os.environ['POLY_LAN1'] = ""
+    os.environ['POLY_LAN2'] = ""
     for i in getInterfaces():
         if 'w' in i:
-            poly_theme['poly_wlan'] = i
-        elif not poly_theme['poly_lan1']:
-            poly_theme['poly_lan1'] = i
+            os.environ['POLY_WLAN'] = i
+        elif not os.getenv('POLY_LAN1'):
+            os.environ['POLY_LAN1'] = i
         else:
-            poly_theme['poly_lan2'] = i
+            os.environ['POLY_LAN2'] = i
+    poly_theme = {}
     poly_theme['ewmhactive'] = f'%[B{theme["background"]}]%[F{theme["focusedbg"]}]{theme["leftmoduleprefix"]}%[F-]%[B-]%[B{theme["focusedbg"]}]%[F{theme["focusedfg"]}]{" "*theme["wspadding"]}%index% %icon%{" "*theme["wspadding"]}%[F-]%[B-]%[B{theme["background"]}]%[F{theme["focusedbg"]}]{theme["leftmodulesuffix"]}%[F-]%[B-]'
     # power menu widgets
     poly_theme['poweropen']= '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
@@ -491,9 +472,6 @@ def startPolybar(theme_path):
         os.environ['POLY_POWER_1-0'] = poly_theme['power10']
         os.environ['POLY_POWER_2-0'] = poly_theme['power20']
         os.environ['POLY_POWER_3-0'] = poly_theme['power30']
-        os.environ['POLY_WLAN'] = poly_theme['poly_wlan']
-        os.environ['POLY_LAN1'] = poly_theme['poly_lan1']
-        os.environ['POLY_LAN2'] = poly_theme['poly_lan2']
         try:
             subprocess.run(['killall', '-q', 'polybar'])
             o = subprocess.Popen('polybar -r island', shell=True)
@@ -501,5 +479,5 @@ def startPolybar(theme_path):
                     'ws_fifo_path':f'/tmp/qtile_ws_{i}', 'ws_format':'', 'layout_format':''}
         except subprocess.CalledProcessError as e:
             logger.warn(e.output.decode().strip())
-    logger.warn(poly_theme)
+    logger.warn(poly_screens)
     return poly_screens
