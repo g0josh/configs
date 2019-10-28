@@ -98,7 +98,6 @@ if __name__ == '__main__':
             for key in theme:
                 _key = str('POLY_'+key.upper())
                 os.environ[_key] = str(theme[key])
-            print("separator - ",os.environ.get('POLY_MODULESEPARATOR'))
             subprocess.call(['killall', 'polybar'])
             o = subprocess.Popen(['polybar', '-r', 'island'])
             _connected[i] = {'name':monitor, 'pid':o.pid}
