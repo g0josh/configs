@@ -1,43 +1,40 @@
-{
-    "terminal_colors":{
-        "background": "0x100310",
-        "foreground": "0xd0c1c6",
-        "black":   "0x210c20",
-        "red":     "0xc72c41",
-        "green":   "0x009c6f",
-        "yellow":  "0xea5f40",
-        "blue":    "0x004682",
-        "magenta": "0x68366c",
-        "cyan":    "0x07d1bf",
-        "white":   "0x707880",
-        "bright_black":   "0x312030",
-        "bright_red":     "0xbf406a",
-        "bright_green":   "0x60f4b4",
-        "bright_yellow":  "0xffa555",
-        "bright_blue":    "0x0370b7",
-        "bright_magenta": "0x844f94",
-        "bright_cyan":    "0x8abeb7",
-        "bright_white":   "0xc5c8c6"
-    },
-    "bodyfg":"#c495b5",
-    "bodybg":"#331f4d",
-    "titlefg":"#1f034d",
-    "titlebg":"#bd3545",
-    "focusedfg":"#1f034d",
-    "focusedbg":"#d23c4d",
-    "urgentfg":"#1f034d",
-    "urgentbg":"#e37b83",
-    "altfg":"#1f034d",
-    "altbg":"#e37b83",
-    "moduleseparator":"",
-    "wspadding":0,
-    "background":"#00000000",
-    "leftmoduleprefix":"",
-    "leftmodulesuffix":"",
-    "rightmoduleprefix":"",
-    "rightmodulesuffix":"",
-    "titlepadding":0,
-    "bodypadding":1,
-    "focusedwindowborder":"#00CED1",
-    "windowborder":"#000212"
-}
+terminal_colors:
+    background: "0x100310"
+    foreground: "0xd0c1c6"
+    black: &black "0x210c20"
+    red: &red "0xc72c41"
+    green: &green "0x009c6f"
+    yellow: &yellow "0xea5f40"
+    blue: &blue "0x004682"
+    magenta: &magenta "0x68366c"
+    cyan:  &cyan "0x07d1bf"
+    white: &white "0x707880"
+    bright_black: &bright_black "0x312030"
+    bright_red:  &bright_red "0xbf406a"
+    bright_green: &bright_green "0x60f4b4"
+    bright_yellow: &bright_yellow "0xffa555"
+    bright_blue:  &bright_blue "0x0370b7"
+    bright_magenta: &bright_magenta "0x844f94"
+    bright_cyan: &bright_cyan "0x8abeb7"
+    bright_white: &bright_white "0xc5c8c6"
+bodyfg: "#c495b5"
+bodybg: "#331f4d"
+titlefg: "#1f034d"
+titlebg: *red
+focusedfg: "#1f034d"
+focusedbg: *red
+urgentfg: "#1f034d"
+urgentbg: *yellow
+altfg: "#1f034d"
+altbg: "#e37b83"
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "#00CED1"
+windowborder: "#000212"

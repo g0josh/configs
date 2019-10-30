@@ -1,17 +1,23 @@
-titlefgcolor=#181838
-titlebgcolor=#fd6c67
-bodyfgcolor=#0b8191
-bodybgcolor=#181838
-focusedfgcolor=#181838
-focusedbgcolor=#fd6c67
-urgentfgcolor=#181838
-urgentbgcolor=#0b8191
-#fcd7cf
-i3wspadding=0
-background=#00000000
-leftmoduleprefix=
-leftmodulesuffix=
-rightmoduleprefix= 
-rightmodulesuffix=
-titlepadding=0
-bodypadding=1
+{
+    "bodyfg":"#0b8191",
+    "bodybg":"#181838",
+    "titlefg":"#181838",
+    "titlebg":"#fd6c67",
+    "focusedfg":"#181838",
+    "focusedbg":"#fd6c67",
+    "urgentfg":"#181838",
+    "urgentbg":"#0b8191",
+    "altfg":"#1f034d",
+    "altbg":"#e37b83",
+    "moduleseparator":"",
+    "wspadding":0,
+    "background":"#00000000",
+    "leftmoduleprefix":"",
+    "leftmodulesuffix":"",
+    "rightmoduleprefix":"",
+    "rightmodulesuffix":"",
+    "titlepadding":0,
+    "bodypadding":1,
+    "focusedwindowborder":"#00CED1",
+    "windowborder":"#000212"
+}
