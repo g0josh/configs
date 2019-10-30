@@ -100,7 +100,7 @@ if __name__ == '__main__':
                 os.environ[_key] = str(theme[key])
             print("separator - ",os.environ.get('POLY_MODULESEPARATOR'))
             subprocess.call(['killall', 'polybar'])
-            o = subprocess.Popen('polybar -r island', shell=True)
+            o = subprocess.Popen(['polybar', '-r', 'island'])
             _connected[i] = {'name':monitor, 'pid':o.pid}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
