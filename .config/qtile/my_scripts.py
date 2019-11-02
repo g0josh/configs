@@ -5,6 +5,7 @@ import re
 import os
 from contextlib import contextmanager
 import json
+import yaml
 
 from libqtile.log_utils import logger
 
@@ -365,7 +366,7 @@ def getNumScreens():
 def getTheme(path):
     try:
         with open(path, 'r') as fh:
-            result = json.load(fh)
+            result = yaml.safe_load(fh)
     except Exception as e:
         logger.warn(e)
     else:
