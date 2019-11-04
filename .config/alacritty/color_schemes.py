@@ -1,9 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 import os
 import yaml
 
+THEME_DIR = os.path.expanduser('~/.config/themes')
 ALACRITTY_CONF_PATH = os.path.expanduser('~/.config/alacritty/alacritty.yml')
 NAMES = ["Sea Shells", "Crayon Pony Fish", "Royal",
         "Gooey", "Gotham", "Wryan", "Wild Cherry", "Grape",
@@ -519,15 +520,27 @@ def get_colors(name="Sea Shells"):
             )
     return colors
 
-def main():
-    global COLORS
-    if len(sys.argv) < 2:
-        print("Please enter a theme name")
-        sys.exit(1)
-
-    colors = get_colors(sys.argv[1].strip())
+def main(arg=None):
+    global COLORS, THEME_DIR
+    arg = 'current' if arg is None else arg
+    themes = []
+    for tf in os.listdir(THEME_DIR):
+        if not tf.endswith('.theme'):
+            continue
+        tf_name = tf.split('.')[0]
+        themes.append(tf_name)
+        if arg in [tf, tf_name]:
+            arg = os.path.join(THEME_DIR, tf)
+    if os.path.isfile(arg):
+        print(f'Using {arg} theme')
+        with open(arg, 'r') as fh:
+            yf = yaml.safe_load(fh)
+        colors = yf['terminal_colors']
+    else:
+        print(f'Using predefined colors {arg}')
+        colors = get_colors(arg.strip())
     if not colors:
-        print("Unknown theme, Acceptable ones are - ", NAMES)
+        print(f'Unknown theme, Acceptable ones are - {NAMES+themes}')
         sys.exit(1)
     with open(ALACRITTY_CONF_PATH, 'r') as fh:
         ala_conf = yaml.safe_load(fh)
@@ -542,5 +555,6 @@ def main():
         yaml.dump(ala_conf, fh, default_flow_style=False)
 
 if __name__ == '__main__':
-    main()
+    arg = sys.argv[1] if len(sys.argv) > 1 else None
+    main(arg)
 

@@ -29,10 +29,9 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka:style=Medium Oblique:pixelsize=11;3:antialias=true
+font-0 = Iosevka Term SS03:style=Regular:pixelsize=11;3:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
-font-3 = Iosevka Nerd Font Mono:style=Regular:pixelsize=14;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
