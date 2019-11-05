@@ -5,6 +5,7 @@ import subprocess
 import os
 import sys
 import json
+import yaml
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
@@ -60,8 +61,7 @@ def setupMonitors():
 if __name__ == '__main__':
     # get the theme file from polybar config
     with open(os.path.join(os.path.expanduser('~'),'.config','themes','current.theme'),'r') as fh:
-        theme = json.load(fh)
-
+        theme = yaml.safe_load(fh)
     # Workspace formats
     formats = {}
     formats['layoutWs'] = f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'

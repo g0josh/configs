@@ -1,32 +1,32 @@
 terminal_colors:
-    background: "0x100310"
-    foreground: "0xd0c1c6"
-    black: &black "0x210c20"
-    red: &red "0xc72c41"
-    green: &green "0x009c6f"
-    yellow: &yellow "0xea5f40"
-    blue: &blue "0x004682"
-    magenta: &magenta "0x68366c"
-    cyan:  &cyan "0x07d1bf"
-    white: &white "0x707880"
-    bright_black: &bright_black "0x312030"
-    bright_red:  &bright_red "0xbf406a"
-    bright_green: &bright_green "0x60f4b4"
-    bright_yellow: &bright_yellow "0xffa555"
-    bright_blue:  &bright_blue "0x0370b7"
-    bright_magenta: &bright_magenta "0x844f94"
-    bright_cyan: &bright_cyan "0x8abeb7"
-    bright_white: &bright_white "0xc5c8c6"
-bodyfg: "#c495b5"
-bodybg: "#331f4d"
-titlefg: "#1f034d"
-titlebg: *red
-focusedfg: "#1f034d"
+    background: &background "#100310"
+    foreground: &foreground "#d0c1c6"
+    black: &black "#210c20"
+    red: &red "#c72c41"
+    green: &green "#009c6f"
+    yellow: &yellow "#ea5f40"
+    blue: &blue "#004682"
+    magenta: &magenta "#68366c"
+    cyan:  &cyan "#07d1bf"
+    white: &white "#707880"
+    bright_black: &bright_black "#312030"
+    bright_red:  &bright_red "#bf406a"
+    bright_green: &bright_green "#60f4b4"
+    bright_yellow: &bright_yellow "#ffa555"
+    bright_blue:  &bright_blue "#0370b7"
+    bright_magenta: &bright_magenta "#844f94"
+    bright_cyan: &bright_cyan "#8abeb7"
+    bright_white: &bright_white "#c5c8c6"
+bodyfg: *foreground 
+bodybg: *magenta
+titlefg: *black
+titlebg: *bright_magenta
+focusedfg: *black
 focusedbg: *red
-urgentfg: "#1f034d"
+urgentfg: *black
 urgentbg: *yellow
-altfg: "#1f034d"
-altbg: "#e37b83"
+altfg: *blue
+altbg: *foreground
 moduleseparator: ""
 wspadding: 0
 background: "#00000000"

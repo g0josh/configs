@@ -1,29 +1,29 @@
 alt_send_esc: true
-background_opacity: 0.95
+background_opacity: 1.0
 colors:
   bright:
-    black: '0x312030'
-    blue: '0x0370b7'
-    cyan: '0x8abeb7'
-    green: '0x60f4b4'
-    magenta: '0x844f94'
-    red: '0xbf406a'
-    white: '0xc5c8c6'
-    yellow: '0xffa555'
+    black: '#7f7f7a'
+    blue: '#5986b2'
+    cyan: '#f2854a'
+    green: '#664233'
+    magenta: '#d9ae98'
+    red: '#b23636'
+    white: '#4c4742'''
+    yellow: '#bf8f60'
   indexed_colors: []
   normal:
-    black: '0x210c20'
-    blue: '0x004682'
-    cursor: '#deb88d'
-    cyan: '0x07d1bf'
-    green: '0x009c6f'
-    magenta: '0x68366c'
-    red: '0xc72c41'
-    white: '0x707880'
-    yellow: '0xea5f40'
+    black: '#666661'
+    blue: '#4c7399'
+    cursor: '#ffffff'
+    cyan: '#d97742'
+    green: '#4c3226'
+    magenta: '#bf9986'
+    red: '#992e2e'
+    white: '#34302d'
+    yellow: '#a67c53'
   primary:
-    background: '0x100310'
-    foreground: '0xd0c1c6'
+    background: '#f5e7de'
+    foreground: '#34302d'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -38,21 +38,21 @@ dynamic_title: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: Iosevka
-    style: Medium Oblique
+    family: Iosevka Term SS03
+    style: Italic
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: Iosevka Nerd Font Mono
-    style: Oblique
+    family: Iosevka Term SS03
+    style: Bold Italic
   normal:
-    family: Iosevka Nerd Font Mono
+    family: Iosevka Term SS03
     style: Regular
   offset:
     x: 0
     y: 0
-  size: 13.0
+  size: 12.0
   use_thin_strokes: false
 key_bindings:
 - action: Paste
@@ -412,7 +412,7 @@ window:
     lines: 0
   dynamic_padding: false
   padding:
-    x: 0
-    y: 0
+    x: 10
+    y: 10
   startup_mode: Windowed
 working_directory: None
