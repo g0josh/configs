@@ -18,7 +18,7 @@ bottom = false
 
 line-size = 1
 
-border-top-size = 0
+border-top-size = 4
 border-left-size = 4
 border-right-size = 4
 border-bottom-size = 0
@@ -29,7 +29,7 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka Term SS03:style=Regular:pixelsize=11;3:antialias=true
+font-0 = Iosevka Term SS03 Medium:style=Medium Italic:pixelsize=11;3:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 
@@ -38,11 +38,6 @@ modules-center = timePrefix time sep timeIndia
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
 tray-padding = 2
-
-wm-restack = i3
-
-scroll-up = i3wm-wsnext
-scroll-down = i3wm-wsprev
 
 #cursor-click = pointer
 #cursor-scroll = ns-resize
@@ -57,71 +52,6 @@ click-left = python3 ~/.config/polybar/qtile_ws.py set next
 click-right = python3 ~/.config/polybar/qtile_ws.py set prev
 scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
 scroll-down = python3 ~/.config/polybar/qtile_ws.py set next
-
-
-# ewmh------------------------------------------------------------------------
-[module/ewmh]
-type = internal/xworkspaces
-pin-workspaces = false
-enable-click = true
-enable-scroll = true
-
-icon-0 = 1;
-icon-1 = 2;
-icon-2 = 3;
-icon-3 = 4;
-icon-4 = 5;
-
-icon-default = 
-format = <label-state>
-#label-monitor = %name%
-
-label-active = ${env:POLY_EWMHACTIVE}
-#label-occupied = ${env:POLY_EWMHOCCUPIED}
-#label-urgent = ${env:POLY_EWMHURGENT}
-#label-empty = ${env:POLY_EWMHEMPTY}
-label-empty = 
-
-#i3---------------------------------------------------------------------------
-[module/i3]
-type = internal/i3
-index-sort = true
-wrapping-scroll = false
-
-ws-icon-0 = 1;
-ws-icon-1 = 2;
-ws-icon-2 = 3;
-ws-icon-3 = 4;
-ws-icon-4 = 5;
-
-ws-icon-default = 
-format = <label-state>
-
-#focused = activecolor workspace on focused monitor
-label-focused = ${env:POLY_I3FOCUSED}
-
-#unfocused = Inactivecolor workspace on any monitor
-label-unfocused = ${env:POLY_I3UNFOCUSED}
-
-#visible = activecolor workspace on unfocused monitor
-label-visible = ${env:POLY_I3VISIBLE}
-
-#urgentcolor = Workspace with urgency hint set
-label-urgent = ${env:POLY_I3URGENT}
-
-[module/i3Prefix]
-type = custom/ipc
-hook-0 = python3 ~/.config/i3/split_status.py get
-initial = 1
-format-prefix = ${env:POLY_LEFTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_TITLEBG}
-format-prefix-background = ${env:POLY_BACKGROUND}
-format-suffix = ${env:POLY_LEFTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_TITLEBG}
-format-suffix-background = ${env:POLY_BACKGROUND}
-format-foreground = ${env:POLY_TITLEFG}
-format-background = ${env:POLY_TITLEBG}
-format-padding = ${env:POLY_TITLEPADDING}
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
