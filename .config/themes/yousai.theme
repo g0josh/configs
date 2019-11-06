@@ -1,5 +1,5 @@
 terminal_colors:
-    background: &background "#f5e7de"
+    background: &background "#eecfbb"
     foreground: &foreground "#34302d"
     black: &black "#666661"
     red: &red "#992e2e"
@@ -19,13 +19,13 @@ terminal_colors:
     bright_white: &bright_white "#4c4742'"
 bodyfg: *background
 bodybg: *bright_red
-titlefg: *background
+titlefg: *foreground
 titlebg: *red
 focusedfg: *foreground
 focusedbg: *background
 urgentfg: *foreground
-urgentbg: *bright_cyan
-altfg: *blue
+urgentbg: *blue
+altfg: *cyan
 altbg: *foreground
 moduleseparator: ""
 wspadding: 0
