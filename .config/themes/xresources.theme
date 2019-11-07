@@ -1,0 +1,41 @@
+terminal_colors:
+    foreground: &foreground "#34302d"
+    background: &background "#f5e7de"
+    cursorColor: &cursorColor "#34302d"
+    color0: &black "#666661"
+    color8: &bright_black "#7f7f7a"
+    color1: &red "#992e2e"
+    color9: &bright_red "#b23636"
+    color2: &green "#4c3226"
+    color10: &bright_green "#664233"
+    color3:  &yellow "#a67c53"
+    color11: &bright_yellow "#bf8f60"
+    color4: &blue "#4c7399"
+    color12: &bright_blue "#5986b2"
+    color5: &magenta "#bf9986"
+    color13: &bright_magenta "#d9ae98"
+    color6: &cyan "#d97742"
+    color14: &bright_cyan "#f2854a"
+    color7: &white "#34302d"
+    color15: &bright_white "#4c4742"
+bodyfg: *background
+bodybg: *bright_red
+titlefg: *foreground
+titlebg: *red
+focusedfg: *foreground
+focusedbg: *background
+urgentfg: *foreground
+urgentbg: *blue
+altfg: *cyan
+altbg: *foreground
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: *bright_cyan
+windowborder: *foreground
