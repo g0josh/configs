@@ -6,50 +6,13 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba:      rgba
 
-! special
-*.foreground:   #fcd7cf
-*.background:   #000212
-*.cursorColor:  #c2d7fb
-
-! black
-*.color0:       #011234
-*.color8:       #002459
-
-! red
-*.color1:       #cf3d38
-*.color9:       #fd6c67
-
-! green
-*.color2:       #a85a57
-*.color10:      #fd6c67
-
-! yellow
-*.color3:       #c85537
-*.color11:      #ef8455
-
-! blue
-*.color4:       #004588
-*.color12:      #29a4c0
-
-! magenta
-*.color5:       #933e3e
-*.color13:      #b76f6f
-
-! cyan
-*.color6:       #0b8191
-*.color14:      #00c6cf
-
-! white
-*.color7:       #707880
-*.color15:      #c5c8c6
-
-
 !URxvt----------------------------
 !URxvt.letterSpace:0
-URxvt.font: xft:Iosevka Nerd Font Mono:style=Regular:size=12:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=12:minispace=False
+URxvt.font: xft:Iosevka Term SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False
+URxvt.boldFont: xft:Iosevka Term SS03 Medium:style=Medium Italic:size=13:antialias=true:hinting=true:minispace=False
+URxvt.italicFont: xft:Iosevka Term SS03:style=Bold Italic:size=13:antialias=true:hinting=true:minispace=False
 
 URxvt.depth:                    32
-URxvt.background:       		[85]#000212
 URxvt*internalBorder:           20
 URxvt*scrollBar:                false
 URxvt*scrollTtyOutput:          false
@@ -61,9 +24,9 @@ URxvt*saveLines:                10000
 !URxvt*fadeColor:		#0d0b0b
 !URxvt*blurRadius:		5
 
-URxvt.keysym.C-0: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size=12:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=12:minispace=False\007
-URxvt.keysym.C-minus: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size=10:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=10:minispace=False\007
-URxvt.keysym.C-equal: command:\033]710;xft:Iosevka Nerd Font Mono:style=Regular:size=16:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=16:minispace=False\007
+URxvt.keysym.C-0: command:\033]710;xft:Iosevka Term SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=12:minispace=False\007
+URxvt.keysym.C-minus: command:\033]710;xft:Iosevka Term SS03:style=Regular:size=10:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=10:minispace=False\007
+URxvt.keysym.C-equal: command:\033]710;xft:Iosevka Term SS03:style=Regular:size=16:antialias=true:hinting=true:minispace=False, xft:Font Awesome 5 Free:style=Regular:size=16:minispace=False\007
 
 !Pass on Ctrl Tab correctly
 URxvt.keysym.Control-Tab:                      \033[27;5;9~
@@ -76,6 +39,8 @@ URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
 URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
 URxvt.keysym.Shift-Up:          command:\033]720;5\007
 URxvt.keysym.Shift-Down:        command:\033]721;5\007
+URxvt.keysym.Control-k:         command:\033]720;5\007
+URxvt.keysym.Control-j:         command:\033]721;5\007
 
 ! Rofi-------------------------------------------------------------------------
 rofi.fullscreen: false
