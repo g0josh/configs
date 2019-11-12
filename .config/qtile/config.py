@@ -18,8 +18,7 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = "alacritty"
 BROWSER = "firefox"
-THEME_PATH = os.path.expanduser("~/.config/themes/current.theme")
-THEME = getTheme(THEME_PATH)
+THEME = getTheme()
 POLYBAR_INFO = {}
 
 default_font = dict(

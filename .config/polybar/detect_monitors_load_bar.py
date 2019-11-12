@@ -5,11 +5,12 @@ import subprocess
 import os
 import sys
 import json
-import yaml
+from runpy import run_path
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
 POLY_INFO_PATH = '/tmp/polybar_info'
+PARSED_THEME_PATH = os.path.expanduser('~/.config/themes/theme')
 
 def getInterfaces():
     lan1 = lan2 = wlan = ""
@@ -60,14 +61,17 @@ def setupMonitors():
 
 if __name__ == '__main__':
     # get the theme file from polybar config
-    with open(os.path.join(os.path.expanduser('~'),'.config','themes','current.theme'),'r') as fh:
-        theme = yaml.safe_load(fh)
-    # Workspace formats
+    themer = run_path(os.path.expanduser('~/.config/themes/themer.py'))
+    theme = themer['getTheme']()
+    if 'occupiedbg' not in theme:
+        theme['occupiedbg'] = theme['bodybg']
+    if 'occupiedfg' not in theme:
+        theme['occupiedfg'] = theme['bodyfg']
     formats = {}
     formats['layoutWs'] = f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['activeWs'] = f'%{{B{theme["background"]}}}%{{F{theme["focusedbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["focusedbg"]}}}%{{F{theme["focusedfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["focusedbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['activeWsOther'] = f'%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["bodybg"]}}}%{{F{theme["focusedbg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
-    formats['occupiedWs'] = f'%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["bodybg"]}}}%{{F{theme["bodyfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
+    formats['occupiedWs'] = f'%{{B{theme["background"]}}}%{{F{theme["occupiedbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["occupiedbg"]}}}%{{F{theme["occupiedfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["occupiedbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['visibleWs'] = f'%{{B{theme["background"]}}}%{{F{theme["altbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["altbg"]}}}%{{F{theme["altfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["altbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['visibleWsOther'] = f'%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["bodybg"]}}}%{{F{theme["altbg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["bodybg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['urgetWs'] = f'%{{B{theme["background"]}}}%{{F{theme["urgentbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["urgentbg"]}}}%{{F{theme["urgentfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["urgentbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'

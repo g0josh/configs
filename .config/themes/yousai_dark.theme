@@ -1,28 +1,60 @@
+terminal_colors:
+    "! special
+    *.foreground:   #d49988
+    *.background:   #1f1622
+    *.cursorColor:  #d49988
 
-colors:
-  # Default colors
-  primary:
-    background: '0x1f1622'
-    foreground: '0xb69cb8'
+    ! black
+    *.color0:       #3b293e
+    *.color8:       #544357
 
-  # Normal colors
-  normal:
-    black:   '0x49354c'
-    red:     '0xbd4349'
-    green:   '0x2d6f53'
-    yellow:  '0xd26226'
-    blue:    '0x4c7399'
-    magenta: '0xbf9986'
-    cyan:    '0xdc9754'
-    white:   '0xfae5d8'
+    ! red
+    *.color1:       #bd4349
+    *.color9:       #ed5757
 
-  # Bright colors
-  bright:
-    black:   '0x49354c'
-    red:     '0xed5757'
-    green:   '0x52977a'
-    yellow:  '0xdc9754'
-    blue:    '0x5986b2'
-    magenta: '0xd9ae98'
-    cyan:    '0xed9b6f'
-    white:   '0xf4d6b7'
+    ! green
+    *.color2:       #2d6f53
+    *.color10:      #52977a
+
+    ! yellow
+    *.color3:       #d26226
+    *.color11:      #dc9754
+
+    ! blue
+    *.color4:       #762e4e
+    *.color12:      #855269
+
+    ! magenta
+    *.color5:       #762e4e
+    *.color13:      #855269
+
+    ! cyan
+    *.color6:       #dc9754
+    *.color14:      #ed9b6f
+
+    ! white
+    *.color7:       #d49988
+    *.color15:      #fecdbe"
+bodyfg: black
+bodybg: red
+titlefg: black
+titlebg: red
+occupiedfg: red
+occupiedbg: black
+focusedfg: black
+focusedbg: red
+urgentfg: background
+urgentbg: yellow
+altfg: cyan
+altbg: background
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: bright_red
+windowborder: background

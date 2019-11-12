@@ -47,7 +47,7 @@ tray-padding = 2
 [module/qtileWs]
 type = custom/ipc
 hook-0 = python3 ~/.config/polybar/qtile_ws.py get %pid%
-initial = 1
+#initial = 1
 click-left = python3 ~/.config/polybar/qtile_ws.py set next
 click-right = python3 ~/.config/polybar/qtile_ws.py set prev
 scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
