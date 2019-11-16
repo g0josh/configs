@@ -86,7 +86,6 @@ nnoremap <C-w> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 set backspace=2
-"set background=dark
 hi Folded ctermbg=0
 filetype plugin indent on
 set encoding=utf-8
@@ -102,6 +101,7 @@ set foldmethod=indent
 
 "Tabs and spacing
 set autoindent
+set background=light
 set cindent
 set tabstop=4
 set expandtab
