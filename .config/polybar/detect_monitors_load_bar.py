@@ -5,7 +5,7 @@ import subprocess
 import os
 import sys
 import json
-from runpy import run_path
+import yaml
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
@@ -60,9 +60,8 @@ def setupMonitors():
 
 
 if __name__ == '__main__':
-    # get the theme file from polybar config
-    themer = run_path(os.path.expanduser('~/.config/themes/themer.py'))
-    theme = themer['getTheme']()
+    with open(PARSED_THEME_PATH, 'r') as fh:
+        theme = yaml.safe_load(fh)
     if 'occupiedbg' not in theme:
         theme['occupiedbg'] = theme['bodybg']
     if 'occupiedfg' not in theme:

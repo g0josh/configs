@@ -53,9 +53,3 @@ rofi.terminal: urxvt
 rofi.eh: 1
 rofi.bw: 0
 rofi.padding: 50
-
-!window             bg          border      separator
-rofi.color-window:	#a0331f4d,	#bd3545,	#bd3545
-
-! State	        	'bg',		'fg',		'altbg',	'hlbg',		'hlfg'
-rofi.color-normal:	#00000000,	#bd3545,	#00000000,	#bd3545,	#331f4d

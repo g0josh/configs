@@ -5,7 +5,7 @@ import re
 import os
 from contextlib import contextmanager
 import json
-from runpy import run_path
+import yaml
 
 from libqtile.log_utils import logger
 
@@ -363,9 +363,10 @@ def getNumScreens():
     else:
         return len(re.findall(r'\w+ connected \w+', o))
 
-def getTheme():
-    themer = run_path(os.path.expanduser('~/.config/themes/themer.py'))
-    return themer['getTheme']()
+def getTheme(path):
+    with open(path, 'r') as fh:
+        theme = yaml.safe_load(fh)
+    return theme
 
 def setupMonitors():
     try:

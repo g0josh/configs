@@ -37,6 +37,8 @@ def getTheme():
             else:
                 _term_colors[ COLOR_MAP[key]] = color
         i += 2
+    x_colors += f"rofi.color-window: #a0{_term_colors['red'][1:]}, {_term_colors['background']}, {_term_colors['background']}\n"
+    x_colors += f"rofi.color-normal: #00000000,	{_term_colors['background']}, #00000000, {_term_colors['background']}, {_term_colors['red']}"
 
     # Write x colors to a file 
     with open(X_COLORS_PATH, 'w') as fh:
@@ -50,6 +52,8 @@ def getTheme():
             continue
         if value in _term_colors:
             _theme[key] = _term_colors[value]
+    with open(PARSED_THEME_PATH, 'w') as fh:
+        yaml.dump(_theme, fh, default_flow_style=False)
     return _theme
 
 def main():

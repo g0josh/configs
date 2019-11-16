@@ -33,4 +33,5 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 numlockx on
-exec i3
+python3 ~/.config/themes/themer.py
+exec qtile
