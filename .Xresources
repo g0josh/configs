@@ -8,9 +8,9 @@ Xft.rgba:      rgba
 
 !URxvt----------------------------
 !URxvt.letterSpace:0
-URxvt.font: xft:Iosevka Term SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False
-URxvt.boldFont: xft:Iosevka Term SS03 Medium:style=Medium Italic:size=13:antialias=true:hinting=true:minispace=False
-URxvt.italicFont: xft:Iosevka Term SS03:style=Bold Italic:size=13:antialias=true:hinting=true:minispace=False
+URxvt.font: xft:Iosevka Term SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
+URxvt.boldFont: xft:Iosevka Term SS03 Medium:style=Medium Italic:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
+URxvt.italicFont: xft:Iosevka Term SS03:style=Bold Italic:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
 
 URxvt.depth:                    32
 URxvt*internalBorder:           20
