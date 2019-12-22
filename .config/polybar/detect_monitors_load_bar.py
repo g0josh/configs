@@ -4,7 +4,7 @@
 import subprocess
 import os
 import sys
-import json
+#import json
 import yaml
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
@@ -103,9 +103,9 @@ if __name__ == '__main__':
                 os.environ[_key] = str(theme[key])
             subprocess.call(['killall', 'polybar'])
             o = subprocess.Popen(['polybar', '-r', 'island'])
-            _connected[i] = {'name':monitor, 'pid':o.pid}
+            _connected[str(i)] = {'name':monitor, 'pid':str(o.pid)}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
     with open(POLY_INFO_PATH, 'w') as fh:
-        json.dump({'formats':formats,
+        yaml.dump({'formats':formats,
             'screens':_connected,'separator':theme['moduleseparator']}, fh)

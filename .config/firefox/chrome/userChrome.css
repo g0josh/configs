@@ -1,35 +1,25 @@
 #TabsToolbar {
   /* visibility: collapse !important; */
-  height: 3px !important;
+  height: 20px !important;
   margin-left: 0px !important;
   margin-top: -2px !important;
   margin-bottom: -2px !important;
-  --tab-min-height: 3px !important;
+  font-size: 10px !important;
+  --tab-min-height: -4px !important;
 }
-#TabsToolbar .tabbrowser-tab .tab-line {
-  background-color:#4499A8  !important;
-}
+
 .tabbrowser-tab .tab-icon-image,
 .tabbrowser-tab .tab-throbber { display:none!important; }
 #sidebar-header {
   visibility: collapse !important;
 }
-#menubar{
-  background-color: #030327 !important;
-  color: #4499A8 !important;
-}
-#urlbar {
-  background-color: #030327 !important;
-  color: #4499A8 !important;
-  border-color: #030327 !important;
-  border-width: 0px !important;
-}
 #nav-bar {
-  color: #b61e32 !important;
-  background-color: #0e0527 !important;
   margin-top: -2px !important;
   margin-bottom: -2px !important;
   height: 30px !important;
+}
+#urlbar {
+  border-width: 0px !important;
 }
 /*change color of popup menus */
 .popup-internal-box {background: #030327 !important;}

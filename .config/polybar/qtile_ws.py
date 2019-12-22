@@ -2,6 +2,7 @@
 
 import sys
 import json
+import yaml
 import  subprocess
 
 from libqtile.command import Client
@@ -19,14 +20,15 @@ def main():
     groups = client.groups()
     curr_group = client.group.info()
     with open('/tmp/polybar_info', 'r') as fh:
-        d = json.load(fh)
+        d = yaml.safe_load(fh)
+        #d = json.load(fh)
     screens = d['screens']
     formats = d['formats']
     separator = d['separator']
 
     if cmd == 'get':
         try:
-            pid = int(sys.argv[2])
+            pid = sys.argv[2]
         except:
             sys.exit(1)
         result = ""

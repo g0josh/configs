@@ -27,7 +27,7 @@ def _getPulseSinks():
         logger.warning (e.output.decode().strip())
         return []
     else:
-        return re.findall(r'^\d', output, flags=re.MULTILINE)
+        return re.findall(r'^\d+', output, flags=re.MULTILINE)
 
 pulse_sinks = _getPulseSinks()
 

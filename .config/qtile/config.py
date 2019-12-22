@@ -16,7 +16,8 @@ from my_scripts import LAYOUT_ICONS
 
 MOD = "mod4"
 ALT = "mod1"
-TERMINAL = "alacritty"
+#TERMINAL = "alacritty"
+TERMINAL = "urxvtc"
 BROWSER = "firefox"
 THEME = getTheme(os.path.expanduser('~/.config/themes/theme'))
 POLYBAR_INFO = {}
@@ -42,8 +43,10 @@ groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], layout="columns" ),
-    Group(name='4', label="4 ", init=True, spawn="{} -e ranger".format(TERMINAL), layout="columns"),
-    Group(name='5', label="5 ", init=True, spawn="{} -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns"),
+    Group(name='4', label="4 ", init=True, spawn="{} -name ranger -e ranger".format(TERMINAL), layout="columns",
+                                matches=[Match(wm_class=["ranger"])]),
+    Group(name='5', label="5 ", init=True, spawn="{} -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
+                                matches=[Match(wm_class=["music"])]),
     # Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 "),
