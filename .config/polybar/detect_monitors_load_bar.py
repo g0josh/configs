@@ -4,12 +4,13 @@
 import subprocess
 import os
 import sys
-import json
+#import json
 import yaml
 
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
 POLY_INFO_PATH = '/tmp/polybar_info'
+PARSED_THEME_PATH = os.path.expanduser('~/.config/themes/theme')
 
 def getInterfaces():
     lan1 = lan2 = wlan = ""
@@ -59,14 +60,12 @@ def setupMonitors():
 
 
 if __name__ == '__main__':
-    # get the theme file from polybar config
-    with open(os.path.join(os.path.expanduser('~'),'.config','themes','current.theme'),'r') as fh:
+    with open(PARSED_THEME_PATH, 'r') as fh:
         theme = yaml.safe_load(fh)
     if 'occupiedbg' not in theme:
         theme['occupiedbg'] = theme['bodybg']
     if 'occupiedfg' not in theme:
         theme['occupiedfg'] = theme['bodyfg']
-    # Workspace formats
     formats = {}
     formats['layoutWs'] = f'%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["titlebg"]}}}%{{F{theme["titlefg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["titlebg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
     formats['activeWs'] = f'%{{B{theme["background"]}}}%{{F{theme["focusedbg"]}}}{theme["leftmoduleprefix"]}%{{F-}}%{{B-}}%{{B{theme["focusedbg"]}}}%{{F{theme["focusedfg"]}}}{" "*theme["wspadding"]}%label%{" "*theme["wspadding"]}%{{F-}}%{{B-}}%{{B{theme["background"]}}}%{{F{theme["focusedbg"]}}}{theme["leftmodulesuffix"]}%{{F-}}%{{B-}}'
@@ -104,9 +103,9 @@ if __name__ == '__main__':
                 os.environ[_key] = str(theme[key])
             subprocess.call(['killall', 'polybar'])
             o = subprocess.Popen(['polybar', '-r', 'island'])
-            _connected[i] = {'name':monitor, 'pid':o.pid}
+            _connected[str(i)] = {'name':monitor, 'pid':str(o.pid)}
         except subprocess.CalledProcessError as e:
             print(e.output.decode().strip())
     with open(POLY_INFO_PATH, 'w') as fh:
-        json.dump({'formats':formats,
+        yaml.dump({'formats':formats,
             'screens':_connected,'separator':theme['moduleseparator']}, fh)

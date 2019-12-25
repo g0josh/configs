@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import re
 import os
 from contextlib import contextmanager
+import json
 import yaml
 
 from libqtile.log_utils import logger
@@ -26,7 +27,7 @@ def _getPulseSinks():
         logger.warning (e.output.decode().strip())
         return []
     else:
-        return re.findall(r'^\d', output, flags=re.MULTILINE)
+        return re.findall(r'^\d+', output, flags=re.MULTILINE)
 
 pulse_sinks = _getPulseSinks()
 
@@ -363,13 +364,9 @@ def getNumScreens():
         return len(re.findall(r'\w+ connected \w+', o))
 
 def getTheme(path):
-    try:
-        with open(path, 'r') as fh:
-            result = yaml.safe_load(fh)
-    except Exception as e:
-        logger.warn(e)
-    else:
-        return result
+    with open(path, 'r') as fh:
+        theme = yaml.safe_load(fh)
+    return theme
 
 def setupMonitors():
     try:

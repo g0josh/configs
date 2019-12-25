@@ -16,10 +16,10 @@ from my_scripts import LAYOUT_ICONS
 
 MOD = "mod4"
 ALT = "mod1"
-TERMINAL = "alacritty"
+#TERMINAL = "alacritty"
+TERMINAL = "urxvtc"
 BROWSER = "firefox"
-THEME_PATH = os.path.expanduser("~/.config/themes/current.theme")
-THEME = getTheme(THEME_PATH)
+THEME = getTheme(os.path.expanduser('~/.config/themes/theme'))
 POLYBAR_INFO = {}
 
 default_font = dict(
@@ -43,8 +43,10 @@ groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], layout="columns" ),
-    Group(name='4', label="4 "),
-    Group(name='5', label="5 ", init=True, spawn=["franz", "{} -e ranger".format(TERMINAL)], layout="monadwide"),
+    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger".format(TERMINAL), layout="columns",
+                                matches=[Match(wm_class=["ranger"])]),
+    Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
+                                matches=[Match(wm_class=["music"])]),
     # Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
     Group(name='6', label="6 "),
     Group(name='7', label="7 "),
@@ -213,7 +215,7 @@ layout_configs={
 }
 
 layouts = [
-    layout.Columns(num_columns=2, **layout_configs),
+    layout.Columns(num_columns=3, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],

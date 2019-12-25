@@ -35,7 +35,8 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -47,7 +48,7 @@ tray-padding = 2
 [module/qtileWs]
 type = custom/ipc
 hook-0 = python3 ~/.config/polybar/qtile_ws.py get %pid%
-initial = 1
+#initial = 1
 click-left = python3 ~/.config/polybar/qtile_ws.py set next
 click-right = python3 ~/.config/polybar/qtile_ws.py set prev
 scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
@@ -181,14 +182,14 @@ type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
 format-prefix= ${env:POLY_RIGHTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_BODYBG}
+format-prefix-foreground = ${env:POLY_TITLEBG}
 format-suffix= ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_BODYBG}
+format-suffix-foreground = ${env:POLY_TITLEBG}
 indicator-icon-0 = caps lock;; A
 indicator-icon-1 = num lock;; 1
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${env:POLY_BODYFG}
-label-indicator-on-background = ${env:POLY_BODYBG}
+label-indicator-on-foreground = ${env:POLY_TITLEFG}
+label-indicator-on-background = ${env:POLY_TITLEBG}
 label-indicator-on-padding = 1
 
 #VOLUME-----------------------------------------------------------------------
