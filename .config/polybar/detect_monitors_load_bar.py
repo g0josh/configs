@@ -10,7 +10,7 @@ import yaml
 POWER_ICONS = {'power':'','reboot':'','lock':'', 
         'logout':'', 'cancel':''}
 POLY_INFO_PATH = '/tmp/polybar_info'
-PARSED_THEME_PATH = os.path.expanduser('~/.config/themes/theme')
+PARSED_THEME_PATH = os.path.expanduser('~/.config/themes/.theme')
 
 def getInterfaces():
     lan1 = lan2 = wlan = ""

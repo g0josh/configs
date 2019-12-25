@@ -19,7 +19,7 @@ ALT = "mod1"
 #TERMINAL = "alacritty"
 TERMINAL = "urxvtc"
 BROWSER = "firefox"
-THEME = getTheme(os.path.expanduser('~/.config/themes/theme'))
+THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
 POLYBAR_INFO = {}
 
 default_font = dict(

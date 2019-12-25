@@ -1,37 +1,52 @@
 terminal_colors:
-  primary:
-    background: &background '#1f1622'
-    foreground: &foreground '#d49988'
-  normal:
-    black:   &black '#3b293e'
-    red:     &red '#bd4349'
-    green:   &green '#2d6f53'
-    yellow:  &yellow '#d26226'
-    blue:    &blue '#762e4e'
-    magenta: &magenta '#762e4e'
-    cyan:    &cyan '#dc9754'
-    white:   &white '#d49988'
-  bright:
-    black:   &bright_black '#544357'
-    red:     &bright_red '#ed5757'
-    green:   &bright_green '#52977a'
-    yellow:  &bright_yellow '#dc9754'
-    blue:    &bright_blue '#855269'
-    magenta: &bright_magenta '#855269'
-    cyan:    &bright_cyan '#ed9b6f'
-    white:   &bright_white '#fecdbe'
-bodyfg: *black
-bodybg: *red
-titlefg: *black
-titlebg: *red
-occupiedfg: *red
-occupiedbg: *black
-focusedfg: *black
-focusedbg: *red
-urgentfg: *background
-urgentbg: *yellow
-altfg: *cyan
-altbg: *background
+    "! special
+    *.foreground:   #d49988
+    *.background:   #1f1622
+    *.cursorColor:  #d49988
+
+    ! black
+    *.color0:       #3b293e
+    *.color8:       #544357
+
+    ! red
+    *.color1:       #bd4349
+    *.color9:       #ed5757
+
+    ! green
+    *.color2:       #2d6f53
+    *.color10:      #52977a
+
+    ! yellow
+    *.color3:       #d26226
+    *.color11:      #dc9754
+
+    ! blue
+    *.color4:       #762e4e
+    *.color12:      #855269
+
+    ! magenta
+    *.color5:       #762e4e
+    *.color13:      #855269
+
+    ! cyan
+    *.color6:       #dc9754
+    *.color14:      #ed9b6f
+
+    ! white
+    *.color7:       #d49988
+    *.color15:      #fecdbe"
+bodyfg: black
+bodybg: red
+titlefg: black
+titlebg: red
+occupiedfg: red
+occupiedbg: black
+focusedfg: black
+focusedbg: red
+urgentfg: background
+urgentbg: yellow
+altfg: cyan
+altbg: background
 moduleseparator: ""
 wspadding: 0
 background: "#00000000"
@@ -41,5 +56,5 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: *bright_red
-windowborder: *background
+focusedwindowborder: bright_red
+windowborder: background

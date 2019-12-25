@@ -1,35 +1,50 @@
 terminal_colors:
-    primary:
-        background: &background "#eecfbb"
-        foreground: &foreground "#34302d"
-    normal:
-        black: &black "#666661"
-        red: &red "#992e2e"
-        green: &green "#4c3226"
-        yellow: &yellow "#a67c53"
-        blue: &blue "#4c7399"
-        magenta: &magenta "#bf9986"
-        cyan:  &cyan "#d97742"
-        white: &white "#34302d"
-    bright:
-        black: &bright_black "#7f7f7a"
-        red:  &bright_red "#b23636"
-        green: &bright_green "#664233"
-        yellow: &bright_yellow "#bf8f60"
-        blue:  &bright_blue "#5986b2"
-        magenta: &bright_magenta "#d9ae98"
-        cyan: &bright_cyan "#f2854a"
-        white: &bright_white "#4c4742'"
-bodyfg: *background
-bodybg: *bright_red
-titlefg: *foreground
-titlebg: *red
-focusedfg: *foreground
-focusedbg: *background
-urgentfg: *foreground
-urgentbg: *blue
-altfg: *cyan
-altbg: *foreground
+    "! special
+    *.foreground:   #34302d
+    *.background:   #f6e2d5
+    *.cursorColor:  #34302d
+
+    ! black
+    *.color0:       #666661
+    *.color8:       #7f7f7a
+
+    ! red
+    *.color1:       #992e2e
+    *.color9:       #b23636
+
+    ! green
+    *.color2:       #4c3226
+    *.color10:      #664233
+
+    ! yellow
+    *.color3:       #a67c53
+    *.color11:      #bf8f60
+
+    ! blue
+    *.color4:       #4c7399
+    *.color12:      #5986b2
+
+    ! magenta
+    *.color5:       #bf9986
+    *.color13:      #d9ae98
+
+    ! cyan
+    *.color6:       #d97742
+    *.color14:      #f2854a
+
+    ! white
+    *.color7:       #34302d
+    *.color15:      #4c4742"
+bodyfg: background
+bodybg: bright_red
+titlefg: background
+titlebg: red
+focusedfg: foreground
+focusedbg: background
+urgentfg: foreground
+urgentbg: bright_cyan
+altfg: blue
+altbg: foreground
 moduleseparator: ""
 wspadding: 0
 background: "#00000000"
@@ -39,5 +54,5 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: *bright_cyan
-windowborder: *foreground
+focusedwindowborder: bright_cyan
+windowborder: foreground

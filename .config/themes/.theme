@@ -1,0 +1,41 @@
+altbg: '#34302d'
+altfg: '#4c7399'
+background: '#00000000'
+bodybg: '#b23636'
+bodyfg: '#f6e2d5'
+bodypadding: 1
+focusedbg: '#f6e2d5'
+focusedfg: '#34302d'
+focusedwindowborder: '#f2854a'
+leftmoduleprefix: "\uE0BE"
+leftmodulesuffix: "\uE0B8"
+moduleseparator: ''
+rightmoduleprefix: "\uE0BA"
+rightmodulesuffix: "\uE0BC"
+terminal_colors:
+  background: '#f6e2d5'
+  black: '#666661'
+  blue: '#4c7399'
+  bright_black: '#7f7f7a'
+  bright_blue: '#5986b2'
+  bright_cyan: '#f2854a'
+  bright_green: '#664233'
+  bright_magenta: '#d9ae98'
+  bright_red: '#b23636'
+  bright_white: '#4c4742'
+  bright_yellow: '#bf8f60'
+  cursorColor: '#34302d'
+  cyan: '#d97742'
+  foreground: '#34302d'
+  green: '#4c3226'
+  magenta: '#bf9986'
+  red: '#992e2e'
+  white: '#34302d'
+  yellow: '#a67c53'
+titlebg: '#992e2e'
+titlefg: '#f6e2d5'
+titlepadding: 0
+urgentbg: '#f2854a'
+urgentfg: '#34302d'
+windowborder: '#34302d'
+wspadding: 0
