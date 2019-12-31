@@ -129,7 +129,8 @@ export EDITOR='nvim'
 export VISUAL='nvim'
 
 # ROS
+export ROS_PYTHON_VERSION=3
 alias roslocal='source ~/dev/catkin_ws/devel/setup.bash;export ROS_MASTER_URI=http://localhost:11311'
-alias rosreem='source ~/dev/catkin_ws/devel/setup.bash; export ROS_MASTER_URI=http://10.68.1.240:11311; export ROS_IP=10.68.1.151'
-export PATH=$PATH:/usr/local/cuda/bin
-export LD_LIBRARY_PATH=/usr/local/cuda/lib64
+#alias rosreem='source ~/dev/catkin_ws/devel/setup.bash; export ROS_MASTER_URI=http://10.68.1.240:11311; export ROS_IP=10.68.1.151'
+#export PATH=$PATH:/usr/local/cuda/bin
+#export LD_LIBRARY_PATH=/usr/local/cuda/lib64
