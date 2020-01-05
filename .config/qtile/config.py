@@ -44,7 +44,7 @@ groups = [
     Group(name='2', label="2 "),
     Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger".format(TERMINAL), layout="columns",
-                                matches=[Match(wm_class=["ranger"])]),
+                                matches=[Match(wm_class=["explorer"])]),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
                                 matches=[Match(wm_class=["music"])]),
     # Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
@@ -53,10 +53,10 @@ groups = [
     ScratchPad("scratchpad", [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
-        DropDown("term", TERMINAL,
+        DropDown("term", "urxvt",
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True),
-        DropDown("calc", "{} -e python".format(TERMINAL),
+        DropDown("calc", "urxvt -e python",
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True)
         ],
