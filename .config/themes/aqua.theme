@@ -1,0 +1,58 @@
+terminal_colors:
+    "! special
+    *.foreground:   #a6a5a4
+    *.background:   #11171a
+    *.cursorColor:  #a6a5a4
+
+    ! black
+    *.color0:       #11171a
+    *.color8:       #11171a
+
+    ! red
+    *.color1:       #a54242
+    *.color9:       #cc6666
+
+    ! green
+    *.color2:       #117969
+    *.color10:      #0abd9f
+
+    ! yellow
+    *.color3:       #ae9d8d
+    *.color11:      #f0c674
+
+    ! blue
+    *.color4:       #04829c
+    *.color12:      #059eb6
+
+    ! magenta
+    *.color5:       #544e46
+    *.color13:      #898074
+
+    ! cyan
+    *.color6:       #07bac7
+    *.color14:      #0ee3ee
+
+    ! white
+    *.color7:       #a6a5a4
+    *.color15:      #a6a5a4"
+bodyfg: foreground
+bodybg: magenta
+titlefg: background
+titlebg: bright_blue
+focusedfg: background
+focusedbg: bright_blue
+urgentfg: background
+urgentbg: bright_cyan
+altfg: blue
+altbg: foreground
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: bright_cyan
+windowborder: background
