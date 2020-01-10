@@ -35,8 +35,7 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-#modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -47,12 +46,12 @@ tray-padding = 2
 # qtile workspaces and layout-------------------------------------------------
 [module/qtileWs]
 type = custom/ipc
-hook-0 = python3 ~/.config/polybar/qtile_ws.py get %pid%
+hook-0 = qtile-ws get -p %pid%
 #initial = 1
-click-left = python3 ~/.config/polybar/qtile_ws.py set next
-click-right = python3 ~/.config/polybar/qtile_ws.py set prev
-scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
-scroll-down = python3 ~/.config/polybar/qtile_ws.py set next
+click-left = qtile-ws set -w next
+click-right = qtile-ws set -w prev
+scroll-up = qtile-ws set -w prev
+scroll-down = qtile-ws set -w next
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
@@ -254,7 +253,7 @@ label-padding = ${env:POLY_TITLEPADDING}
 [module/utilization]
 type = custom/script
 interval = 5
-exec = bash $HOME/.config/polybar/utilization.sh
+exec = utilization
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-suffix-foreground = ${env:POLY_BODYBG}
 label-foreground = ${env:POLY_BODYFG}
@@ -278,7 +277,7 @@ label-padding = ${env:POLY_TITLEPADDING}
 [module/temp]
 type = custom/script
 interval = 5.0
-exec = bash $HOME/.config/polybar/gettemp.sh
+exec = temp
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-suffix-foreground = ${env:POLY_BODYBG}
 label-foreground = ${env:POLY_BODYFG}
