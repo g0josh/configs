@@ -1,12 +1,12 @@
 terminal_colors:
     "! special
-    *.foreground:   #bda37d
-    *.background:   #070c14
-    *.cursorColor:  #bda37d
+    *.foreground:   #7aaea8
+    *.background:   #0a1012
+    *.cursorColor:  #7aaea8
 
     ! black
-    *.color0:       #0b121c
-    *.color8:       #373b41
+    *.color0:       #0a1012
+    *.color8:       #0d242c
 
     ! red
     *.color1:       #9c3519
@@ -33,10 +33,10 @@ terminal_colors:
     *.color14:      #8abeb7
 
     ! white
-    *.color7:       #865a3e
-    *.color15:      #bda37d"
-bodyfg: red
-bodybg: black
+    *.color7:       #239490
+    *.color15:      #7aaea8"
+bodyfg: white
+bodybg: bright_black
 titlefg: background
 titlebg: red
 focusedfg: background
