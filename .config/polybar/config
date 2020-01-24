@@ -34,7 +34,7 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=8;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2  sep powermenu
 tray-position = right
 tray-padding = 2
 

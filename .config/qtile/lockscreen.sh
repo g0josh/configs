@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOCKIMAGE=~/Pictures/Lockscreen
+LOCKIMAGE=~/Pictures/Wallpaper
 if [ ! -f "$LOCKIMAGE" ]; then
   convert ~/Pictures/Wallpaper -filter Gaussian -resize 5% -define filter:sigma=2.5 -resize 4000% ~/Pictures/Lockscreen
 fi
@@ -25,20 +25,20 @@ i3lock \
 --insidevercolor=$C \
 --insidewrongcolor=$C \
 --line-uses-inside \
---indpos="500:550" \
+--indpos="500:850" \
  \
 --clock \
 --timecolor=$T \
 --timestr="%I:%M %p" \
 --timesize=200 \
 --time-font="Iosevka" \
---timepos="500:850" \
+--timepos="500:1150" \
  \
 --datestr="%d %b, %A" \
 --datesize=100 \
 --datecolor=$T \
 --date-font="Iosevka" \
---datepos="500:950" \
+--datepos="500:1250" \
  \
 --veriftext="" \
 --verifcolor=$T \
