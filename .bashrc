@@ -128,6 +128,11 @@ alias vim='nvim'
 export EDITOR='nvim'
 export VISUAL='nvim'
 
+# Golang
+export GOPATH='/home/job/dev/go'
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:/usr/local/go/bin:$GOBIN
+
 # ROS
 export ROS_PYTHON_VERSION=3
 alias roslocal='source ~/dev/catkin_ws/devel/setup.bash;export ROS_MASTER_URI=http://localhost:11311'
