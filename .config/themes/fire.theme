@@ -35,6 +35,7 @@ terminal_colors:
     ! white
     *.color7:       #239490
     *.color15:      #7aaea8"
+wallpaper: "fire.jpg"
 bodyfg: white
 bodybg: bright_black
 titlefg: background
@@ -56,3 +57,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: yellow
 windowborder: background
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

@@ -1,13 +1,13 @@
 terminal_colors:  "pywal"
 wallpaper: "towerwatch.jpg"
 bodyfg: "background"
-bodybg: "red"
+bodybg: "magenta"
 titlefg: "background"
-titlebg: "green"
+titlebg: "red"
 focusedfg: "background"
 focusedbg: "red"
 urgentfg: "background"
-urgentbg: "bright_cyan"
+urgentbg: "green"
 altfg: "blue"
 altbg: "foreground"
 moduleseparator: ""
@@ -19,5 +19,9 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "blue"
+focusedwindowborder: "green"
 windowborder: "background"
+barleftborder : 5
+barrightborder : 5
+bartopborder : 3
+barbottomborder : 0

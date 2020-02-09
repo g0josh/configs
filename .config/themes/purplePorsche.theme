@@ -21,3 +21,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "blue"
 windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

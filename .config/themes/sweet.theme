@@ -3,12 +3,12 @@ wallpaper: "sweet.png"
 bodyfg: "background"
 bodybg: "magenta"
 titlefg: "background"
-titlebg: "yellow"
+titlebg: "green"
 focusedfg: "background"
-focusedbg: "yellow"
+focusedbg: "green"
 urgentfg: "background"
-urgentbg: "green"
-altfg: "red"
+urgentbg: "bright_cyan"
+altfg: "blue"
 altbg: "foreground"
 moduleseparator: ""
 wspadding: 0
@@ -21,3 +21,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "red"
 windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

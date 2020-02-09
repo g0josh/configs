@@ -1,42 +1,46 @@
-altbg: '#8dcbe4'
-altfg: '#3B456B'
+altbg: '#54798b'
+altfg: '#276683'
 background: '#00000000'
-bodybg: '#1A4C92'
-bodyfg: '#050318'
+barbottomborder: 0
+barleftborder: 10
+barrightborder: 10
+bartopborder: 3
+bodybg: '#276683'
+bodyfg: '#141014'
 bodypadding: 1
-focusedbg: '#A93046'
-focusedfg: '#050318'
-focusedwindowborder: '#3B456B'
-leftmoduleprefix: "\uE0BE"
-leftmodulesuffix: "\uE0B8"
-moduleseparator: ''
-rightmoduleprefix: "\uE0BA"
-rightmodulesuffix: "\uE0BC"
+focusedbg: '#7a4456'
+focusedfg: '#141014'
+focusedwindowborder: '#7a4456'
+leftmoduleprefix: "\uE0B6"
+leftmodulesuffix: "\uE0B4"
+moduleseparator: ' '
+rightmoduleprefix: "\uE0B6"
+rightmodulesuffix: "\uE0B4"
 terminal_colors:
-  background: '#050318'
-  black: '#050318'
-  blue: '#F12A4F'
-  bright_black: '#628e9f'
-  bright_blue: '#F12A4F'
-  bright_cyan: '#0B5B9E'
-  bright_green: '#F31622'
-  bright_magenta: '#1A4C92'
-  bright_red: '#3B456B'
-  bright_white: '#8dcbe4'
-  bright_yellow: '#A93046'
-  cursorColor: '#8dcbe4'
-  cyan: '#0B5B9E'
-  foreground: '#8dcbe4'
-  green: '#F31622'
-  magenta: '#1A4C92'
-  red: '#3B456B'
-  white: '#8dcbe4'
-  yellow: '#A93046'
-titlebg: '#A93046'
-titlefg: '#050318'
+  background: '#141014'
+  black: '#141014'
+  blue: '#276683'
+  bright_black: '#54798b'
+  bright_blue: '#276683'
+  bright_cyan: '#68b8c7'
+  bright_green: '#68a285'
+  bright_magenta: '#9d3c5c'
+  bright_red: '#9d3c5c'
+  bright_white: '#54798b'
+  bright_yellow: '#6f96a8'
+  cursorColor: '#54798b'
+  cyan: '#68b8c7'
+  foreground: '#54798b'
+  green: '#68a282'
+  magenta: '#7a4456'
+  red: '#7a4456'
+  white: '#54798b'
+  yellow: '#6f96a8'
+titlebg: '#7a4456'
+titlefg: '#141014'
 titlepadding: 0
-urgentbg: '#F31622'
-urgentfg: '#050318'
-wallpaper: /home/cbarobotics/Pictures/walls/sweet.png
-windowborder: '#050318'
+urgentbg: '#68b8c7'
+urgentfg: '#141014'
+wallpaper: /home/job/.config/themes/walls/pinkBeach.jpg
+windowborder: '#141014'
 wspadding: 0

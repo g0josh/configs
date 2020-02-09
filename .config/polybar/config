@@ -8,7 +8,7 @@ content-background = ${env:POLY_BACKGROUND}
 monitor = ${env:POLY_MONITOR}
 monitor-fallback = HDMI-0
 width = 100%
-height = 16
+height = 18
 radius = 0
 fixed-center = true
 enable-ipc = true
@@ -16,10 +16,10 @@ background = ${env:POLY_BACKGROUND}
 override-redirect = false
 bottom = false
 
-border-top-size = 0
-border-left-size = 4
-border-right-size = 4
-border-bottom-size = 0
+border-top-size = ${env:POLY_BARTOPBORDER}
+border-left-size = ${env:POLY_BARLEFTBORDER}
+border-right-size = ${env:POLY_BARRIGHTBORDER}
+border-bottom-size = ${env:POLY_BARBOTTOMBORDER}
 line-size = 1
 
 padding-left = 0
@@ -34,7 +34,7 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=8;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2  sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -55,6 +55,12 @@ scroll-down = qtile-ws set -w next
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
 type = internal/mpd
+format-online =  
+format-offline =   
+format-offline-foreground = ${env:POLY_TITLEFG}
+format-offline-background = ${env:POLY_TITLEBG}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 
 format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
 format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
@@ -69,13 +75,6 @@ format-offline-prefix-background = ${env:POLY_BACKGROUND}
 format-offline-suffix-foreground = ${env:POLY_TITLEBG}
 format-offline-suffix-background = ${env:POLY_BACKGROUND}
 
-format-online =  
-format-offline =  
-format-offline-foreground = ${env:POLY_TITLEFG}
-format-offline-background = ${env:POLY_TITLEBG}
-format-online-foreground = ${env:POLY_TITLEFG}
-format-online-background = ${env:POLY_TITLEBG}
-
 [module/mpd]
 type = internal/mpd
 
@@ -87,6 +86,7 @@ label-song-padding = ${env:POLY_BODYPADDING}
 label-time = %elapsed% / %total% 
 label-time-padding = ${env:POLY_BODYPADDING}
 label-song-maxlen = 30
+label-song-minlen = 2
 label-song-ellipsis = true
 
 format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
@@ -106,6 +106,7 @@ format-online = <icon-prev>
 icon-prev= 
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
+icon-prev-padding = ${env:POLY_TITLEPADDING}
 
 [module/mpdPlayPause]
 type = internal/mpd
@@ -119,6 +120,8 @@ format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <toggle>
 icon-pause = 
 icon-play = 
+icon-pause-padding = ${env:POLY_TITLEPADDING}
+icon-play-padding = ${env:POLY_TITLEPADDING}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
 
@@ -133,8 +136,10 @@ format-online-suffix-foreground = ${env:POLY_TITLEBG}
 format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <icon-next>
 icon-next = 
+icon-next-padding = ${env:POLY_TITLEPADDING}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
+
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
 type = custom/script
@@ -210,7 +215,6 @@ type = internal/pulseaudio
 format-volume = <ramp-volume>
 format-volume-prefix = ${env:POLY_RIGHTMODULEPREFIX}
 format-volume-prefix-foreground = ${env:POLY_TITLEBG}
-format-volume-prefix-background = #00000000
 format-volume-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-volume-suffix-foreground = ${env:POLY_TITLEBG}
 format-volume-suffix-background = ${env:POLY_BODYBG}
@@ -222,7 +226,6 @@ label-muted-background = ${env:POLY_TITLEBG}
 label-muted-padding = ${env:POLY_TITLEPADDING}
 format-muted-prefix = ${env:POLY_RIGHTMODULEPREFIX}
 format-muted-prefix-foreground = ${env:POLY_TITLEBG}
-format-muted-prefix-background = #00000000
 format-muted-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-muted-suffix-foreground = ${env:POLY_TITLEBG}
 
@@ -291,7 +294,6 @@ interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
 format-connected-prefix-foreground = ${env:POLY_TITLEBG}
-format-connected-prefix-background = #00000000
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_TITLEBG}
 format-connected-suffix-background = ${env:POLY_BODYBG}

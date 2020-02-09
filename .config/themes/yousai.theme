@@ -35,6 +35,7 @@ terminal_colors:
     ! white
     *.color7:       #d49988
     *.color15:      #fecdbe"
+wallpaper: "yousai.jpg"
 bodyfg: black
 bodybg: red
 titlefg: black
@@ -58,3 +59,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: bright_red
 windowborder: background
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

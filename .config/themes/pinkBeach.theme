@@ -1,0 +1,63 @@
+terminal_colors:
+    "! special
+    *.foreground:   #54798b
+    *.background:   #141014
+    *.cursorColor:  #54798b
+
+    ! black
+    *.color0:       #141014
+    *.color8:       #54798b
+
+    ! red
+    *.color1:       #7a4456
+    *.color9:       #9d3c5c
+
+    ! green
+    *.color2:       #68a282
+    *.color10:      #68a285
+
+    ! yellow
+    *.color3:       #6f96a8
+    *.color11:      #6f96a8
+
+    ! blue
+    *.color4:       #276683
+    *.color12:      #276683
+
+    ! magenta
+    *.color5:       #7a4456
+    *.color13:      #9d3c5c
+
+    ! cyan
+    *.color6:       #68b8c7
+    *.color14:      #68b8c7
+
+    ! white
+    *.color7:       #54798b
+    *.color15:      #54798b"
+wallpaper: "pinkBeach.jpg"
+bodyfg: "background"
+bodybg: "blue"
+titlefg: "background"
+titlebg: "red"
+focusedfg: "background"
+focusedbg: "red"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+moduleseparator: " "
+wspadding: 0
+background: "#00000000" 
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0
