@@ -36,8 +36,8 @@ terminal_colors:
     *.color7:       #d49988
     *.color15:      #fecdbe"
 wallpaper: "yousai.jpg"
-bodyfg: black
-bodybg: red
+bodyfg: red
+bodybg: black
 titlefg: black
 titlebg: red
 occupiedfg: red
@@ -48,13 +48,13 @@ urgentfg: background
 urgentbg: yellow
 altfg: cyan
 altbg: background
-moduleseparator: ""
+moduleseparator: " "
 wspadding: 0
 background: "#00000000"
-leftmoduleprefix: ""
-leftmodulesuffix: ""
-rightmoduleprefix: ""
-rightmodulesuffix: ""
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
 focusedwindowborder: bright_red
