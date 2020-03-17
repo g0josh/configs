@@ -2,28 +2,29 @@ alt_send_esc: true
 background_opacity: 1.0
 colors:
   bright:
-    black: '#7f7f7a'
-    blue: '#5986b2'
-    cyan: '#f2854a'
-    green: '#664233'
-    magenta: '#d9ae98'
-    red: '#b23636'
-    white: '#4c4742'''
-    yellow: '#bf8f60'
+    black: '#544357'
+    blue: '#855269'
+    cyan: '#ed9b6f'
+    green: '#52977a'
+    magenta: '#855269'
+    red: '#ed5757'
+    white: '#fecdbe'
+    yellow: '#dc9754'
   indexed_colors: []
   normal:
-    black: '#666661'
-    blue: '#4c7399'
+    black: '#3b293e'
+    blue: '#762e4e'
     cursor: '#ffffff'
-    cyan: '#d97742'
-    green: '#4c3226'
-    magenta: '#bf9986'
-    red: '#992e2e'
-    white: '#34302d'
-    yellow: '#a67c53'
+    cursorColor: '#d49988'
+    cyan: '#dc9754'
+    green: '#2d6f53'
+    magenta: '#762e4e'
+    red: '#bd4349'
+    white: '#d49988'
+    yellow: '#d26226'
   primary:
-    background: '#f5e7de'
-    foreground: '#34302d'
+    background: '#1f1622'
+    foreground: '#d49988'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -394,7 +395,6 @@ mouse_bindings:
   mouse: Middle
 scrolling:
   auto_scroll: false
-  faux_multiplier: 3
   history: 10000
   multiplier: 3
 selection:

@@ -6,9 +6,9 @@ if [ ! -f "$LOCKIMAGE" ]; then
 fi
 
 C=#00000000
-T="`xrdb -query|grep color11:|awk '{print $2}'`aa"	#Text
-D="`xrdb -query|grep color12:|awk '{print $2}'`aa"	#Default
-W="`xrdb -query|grep color1:|awk '{print $2}'`aa"	#Wrong
+T="`xrdb -query|grep "*.color11:"|awk '{print $2}'`aa"	#Text
+D="`xrdb -query|grep "*.color12:"|awk '{print $2}'`aa"	#Default
+W="`xrdb -query|grep "*.color1:"|awk '{print $2}'`aa"	#Wrong
 
 i3lock \
 --tiling \

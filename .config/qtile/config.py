@@ -16,7 +16,7 @@ from my_scripts import LAYOUT_ICONS
 
 MOD = "mod4"
 ALT = "mod1"
-#TERMINAL = "alacritty"
+ALTTERMINAL = "alacritty"
 TERMINAL = "urxvtc"
 BROWSER = "firefox"
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
@@ -42,13 +42,13 @@ icon_font = dict(
 groups = [
     Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["code-oss"])], layout="columns" ),
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], layout="columns" ),
     Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger".format(TERMINAL), layout="columns",
                                 matches=[Match(wm_class=["explorer"])]),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
                                 matches=[Match(wm_class=["music"])]),
-    # Group(name='6', label="6 ", matches=[Match(wm_class=["Thunderbird"])], init=True, spawn="thunderbird", layout="monadtall"),
-    Group(name='6', label="6 "),
+    Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
+    #Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
         # define a drop down terminal.
@@ -153,6 +153,7 @@ keys = [
     # multiple stack panes
     Key([MOD, "shift"], "Return", lazy.layout.toggle_split()),
     Key([MOD], "Return", lazy.spawn(TERMINAL)),
+    Key([ALT], "Return", lazy.spawn(ALTTERMINAL)),
     Key([MOD], "b", lazy.spawn(BROWSER)),
 
     # Toggle between different layouts
