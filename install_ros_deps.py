@@ -1,7 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import apt
 import subprocess
+import argparse
 
 PREDEFINED = {
         "python-wxtools" : None,
@@ -10,8 +11,13 @@ PREDEFINED = {
         }
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", "-p", default=None, help="path to the src folder")
+    args = parser.parse_args()
+    
+    src = args.path if args.path is not None else "src"
     try:
-        a = subprocess.check_output(["rosdep","check","--from-paths", "src","--ignore-src"])
+        a = subprocess.check_output(["rosdep","check","--from-paths", src,"--ignore-src"])
     except subprocess.CalledProcessError as e:
         err, deps = e.stderr, e.stdout
 
