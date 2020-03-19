@@ -48,9 +48,9 @@ else
     curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
     echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
     sudo apt install syncthing transmission uget mpd mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager
-    sudo dpkg -i ./resemsmice_1.1.3_amd64.deb
-    cp ./.profile ~/
-    cp ./.xinitrc ~/
+    sudo dpkg -i resemsmice_1.1.3_amd64.deb
+    cp .profile ~/
+    cp .xinitrc ~/
     systemctl enable network-manager
 fi
 
@@ -60,28 +60,28 @@ echo "Setting up configs"
 echo "---------------------------------------"
 echo ""
 
-cp ./.config/qtile ~/.config/ -r
-cp ./.config/polybar ~/.config/ -r
-cp ./.config/ranger ~/.config/ -r
-cp ./.config/alacritty ~/.config/ -r
-cp ./.config/mpd ~/.config/ -r
-cp ./.config/ncmpcpp ~/.config/ -r
-cp ./.config/nvim ~/.config/ -r
-cp ./.config/themes ~/.config/ -r
-cp ./.config/compton.conf ~/.config/compton.conf
-cp ./.Xresources ~/
-cp ./.bashrc ~/
-cp ./.tmux.conf ~/
+cp .config/qtile ~/.config/ -r
+cp .config/polybar ~/.config/ -r
+cp .config/ranger ~/.config/ -r
+cp .config/alacritty ~/.config/ -r
+cp .config/mpd ~/.config/ -r
+cp .config/ncmpcpp ~/.config/ -r
+cp .config/nvim ~/.config/ -r
+cp .config/themes ~/.config/ -r
+cp .config/compton.conf ~/.config/compton.conf
+cp .Xresources ~/
+cp .bashrc ~/
+cp .tmux.conf ~/
 mkdir ~/.fonts
 cp fonts/* ~/.fonts/
 fc-cache -fv
-cd ..
 
 echo ""
 echo "---------------------------------------"
 echo "Installing Polybar"
 echo "---------------------------------------"
 echo ""
+cd $HOME/tools
 git clone --recursive https://github.com/polybar/polybar
 sudo apt install pkg-config python3-sphinx
 sudo apt install libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev	
@@ -94,7 +94,6 @@ make -j$(nproc)
 sudo make install
 
 sudo apt remove python3-sphinx
-cd ..
 
 echo ""
 echo "---------------------------------------"
