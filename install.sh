@@ -47,7 +47,7 @@ else
     echo "-----------------------------------------------"
     curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
     echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
-    sudo apt install syncthing transmission uget mpd mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager
+    sudo apt install syncthing transmission uget mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager
     sudo dpkg -i resemsmice_1.1.3_amd64.deb
     cp .profile ~/
     cp .xinitrc ~/
