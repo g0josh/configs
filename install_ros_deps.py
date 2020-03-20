@@ -8,6 +8,8 @@ PREDEFINED = {
         "python-wxtools" : None,
         "python-rosdep":"python3-rosdep2",
         "python3-rosdep":"python3-rosdep2",
+        "python3-rosdep-modules":"python3-rosdep2",
+        "python3-catkin-pkg-modules":"python3-catkin-pkg"
         }
 
 if __name__ == '__main__':
@@ -16,8 +18,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     src = args.path if args.path is not None else "src"
+    rosdep_path = os.path.join(os.path.expanduser("~"), ".local/bin/rosdep")
+    if not os.path.exists(rosdep_path):
+        rosdep_path = "rosdep"
     try:
-        a = subprocess.check_output(["rosdep","check","--from-paths", src,"--ignore-src"])
+        a = subprocess.check_output([rosdep_path,"check","--from-paths", src,"--ignore-src"])
     except subprocess.CalledProcessError as e:
         err, deps = e.stderr, e.stdout
 

@@ -7,15 +7,17 @@ if [ "$cont" == "n" ]; then
 fi
 read -p 'Office(1) or Home(0): ' office
 
-sudo apt install xorg
+sudo apt install xorg -y
 
 echo ""
 echo "---------------------------------------"
 echo "Installing Qtile"
 echo "---------------------------------------"
 echo ""
-sudo apt-get install libpangocairo-1.0-0
-pip install xcffib cairocffi qtile
+sudo apt-get install libxcb-render0-dev libffi-dev libcairo2 python3-pip cmake -y
+pip3 install xcffib
+pip3 install --no-cache-dir cairocffi
+pip3 install qtile
 
 
 echo ""
@@ -30,10 +32,10 @@ sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get install apt-transport-https
 sudo add-apt-repository ppa:codejamninja/jam-os
-add-apt-repository ppa:mmstick76/alacritty
+sudo add-apt-repository ppa:mmstick76/alacritty
 
 sudo apt update
-sudo apt install code i3lock-color tmux pavucontrol alacritty firefox rxvt-unicode ranger imagemagick neovim feh bc lm-sensors rofi tmux
+sudo apt install code i3lock-color tmux pavucontrol alacritty firefox rxvt-unicode imagemagick feh bc lm-sensors rofi 
 
 
 if [ "$office" == "1" ]; then
@@ -47,7 +49,7 @@ else
     echo "-----------------------------------------------"
     curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
     echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
-    sudo apt install syncthing transmission uget mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager
+    sudo apt install syncthing transmission uget mpd mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager nautilus
     sudo dpkg -i resemsmice_1.1.3_amd64.deb
     cp .profile ~/
     cp .xinitrc ~/
@@ -75,6 +77,17 @@ cp .tmux.conf ~/
 mkdir ~/.fonts
 cp fonts/* ~/.fonts/
 fc-cache -fv
+mkdir $HOME/tools
+
+echo ""
+echo "---------------------------------------"
+echo "Installing NVIM"
+echo "---------------------------------------"
+echo ""
+curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+mv nvim.appimage $HOME/tools
+sudo chmod u+x nvim.appimage
+sudo update-alternatives --install /usr/bin/vim vim "$HOME/tools/nvim.appimage" 110
 
 echo ""
 echo "---------------------------------------"
@@ -101,7 +114,7 @@ echo "Installing compton"
 echo "---------------------------------------"
 echo ""
 sudo apt install asciidoc --no-install-recommends
-sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl libxdamage-dev libdrm-dev mesa-common-dev
+sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl libxdamage-dev libdrm-dev mesa-common-dev libgl1-mesa-dev
 cd $HOME/tools
 git clone https://github.com/tryone144/compton.git
 cd compton
