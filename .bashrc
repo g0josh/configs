@@ -117,16 +117,13 @@ if ! shopt -oq posix; then
 fi
 
 function parse_git_branch { 
-   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' 
+   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/' 
 } 
 #export PS1="\[\e[30;42m\]\u@\h\[\e[0m\]\[\e[32;46m\]\[\e[0m\]\[\e[30;46m\]\w\[\e[m\]\[\e[36;44m\]\[\e[0m\]\[\e[0;44m\]\$(parse_git_branch)\[\e[0m\]\[\e[34m\]\[\e[0m\]\n"
 export PS1="\[\e[30;45m\]\u@\h\[\e[0m\]\[\e[35m\]\[\e[0m\]\[\e[35m\]\w \[\e[m\]\[\e[31m\]\$(parse_git_branch)\[\e[0m\]\n"
 
 alias shut='shutdown now'
 alias ls='ls --color'
-alias vim='nvim'
-export EDITOR='nvim'
-export VISUAL='nvim'
 
 # Golang
 export GOPATH='/home/job/dev/go'

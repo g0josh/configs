@@ -40,10 +40,11 @@ icon_font = dict(
 )
 
 groups = [
-    Group(name='1', label="1 "),
+    Group(name='1', label="1 "),
+    #Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], layout="columns" ),
-    Group(name='4', label="4 ", init=True, spawn="urxvt -name ranger -e ranger".format(TERMINAL), layout="columns",
+    Group(name='4', label="4 ", init=True, spawn="nautilus".format(TERMINAL), layout="columns",
                                 matches=[Match(wm_class=["explorer"])]),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
                                 matches=[Match(wm_class=["music"])]),
@@ -56,7 +57,7 @@ groups = [
         DropDown("term", "urxvt",
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True),
-        DropDown("calc", "urxvt -e python",
+        DropDown("calc", "urxvt -e python3",
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True)
         ],
