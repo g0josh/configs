@@ -1,0 +1,71 @@
+terminal_colors: 
+    "! special
+    *.foreground:   #cfbbd9
+    *.background:   #0b0317
+    *.cursorColor:  #cfbbd9
+
+    ! black
+    *.color0:       #0b0317
+    *.color8:       #908297
+
+    ! red
+    *.color1:       #8d75b9
+    *.color9:       #8d75b9
+
+    ! green
+    *.color2:       #7e85c1
+    *.color10:      #7e85c1
+
+    ! yellow
+    *.color3:       #cf92b4
+    *.color11:      #cf92b4
+
+    ! blue
+    *.color4:       #d09dbc
+    *.color12:      #d09dbc
+
+    ! magenta
+    *.color5:       #f0a6b0
+    *.color13:      #f0a6b0
+
+    ! cyan
+    *.color6:       #9d82c2
+    *.color14:      #9d82c2
+
+    ! white
+    *.color7:       #cfbbd9
+    *.color15:      #cfbbd9"
+wallpaper: "bluePastelGradient.jpg"
+bodyfg: "background"
+bodybg: "green"
+titlefg: "background"
+titlebg: "magenta"
+focusedfg: "background"
+focusedbg: "magenta"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0
