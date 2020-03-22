@@ -1,0 +1,21 @@
+*.background: #170e18
+*.foreground: #f6dede
+*.cursor: #f6dede
+*.color0: #170e18
+*.color1: #735285
+*.color2: #AA6388
+*.color3: #D7738C
+*.color4: #EF90A0
+*.color5: #FBAEB4
+*.color6: #FBBBC2
+*.color7: #f6dede
+*.color8: #ac9b9b
+*.color9: #735285
+*.color10: #AA6388
+*.color11: #D7738C
+*.color12: #EF90A0
+*.color13: #FBAEB4
+*.color14: #FBBBC2
+*.color15: #f6dede
+rofi.color-window: #a0735285, #170e18, #170e18
+rofi.color-normal: #00000000,	#170e18, #00000000, #170e18, #735285

@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "lightHouse.jpg"
+bodyfg: "background"
+bodybg: "green"
+titlefg: "background"
+titlebg: "magenta"
+focusedfg: "background"
+focusedbg: "magenta"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: " "
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

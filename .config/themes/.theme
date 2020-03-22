@@ -1,0 +1,60 @@
+altbg: '#f6dede'
+altfg: '#EF90A0'
+background: '#00000000'
+barbottomborder: 0
+barleftborder: 10
+barrightborder: 10
+bartopborder: 3
+bodybg: '#AA6388'
+bodyfg: '#170e18'
+bodypadding: 1
+focusedbg: '#FBAEB4'
+focusedfg: '#170e18'
+focusedwindowborder: '#735285'
+gradient1body: '#735285'
+gradient1title: '#735285'
+gradient2body: '#AA6388'
+gradient2title: '#AA6388'
+gradient3body: '#D7738C'
+gradient3title: '#D7738C'
+gradient4body: '#EF90A0'
+gradient4title: '#EF90A0'
+gradient5body: '#FBAEB4'
+gradient5title: '#FBAEB4'
+gradient6body: '#FBBBC2'
+gradient6title: '#FBBBC2'
+gradient7body: '#f6dede'
+gradient7title: '#f6dede'
+leftmoduleprefix: "\uE0B6"
+leftmodulesuffix: "\uE0B4"
+moduleseparator: ' '
+rightmoduleprefix: "\uE0B6"
+rightmodulesuffix: "\uE0B4"
+terminal_colors:
+  background: '#170e18'
+  black: '#170e18'
+  blue: '#EF90A0'
+  bright_black: '#ac9b9b'
+  bright_blue: '#EF90A0'
+  bright_cyan: '#FBBBC2'
+  bright_green: '#AA6388'
+  bright_magenta: '#FBAEB4'
+  bright_red: '#735285'
+  bright_white: '#f6dede'
+  bright_yellow: '#D7738C'
+  cursorColor: '#f6dede'
+  cyan: '#FBBBC2'
+  foreground: '#f6dede'
+  green: '#AA6388'
+  magenta: '#FBAEB4'
+  red: '#735285'
+  white: '#f6dede'
+  yellow: '#D7738C'
+titlebg: '#FBAEB4'
+titlefg: '#170e18'
+titlepadding: 0
+urgentbg: '#FBBBC2'
+urgentfg: '#170e18'
+wallpaper: /home/job/.config/themes/walls/lightHouse.jpg
+windowborder: '#170e18'
+wspadding: 0
