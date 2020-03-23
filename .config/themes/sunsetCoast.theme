@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "sunsetCoast.jpg"
+bodyfg: "background"
+bodybg: "blue"
+titlefg: "background"
+titlebg: "green"
+focusedfg: "background"
+focusedbg: "green"
+urgentfg: "background"
+urgentbg: "cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "white"
+    - "magenta"
+    - "yellow"
+    - "blue"
+    - "green"
+    - "cyan"
+    - "red"
+moduleseparator: " "
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0
