@@ -19,6 +19,7 @@ ALT = "mod1"
 ALTTERMINAL = "alacritty"
 TERMINAL = "urxvtc"
 BROWSER = "firefox"
+ALTBROWSER = "google-chrome-stable"
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
 POLYBAR_INFO = {}
 
@@ -156,6 +157,7 @@ keys = [
     Key([MOD], "Return", lazy.spawn(TERMINAL)),
     Key([ALT], "Return", lazy.spawn(ALTTERMINAL)),
     Key([MOD], "b", lazy.spawn(BROWSER)),
+    Key([ALT], "b", lazy.spawn(ALTBROWSER)),
 
     # Toggle between different layouts
     Key([MOD], "Tab", lazy.next_layout(), polybar_hook),

@@ -20,7 +20,7 @@ POWER_BUTTONS={ 'SHUT_DOWN':0, 'LOG_OUT':1, 'LOCK_SCREEN':2 }
 # VOLUME
 # ---------------------------------------------
 
-def _getPulseSinks():
+def getPulseSinks():
     try:
         output = subprocess.check_output(['pactl','list','short','sinks']).decode()
     except subprocess.CalledProcessError as e:
@@ -28,8 +28,6 @@ def _getPulseSinks():
         return []
     else:
         return re.findall(r'^\d+', output, flags=re.MULTILINE)
-
-pulse_sinks = _getPulseSinks()
 
 def volumePressed(x, y, button, icon_widget=None, value_widget=None):
     if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
@@ -98,17 +96,13 @@ def getVolume():
     return volume
 
 def toggleMuteVolume():
-    global pulse_sinks
-    if not pulse_sinks:
-        return
-    for sink in pulse_sinks:
+    sinks = getPulseSinks()
+    for sink in sinks:
         subprocess.call(['pactl', 'set-sink-mute', sink, 'toggle'])
 
 def changeVolume(value='+5%'):
-    global pulse_sinks
-    if not pulse_sinks:
-        return
-    for sink in pulse_sinks:
+    sinks = getPulseSinks()
+    for sink in sinks:
         subprocess.call(['pactl', 'set-sink-volume', sink, value])
 
 # ---------------------------------------------
