@@ -8,7 +8,6 @@ import json
 import yaml
 
 from libqtile.log_utils import logger
-
 from socket import error as socket_error
 
 POWER_ICONS = { 'power':'','reboot':'','lock':'', 'logout':''}
@@ -472,3 +471,19 @@ def startPolybar(theme_path):
             logger.warn(e.output.decode().strip())
     logger.warn(poly_screens)
     return poly_screens
+
+def updateWallpaper(qtile, adjustWindowCount = 0):
+    groups = qtile.cmd_groups()
+    windows = adjustWindowCount
+    for group in groups:
+        if groups[group]["screen"] is None:
+            continue
+        windows += len(groups[group]["windows"])
+
+    wall = "BlurredWallpaper" if windows > 0 else "Wallpaper"
+    wallPath = os.path.join(os.path.expanduser("~"), "Pictures", wall)
+    cmd = "feh --bg-fill " + wallPath
+    p = subprocess.Popen(cmd.split(), stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    if stdout or stderr:
+        logger.warning("out = {}, err = {}".format(stdout , stderr))

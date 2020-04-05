@@ -11,7 +11,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
 from my_scripts import changeVolume, toggleMuteVolume, getInterfaces
-from my_scripts import getTheme, startPolybar
+from my_scripts import getTheme, startPolybar, updateWallpaper
 from my_scripts import LAYOUT_ICONS
 
 MOD = "mod4"
@@ -44,10 +44,10 @@ groups = [
     Group(name='1', label="1 "),
     #Group(name='1', label="1 "),
     Group(name='2', label="2 "),
-    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])], layout="columns" ),
-    Group(name='4', label="4 ", init=True, spawn="nautilus".format(TERMINAL), layout="columns",
+    Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])]),
+    Group(name='4', label="4 ", init=True, spawn="nautilus".format(TERMINAL),
                                 matches=[Match(wm_class=["explorer"])]),
-    Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL), layout="columns",
+    Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer".format(TERMINAL),
                                 matches=[Match(wm_class=["music"])]),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
     #Group(name='6', label="6 "),
@@ -166,8 +166,8 @@ keys = [
 
     Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), polybar_hook),
     Key([MOD, "shift", "control"], "Down", lazy.next_screen(), polybar_hook),
-    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), polybar_hook),
-    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), polybar_hook),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
     Key([MOD], "u", lazy.next_urgent(), polybar_hook),
 
     Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
@@ -184,8 +184,8 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), polybar_hook),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), polybar_hook),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
@@ -206,9 +206,9 @@ for i in groups:
     else:
         keys.extend([
             # MOD1 + letter of group = switch to group
-            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook),
+            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
             # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), polybar_hook),
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
         ])
 
 layout_configs={
@@ -312,6 +312,15 @@ def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
     #launch_polybar()
+
+@hook.subscribe.client_new
+def windowAdded(c):
+    updateWallpaper(c.qtile, 1)
+
+@hook.subscribe.client_killed
+def windowDeleted(c):
+    updateWallpaper(c.qtile, -1)
+
 
 '''
 @hook.subscribe.startup
