@@ -473,17 +473,17 @@ def startPolybar(theme_path):
     return poly_screens
 
 def updateWallpaper(qtile, adjustWindowCount = 0):
-    pass
-    #groups = qtile.cmd_groups()
-    #windows = adjustWindowCount
-    #for group in groups:
-    #    if groups[group]["screen"] is None:
-    #        continue
-    #    windows += len(groups[group]["windows"])
+    groups = qtile.cmd_groups()
+    windows = adjustWindowCount
+    for group in groups:
+        if groups[group]["screen"] is None:
+            continue
+        windows += len(groups[group]["windows"])
 
-    #wall = "BlurredWallpaper" if windows > 0 else "Wallpaper"
-    #wallPath = os.path.join(os.path.expanduser("~"), "Pictures", wall)
-    #cmd = "feh --bg-fill " + wallPath
+    wall = "BlurredWallpaper" if windows > 0 else "Wallpaper"
+    wallPath = os.path.expanduser("~/Pictures/") + wall
+    cmd = "feh --bg-fill " + wallPath
+    p = subprocess.Popen(cmd.split())
     #p = subprocess.Popen(cmd.split(), stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     #stdout, stderr = p.communicate()
     #if stdout or stderr:
