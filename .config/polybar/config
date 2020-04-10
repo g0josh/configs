@@ -4,7 +4,7 @@ content = ${env:POLY_MODULESEPARATOR:}
 content-foreground = ${env:POLY_BACKGROUND}
 content-background = ${env:POLY_BACKGROUND}
 
-[bar/island]
+[bar/qtile]
 monitor = ${env:POLY_MONITOR}
 monitor-fallback = HDMI-0
 width = 100%
@@ -39,6 +39,41 @@ modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utiliz
 tray-position = right
 tray-padding = 2
 
+[bar/i3]
+monitor = ${env:POLY_MONITOR}
+monitor-fallback = HDMI-0
+width = 100%
+height = 18
+radius = 0
+fixed-center = true
+enable-ipc = true
+background = ${env:POLY_BACKGROUND}
+override-redirect = false
+bottom = false
+
+border-top-size = ${env:POLY_BARTOPBORDER}
+border-left-size = ${env:POLY_BARLEFTBORDER}
+border-right-size = ${env:POLY_BARRIGHTBORDER}
+border-bottom-size = ${env:POLY_BARBOTTOMBORDER}
+line-size = 1
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+#font-0 = Iosevka Term SS03 Medium:style=Medium:pixelsize=11;2:antialias=true
+font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;2:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
+
+modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-center = timePrefix time sep timeIndia 
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+tray-position = right
+tray-padding = 2
+
 #cursor-click = pointer
 #cursor-scroll = ns-resize
 
@@ -52,6 +87,41 @@ click-left = qtile-ws set -w next
 click-right = qtile-ws set -w prev
 scroll-up = qtile-ws set -w prev
 scroll-down = qtile-ws set -w next
+
+#i3---------------------------------------------------------------------------
+[module/i3Ws]
+type = internal/i3
+index-sort = true
+wrapping-scroll = false
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+
+ws-icon-default = 
+format = <label-state>
+
+#focused = activecolor workspace on focused monitor
+label-focused = ${env:POLY_ACTIVEWS}
+#label-focused-background = ${env:POLY_FOCUSEDBG}
+#label-focused-foreground = ${env:POLY_FOCUSEDFG}
+
+#unfocused = Inactivecolor workspace on any monitor
+label-unfocused = ${env:POLY_OCCUPIEDWS}
+#label-unfocused-background = ${env:POLY_BODYBG}
+#label-unfocused-foreground = ${env:POLY_BODYFG}
+
+#visible = activecolor workspace on unfocused monitor
+label-visible = ${env:POLY_VISIBLEOTHERWS}
+#label-visible-background = ${env:POLY_ALTBG}
+#label-visible-foreground = ${env:POLY_ALTFG}
+
+#urgentcolor = Workspace with urgency hint set
+label-urgent = ${env:POLY_URGENTWS}
+#label-urgent-background = ${env:POLY_URGENTBG}
+#label-urgent-foreground = ${env:POLY_URGENTFG}
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]

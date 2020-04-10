@@ -1,14 +1,15 @@
 #!/bin/sh
 
-LOCKIMAGE=~/Pictures/Wallpaper
+LOCKIMAGE=~/Pictures/Lockscreen
 if [ ! -f "$LOCKIMAGE" ]; then
-  convert ~/Pictures/Wallpaper -filter Gaussian -resize 5% -define filter:sigma=2.5 -resize 4000% ~/Pictures/Lockscreen
+#  convert ~/Pictures/Wallpaper -filter Gaussian -resize 5% -define filter:sigma=2.5 -resize 4000% ~/Pictures/Lockscreen
+  convert ~/Pictures/Wallpaper -resize 2560x1080 ~/Pictures/Lockscreen
 fi
 
 C=#00000000
-T="`xrdb -query|grep "*.color11:"|awk '{print $2}'`aa"	#Text
-D="`xrdb -query|grep "*.color12:"|awk '{print $2}'`aa"	#Default
-W="`xrdb -query|grep "*.color1:"|awk '{print $2}'`aa"	#Wrong
+T="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Text
+D="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Default
+W="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Wrong
 
 i3lock \
 --tiling \
