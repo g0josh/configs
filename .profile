@@ -28,5 +28,9 @@ fi
 
 # Startx
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-	startx
+    export WM="qtile"
+	startx $HOME/.xinitrc
+elif [[ ! $DISPLAY && $XDG_VTNR -eq 2 ]]; then
+    export WM="i3"
+	startx $HOME/.xinitrc_i3
 fi

@@ -38,4 +38,4 @@ fi
 
 numlockx on
 udiskie -2 &
-exec qtile
+exec i3
