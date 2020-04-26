@@ -1,23 +1,59 @@
-terminal_colors:  "pywal"
+terminal_colors:
+    "! special
+    *.foreground:   #f6dacb
+    *.background:   #150c24
+    *.cursorColor:  #f6dacb
+
+    ! black
+    *.color0:       #150c24
+    *.color8:       #34264b
+
+    ! red
+    *.color1:       #d35071
+    *.color9:       #ff6f6f
+
+    ! green
+    *.color2:       #af6666
+    *.color10:      #af6666
+
+    ! yellow
+    *.color3:       #de935f
+    *.color11:      #f8983d
+
+    ! blue
+    *.color4:       #6c5596
+    *.color12:      #6c5596
+
+    ! magenta
+    *.color5:       #b03f84
+    *.color13:      #b66181
+
+    ! cyan
+    *.color6:       #ee7f61
+    *.color14:      #ff8e6f
+
+    ! white
+    *.color7:       #f6dacb
+    *.color15:      #f6dacb"
 wallpaper: "sunsetCoast.jpg"
-bodyfg: "background"
-bodybg: "blue"
+bodyfg: "bright_black"
+bodybg: "red"
 titlefg: "background"
-titlebg: "green"
+titlebg: "bright_yellow"
 focusedfg: "background"
-focusedbg: "green"
+focusedbg: "bright_yellow"
 urgentfg: "background"
 urgentbg: "cyan"
 altfg: "blue"
 altbg: "foreground"
 gradient:
-    - "white"
-    - "magenta"
+    - "bright_yellow"
     - "yellow"
-    - "blue"
     - "green"
     - "cyan"
     - "red"
+    - "blue"
+    - "magenta"
 moduleseparator: " "
 wspadding: 0
 background: "#00000000"
@@ -27,7 +63,7 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "red"
+focusedwindowborder: "bright_yellow"
 windowborder: "background"
 barleftborder : 10
 barrightborder : 10

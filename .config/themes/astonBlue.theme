@@ -1,0 +1,35 @@
+terminal_colors: "pywal"
+wallpaper: "astonBlue.jpg"
+bodyfg: "background"
+bodybg: "green"
+titlefg: "background"
+titlebg: "red"
+focusedfg: "background"
+focusedbg: "red"
+urgentfg: "background"
+urgentbg: "white"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "white"
+    - "yellow"
+    - "green"
+    - "magenta"
+    - "cyan"
+    - "blue"
+    - "red"
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

@@ -225,7 +225,7 @@ bindsym $MOD+b exec --no-startup-id $BROWSER
 #}/
 
 # misc startup
-exec --no-startup-id python3 $HOME/.config/i3/detect_monitors_load_bar.py
+exec --no-startup-id reload-screens 
 exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splitv
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
