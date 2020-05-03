@@ -5,6 +5,7 @@ set $TERM_NAME URxvt
 set $TERM_ALT alacritty
 set $TERM_ALT_NAME Alacritty
 set $BROWSER firefox
+set $BROWSER_ALT google-chrome
 
 # Visual
 gaps inner 15
@@ -62,6 +63,7 @@ bindsym $MOD+q kill ; exec --no-startup-id i3-change-wall
 
 # Apps
 bindsym $MOD+b exec --no-startup-id $BROWSER ; exec --no-startup-id i3-change-wall
+bindsym $MOD_ALT+b exec --no-startup-id $BROWSER_ALT ; exec --no-startup-id i3-change-wall
 bindsym $MOD+Return exec $TERM ; exec --no-startup-id i3-change-wall
 bindsym $MOD_ALT+Return exec $TERM_ALT ; exec --no-startup-id i3-change-wall
 bindsym $MOD+a exec rofi -show drun

@@ -1,0 +1,71 @@
+terminal_colors:
+    "! special
+    *.foreground:   #a6e5e9
+    *.background:   #0f0212
+    *.cursorColor:  #a6e5e9
+
+    ! black
+    *.color0:       #0f0212
+    *.color8:       #541c1c
+
+    ! red
+    *.color1:       #c73f3f
+    *.color9:       #c90b50
+
+    ! green
+    *.color2:       #916dac
+    *.color10:      #916dac
+
+    ! yellow
+    *.color3:       #c96187
+    *.color11:      #c96187
+
+    ! blue
+    *.color4:       #24b2f0
+    *.color12:      #24b2f0
+
+    ! magenta
+    *.color5:       #5fa9d0
+    *.color13:      #5fa9d0
+
+    ! cyan
+    *.color6:       #2ad6f0
+    *.color14:      #2ad6f0
+
+    ! white
+    *.color7:       #a6e5e9
+    *.color15:      #a6e5e9"
+wallpaper: "orangeGradient.png"
+bodyfg: "bright_black"
+bodybg: "green"
+titlefg: "bright_red"
+titlebg: "blue"
+focusedfg: "bright_red"
+focusedbg: "blue"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0
