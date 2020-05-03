@@ -1,137 +1,118 @@
-#It will not be overwritten, so edit it as you like.
-#
-# Should you change your keyboard layout some time, delete
-# this file and re-run i3-config-wizard(1).
-#
-
-# i3 config file (v4)
-#
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
-
 set $MOD Mod4
 set $MOD_ALT Mod1
-set $TERM urxvt
+set $TERM urxvtc
 set $TERM_NAME URxvt
+set $TERM_ALT alacritty
+set $TERM_ALT_NAME Alacritty
 set $BROWSER firefox
 
-gaps inner 18
-#gaps outer 15 
+# Visual
+gaps inner 15
+#gaps outer 15
 #smart_gaps on
 smart_borders on
-bindsym $MOD+g		gaps inner current plus 5
-bindsym $MOD+Shift+g 	gaps inner current minus 5
-
 hide_edge_borders both
 default_border pixel 2
 default_floating_border pixel 2
+font xft:Iosevka Nerd Font Medium 10
+
+# Colors
 set_from_resource $accent-clr color9 #9f2323
 set_from_resource $bg-clr color0 #000000
 set_from_resource $txt-clr foreground #858585
 set_from_resource $inact-txt-clr color6	#5d3535
 set_from_resource $urg-bg-clr color2 #116466
+#colors:                border          backgr          text            indicator
+client.focused          $accent-clr     $accent-clr     $txt-clr   	    $accent-clr
+client.focused_inactive $bg-clr         $bg-clr         $inact-txt-clr  $bg-clr
+client.unfocused        $bg-clr         $bg-clr         $inact-txt-clr  $bg-clr
+client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-clr
 
-#colors:                border		backgr.     	text          	indicator
-client.focused          $accent-clr   	$accent-clr   	$txt-clr   	$accent-clr
-client.focused_inactive $bg-clr		$bg-clr 	$inact-txt-clr	$bg-clr
-client.unfocused        $bg-clr		$bg-clr		$inact-txt-clr	$bg-clr
-client.urgent           $urg-bg-clr  	$urg-bg-clr	$txt-clr	$urg-bg-clr
+# Startup
+exec --no-startup-id urxvtd
+exec --no-startup-id reload-screens
+exec --no-startup-id compton --config $HOME/.config/compton.conf
+exec --no-startup-id nautilus
+exec $TERM -name calculator -e python3
+exec --no-startup-id $TERM -name music -e ncmpcpp -s visualizer
+for_window [class="Nautilus"] move workspace $ws4
+for_window [class=$TERM_NAME instance="calculator"] move scratchpad
+for_window [class=$TERM_NAME instance="music"] move workspace $ws5
+exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font xft:Iosevka Medium Oblique 10 
-# font pango:hack 14 
+# Keys --------------------------------------------------------------------------------
 
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-# font pango:DejaVu Sans Mono 8
+# i3
+bindsym $MOD+g gaps inner current plus 5
+bindsym $MOD+Shift+g gaps inner current minus 5
+bindsym $MOD+Control+r restart
+bindsym $MOD+backslash layout default ; split h
+bindsym $MOD+bracketright layout default ; split v
+bindsym $MOD+Shift+w move scratchpad
+bindsym $MOD+w scratchpad show
+bindsym $MOD+s layout stacking
+bindsym $MOD+t layout tabbed
+bindsym $MOD+e layout default
 
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
+# System
+bindsym $MOD+Control+m exec --no-startup-id reload-screens
+bindsym $MOD+Shift+Control+q exit
+bindsym $MOD+x	exec --no-startup-id $HOME/.config/i3/lockscreen.sh
+bindsym $MOD+q kill ; exec --no-startup-id i3-change-wall
 
-# Use Mouse+$MOD to drag floating windows to their wanted position
+# Apps
+bindsym $MOD+b exec --no-startup-id $BROWSER ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Return exec $TERM ; exec --no-startup-id i3-change-wall
+bindsym $MOD_ALT+Return exec $TERM_ALT ; exec --no-startup-id i3-change-wall
+bindsym $MOD+a exec rofi -show drun
+
+# Music/Audio
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id audio -v +5
+bindsym $MOD+$MOD_ALT+Up exec --no-startup-id audio -v +5
+bindsym XF86AudioLowerVolume exec --no-startup-id audio -v -5
+bindsym $MOD+$MOD_ALT+Down exec --no-startup-id audio -v -5
+bindsym XF86AudioMute exec --no-startup-id audio -m 2
+bindsym $MOD+$MOD_ALT+z exec --no-startup-id audio -m 2
+bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id audio -r prev
+bindsym $MOD+$MOD_ALT+Next exec --no-startup-id audio -r next
+bindsym XF86AudioPlay exec mpc toggle
+bindsym $MOD+$MOD_ALT+End exec mpc toggle
+bindsym $MOD+$MOD_ALT+Right exec mpc next
+bindsym $MOD+$MOD_ALT+Left exec mpc prev
+
+# Floating
 floating_modifier $MOD
+bindsym $MOD+f fullscreen toggle
+bindsym $MOD+Shift+f floating toggle
+bindsym $MOD+Control+f focus mode_toggle
 
-# start a terminal
-bindsym $MOD+Return exec $TERM 
+# Navigation/Workspaces
+bindsym $MOD+p focus parent
+bindsym $MOD+o focus child
 
-# kill focused window
-bindsym $MOD+q kill
-
-# start dmenu (a program launcher)
-bindsym $MOD+a exec rofi -show drun 
-# bindsym $MOD+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $MOD+d exec --no-startup-id i3-dmenu-desktop
-
-# change focus
 bindsym $MOD+j focus down
 bindsym $MOD+k focus up
 bindsym $MOD+l focus right
 bindsym $MOD+h focus left
-
-# alternatively, you can use the cursor keys:
 bindsym $MOD+Left focus left
 bindsym $MOD+Down focus down
 bindsym $MOD+Up focus up
 bindsym $MOD+Right focus right
 
-# move focused window
 bindsym $MOD+Shift+j move down
 bindsym $MOD+Shift+k move up
 bindsym $MOD+Shift+l move right
 bindsym $MOD+Shift+h move left
-
-# alternatively, you can use the cursor keys:
 bindsym $MOD+Shift+Left move left
 bindsym $MOD+Shift+Down move down
 bindsym $MOD+Shift+Up move up
 bindsym $MOD+Shift+Right move right
 
-# focus on differnet monitors/outputs
+# Monitors/outputs
 bindsym $MOD_ALT+Control+Shift+Left move workspace to output left
-# split in horizontal orientation
-bindsym $MOD+backslash layout default ; split h ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splitv
+bindsym $MOD_ALT+Control+Shift+Right move workspace to output right
 
-# split in vertical orientation
-bindsym $MOD+bracketright layout default ; split v ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splith
-
-# enter fullscreen mode for the focused container
-bindsym $MOD+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $MOD+s layout stacking ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set stacking
-bindsym $MOD+t layout tabbed ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set tabbed
-bindsym $MOD+e layout default ; exec --no-startup-id python3 $HOME/.config/i3/split_status.py set split
-
-# toggle tiling / floating
-bindsym $MOD+Shift+f floating toggle
-
-# change focus between tiling / floating windows
-bindsym $MOD+Control+f focus mode_toggle
-
-# focus the parent container
-bindsym $MOD+p focus parent
-
-# focus the child container
-#bindsym $MOD+w focus child
-
-# Scratchpad
-bindsym $MOD+Shift+w move scratchpad
-bindsym $MOD+w scratchpad show
-
-# Python calculator
-# bindsym $MOD+c exec $TERM -name calculator -e python
-bindsym $MOD+c exec --no-startup-id $HOME/.config/i3/toggle_calc.sh
-for_window [class=$TERM_NAME instance="calculator"] floating enable
-
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -143,113 +124,32 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# switch to workspace
-bindsym $MOD+1 workspace $ws1 
-bindsym $MOD+2 workspace $ws2
-bindsym $MOD+3 workspace $ws3
-bindsym $MOD+4 workspace $ws4
-bindsym $MOD+5 workspace $ws5
-bindsym $MOD+6 workspace $ws6
-bindsym $MOD+7 workspace $ws7
-bindsym $MOD+8 workspace $ws8
-bindsym $MOD+9 workspace $ws9
-bindsym $MOD+0 workspace $ws10
+bindsym $MOD+1 workspace $ws1 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+2 workspace $ws2 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+3 workspace $ws3 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+4 workspace $ws4 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+5 workspace $ws5 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+6 workspace $ws6 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+7 workspace $ws7 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+8 workspace $ws8 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+9 workspace $ws9 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+0 workspace $ws10 ; exec --no-startup-id i3-change-wall
 
-bindsym Control+$MOD+Left workspace prev
-bindsym Control+$MOD+Right workspace next
+bindsym Control+$MOD+Left workspace prev; exec --no-startup-id i3-change-wall
+bindsym Control+$MOD+Right workspace next; exec --no-startup-id i3-change-wall
 
-# move focused container to workspace
-bindsym $MOD+Shift+1 move container to workspace $ws1
-bindsym $MOD+Shift+2 move container to workspace $ws2
-bindsym $MOD+Shift+3 move container to workspace $ws3
-bindsym $MOD+Shift+4 move container to workspace $ws4
-bindsym $MOD+Shift+5 move container to workspace $ws5
-bindsym $MOD+Shift+6 move container to workspace $ws6
-bindsym $MOD+Shift+7 move container to workspace $ws7
-bindsym $MOD+Shift+8 move container to workspace $ws8
-bindsym $MOD+Shift+9 move container to workspace $ws9
-bindsym $MOD+Shift+0 move container to workspace $ws10
+bindsym Control+Shift+$MOD+Left move container to workspace prev; exec --no-startup-id i3-change-wall
+bindsym Control+Shift+$MOD+Right move container to workspace next; exec --no-startup-id i3-change-wall
 
-# reload the configuration file
-#bindsym $MOD+Control+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $MOD+Control+r restart
-bindsym $MOD+Control+m exec --no-startup-id python3 $HOME/.config/i3/detect_monitors_load_bar.py
-# exit i3 (logs you out of your X session)
-#bindsym $MOD+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $MOD+Shift+Control+q exit
-bindsym $MOD+x	exec --no-startup-id $HOME/.config/i3/lockscreen.sh 
-#bindsym $MOD+Shift+x exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
+bindsym $MOD+Shift+1 move container to workspace $ws1 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+2 move container to workspace $ws2 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+3 move container to workspace $ws3 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+4 move container to workspace $ws4 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+5 move container to workspace $ws5 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+6 move container to workspace $ws6 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+7 move container to workspace $ws7 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+8 move container to workspace $ws8 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+9 move container to workspace $ws9 ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+0 move container to workspace $ws10 ; exec --no-startup-id i3-change-wall
 
-# resize window (you can also use the mouse for that)
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape or $MOD+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $MOD+r mode "default"
-}
-
-bindsym $MOD+z mode "resize"
-bindsym $MOD+b exec --no-startup-id $BROWSER
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#	colors{
-#		background #000000
-#		statusline #e2a581 
-#		focused_workspace  #bc3500 #bc3500 #ffffff
-#		inactive_workspace #6b2525 #000000 #6b2525
-#		urgent_workspace   #e8a220 #e8a220 #ffffff
-#	}
-#        status_command i3status -c ~/.config/i3/i3status.conf 
-#        status_command ~/.config/i3/i3status.sh
-#        position top
-#	tray_padding 2 
-#}/
-
-# misc startup
-exec --no-startup-id reload-screens 
-exec --no-startup-id python3 $HOME/.config/i3/split_status.py set splitv
-exec --no-startup-id compton --config $HOME/.config/compton.conf
-exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
-
-#exec --no-startup-id code
-assign [class="Code"] $ws3
-exec --no-startup-id $TERM -name tmux_inst -e tmux new -s code 
-assign [class=$TERM_NAME instance="tmux_inst"] $ws3
-exec --no-startup-id $TERM -name ranger_inst -e ranger
-assign [class=$TERM_NAME instance="ranger_inst"] $ws4
-exec --no-startup-id $TERM -name scratch
-for_window [class=$TERM_NAME instance="scratch"] move scratchpad
-
-# Music Controls
-exec --no-startup-id $TERM -name ncmpcpp_inst -e ncmpcpp -s visualizer
-assign [class=$TERM_NAME instance="ncmpcpp_inst"] $ws5
-bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
-bindsym $MOD_ALT+Up exec --no-startup-id $HOME/.config/i3/pulse_vol.sh +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
-bindsym $MOD_ALT+Down exec --no-startup-id $HOME/.config/i3/pulse_vol.sh -5%
-# Valid args are 0, 1 toggle
-bindsym XF86AudioMute exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
-bindsym $MOD_ALT+z exec --no-startup-id $HOME/.config/i3/pulse_mute.sh toggle
-bindsym XF86AudioPlay exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym $MOD_ALT+End exec mpc toggle||dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym $MOD_ALT+Right exec mpc next
-bindsym $MOD_ALT+Left exec mpc prev
