@@ -285,6 +285,7 @@ label-volume-foreground = ${env:POLY_BODYFG}
 label-volume-background = ${env:POLY_GRADIENT2BODY}
 label-volume-padding = ${env:POLY_BODYPADDING}
 
+click-right = audio -r next &
 format-muted =
 
 [module/volumePrefix]
@@ -314,6 +315,8 @@ ramp-volume-4 = %{T3}%{T-}
 ramp-volume-foreground = ${env:POLY_TITLEFG}
 ramp-volume-background = ${env:POLY_GRADIENT2TITLE}
 ramp-volume-padding = ${env:POLY_TITLEPADDING}
+
+click-right = audio -r next &
 
 #UTILIZATION------------------------------------------------------------------
 [module/utilizationPrefix]

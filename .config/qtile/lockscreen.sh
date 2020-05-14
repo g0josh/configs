@@ -7,9 +7,9 @@ if [ ! -f "$LOCKIMAGE" ]; then
 fi
 
 C=#00000000
-T="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Text
-D="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Default
-W="`xrdb -query|grep "*.background:"|awk '{print $2}'`aa"	#Wrong
+T="`xrdb -query|grep "*.foreground:"|awk '{print $2}'`aa"	#Text
+D="`xrdb -query|grep "*.foreground:"|awk '{print $2}'`aa"	#Default
+W="`xrdb -query|grep "*.foreground:"|awk '{print $2}'`aa"	#Wrong
 
 i3lock \
 --tiling \
@@ -26,20 +26,20 @@ i3lock \
 --insidevercolor=$C \
 --insidewrongcolor=$C \
 --line-uses-inside \
---indpos="500:850" \
+--indpos="450:850" \
  \
 --clock \
 --timecolor=$T \
 --timestr="%I:%M %p" \
 --timesize=200 \
 --time-font="Iosevka" \
---timepos="500:1150" \
+--timepos="450:1150" \
  \
 --datestr="%d %b, %A" \
 --datesize=100 \
 --datecolor=$T \
 --date-font="Iosevka" \
---datepos="500:1250" \
+--datepos="450:1250" \
  \
 --veriftext="" \
 --verifcolor=$T \

@@ -10,7 +10,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
-from my_scripts import changeVolume, toggleMuteVolume, getInterfaces
+from cliutils import audio
 from my_scripts import getTheme, startPolybar, updateWallpaper
 from my_scripts import LAYOUT_ICONS
 
@@ -172,12 +172,14 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
     Key([MOD], "u", lazy.next_urgent(), polybar_hook),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:toggleMuteVolume())),
-    Key([MOD], "z", lazy.function(lambda x:toggleMuteVolume())),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:changeVolume('-5%'))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:changeVolume('-5%'))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:changeVolume('+5%'))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:changeVolume('+5%'))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:audio(mute=2))),
+    Key([MOD], "z", lazy.function(lambda x:audio(mute=2))),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:audio(vol="-5"))),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:audio(vol='-5'))),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:audio(vol='+5'))),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:audio(vol='+5'))),
+    Key([MOD, ALT], "Prior", lazy.function(lambda x:audio(route='prev'))),
+    Key([MOD, ALT], "Next", lazy.function(lambda x:audio(route='next'))),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -195,7 +197,7 @@ keys = [
     # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
-    
+
 ]
 
 for i in groups:
@@ -271,7 +273,7 @@ floating_layout = layout.Floating(float_rules=[
     border_normal=THEME['windowborder']
 )
 auto_fullscreen = True
-focus_on_window_activation = "smart"
+#focus_on_window_activation = "smart"
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the

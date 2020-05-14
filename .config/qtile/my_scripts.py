@@ -6,6 +6,7 @@ import os
 from contextlib import contextmanager
 import json
 import yaml
+from cliutils import audio
 
 from libqtile.log_utils import logger
 from socket import error as socket_error
@@ -115,7 +116,7 @@ def getMpd(not_connected_text='', max_title_len=15):
         return not_connected_text
     else:
         output = output.split('\n')
-    try:    
+    try:
         title = output[0].split('-')[-1].strip()
         title = title[:12] + '...' if len(title)>max_title_len else "{}{}".format(title," "*(max_title_len-len(title)))
         time = output[1].split()[-2]
@@ -189,7 +190,7 @@ def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=
         return error_text
     else:
         services = [x for x in output.split('\n') if x.startswith('*AO') and 'wifi' in x]
-    
+
     if not services:
         return ""
     essid = services[0].split()[1]
@@ -465,7 +466,7 @@ def startPolybar(theme_path):
         try:
             subprocess.run(['killall', '-q', 'polybar'])
             o = subprocess.Popen('polybar -r island', shell=True)
-            poly_screens[i] = {'name':monitor, 'pid':o.pid, 
+            poly_screens[i] = {'name':monitor, 'pid':o.pid,
                     'ws_fifo_path':f'/tmp/qtile_ws_{i}', 'ws_format':'', 'layout_format':''}
         except subprocess.CalledProcessError as e:
             logger.warn(e.output.decode().strip())
