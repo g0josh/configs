@@ -183,16 +183,16 @@ def getInterfaces():
 
 def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=''):
     try:
-        output = subprocess.check_output(['connmanctl', 'services']).decode()
+        output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
         logger.warning (e.output.decode().strip())
         return error_text
     else:
-        services = [x for x in output.split('\n') if x.startswith('*AO') and 'wifi' in x]
+        _essid = re.search(f'{interface}:\s+connected\s+\w+\s+(\S+)\n', output)
     
-    if not services:
+    if not _essid:
         return ""
-    essid = services[0].split()[1]
+    essid = _essid.group(1)
 
     #get speeds
     global net_speed_objects
@@ -214,7 +214,7 @@ def getWlan(interface='wlo1', widgets = [], ontexts=[], offtexts=[], error_text=
         return "{}|{}".format(essid, speed)
 
 def getLan(interface='enp24s0', error_text=''):
-    #check if enabled:
+    #check if enabled:essid
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
                    '/sys/class/net/{}/carrier'.format(interface)]:
@@ -291,7 +291,7 @@ def getlocksStatus():
         result.append('0')
     return " ".join(result)
 
-def getTemps(x=0,y=0,button=1, threshold=40):
+def getTemps(x=0,y=0,button=1, threshold=0):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -310,7 +310,7 @@ def getTemps(x=0,y=0,button=1, threshold=40):
     if int(cpu_temp) > threshold or int(gpu_temp) > threshold:
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
-def getUtilization(x=0,y=0,button=1,threshold=10):
+def getUtilization(x=0,y=0,button=1,threshold=0):
     try:
         cpu = subprocess.check_output(['top','-bn2','-d0.1']).decode()
         gpu = subprocess.check_output(['nvidia-smi','-q','-d', 'UTILIZATION']).decode()

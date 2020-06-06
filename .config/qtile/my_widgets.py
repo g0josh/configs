@@ -94,6 +94,7 @@ class FuncWithClick(base.ThreadedPollText):
     def __init__(self, **config):
         base.ThreadedPollText.__init__(self, **config)
         self.add_defaults(FuncWithClick.defaults)
+        # self.padding = 5
 
     def button_press(self, x, y, button):
         if self.click_func:
@@ -124,8 +125,8 @@ class ComboWidget(object):
     def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
                 body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='',click_func=None,
                 click_func_args={},update_after_click=False, border_font=None, border_font_size=12, title_font=None,
-                title_font_size=12, body_font=None, body_font_size=12, collapsible=True, inactive_hide=True,
-                poll_interval=1000, head_text="", tail_text="",center_text=None, hide=False):
+                title_font_size=12, body_font=None, body_font_size=12, inactive_hide=True,
+                poll_interval=1000, head_text="", tail_text="",center_text=None, hide=False):
 
         if body_poll_func is None and title_poll_func is None:
             raise AttributeError("No poll functions provided")
@@ -154,13 +155,13 @@ class ComboWidget(object):
         title_func = (lambda:"") if hide else self.poll_title
         title_tail_func = (lambda:"") if hide else lambda:self._center_text
 
-        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click,foreground=title_bg,
+        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click,foreground=title_fg, background=title_bg,
             update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
         self.title = FuncWithClick(func=title_func, func_args={},click_func=self.click,
             foreground=title_fg, background=title_bg, update_interval=title_poll_interval,
             font=title_font, fontsize=title_font_size, padding=0)
         self.title_tail = FuncWithClick(func= title_tail_func, click_func=self.click, foreground=title_bg,
-            background=body_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+            background=title_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
         if self.body_poll_func is not None:
             body_func = (lambda:"") if hide else self.poll_body

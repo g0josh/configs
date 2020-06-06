@@ -114,7 +114,7 @@ echo "Installing compton"
 echo "---------------------------------------"
 echo ""
 sudo apt install asciidoc --no-install-recommends
-sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl libxdamage-dev libdrm-dev mesa-common-dev libgl1-mesa-dev
+sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl libxdamage-dev libdrm-dev mesa-common-dev libgl1-mesa-dev libpcre3-dev
 cd $HOME/tools
 git clone https://github.com/tryone144/compton.git
 cd compton
