@@ -31,14 +31,14 @@ client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-
 
 # Startup
 exec --no-startup-id urxvtd
+for_window [class="Nautilus"] move workspace $ws4
+for_window [class=$TERM_NAME instance="calculator"] move scratchpad
+for_window [class=$TERM_NAME instance="music"] move workspace $ws5
 exec --no-startup-id reload-screens
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec --no-startup-id nautilus
 exec $TERM -name calculator -e python3
 exec --no-startup-id $TERM -name music -e ncmpcpp -s visualizer
-for_window [class="Nautilus"] move workspace $ws4
-for_window [class=$TERM_NAME instance="calculator"] move scratchpad
-for_window [class=$TERM_NAME instance="music"] move workspace $ws5
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 # Keys --------------------------------------------------------------------------------
@@ -154,4 +154,20 @@ bindsym $MOD+Shift+8 move container to workspace $ws8 ; exec --no-startup-id i3-
 bindsym $MOD+Shift+9 move container to workspace $ws9 ; exec --no-startup-id i3-change-wall
 bindsym $MOD+Shift+0 move container to workspace $ws10 ; exec --no-startup-id i3-change-wall
 
+# Resizing
+mode "resize" {
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
 
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $MOD+r mode "default"
+}
+bindsym $MOD+z mode "resize"
