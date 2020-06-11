@@ -1,7 +1,6 @@
 #!/bin/bash
 
-urxvtd &
 killall compton 
-#reload-screens
+# reload-screens
 compton &
 

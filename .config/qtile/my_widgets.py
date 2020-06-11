@@ -2,82 +2,6 @@ from libqtile.widget import base
 from libqtile.widget.groupbox import _GroupBase
 from libqtile.log_utils import logger
 
-
-class GroupTextBox(_GroupBase):
-    """A widget that graphically displays the current group"""
-    orientations = base.ORIENTATION_HORIZONTAL
-    defaults = [("border", "000000", "group box border color")]
-
-    def __init__(self, track_group, label, active_fg, active_bg,
-            inactive_fg, inactive_bg, urgent_fg, urgent_bg,
-            not_empty_fg, not_empty_bg, **config):
-        _GroupBase.__init__(self, **config)
-        self.add_defaults(GroupTextBox.defaults)
-        self.track_group_name = track_group
-        self.tracking_group = None
-        self._label = label
-        self.label=label
-        self.active_fg = active_fg
-        self.active_bg = active_bg
-        self.inactive_fg = inactive_fg
-        self.inactive_bg = inactive_bg
-        self.urgent_fg = urgent_fg
-        self.urgent_bg = urgent_bg
-        self.not_empty_fg = not_empty_fg
-        self.not_empty_bg = not_empty_bg
-
-    def button_press(self, x, y, button):
-        if self.tracking_group:
-            self.bar.screen.set_group(self.tracking_group)
-
-    def calculate_length(self):
-        width, _ = self.drawer.max_layout_size(
-           [self.label],
-           self.font,
-           self.fontsize
-        )
-        return width
-
-    def group_has_urgent(self, group):
-        return len([w for w in group.windows if w.urgent]) > 0
-
-    def get_group(self):
-        for g in self.qtile.groups:
-            if g.name == self.track_group_name:
-            #if g.name == self.track_group and (g.windows or g.screen):
-                return g
-        return None
-
-    def draw(self):
-        tracking_group = self.get_group()
-        # if tracking_group is None:
-        #     self.drawer.clear(self.bar.background)
-        #     # self.drawbox(self.margin_x, " ", self.border, self.foreground)
-        #     self.drawer.draw(offsetx=self.offset, width=self.width)
-        #     # self.bar.draw()
-
-        # if tracking_group == self.tracking_group:
-            # return True
-        self.tracking_group = tracking_group
-        # self.text = self.tracking_group.label if self.text == 'NA' else self.text
-        # self.label = self._label
-        if self.tracking_group == self.qtile.current_group:
-            self.foreground = self.active_fg
-            self.background = self.active_bg
-        elif self.group_has_urgent(self.tracking_group):
-            self.foreground = self.urgent_fg
-            self.background = self.urgent_bg
-        elif self.tracking_group.windows or self.tracking_group.screen:
-            self.foreground = self.not_empty_fg
-            self.background = self.not_empty_bg
-        else:
-            self.foreground = self.inactive_fg
-            self.background = self.inactive_bg
-            # self.label = ""
-        self.drawer.clear(self.background or self.bar.background)
-        self.drawbox(0, self.label, self.border, self.foreground)
-        self.drawer.draw(offsetx=self.offset, width=self.width)
-
 class FuncWithClick(base.ThreadedPollText):
     """A generic text widget that polls using poll function to get the text"""
     orientations = base.ORIENTATION_HORIZONTAL
@@ -88,24 +12,29 @@ class FuncWithClick(base.ThreadedPollText):
         ('release_func', None, 'click release function'),
         ('func_args', {}, 'function arguments'),
         ('click_func_args', {}, 'function arguments'),
-        ('release_func_args', {}, 'function arguments')
+        ('release_func_args', {}, 'function arguments'),
+        ('color_func', {}, 'function to get the fg abd bg '),
+        ('color_func_args', {}, 'function arguments')
     ]
 
     def __init__(self, **config):
         base.ThreadedPollText.__init__(self, **config)
+        # super().__init__(self, **config)
         self.add_defaults(FuncWithClick.defaults)
         # self.padding = 5
 
     def button_press(self, x, y, button):
         if self.click_func:
-            self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+            self.click_func_args.update(
+                {'x': x, 'y': y, 'button': button, 'qtile': self.qtile})
             result = self.click_func(**self.click_func_args)
             # if result:
             #     self.update(result)
 
     def button_release(self, x, y, button):
         if self.release_func:
-            self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+            self.click_func_args.update(
+                {'x': x, 'y': y, 'button': button, 'qtile': self.qtile})
             result = self.release_func(**self.click_func_args)
             # if result:
             #     self.update(result)
@@ -120,13 +49,23 @@ class FuncWithClick(base.ThreadedPollText):
 
         return self.func(**self.func_args)
 
+    def update(self, text):
+        if self.color_func:
+            self.color_func_args.update({'qtile': self.qtile})
+            colors = self.color_func(**self.colors_func_args)
+            self.background = colors['background']
+            self.foreground = colors['foreground']
+        super().update(text)
+
 
 class ComboWidget(object):
-    def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args={}, update_title=False,
-                body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='',click_func=None,
-                click_func_args={},update_after_click=False, border_font=None, border_font_size=12, title_font=None,
-                title_font_size=12, body_font=None, body_font_size=12, inactive_hide=True,
-                poll_interval=1000, head_text="", tail_text="",center_text=None, hide=False):
+    def __init__(self, title_poll_func, title_bg, title_fg, title_poll_func_args=None, update_title=False,
+                 body_poll_func=None, body_poll_func_args={}, body_fg='111111', body_bg='', click_func=None,
+                 click_func_args={}, update_after_click=False, border_font=None, border_font_size=12, title_font=None,
+                 title_font_size=12, body_font=None, body_font_size=12, inactive_hide=True,
+                 poll_interval=1000, head_text="", tail_text="", center_text=None, hide=False,
+                 title_label=None, body_label=None, title_color_func=None, title_color_func_args=None,
+                 body_color_func=None, body_color_func_args=None, title_padding=None, body_padding=None):
 
         if body_poll_func is None and title_poll_func is None:
             raise AttributeError("No poll functions provided")
@@ -134,10 +73,14 @@ class ComboWidget(object):
         self.update_title = update_title
         self.title_poll_func = title_poll_func
         self.title_poll_func_args = title_poll_func_args
+        self.title_color_func = title_color_func
+        self.title_color_func_args = title_color_func_args
         title_poll_interval = None
 
         self.body_poll_func = body_poll_func
         self.body_poll_func_args = body_poll_func_args
+        self.body_color_func = body_color_func
+        self.body_color_func_args = body_color_func_args
         self.inactive_hide = inactive_hide
         self._head_text = head_text
         self._tail_text = tail_text
@@ -151,31 +94,38 @@ class ComboWidget(object):
         if self.body_poll_func is None and self.update_title:
             title_poll_interval = poll_interval
 
-        title_head_func = (lambda:"") if hide else lambda:self._head_text
-        title_func = (lambda:"") if hide else self.poll_title
-        title_tail_func = (lambda:"") if hide else lambda:self._center_text
+        title_head_func = (lambda: "") if hide else lambda: self._head_text
+        title_func = (lambda: "") if hide else self.poll_title
+        title_tail_func = (lambda: "") if hide else lambda: self._center_text
 
-        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click,foreground=title_fg, background=title_bg,
-            update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
-        self.title = FuncWithClick(func=title_func, func_args={},click_func=self.click,
-            foreground=title_fg, background=title_bg, update_interval=title_poll_interval,
-            font=title_font, fontsize=title_font_size, padding=0)
-        self.title_tail = FuncWithClick(func= title_tail_func, click_func=self.click, foreground=title_bg,
-            background=title_bg, update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click, foreground=title_bg, background=title_fg,
+                                        update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+        self.title = FuncWithClick(func=title_func, func_args={}, click_func=self.click,
+                                   foreground=title_fg, background=title_bg, update_interval=title_poll_interval,
+                                   font=title_font, fontsize=title_font_size, padding=title_padding, label=title_label, color_fumc=title_color_func,
+                                   color_func_args=title_color_func_args)
+        self.title_tail = FuncWithClick(func=title_tail_func, click_func=self.click, foreground=title_bg,
+                                        update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
+        self.body = None
+        self.body_tail = None
         if self.body_poll_func is not None:
-            body_func = (lambda:"") if hide else self.poll_body
-            body_tail_func = (lambda:"") if hide else lambda:self._tail_text
-            self.body =  FuncWithClick(func=body_func, func_args={},click_func=self.click,
-                foreground=body_fg, background=body_bg, update_interval=poll_interval, font=body_font,
-                fontsize=body_font_size, padding=0)
+            body_func = (lambda: "") if hide else self.poll_body
+            body_tail_func = (lambda: "") if hide else lambda: self._tail_text
+            self.title_tail.background = body_bg
+            self.body = FuncWithClick(func=body_func, func_args={}, click_func=self.click,
+                                      foreground=body_fg, background=body_bg, update_interval=poll_interval, font=body_font,
+                                      fontsize=body_font_size, padding=body_padding, label=body_label, color_fumc=body_color_func,
+                                      color_func_args=body_color_func_args)
             self.body_tail = FuncWithClick(func=body_tail_func, click_func=self.click, foreground=body_bg,
-                update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
+                                           update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
 
-    def click(self, x, y, button):
+    def click(self, x, y, button, qtile):
         if self.click_func is None:
+            logger.warn("returned")
             return
-        self.click_func_args.update( {'x':x, 'y':y, 'button':button} )
+        self.click_func_args.update(
+            {'x': x, 'y': y, 'button': button, 'qtile': qtile})
         result = self.click_func(**self.click_func_args)
         if self.update_after_click:
             if self.body_poll_func is None and self.update_title:
@@ -193,8 +143,22 @@ class ComboWidget(object):
         if text is not None:
             result = text
         else:
-            result = self.title_poll_func(**self.title_poll_func_args)
+            if self.title_poll_func_args is not None:
+                args_t = self.title_poll_func_args
+                args_t.update({'qtile':self.title.qtile})
+                result = self.title_poll_func(**args_t)
+            else:
+                result = self.title_poll_func()
         if result:
+            # color
+            if self.title_color_func:
+                args_tc = self.title_color_func_args
+                args_tc.update({'qtile':self.title.qtile})
+                color = self.title_color_func(**args_tc)
+                self.title.background = color['background']
+                self.title.foreground = color['foreground']
+                self.title_head.foreground = color['background']
+                self.title_tail.foreground = color['background']
             if not self.title_head.text:
                 self.title_head.update(self._head_text)
             if not self.title_tail.text:
@@ -209,12 +173,27 @@ class ComboWidget(object):
             return result
 
     def poll_body(self, text=None, force=False):
+        if not self.body:
+            return
         if text is not None:
             result = text
         else:
-            result = self.body_poll_func(**self.body_poll_func_args)
+            if self.body_poll_func_args is not None:
+                args_b = self.body_poll_func_args
+                args_b.update({'qtile':self.body.qtile})
+                result = self.body_poll_func(**args_b)
+            else:
+                result = self.body_poll_func()
 
         if result:
+            # color
+            if self.body_color_func:
+                args_bc = self.body_color_func_args
+                args_bc.update({'qtile':self.title.qtile})
+                color = self.body_color_func(**args_bc)
+                self.body.background = color['background']
+                self.body.foreground = color['foreground']
+                self.body_tail.foreground = color['background']
             if self.update_title or self.title_head.text != self._head_text:
                 self.poll_title(force=True)
             if not self.body_tail.text:
@@ -237,7 +216,10 @@ class ComboWidget(object):
         if body_text is not None:
             self.poll_body(text=body_text, force=True)
         if title_text is None and body_text is None:
-            self.poll_body(force=True)
+            if self.body:
+                self.poll_body(force=True)
+            else:
+                self.poll_title(force=True)
 
     def getBody(self):
         return self.body.text
@@ -254,7 +236,7 @@ class ComboWidget(object):
 
     @text.setter
     def text(self, value):
-        assert isinstance(value, str), "This has to a string"
+        assert isinstance(value, str), "This has to be a string"
         if self.body_poll_func is not None:
             self.poll_title(text=value)
         else:
