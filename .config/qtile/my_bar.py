@@ -1,4 +1,5 @@
 from libqtile import widget
+
 from my_widgets import ComboWidget
 
 from my_scripts import getVolume, getVolumeIcon, volumePressed
@@ -8,26 +9,21 @@ from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
 from my_scripts import getInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
 
-from libqtile.log_utils import logger
-
-
-default_font = dict(
-    font="Iosevka Medium Oblique",
+DEFAULT_FONT = dict(
+    font="Iosevka Nerd Font Medium",
+    # font="JetBrainsMono Nerd Font Mono Regular",
     fontsize=14,
-    padding=0
 )
-border_font = dict(
+
+BORDER_FONT = dict(
     font="Iosevka Nerd Font Mono",
-    fontsize=16,
-    padding=0
+    fontsize=18,
 )
 
-icon_font = dict(
+ICON_FONT = dict(
     font="Font Awesome 5 Free Solid",
-    fontsize=12,
-    padding=0
+    fontsize=13,
 )
-
 
 common_widgets = {}
 group_widgets = {}
@@ -35,15 +31,15 @@ group_widgets = {}
 
 def prepareCommonWidgets(theme):
     global common_widgets, group_widgets
-    global default_font, border_font, icon_font
+    global DEFAULT_FONT, BORDER_FONT, ICON_FONT
 
     common_widgets['mpd'] = ComboWidget(title_poll_func=lambda: "", body_poll_func=getMpd, poll_interval=5,
                                         title_fg=theme['titlefg'], title_bg=theme['titlebg'],
                                         title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
                                         body_fg=theme['bodyfg'], body_bg=theme['bodybg'],
-                                        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                        border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                        body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                        title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                        border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                        body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                         head_text=theme['leftmoduleprefix'], center_text=theme['leftmodulesuffix'],
                                         tail_text=theme['leftmodulesuffix'],
                                         update_title=False, click_func=clickMpd, update_after_click=True)
@@ -53,9 +49,9 @@ def prepareCommonWidgets(theme):
                                                body_fg=theme['bodyfg'], body_bg=theme['bodybg'],
                                                title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                               title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                               border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                               body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                               title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                               border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                               body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                                head_text=theme['leftmoduleprefix'], center_text=theme['leftmodulesuffix'],
                                                tail_text=theme['rightmodulesuffix'],
                                                update_title=False)
@@ -66,8 +62,8 @@ def prepareCommonWidgets(theme):
                                                title_fg=theme['bodyfg'], title_bg=theme['bodybg'],
                                                title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                               title_font=default_font['font'], title_font_size=default_font['fontsize'],
-                                               border_font=border_font['font'], border_font_size=border_font['fontsize'],
+                                               title_font=DEFAULT_FONT['font'], title_font_size=DEFAULT_FONT['fontsize'],
+                                               border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                                                head_text=theme['rightmoduleprefix'], tail_text=theme['rightmodulesuffix'],
                                                update_title=True)
 
@@ -76,9 +72,9 @@ def prepareCommonWidgets(theme):
                                           body_fg=theme['titlefg'], body_bg=theme['gradient1body'],
                                           title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                          title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                          border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                          body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                          title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                          border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                          body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                           head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                           tail_text=theme['rightmodulesuffix'],
                                           update_title=True, click_func=getlocksStatus, update_after_click=True)
@@ -88,9 +84,9 @@ def prepareCommonWidgets(theme):
                                                 body_fg=theme['titlefg'], body_bg=theme['gradient2body'],
                                                 title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                                title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                                border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                                body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                                title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                                border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                                body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                                 head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                                 tail_text=theme['rightmodulesuffix'],
                                                 update_title=False, click_func=getTemps, update_after_click=True)
@@ -100,9 +96,9 @@ def prepareCommonWidgets(theme):
                                                 body_fg=theme['titlefg'], body_bg=theme['gradient3body'],
                                                 title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                                title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                                border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                                body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                                title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                                border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                                body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                                 head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                                 tail_text=theme['rightmodulesuffix'],
                                                 update_title=False, click_func=getUtilization, update_after_click=True)
@@ -112,9 +108,9 @@ def prepareCommonWidgets(theme):
                                            body_fg=theme['titlefg'], body_bg=theme['gradient4body'],
                                            title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                           title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                           border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                           body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                           title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                           border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                           body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                            head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                            tail_text=theme['rightmodulesuffix'],
                                            update_title=True, click_func=volumePressed, update_after_click=True, inactive_hide=False)
@@ -132,9 +128,9 @@ def prepareCommonWidgets(theme):
                                   body_fg=theme['titlefg'], body_bg=theme['gradient5body'],
                                   title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                  title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                  border_font=border_font['font'], border_font_size=border_font['fontsize'],
-                                  body_font=default_font['font'], body_font_size=default_font['fontsize'],
+                                  title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                  border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'],
                                   head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                   tail_text=theme['rightmodulesuffix'],
                                   update_title=False))
@@ -143,8 +139,8 @@ def prepareCommonWidgets(theme):
                                                 title_fg=theme['titlefg'], title_bg=theme['gradient6title'],
                                                 title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                                title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                                border_font=border_font['font'], border_font_size=border_font['fontsize'],
+                                                title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                                border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                                                 head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                                 tail_text=theme['rightmodulesuffix'], update_title=True, hide=True,
                                                 click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['LOCK_SCREEN']}, inactive_hide=False)
@@ -153,8 +149,8 @@ def prepareCommonWidgets(theme):
                                          title_fg=theme['titlefg'], title_bg=theme['gradient6title'],
                                          title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                         title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                         border_font=border_font['font'], border_font_size=border_font['fontsize'],
+                                         title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                         border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                                          head_text=theme['rightmoduleprefix'], center_text=theme['rightmodulesuffix'],
                                          tail_text=theme['rightmodulesuffix'], update_title=True, hide=True,
                                          click_func=powerClicked, click_func_args={'power_button': POWER_BUTTONS['SHUT_DOWN']}, inactive_hide=False)
@@ -163,8 +159,8 @@ def prepareCommonWidgets(theme):
                                                  title_fg=theme['titlefg'], title_bg=theme['gradient7title'],
                                                  title_padding=theme['titlepadding'], body_padding=theme['bodypadding'],
 
-                                                 title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                                                 border_font=border_font['font'], border_font_size=border_font['fontsize'],
+                                                 title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                                                 border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                                                  head_text=theme['rightmoduleprefix'],
                                                  update_title=True, click_func=show_hide_power_widgets, click_func_args={}, inactive_hide=False)
 
@@ -182,8 +178,8 @@ def getGroupWidgets(theme, screen, groups):
                         update_after_click=True, inactive_hide=True, update_title=True,
                         title_padding=theme['wspadding'], body_padding=theme['bodypadding'],
 
-                        title_font=icon_font['font'], title_font_size=icon_font['fontsize'],
-                        border_font=border_font['font'], border_font_size=border_font['fontsize'],
+                        title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+                        border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                         head_text=theme['leftmoduleprefix'], tail_text=theme['leftmodulesuffix'])
         )
     return result
@@ -200,8 +196,7 @@ def getWidgets(theme, screen, groups):
         widget.CurrentLayoutIcon(
             background=theme['titlebg'], scale=0.6, foreground=theme['titlefg'], padding=theme['titlepadding']),
         widget.TextBox(
-            **border_font, text=theme['leftmodulesuffix'], foreground=theme['titlebg'],
-        )
+            **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['titlebg'], padding=0)
     ]
 
     _groups_widgets = getGroupWidgets(theme, screen, groups)
@@ -210,23 +205,25 @@ def getWidgets(theme, screen, groups):
     group_widgets[screen] = _groups_widgets
 
     widgets += common_widgets['mpd'].getWidgets()
-    widgets += [widget.Spacer(length=400)]
-
-    widgets += common_widgets['local_time'].getWidgets()
-    widgets += common_widgets['india_time'].getWidgets()
-
+    
     # Prompt
     if screen == 0:
         widgets += [
             widget.TextBox(
-                **border_font, foreground=theme['titlebg'], text=theme['rightmoduleprefix']),
+                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0),
             widget.Prompt(
-                **default_font, foreground=theme['titlefg'], background=theme['titlebg'], prompt=" "),
+                **DEFAULT_FONT, foreground=theme['titlefg'], background=theme['titlebg'], prompt=" "),
             widget.TextBox(
-                **border_font, foreground=theme['titlebg'], text=theme['rightmodulesuffix']),
+                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
         ]
     # Systray
-    widgets += [widget.Spacer(), widget.Systray()]
+    widgets += [widget.Spacer()]
+
+    widgets += common_widgets['local_time'].getWidgets()
+    widgets += common_widgets['india_time'].getWidgets()
+    widgets += [widget.Spacer(length=365)]
+
+
 
     widgets += common_widgets['locks'].getWidgets()
     widgets += common_widgets['temperature'].getWidgets()
@@ -251,10 +248,10 @@ def updateGroupWidgets():
             w.update()
 
 
-def clickGroup(qtile, group, x=0, y=0):
+def clickGroup(qtile, group, x=0, y=0, button=1):
     for _group in qtile.groups:
         if _group.name == group:
-            group.cmd_toscreen()
+            _group.cmd_toscreen()
             break
     updateGroupWidgets()
 
@@ -272,3 +269,7 @@ def show_hide_power_widgets(x=0, y=0, button=1, qtile=None):
         common_widgets['toggle_power'].update(title_text=" ")
     else:
         common_widgets['toggle_power'].update(title_text=" ")
+
+def getFonts():
+    global DEFAULT_FONT, ICON_FONT, BORDER_FONT
+    return DEFAULT_FONT, ICON_FONT, BORDER_FONT

@@ -14,6 +14,7 @@ from cliutils import audio
 from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
 from my_bar import updateGroupWidgets, show_hide_power_widgets
+from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
 
 MOD = "mod4"
 ALT = "mod1"
@@ -26,26 +27,8 @@ NUM_SCREENS = getNumScreens()
 
 POLYBAR_INFO = {}
 
-default_font = dict(
-    font="Iosevka Medium Oblique",
-    fontsize=14,
-    padding=0
-)
-border_font = dict(
-    font="Iosevka Nerd Font Mono",
-    fontsize=16,
-    padding=0
-)
-
-icon_font = dict(
-    font="Font Awesome 5 Free Solid",
-    fontsize=12,
-    padding=0
-)
-
 groups = [
     Group(name='1', label="1 "),
-    #Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     #Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])]),
     Group(name='3', label="3 "),
@@ -55,7 +38,6 @@ groups = [
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer",
                                 matches=[Match(wm_class=["music"])]),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
-    #Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
         # define a drop down terminal.
@@ -233,11 +215,11 @@ layouts = [
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
         active_fg=THEME['titlefg'], inactive_fg=THEME['bodyfg'], bg_color=THEME['windowborder'],
-        padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
+        padding_left=2, panel_width=100, font=DEFAULT_FONT['font'], sections=['Sections'] ),
     layout.Max()
 ]
 
-extension_defaults = default_font.copy()
+extension_defaults = DEFAULT_FONT.copy()
 
 #No bar as we are using polybar
 screens = []
@@ -286,7 +268,7 @@ for n in range(NUM_SCREENS):
        Screen(
            top=bar.Bar(
                widgets=getWidgets(THEME, n, groups),
-               size=border_font['fontsize'] - 1, margin=[THEME['bartopborder'], 
+               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
                                                         THEME['barleftborder'],
                                                         THEME['barbottomborder'],
                                                         THEME['barrightborder']],

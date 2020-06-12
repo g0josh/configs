@@ -147,10 +147,11 @@ def changeVolume(value='+5%'):
 # ---------------------------------------------
 
 
-def getMpd(not_connected_text='', max_title_len=15, qtile=None):
+def getMpd(not_connected_text='', max_title_len=20, qtile=None):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
+        logger.warn("getMpd: {}".format(e))
         return not_connected_text
     else:
         output = output.split('\n')
@@ -161,7 +162,7 @@ def getMpd(not_connected_text='', max_title_len=15, qtile=None):
         time = output[1].split()[-2]
     except Exception as e:
         logger.warning(e)
-        return ""
+        return not_connected_text
     else:
         return "{} - {}".format(title, time)
 
@@ -342,7 +343,7 @@ def getlocksStatus(qtile=None):
     return " ".join(result)
 
 
-def getTemps(x=0, y=0, button=1, threshold=40, qtile=None):
+def getTemps(x=0, y=0, button=1, threshold=0, qtile=None):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -362,7 +363,7 @@ def getTemps(x=0, y=0, button=1, threshold=40, qtile=None):
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
 
-def getUtilization(x=0, y=0, button=1, threshold=10, qtile=None):
+def getUtilization(x=0, y=0, button=1, threshold=0, qtile=None):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
         gpu = subprocess.check_output(
