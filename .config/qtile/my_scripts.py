@@ -146,12 +146,65 @@ def changeVolume(value='+5%'):
 # MPD
 # ---------------------------------------------
 
+def getCmus(not_connected_text='', max_title_len=20, qtile=None):
+    try:
+        output = subprocess.check_output(['cmus-remote', '-Q']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warn("getMpd: {}".format(e))
+        return not_connected_text
+    else:
+        output = re.findall(r'file (.*)|duration (\d+)|position (\d+)|tag title (.*)', output, re.MULTILINE)
+
+    try:
+        if len(output) > 3:
+            title = output[3][-1].strip()
+        else:
+            title = output[0][0].split('/')[-1].split('.')[0].strip()
+        title = title[:max_title_len-3] + '...' if len(title) > max_title_len else "{}{}".format(
+            title, " "*(max_title_len-len(title)))
+        total_time_m = int(output[1][1])//60
+        total_time_s = int(output[1][1])%60
+        time_m = int(output[2][2])//60
+        time_s = int(output[2][2])%60
+
+    except Exception as e:
+        logger.warning("{} {}".format(e, output))
+        return not_connected_text
+    else:
+        return "{} {}:{}/{}:{}".format(title, time_m, time_s, total_time_m, total_time_s)
+
+def clickCmus(button, x=0, y=0, qtile=None):
+    keys = {
+        # Left mouse button
+        "toggle": 1,
+        # Right mouse button
+        "stop": 3,
+        # Scroll up
+        "previous": 4,
+        # Scroll down
+        "next": 5,
+        # User defined command
+        "command": None
+    }
+    cmd = ['cmus-remote']
+    if button == keys["toggle"]:
+        cmd.append('--pause')
+    elif button == keys["stop"]:
+        cmd.append('--stop')
+    elif button == keys["previous"]:
+        cmd.append('--prev')
+    elif button == keys["next"]:
+        cmd.append('--next')
+    try:
+        subprocess.run(cmd)
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
 
 def getMpd(not_connected_text='', max_title_len=20, qtile=None):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
-        logger.warn("getMpd: {}".format(e))
+        # logger.warn("getMpd: {}".format(e))
         return not_connected_text
     else:
         output = output.split('\n')
@@ -161,7 +214,7 @@ def getMpd(not_connected_text='', max_title_len=20, qtile=None):
             title, " "*(max_title_len-len(title)))
         time = output[1].split()[-2]
     except Exception as e:
-        logger.warning(e)
+        # logger.warning(e)
         return not_connected_text
     else:
         return "{} - {}".format(title, time)
@@ -419,7 +472,6 @@ def getTheme(path):
         theme = yaml.safe_load(fh)
     THEME = theme
     return theme
-
 
 def setupMonitors():
     try:

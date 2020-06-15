@@ -5,6 +5,7 @@ from my_widgets import ComboWidget
 from my_scripts import getVolume, getVolumeIcon, volumePressed
 from my_scripts import getGroupColors, getGroupLabel
 from my_scripts import getMpd, clickMpd
+# from my_scripts import getCmus, clickCmus
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
 from my_scripts import getInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
@@ -270,6 +271,6 @@ def show_hide_power_widgets(x=0, y=0, button=1, qtile=None):
     else:
         common_widgets['toggle_power'].update(title_text=" ")
 
-def getFonts():
-    global DEFAULT_FONT, ICON_FONT, BORDER_FONT
-    return DEFAULT_FONT, ICON_FONT, BORDER_FONT
+def updateVolumeWidgets():
+    global common_widgets
+    common_widgets['volume'].update()

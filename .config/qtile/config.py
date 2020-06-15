@@ -13,7 +13,7 @@ from libqtile.log_utils import logger
 from cliutils import audio
 from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
-from my_bar import updateGroupWidgets, show_hide_power_widgets
+from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
 from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
 
 MOD = "mod4"
@@ -36,6 +36,7 @@ groups = [
                                 #matches=[Match(wm_class=["explorer"])]),
     Group(name='4', label="4 ", init=True, spawn="nautilus"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer",
+    # Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e cmus",
                                 matches=[Match(wm_class=["music"])]),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
     Group(name='7', label="7 "),
@@ -158,14 +159,14 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
     Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets())),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:audio(mute=2))),
-    Key([MOD], "z", lazy.function(lambda x:audio(mute=2))),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:audio(vol="-5"))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:audio(vol='-5'))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:audio(vol='+5'))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:audio(vol='+5'))),
-    Key([MOD, ALT], "Prior", lazy.function(lambda x:audio(route='prev'))),
-    Key([MOD, ALT], "Next", lazy.function(lambda x:audio(route='next'))),
+    Key([], "XF86AudioMute", lazy.function(lambda x:audio(mute=2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD], "z", lazy.function(lambda x:audio(mute=2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:audio(vol="-5")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Down", lazy.function(lambda x:audio(vol='-5')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:audio(vol='+5')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Up", lazy.function(lambda x:audio(vol='+5')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Prior", lazy.function(lambda x:audio(route='prev')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Next", lazy.function(lambda x:audio(route='next')), lazy.function(lambda x: updateVolumeWidgets())),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
