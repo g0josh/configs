@@ -5,7 +5,6 @@ from my_widgets import ComboWidget
 from my_scripts import getVolume, getVolumeIcon, volumePressed
 from my_scripts import getGroupColors, getGroupLabel
 from my_scripts import getMpd, clickMpd
-# from my_scripts import getCmus, clickCmus
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
 from my_scripts import getInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
@@ -178,7 +177,6 @@ def getGroupWidgets(theme, screen, groups):
                             'group': group.name},
                         update_after_click=True, inactive_hide=True, update_title=True,
                         title_padding=theme['wspadding'], body_padding=theme['bodypadding'],
-
                         title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
                         border_font=BORDER_FONT['font'], border_font_size=BORDER_FONT['fontsize'],
                         head_text=theme['leftmoduleprefix'], tail_text=theme['leftmodulesuffix'])
@@ -222,7 +220,7 @@ def getWidgets(theme, screen, groups):
 
     widgets += common_widgets['local_time'].getWidgets()
     widgets += common_widgets['india_time'].getWidgets()
-    widgets += [widget.Spacer(length=365)]
+    widgets += [widget.Spacer(length=675-theme['barrightborder'])]
 
 
 

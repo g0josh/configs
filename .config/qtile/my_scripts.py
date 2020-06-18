@@ -6,7 +6,7 @@ import os
 from contextlib import contextmanager
 import json
 import yaml
-from cliutils import audio
+import my_audio as audio
 
 from libqtile.log_utils import logger
 from libqtile.command import lazy
@@ -49,63 +49,25 @@ def getGroupColors(qtile, group, theme, screen=0):
 # VOLUME
 # ---------------------------------------------
 
-def getPulseSinks():
-    try:
-        output = subprocess.check_output(
-            ['pactl', 'list', 'short', 'sinks']).decode()
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
-        return []
-    else:
-        return re.findall(r'^\d+', output, flags=re.MULTILINE)
-
-
-def volumePressed(button, icon_widget=None, value_widget=None, x=0, y=0, qtile=None):
+def volumePressed(button, x=0, y=0, qtile=None):
     if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
-        toggleMuteVolume()
+        audio.setMute(2)
     elif button == MOUSE_BUTTONS['SCROLL_UP']:
-        changeVolume('+5%')
+        audio.setVolume("+5%")
     elif button == MOUSE_BUTTONS['SCROLL_DOWN']:
-        changeVolume('-5%')
+        audio.setVolume("-5%")
     else:
         logger.warning('Uknown mouse click = {}'.format(button))
-
-    if icon_widget:
-        icon_widget.update(icon_widget.poll())
-
-    if value_widget:
-        value_widget.update(value_widget.poll())
-
-
-def isVolumeMuted(reverse=False):
-    try:
-        cmd = "pacmd list-sinks|grep 'muted'|awk '{print $2}'"
-        muted = subprocess.check_output(cmd, shell=True).strip().decode()
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
-        return 'error'
-
-    if reverse:
-        return muted == 'no'
-    else:
-        return muted == 'yes'
 
 
 def getVolumeIcon(muted_icon='', icons=['', '', ''], volume=None, qtile=None):
     # check if muted
-    if isVolumeMuted():
+    if audio.isMuted() == True:
         return muted_icon
 
     # Check volume level
     if volume is None:
-        try:
-            output = subprocess.check_output(
-                ['pactl', 'list', 'sinks']).decode()
-            volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
-            volume = int(volume.group().split('/')[-1].strip())
-        except subprocess.CalledProcessError as e:
-            logger.warning(e.output.decode().strip())
-            return 'error'
+        volume = audio.getVolume()
 
     margin = 100 / len(icons)
     index, _ = divmod(volume, margin)
@@ -115,32 +77,9 @@ def getVolumeIcon(muted_icon='', icons=['', '', ''], volume=None, qt
 
 
 def getVolume(qtile=None):
-    if isVolumeMuted():
+    if audio.isMuted() == True:
         return ""
-    try:
-        output = subprocess.check_output(['pactl', 'list', 'sinks']).decode()
-        volume = re.search(r'Volume:\sfront-left:\s\d+\s/\s+\d+', output)
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
-        return 'error'
-
-    if volume:
-        volume = volume.group().split('/')[-1].strip() + '%'
-    else:
-        return 'error'
-    return volume
-
-
-def toggleMuteVolume():
-    sinks = getPulseSinks()
-    for sink in sinks:
-        subprocess.call(['pactl', 'set-sink-mute', sink, 'toggle'])
-
-
-def changeVolume(value='+5%'):
-    sinks = getPulseSinks()
-    for sink in sinks:
-        subprocess.call(['pactl', 'set-sink-volume', sink, value])
+    return audio.getVolume()
 
 # ---------------------------------------------
 # MPD

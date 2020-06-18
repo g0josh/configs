@@ -10,7 +10,8 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown, Screen
 from libqtile.log_utils import logger
 
-from cliutils import audio
+from my_audio import setMute, setVolume, setActiveSink
+from my_audio import update as updateAudio
 from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
 from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
@@ -159,14 +160,14 @@ keys = [
     Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
     Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets())),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:audio(mute=2)), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([MOD], "z", lazy.function(lambda x:audio(mute=2)), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:audio(vol="-5")), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:audio(vol='-5')), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:audio(vol='+5')), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:audio(vol='+5')), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([MOD, ALT], "Prior", lazy.function(lambda x:audio(route='prev')), lazy.function(lambda x: updateVolumeWidgets())),
-    Key([MOD, ALT], "Next", lazy.function(lambda x:audio(route='next')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioMute", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD], "z", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x: setVolume("-5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Down", lazy.function(lambda x: setVolume("-5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x: setVolume("+5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Up", lazy.function(lambda x: setVolume("+5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Prior", lazy.function(lambda x:setActiveSink('prev')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')), lazy.function(lambda x: updateVolumeWidgets())),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -186,6 +187,8 @@ keys = [
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
 
 ]
+
+
 
 for i in groups:
     if i.name == 'scratchpad':
@@ -273,12 +276,10 @@ for n in range(NUM_SCREENS):
                                                         THEME['barleftborder'],
                                                         THEME['barbottomborder'],
                                                         THEME['barrightborder']],
-               background=THEME['terminal_colors']['background'], opacity=1
+               background=THEME['background'], opacity=1
            )
        )
    )
-
-# show_hide_power_widgets()
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -315,3 +316,9 @@ def start():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
 '''
+
+@hook.subscribe.startup_complete
+def refreshAudio():
+    logger.warn("after startup")
+    updateAudio()
+    updateVolumeWidgets()

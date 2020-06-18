@@ -98,7 +98,7 @@ class ComboWidget(object):
         title_func = (lambda: "") if hide else self.poll_title
         title_tail_func = (lambda: "") if hide else lambda: self._center_text
 
-        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click, foreground=title_bg, background=title_fg,
+        self.title_head = FuncWithClick(func=title_head_func, click_func=self.click, foreground=title_bg,
                                         update_interval=None, font=border_font, fontsize=border_font_size, padding=0)
         self.title = FuncWithClick(func=title_func, func_args={}, click_func=self.click,
                                    foreground=title_fg, background=title_bg, update_interval=title_poll_interval,
