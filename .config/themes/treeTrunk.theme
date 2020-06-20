@@ -29,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "yellow"
 windowborder: "background"
-barleftborder : 10
-barrightborder : 10
+barleftborder : 300
+barrightborder : 300
 bartopborder : 3
 barbottomborder : 0

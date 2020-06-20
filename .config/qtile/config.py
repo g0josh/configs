@@ -11,7 +11,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
 from my_audio import setMute, setVolume, setActiveSink
-from my_audio import update as updateAudio
+# from my_audio import update as updateAudio
 from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
 from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
@@ -304,11 +304,12 @@ def startOnce():
 @hook.subscribe.client_new
 def windowAdded(c):
     updateWallpaper(c.qtile, 1)
+    updateGroupWidgets()
 
 @hook.subscribe.client_killed
 def windowDeleted(c):
     updateWallpaper(c.qtile, -1)
-
+    updateGroupWidgets()
 
 '''
 @hook.subscribe.startup
@@ -319,6 +320,6 @@ def start():
 
 @hook.subscribe.startup_complete
 def refreshAudio():
-    logger.warn("after startup")
-    updateAudio()
+    # updateAudio()
+    updateGroupWidgets()
     updateVolumeWidgets()

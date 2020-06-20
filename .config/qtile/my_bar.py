@@ -220,7 +220,7 @@ def getWidgets(theme, screen, groups):
 
     widgets += common_widgets['local_time'].getWidgets()
     widgets += common_widgets['india_time'].getWidgets()
-    widgets += [widget.Spacer(length=675-theme['barrightborder'])]
+    widgets += [widget.Spacer(length=710-theme['barrightborder'])]
 
 
 

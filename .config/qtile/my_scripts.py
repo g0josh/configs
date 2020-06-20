@@ -335,7 +335,7 @@ def getlocksStatus(qtile=None):
     return " ".join(result)
 
 
-def getTemps(x=0, y=0, button=1, threshold=0, qtile=None):
+def getTemps(x=0, y=0, button=1, threshold=40, qtile=None):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -355,7 +355,7 @@ def getTemps(x=0, y=0, button=1, threshold=0, qtile=None):
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
 
-def getUtilization(x=0, y=0, button=1, threshold=0, qtile=None):
+def getUtilization(x=0, y=0, button=1, threshold=10, qtile=None):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
         gpu = subprocess.check_output(
