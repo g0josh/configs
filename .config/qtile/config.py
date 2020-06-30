@@ -320,6 +320,5 @@ def start():
 
 @hook.subscribe.startup_complete
 def refreshAudio():
-    # updateAudio()
     updateGroupWidgets()
     updateVolumeWidgets()

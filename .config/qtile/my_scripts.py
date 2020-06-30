@@ -6,11 +6,15 @@ import os
 from contextlib import contextmanager
 import json
 import yaml
-import my_audio as audio
+import typing
 
 from libqtile.log_utils import logger
 from libqtile.command import lazy
+from libqtile.core.manager import Qtile
 from socket import error as socket_error
+
+import my_audio as audio
+from my_widgets import ComboWidgetColor
 
 POWER_ICONS = {'power': '', 'reboot': '', 'lock': '', 'logout': ''}
 LAYOUT_ICONS = {'columns': 'HHH', 'monadtall': '[]=',
@@ -24,32 +28,33 @@ THEME = {}
 # ---------------------------------------------
 # Group
 # ---------------------------------------------
-def getGroupLabel(qtile, group, x=0, y=0, button=1):
+
+def getGroupLabel(qtile:Qtile, group:str):
     for _group in qtile.groups:
         if group == _group.name:
-            return _group.label if (_group.screen is not None or len(_group.windows) > 0) else False
-    return False
+            return _group.label if (_group.screen is not None or len(_group.windows) > 0) else ""
+    return ""
 
-def getGroupColors(qtile, group, theme, screen=0):
+def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> ComboWidgetColor:
     curr_group = qtile.current_group.name
     curr_screen = qtile.current_group.screen.index
     if curr_group == group and curr_screen == screen :
-        return {'foreground': theme['focusedfg'], 'background': theme['focusedbg']}
+        return ComboWidgetColor(foreground=theme['focusedfg'],background=theme['focusedbg'])
     curr_screen = qtile.current_group.screen.index
     for _group in qtile.groups:
         if group == _group.name:
             if _group.screen is None:
-                return {'foreground': theme['bodyfg'], 'background': theme['bodybg']}
+                return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
             elif _group.screen.index == screen:
-                return {'foreground': theme['altfg'], 'background': theme['altbg']}
+                return ComboWidgetColor(foreground=theme['altfg'],background=theme['altbg'])
             break
-    return {'foreground': theme['bodyfg'], 'background': theme['bodybg']}
+    return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
 
 # ---------------------------------------------
 # VOLUME
 # ---------------------------------------------
 
-def volumePressed(button, x=0, y=0, qtile=None):
+def volumeClicked(qtile:Qtile, button:int):
     if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
         audio.setMute(2)
     elif button == MOUSE_BUTTONS['SCROLL_UP']:
@@ -59,15 +64,13 @@ def volumePressed(button, x=0, y=0, qtile=None):
     else:
         logger.warning('Uknown mouse click = {}'.format(button))
 
-
-def getVolumeIcon(muted_icon='', icons=['', '', ''], volume=None, qtile=None):
+def getVolumeIcon(qtile:Qtile, muted_icon='', icons=['', '', '']):
     # check if muted
     if audio.isMuted() == True:
         return muted_icon
 
     # Check volume level
-    if volume is None:
-        volume = audio.getVolume()
+    volume = audio.getVolume()
 
     margin = 100 / len(icons)
     index, _ = divmod(volume, margin)
@@ -75,17 +78,16 @@ def getVolumeIcon(muted_icon='', icons=['', '', ''], volume=None, qt
         index = len(icons) - 1
     return icons[int(index)]
 
-
-def getVolume(qtile=None):
+def getVolume(qtile:Qtile):
     if audio.isMuted() == True:
         return ""
     return audio.getVolume()
 
 # ---------------------------------------------
-# MPD
+# Music
 # ---------------------------------------------
 
-def getCmus(not_connected_text='', max_title_len=20, qtile=None):
+def getCmus(qtile=None, not_connected_text='', max_title_len=20):
     try:
         output = subprocess.check_output(['cmus-remote', '-Q']).decode()
     except subprocess.CalledProcessError as e:
@@ -112,7 +114,7 @@ def getCmus(not_connected_text='', max_title_len=20, qtile=None):
     else:
         return "{} {}:{}/{}:{}".format(title, time_m, time_s, total_time_m, total_time_s)
 
-def clickCmus(button, x=0, y=0, qtile=None):
+def clickCmus(qtile=None, button=1):
     keys = {
         # Left mouse button
         "toggle": 1,
@@ -139,7 +141,7 @@ def clickCmus(button, x=0, y=0, qtile=None):
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
 
-def getMpd(not_connected_text='', max_title_len=20, qtile=None):
+def getMpd( qtile=None, not_connected_text='', max_title_len=20):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
@@ -158,8 +160,7 @@ def getMpd(not_connected_text='', max_title_len=20, qtile=None):
     else:
         return "{} - {}".format(title, time)
 
-
-def clickMpd(button, x=0, y=0, qtile=None):
+def clickMpd(qtile=None, button=1):
     keys = {
         # Left mouse button
         "toggle": 1,
@@ -190,9 +191,7 @@ def clickMpd(button, x=0, y=0, qtile=None):
 # Internet
 # ---------------------------------------------
 
-
 net_speed_objects = []
-
 
 class NetSpeeds(object):
     def __init__(self, interface="wlp2s0"):
@@ -215,12 +214,10 @@ class NetSpeeds(object):
                   1e6 else "{:2.1f} MB/s".format(x/1e6) for x in speeds]
         return {'upload': speeds[0], 'download': speeds[1]}
 
-
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
-
-def getWlan(interface='wlo1', widgets=[], ontexts=[], offtexts=[], error_text='', qtile=None):
+def getWlan(qtile=None, interface='wlo1', widgets=[], ontexts=[], offtexts=[], error_text=''):
     try:
         output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
@@ -252,8 +249,7 @@ def getWlan(interface='wlo1', widgets=[], ontexts=[], offtexts=[], error_text='�
     else:
         return "{}|{}".format(essid, speed)
 
-
-def getLan(interface='enp24s0', error_text='', qtile=None):
+def getLan(qtile=None, interface='enp24s0', error_text=''):
     # check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
@@ -293,7 +289,6 @@ def getLan(interface='enp24s0', error_text='', qtile=None):
 
 # Setting a time zone
 
-
 @contextmanager
 def setTimeZone(the_tz):
     orig = os.environ.get('TZ')
@@ -306,8 +301,7 @@ def setTimeZone(the_tz):
         del os.environ['TZ']
     time.tzset()
 
-
-def getTime(format='%b %d, %A, %I:%M %p', timezone=None, qtile=None):
+def getTime(qtile=None, format='%b %d, %A, %I:%M %p', timezone=None):
     def _get_time():
         now = datetime.now().astimezone()
         return (now + timedelta(seconds=0.5)).strftime(format)
@@ -317,7 +311,6 @@ def getTime(format='%b %d, %A, %I:%M %p', timezone=None, qtile=None):
             return _get_time()
     else:
         return _get_time()
-
 
 def getlocksStatus(qtile=None):
     result = []
@@ -334,8 +327,7 @@ def getlocksStatus(qtile=None):
         result.append('0')
     return " ".join(result)
 
-
-def getTemps(x=0, y=0, button=1, threshold=40, qtile=None):
+def getTemps(qtile=None, threshold=-1 ):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -354,8 +346,7 @@ def getTemps(x=0, y=0, button=1, threshold=40, qtile=None):
     if int(cpu_temp) > threshold or int(gpu_temp) > threshold:
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
-
-def getUtilization(x=0, y=0, button=1, threshold=10, qtile=None):
+def getUtilization(qtile=None, threshold=-1):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
         gpu = subprocess.check_output(
@@ -376,8 +367,7 @@ def getUtilization(x=0, y=0, button=1, threshold=10, qtile=None):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-
-def powerClicked(button, power_button, x=0, y=0, qtile=None):
+def powerClicked(button, power_button, qtile=None):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
 
@@ -394,7 +384,6 @@ def powerClicked(button, power_button, x=0, y=0, qtile=None):
         except subprocess.CalledProcessError as e:
             logger.warning(e.output.decode().strip())
 
-
 def getNumScreens():
     try:
         o = subprocess.check_output(['xrandr']).decode()
@@ -403,7 +392,6 @@ def getNumScreens():
         return 1
     else:
         return len(re.findall(r'\w+ connected \w+', o))
-
 
 def getTheme(path):
     global THEME
@@ -442,7 +430,6 @@ def setupMonitors():
         logger.warning(e.output.decode().strip())
     else:
         return monitors
-
 
 def startPolybar(theme_path):
     monitors = setupMonitors()
@@ -551,7 +538,6 @@ def startPolybar(theme_path):
     logger.warn(poly_screens)
     return poly_screens
 
-
 def updateWallpaper(qtile, adjustWindowCount=0):
     groups = qtile.cmd_groups()
     windows = adjustWindowCount
@@ -563,7 +549,7 @@ def updateWallpaper(qtile, adjustWindowCount=0):
     wall = "BlurredWallpaper" if windows > 0 else "Wallpaper"
     wallPath = os.path.expanduser("~/Pictures/") + wall
     cmd = "feh --bg-fill " + wallPath
-    p = subprocess.Popen(cmd.split())
+    subprocess.Popen(cmd.split())
     #p = subprocess.Popen(cmd.split(), stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     #stdout, stderr = p.communicate()
     # if stdout or stderr:
