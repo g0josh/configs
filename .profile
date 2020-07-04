@@ -25,12 +25,3 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-
-# Startx
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-    export WM="qtile"
-	startx $HOME/.xinitrc
-elif [[ ! $DISPLAY && $XDG_VTNR -eq 2 ]]; then
-    export WM="i3"
-	startx $HOME/.xinitrc_i3
-fi
