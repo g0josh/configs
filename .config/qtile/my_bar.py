@@ -1,0 +1,243 @@
+from functools import partial
+
+from libqtile import widget
+from libqtile.core.manager import Qtile
+from libqtile.log_utils import logger
+
+from my_scripts import getVolume, getVolumeIcon, volumeClicked
+from my_scripts import getGroupColors, getGroupLabel
+from my_scripts import getMpd, clickMpd
+from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
+from my_scripts import getInterfaces, getWlan, getLan
+from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
+
+from my_widgets import ComboWidget
+
+DEFAULT_FONT = dict(
+    font="Iosevka Nerd Font Medium",
+    # font="JetBrainsMono Nerd Font Mono Regular",
+    fontsize=16,
+)
+
+BORDER_FONT = dict(
+    font="Iosevka Nerd Font Mono",
+    fontsize=18,
+)
+
+ICON_FONT = dict(
+    font="Font Awesome 5 Free Solid",
+    fontsize=13,
+)
+
+common_widgets = {}
+group_widgets = {}
+
+
+def prepareCommonWidgets(theme):
+    global common_widgets, group_widgets
+    global DEFAULT_FONT, BORDER_FONT, ICON_FONT
+
+    common_widgets['mpd'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['titlebg'], title_fg=theme['titlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getMpd, body_bg=theme['bodybg'],
+                                  body_fg=theme['bodyfg'], body_padding=theme['bodypadding'], poll_interval=30,
+                                  title_head_text=theme['leftmoduleprefix'], title_tail_text=theme['leftmodulesuffix'],
+                                  body_tail_text=theme['leftmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
+                                  click_func=clickMpd, click_update=True)
+
+    common_widgets['local_time'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['titlebg'], title_fg=theme['titlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getTime, body_bg=theme['bodybg'],
+                                  body_fg=theme['bodyfg'], body_padding=theme['bodypadding'], poll_interval=30,
+                                  title_head_text=theme['leftmoduleprefix'], title_tail_text=theme['leftmodulesuffix'],
+                                  body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True)
+
+    common_widgets['india_time'] = ComboWidget(title_func=partial(getTime, format='%I:%M %p', timezone='Asia/Kolkata'), 
+                                title_bg=theme['bodybg'], title_fg=theme['bodyfg'],
+                                title_padding=theme['bodypadding'], poll_interval=30, title_head_text=theme['rightmoduleprefix'],
+                                title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=DEFAULT_FONT['font'],
+                                title_font_size=DEFAULT_FONT['fontsize'], click_update=True, title_update=True)
+
+    common_widgets['locks'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient1title'], title_fg=theme['titlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getlocksStatus, body_bg=theme['gradient1body'],
+                                  body_fg=theme['titlefg'], body_padding=theme['bodypadding'], poll_interval=2, title_head_text=theme['rightmoduleprefix'],
+                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
+                                  head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True)
+
+    common_widgets['temperature'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient2title'], title_fg=theme['titlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getTemps, body_bg=theme['gradient2body'],
+                                  body_fg=theme['titlefg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
+                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
+                                  head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True)
+
+    common_widgets['utilization'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient3title'], title_fg=theme['titlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getUtilization, body_bg=theme['gradient3body'],
+                                  body_fg=theme['titlefg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
+                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
+                                  head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True)
+
+    common_widgets['volume'] = ComboWidget(title_func=getVolumeIcon, title_bg=theme['gradient4title'], title_fg=theme['titlefg'],
+                                  title_update=True, title_padding=theme['titlepadding'], body_func=getVolume, body_bg=theme['gradient4body'],
+                                  body_fg=theme['titlefg'], body_padding=theme['bodypadding'], poll_interval=None, title_head_text=theme['rightmoduleprefix'],
+                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme[
+                                      'rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT[
+                                      'font'], title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_func=volumeClicked, click_update=True)
+
+    # Since computers can have multiple net interfaces
+    common_widgets['wlan'] = []
+    common_widgets['lan'] = []
+    for interface in getInterfaces():
+        title = (lambda qtile: "") if 'wl' in interface else (lambda qtile: "")
+        func = getWlan if 'wl' in interface else getLan
+        i_list = common_widgets['wlan'] if 'wl' in interface else common_widgets['lan']
+        i_list.append(ComboWidget(title_func=title, title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
+                        title_padding=theme['titlepadding'], body_func=partial(func, interface=interface),
+                        body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
+                        poll_interval=5, title_head_text=theme['rightmoduleprefix'], title_tail_text=theme['rightmodulesuffix'],
+                        body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'], head_tail_font_size=BORDER_FONT['fontsize'],
+                        title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
+                        body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True ))
+
+    common_widgets['screen_lock'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient6title'], title_fg=theme['titlefg'],
+                                       title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
+                                       title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                       head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                       title_font_size=ICON_FONT['fontsize'], hide=True,
+                                       click_func=lambda qtile, buttton: powerClicked(qtile, buttton, POWER_BUTTONS['LOCK_SCREEN']))
+
+    common_widgets['shut'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient6title'], title_fg=theme['titlefg'],
+                                title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
+                                title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                title_font_size=ICON_FONT['fontsize'], hide=True,
+                                click_func=lambda qtile, buttton: powerClicked(qtile, buttton, POWER_BUTTONS['SHUT_DOWN']))
+
+    common_widgets['toggle_power'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient7title'], title_fg=theme['titlefg'],
+                                title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
+                                title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
+                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                title_font_size=ICON_FONT['fontsize'],
+                                click_func=show_hide_power_widgets)
+
+def getGroupWidgets(theme, screen, groups):
+    result = []
+    for group in groups:
+        result.append(
+            ComboWidget(title_func=partial(getGroupLabel, group=group.name),
+               title_bg=theme['bodybg'], title_fg=theme['bodyfg'], title_update=True,
+               title_padding=theme['wspadding'], title_head_text=theme['leftmoduleprefix'],
+               title_color_func=partial(
+                   getGroupColors, group=group.name, theme=theme, screen=screen),
+               title_tail_text=theme['leftmodulesuffix'], head_tail_font=BORDER_FONT[
+                   'font'], head_tail_font_size=BORDER_FONT['fontsize'],
+               title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
+               click_func=partial(clickGroup, group=group.name), inactive_hide=True,
+               click_update=True)
+        )
+    return result
+
+
+def getWidgets(theme, screen, groups):
+    global common_widgets, group_widgets
+
+    if len(common_widgets) < 1:
+        prepareCommonWidgets(theme)
+
+    # Layout Icon
+    widgets = [
+        widget.CurrentLayoutIcon(
+            background=theme['titlebg'], scale=0.6, foreground=theme['titlefg'], padding=theme['titlepadding']),
+        widget.TextBox(
+            **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['titlebg'], padding=0)
+    ]
+
+    _groups_widgets = getGroupWidgets(theme, screen, groups)
+    for w in _groups_widgets:
+        widgets += w.getWidgets()
+    group_widgets[screen] = _groups_widgets
+
+    widgets += common_widgets['mpd'].getWidgets()
+
+    # Prompt
+    if screen == 0:
+        widgets += [
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0),
+            widget.Prompt(
+                **DEFAULT_FONT, foreground=theme['titlefg'], background=theme['titlebg'], prompt=" "),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
+        ]
+
+    # Auto spacer
+    widgets += [widget.Spacer()]
+
+    widgets += common_widgets['local_time'].getWidgets()
+    widgets += common_widgets['india_time'].getWidgets()
+
+    widgets += [widget.Spacer(length=710-theme['barrightborder'])]
+
+    widgets += common_widgets['locks'].getWidgets()
+    widgets += common_widgets['temperature'].getWidgets()
+    widgets += common_widgets['utilization'].getWidgets()
+    widgets += common_widgets['volume'].getWidgets()
+    for k in ['wlan', 'lan']:
+        for w in common_widgets[k]:
+            widgets += w.getWidgets()
+
+    widgets += common_widgets['screen_lock'].getWidgets()
+    widgets += common_widgets['shut'].getWidgets()
+    widgets += common_widgets['toggle_power'].getWidgets()
+
+    return widgets
+
+
+def updateGroupWidgets():
+    global group_widgets
+    for screen in group_widgets:
+        for w in group_widgets[screen]:
+            w.update()
+
+
+def clickGroup(qtile: Qtile, button: int, group: str):
+    for _group in qtile.groups:
+        if _group.name == group:
+            _group.cmd_toscreen()
+            break
+    updateGroupWidgets()
+
+
+def show_hide_power_widgets(qtile, button):
+    if button != MOUSE_BUTTONS['LEFT_CLICK']:
+        return
+
+    global common_widgets
+    common_widgets['screen_lock'].show(
+        common_widgets['screen_lock'].isHidden())
+    common_widgets['shut'].show(common_widgets['shut'].isHidden())
+
+    if common_widgets['screen_lock'].isHidden():
+        common_widgets['toggle_power'].title.update("")
+    else:
+        common_widgets['toggle_power'].title.update("")
+
+
+def updateVolumeWidgets():
+    global common_widgets
+    common_widgets['volume'].update()

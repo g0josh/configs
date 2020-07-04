@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "merc.jpg"
+bodyfg: "background"
+bodybg: "green"
+titlefg: "background"
+titlebg: "blue"
+focusedfg: "background"
+focusedbg: "blue"
+urgentfg: "background"
+urgentbg: "white"
+altfg: "red"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: ""
+wspadding: 0
+background: "background"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "blue"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0

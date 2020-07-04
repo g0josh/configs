@@ -5,14 +5,16 @@ import subprocess
 from typing import List
 import json
 
-from libqtile import layout, hook
+from libqtile import layout, hook, bar
 from libqtile.command import lazy
-from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown, Screen
 from libqtile.log_utils import logger
 
-from cliutils import audio
-from my_scripts import getTheme, startPolybar, updateWallpaper
-from my_scripts import LAYOUT_ICONS
+from my_audio import setMute, setVolume, setActiveSink
+from my_scripts import getTheme, updateWallpaper, getNumScreens
+from my_bar import getWidgets
+from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
+from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
 
 MOD = "mod4"
 ALT = "mod1"
@@ -21,28 +23,12 @@ TERMINAL = "urxvtc"
 BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
+NUM_SCREENS = getNumScreens()
+
 POLYBAR_INFO = {}
-
-default_font = dict(
-    font="Iosevka Medium Oblique",
-    fontsize=14,
-    padding=0
-)
-border_font = dict(
-    font="Iosevka Nerd Font Mono",
-    fontsize=16,
-    padding=0
-)
-
-icon_font = dict(
-    font="Font Awesome 5 Free Solid",
-    fontsize=12,
-    padding=0
-)
 
 groups = [
     Group(name='1', label="1 "),
-    #Group(name='1', label="1 "),
     Group(name='2', label="2 "),
     #Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])]),
     Group(name='3', label="3 "),
@@ -50,9 +36,9 @@ groups = [
                                 #matches=[Match(wm_class=["explorer"])]),
     Group(name='4', label="4 ", init=True, spawn="nautilus"),
     Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer",
+    # Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e cmus",
                                 matches=[Match(wm_class=["music"])]),
     Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
-    #Group(name='6', label="6 "),
     Group(name='7', label="7 "),
     ScratchPad("scratchpad", [
         # define a drop down terminal.
@@ -98,11 +84,12 @@ def float_to_front(qtile):
 
 @lazy.function
 def polybar_hook(qtile):
-    try:
-        subprocess.call(['polybar-msg','hook','qtileWs','1'])
-    except subprocess.CalledProcessError as e:
-        logger.warn(e)
-        return
+    return
+    # try:
+    #     subprocess.call(['polybar-msg','hook','qtileWs','1'])
+    # except subprocess.CalledProcessError as e:
+    #     logger.warn(e)
+    #     return
 
 keys = [
     # Switch between windows in current stack pane
@@ -162,24 +149,24 @@ keys = [
     Key([ALT], "b", lazy.spawn(ALTBROWSER)),
 
     # Toggle between different layouts
-    Key([MOD], "Tab", lazy.next_layout(), polybar_hook),
+    Key([MOD], "Tab", lazy.next_layout()),
 
     Key([MOD], "q", lazy.window.kill()),
 
-    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), polybar_hook),
-    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), polybar_hook),
-    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
-    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
-    Key([MOD], "u", lazy.next_urgent(), polybar_hook),
+    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets())),
+    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets())),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets())),
 
-    Key([], "XF86AudioMute", lazy.function(lambda x:audio(mute=2))),
-    Key([MOD], "z", lazy.function(lambda x:audio(mute=2))),
-    Key([], "XF86AudioLowerVolume", lazy.function(lambda x:audio(vol="-5"))),
-    Key([MOD, ALT], "Down", lazy.function(lambda x:audio(vol='-5'))),
-    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x:audio(vol='+5'))),
-    Key([MOD, ALT], "Up", lazy.function(lambda x:audio(vol='+5'))),
-    Key([MOD, ALT], "Prior", lazy.function(lambda x:audio(route='prev'))),
-    Key([MOD, ALT], "Next", lazy.function(lambda x:audio(route='next'))),
+    Key([], "XF86AudioMute", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD], "z", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioLowerVolume", lazy.function(lambda x: setVolume("-5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Down", lazy.function(lambda x: setVolume("-5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([], "XF86AudioRaiseVolume", lazy.function(lambda x: setVolume("+5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Up", lazy.function(lambda x: setVolume("+5%")), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Prior", lazy.function(lambda x:setActiveSink('prev')), lazy.function(lambda x: updateVolumeWidgets())),
+    Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')), lazy.function(lambda x: updateVolumeWidgets())),
 
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
@@ -188,17 +175,19 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), polybar_hook, lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
-    Key([MOD], "a", lazy.spawn("rofi -show drun")),
-    # Key([MOD], 'a', lazy.spawncmd()),
+    # Key([MOD], "a", lazy.spawn("rofi -show drun")),
+    Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
 
 ]
+
+
 
 for i in groups:
     if i.name == 'scratchpad':
@@ -210,9 +199,10 @@ for i in groups:
     else:
         keys.extend([
             # MOD1 + letter of group = switch to group
-            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
+            # Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
+            Key([MOD], i.name, lazy.group[i.name].toscreen(), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x)) ),
             # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x)) ),
         ])
 
 layout_configs={
@@ -228,11 +218,11 @@ layouts = [
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
         active_fg=THEME['titlefg'], inactive_fg=THEME['bodyfg'], bg_color=THEME['windowborder'],
-        padding_left=2, panel_width=100, font=default_font['font'], sections=['Sections'] ),
+        padding_left=2, panel_width=100, font=DEFAULT_FONT['font'], sections=['Sections'] ),
     layout.Max()
 ]
 
-extension_defaults = default_font.copy()
+extension_defaults = DEFAULT_FONT.copy()
 
 #No bar as we are using polybar
 screens = []
@@ -275,6 +265,21 @@ floating_layout = layout.Floating(float_rules=[
 auto_fullscreen = True
 #focus_on_window_activation = "smart"
 
+screens = []
+for n in range(NUM_SCREENS):
+    screens.append(
+       Screen(
+           top=bar.Bar(
+               widgets=getWidgets(THEME, n, groups),
+               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
+                                                        THEME['barleftborder'],
+                                                        THEME['barbottomborder'],
+                                                        THEME['barrightborder']],
+               background=THEME['background'], opacity=1
+           )
+       )
+   )
+
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
 # mailing lists, github issues, and other WM documentation that suggest setting
@@ -285,46 +290,25 @@ auto_fullscreen = True
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
 
-# apps to groups
-# @hook.subscribe.client_new
-# def assignGroup(c):
-#     with open('/home/job/.qlog', 'a') as f:
-#         f.write("test {}, {}, {}\n".format(c.name, c.wm_instance_class, c.wm_class))
-#     if c.wm_class == "Code":
-#         c.togroup("3")
-#     if c.wm_instance_class == "ranger_inst":
-#         c.togroup("4")
-#     if c.wm_instance_class == "ncmpcpp_inst":
-#         c.togroup("5")
-
-def launch_polybar():
-    global POLYBAR_INFO
-    POLYBAR_INFO = startPolybar(THEME_PATH)
-    for s in POLYBAR_INFO:
-        if os.path.exists(POLYBAR_INFO[s]['ws_fifo_path']):
-            os.remove(POLYBAR_INFO[s]['ws_fifo_path'])
-        os.mkfifo(POLYBAR_INFO[s]['ws_fifo_path'])
-
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
-    #launch_polybar()
 
 @hook.subscribe.startup_once
 def startOnce():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
-    #launch_polybar()
 
 @hook.subscribe.client_new
 def windowAdded(c):
     updateWallpaper(c.qtile, 1)
+    updateGroupWidgets()
 
 @hook.subscribe.client_killed
 def windowDeleted(c):
     updateWallpaper(c.qtile, -1)
-
+    updateGroupWidgets()
 
 '''
 @hook.subscribe.startup
@@ -332,3 +316,8 @@ def start():
     start = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([start])
 '''
+
+@hook.subscribe.startup_complete
+def refreshWidgets():
+    updateGroupWidgets()
+    updateVolumeWidgets()

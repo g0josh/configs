@@ -3,8 +3,8 @@ wallpaper: "neon.png"
 bodyfg: "background"
 bodybg: "green"
 titlefg: "background"
-titlebg: "blue"
-focusedfg: "foreground"
+titlebg: "red"
+focusedfg: "background"
 focusedbg: "red"
 urgentfg: "foreground"
 urgentbg: "red"
@@ -20,7 +20,7 @@ gradient:
     - "white"
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
+background: "000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
@@ -29,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "red"
 windowborder: "background"
-barleftborder : 10
-barrightborder : 10
+barleftborder : 300
+barrightborder : 300
 bartopborder : 3
 barbottomborder : 0
