@@ -74,12 +74,13 @@ class ComboWidget(object):
                  title_font: Optional[str] = None, title_font_size: Optional[int] = None,
                  body_font: Optional[str] = None, body_font_size: Optional[int] = None,
                  click_func: Optional[Callable[[Qtile, int], None]] = None, click_update: Optional[bool] = None,
-                 hide: Optional[bool] = None, inactive_hide: Optional[bool] = None
+                 hide: Optional[bool] = None, inactive_hide: Optional[bool] = None, margin_text:Optional[str]=None
                  ):
 
         if not body_func and not title_func:
             raise AttributeError("No poll functions provided")
-
+        
+        self.margin_text = margin_text
         self.title_func = title_func
         self.title_color_func = title_color_func
         self.update_title = title_update if title_update else False
@@ -89,6 +90,7 @@ class ComboWidget(object):
         self.body_func = body_func
         self.body_color_func = body_color_func
         self.body_label = body_label
+
 
         self.title_head_text = title_head_text if title_head_text else ""
         self.title_tail_text = title_tail_text if title_tail_text else ""
@@ -110,6 +112,9 @@ class ComboWidget(object):
         title_func = (lambda: "") if (hide or self.body_func) else self.pollTitle
         title_head = "" if hide else self.title_head_text
         title_tail = "" if hide else self.title_tail_text
+        margin_text = "" if hide else self.margin_text
+        self.margin = TextBox(text=margin_text, foreground=title_bg, font=head_tail_font, fontsize=head_tail_font_size,
+                                  padding=0)
         self.title_head = TextBox(text=title_head, foreground=title_bg, font=head_tail_font, fontsize=head_tail_font_size,
                                   mouse_callbacks=_mouse_callbacks, padding=0)
         self.title_tail = TextBox(text=title_tail, foreground=title_bg, font=head_tail_font, fontsize=head_tail_font_size,
@@ -130,9 +135,9 @@ class ComboWidget(object):
 
     def getWidgets(self):
         if self.body:
-            return [self.title_head, self.title, self.title_tail, self.body, self.body_tail]
+            return [self.margin, self.title_head, self.title, self.title_tail, self.body, self.body_tail]
         else:
-            return [self.title_head, self.title, self.title_tail]
+            return [self.margin, self.title_head, self.title, self.title_tail]
 
     def click(self, qtile: Qtile, button: int):
         if self.click_func:
@@ -155,9 +160,12 @@ class ComboWidget(object):
                 self.title_head.update(self.title_head_text)
             if self.title_tail.text != self.title_tail_text:
                 self.title_tail.update(self.title_tail_text)
+            if self.margin.text != self.margin_text:
+                self.margin.update(self.margin_text)
         elif self.inactive_hide:
             self.title_head.update("")
             self.title_tail.update("")
+            self.margin.update("")
 
         _result = self.title_label if (self.title_label and result) else result
 
@@ -184,11 +192,11 @@ class ComboWidget(object):
                 self.pollTitle(force=True)
         elif self.inactive_hide:
             _poll_title = False
-            for w in [self.title_head, self.title, self.title_tail, self.body_tail]:
+            for w in [self.margin, self.title_head, self.title, self.title_tail, self.body_tail]:
                 if w.text:
                     w.update("")
 
-        if (self.update_title and _poll_title):
+        if self.update_title and _poll_title:
             self.pollTitle(force=True)
 
         _result = self.body_label if self.body_label else result
