@@ -11,7 +11,6 @@ from libqtile.config import Click, Drag, Group, Key, Match, ScratchPad, DropDown
 from libqtile.log_utils import logger
 
 from my_audio import setMute, setVolume, setActiveSink
-# from my_audio import update as updateAudio
 from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
 from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
@@ -319,6 +318,6 @@ def start():
 '''
 
 @hook.subscribe.startup_complete
-def refreshAudio():
+def refreshWidgets():
     updateGroupWidgets()
     updateVolumeWidgets()

@@ -6,7 +6,7 @@ import os
 from contextlib import contextmanager
 import json
 import yaml
-import typing
+from typing import Optional
 
 from libqtile.log_utils import logger
 from libqtile.command import lazy
@@ -87,7 +87,7 @@ def getVolume(qtile:Qtile):
 # Music
 # ---------------------------------------------
 
-def getCmus(qtile=None, not_connected_text='', max_title_len=20):
+def getCmus(qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_len:int=20):
     try:
         output = subprocess.check_output(['cmus-remote', '-Q']).decode()
     except subprocess.CalledProcessError as e:
@@ -114,7 +114,7 @@ def getCmus(qtile=None, not_connected_text='', max_title_len=20):
     else:
         return "{} {}:{}/{}:{}".format(title, time_m, time_s, total_time_m, total_time_s)
 
-def clickCmus(qtile=None, button=1):
+def clickCmus(qtile:Optional[Qtile]=None, button:int=1):
     keys = {
         # Left mouse button
         "toggle": 1,
@@ -141,7 +141,7 @@ def clickCmus(qtile=None, button=1):
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
 
-def getMpd( qtile=None, not_connected_text='', max_title_len=20):
+def getMpd( qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_len:int=20):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
@@ -160,7 +160,7 @@ def getMpd( qtile=None, not_connected_text='', max_title_len=20):
     else:
         return "{} - {}".format(title, time)
 
-def clickMpd(qtile=None, button=1):
+def clickMpd(qtile:Optional[Qtile]=None, button:int=1):
     keys = {
         # Left mouse button
         "toggle": 1,
@@ -217,7 +217,7 @@ class NetSpeeds(object):
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
-def getWlan(qtile=None, interface='wlo1', widgets=[], ontexts=[], offtexts=[], error_text=''):
+def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', widgets:list=[], ontexts:list=[], offtexts:list=[], error_text:str=''):
     try:
         output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
@@ -249,7 +249,7 @@ def getWlan(qtile=None, interface='wlo1', widgets=[], ontexts=[], offtexts=[], e
     else:
         return "{}|{}".format(essid, speed)
 
-def getLan(qtile=None, interface='enp24s0', error_text=''):
+def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str=''):
     # check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
@@ -301,7 +301,7 @@ def setTimeZone(the_tz):
         del os.environ['TZ']
     time.tzset()
 
-def getTime(qtile=None, format='%b %d, %A, %I:%M %p', timezone=None):
+def getTime(qtile:Optional[Qtile]=None, format:str='%b %d, %A, %I:%M %p', timezone:Optional[str]=None):
     def _get_time():
         now = datetime.now().astimezone()
         return (now + timedelta(seconds=0.5)).strftime(format)
@@ -312,7 +312,7 @@ def getTime(qtile=None, format='%b %d, %A, %I:%M %p', timezone=None):
     else:
         return _get_time()
 
-def getlocksStatus(qtile=None):
+def getlocksStatus(qtile:Optional[Qtile]=None):
     result = []
     try:
         output = subprocess.check_output(['xset', 'q']).decode()
@@ -327,7 +327,7 @@ def getlocksStatus(qtile=None):
         result.append('0')
     return " ".join(result)
 
-def getTemps(qtile=None, threshold=-1 ):
+def getTemps(qtile:Optional[Qtile]=None, threshold:int=-1 ):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
@@ -346,7 +346,7 @@ def getTemps(qtile=None, threshold=-1 ):
     if int(cpu_temp) > threshold or int(gpu_temp) > threshold:
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
-def getUtilization(qtile=None, threshold=-1):
+def getUtilization(qtile:Optional[Qtile]=None, threshold:int=-1):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
         gpu = subprocess.check_output(
@@ -367,7 +367,7 @@ def getUtilization(qtile=None, threshold=-1):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-def powerClicked(button, power_button, qtile=None):
+def powerClicked(qtile:Optional[Qtile]=None, button:int=1, power_button:int=1):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
 
@@ -538,7 +538,7 @@ def startPolybar(theme_path):
     logger.warn(poly_screens)
     return poly_screens
 
-def updateWallpaper(qtile, adjustWindowCount=0):
+def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0):
     groups = qtile.cmd_groups()
     windows = adjustWindowCount
     for group in groups:

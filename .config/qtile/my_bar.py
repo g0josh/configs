@@ -108,7 +108,7 @@ def prepareCommonWidgets(theme):
         i_list = common_widgets['wlan'] if 'wl' in interface else common_widgets['lan']
         i_list.append(ComboWidget(title_func=title, title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
                         title_padding=theme['titlepadding'], body_func=partial(func, interface=interface),
-                        body_fg=theme['bodyfg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
+                        body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
                         poll_interval=5, title_head_text=theme['rightmoduleprefix'], title_tail_text=theme['rightmodulesuffix'],
                         body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'], head_tail_font_size=BORDER_FONT['fontsize'],
                         title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
@@ -184,18 +184,19 @@ def getWidgets(theme, screen, groups):
             widget.TextBox(
                 **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
         ]
-    # Systray
+
+    # Auto spacer
     widgets += [widget.Spacer()]
 
     widgets += common_widgets['local_time'].getWidgets()
     widgets += common_widgets['india_time'].getWidgets()
+
     widgets += [widget.Spacer(length=710-theme['barrightborder'])]
 
     widgets += common_widgets['locks'].getWidgets()
     widgets += common_widgets['temperature'].getWidgets()
     widgets += common_widgets['utilization'].getWidgets()
     widgets += common_widgets['volume'].getWidgets()
-
     for k in ['wlan', 'lan']:
         for w in common_widgets[k]:
             widgets += w.getWidgets()
