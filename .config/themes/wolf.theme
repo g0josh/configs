@@ -1,11 +1,11 @@
 terminal_colors:
     "! special
     *.foreground:   #e5e4f0
-    *.background:   #0d0717
+    *.background:   #060a1b
     *.cursorColor:  #e5e4f0
 
     ! black
-    *.color0:       #0d0717
+    *.color0:       #060a1b
     *.color8:       #a09fa8
 
     ! red
@@ -56,7 +56,7 @@ gradient:
     - "white"
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
+background: "080d22"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""

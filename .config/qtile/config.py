@@ -183,6 +183,8 @@ keys = [
     # Key([MOD], "a", lazy.spawn("rofi -show drun")),
     Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
+    Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
+    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
 
 ]
@@ -193,7 +195,6 @@ for i in groups:
     if i.name == 'scratchpad':
             keys.extend([
                 Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
-                Key([MOD, "shift"], "s", lazy.window.togroup("scratchpad")),
                 Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc'))
             ])
     else:

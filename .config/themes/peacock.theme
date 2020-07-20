@@ -37,7 +37,7 @@ terminal_colors:
     *.color15:      #79e4e7"
 wallpaper: "peacock.png"
 bodyfg: "background"
-bodybg: "cyan"
+bodybg: "magenta"
 titlefg: "background"
 titlebg: "blue"
 focusedfg: "bright_black"
@@ -56,14 +56,14 @@ gradient:
     - "blue"
 moduleseparator: ""
 wspadding: 0
-background: "#000000"
+background: "red"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "red"
+focusedwindowborder: "magenta"
 windowborder: "background"
 barleftborder : 300
 barrightborder : 300

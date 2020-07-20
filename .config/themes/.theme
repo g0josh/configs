@@ -1,0 +1,60 @@
+altbg: '#d5d9da'
+altfg: '#8C7970'
+background: '#040405'
+barbottomborder: 0
+barleftborder: 300
+barrightborder: 300
+bartopborder: 0
+bodybg: '#5B7588'
+bodyfg: '#040405'
+bodypadding: 1
+focusedbg: '#30B9DF'
+focusedfg: '#040405'
+focusedwindowborder: '#30B9DF'
+gradient1body: '#8C7970'
+gradient1title: '#8C7970'
+gradient2body: '#5B7588'
+gradient2title: '#5B7588'
+gradient3body: '#758994'
+gradient3title: '#758994'
+gradient4body: '#30B9DF'
+gradient4title: '#30B9DF'
+gradient5body: '#9CA3A7'
+gradient5title: '#9CA3A7'
+gradient6body: '#ACBBC3'
+gradient6title: '#ACBBC3'
+gradient7body: '#d5d9da'
+gradient7title: '#d5d9da'
+leftmoduleprefix: "\uE0BE"
+leftmodulesuffix: "\uE0B8"
+moduleseparator: ''
+rightmoduleprefix: "\uE0BA"
+rightmodulesuffix: "\uE0BC"
+terminal_colors:
+  background: '#040405'
+  black: '#040405'
+  blue: '#30B9DF'
+  bright_black: '#959798'
+  bright_blue: '#30B9DF'
+  bright_cyan: '#ACBBC3'
+  bright_green: '#5B7588'
+  bright_magenta: '#9CA3A7'
+  bright_red: '#8C7970'
+  bright_white: '#d5d9da'
+  bright_yellow: '#758994'
+  cursorColor: '#d5d9da'
+  cyan: '#ACBBC3'
+  foreground: '#d5d9da'
+  green: '#5B7588'
+  magenta: '#9CA3A7'
+  red: '#8C7970'
+  white: '#d5d9da'
+  yellow: '#758994'
+titlebg: '#30B9DF'
+titlefg: '#040405'
+titlepadding: 0
+urgentbg: '#d5d9da'
+urgentfg: '#040405'
+wallpaper: /home/job/.config/themes/walls/merc.jpg
+windowborder: '#040405'
+wspadding: 0

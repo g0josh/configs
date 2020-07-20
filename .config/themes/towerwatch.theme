@@ -17,10 +17,10 @@ gradient:
     - "blue"
     - "magenta"
     - "cyan"
-    - "white"
+    - "green"
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
+background: "cyan"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
@@ -29,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "green"
 windowborder: "background"
-barleftborder : 5
-barrightborder : 5
-bartopborder : 3
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
 barbottomborder : 0
