@@ -15,7 +15,7 @@ URxvt.font: xft:Iosevka Nerd Font Mono:style=Regular:size=12:antialias=true:hint
 URxvt.boldFont: xft:Iosevka Nerd Font Mono:style=Medium Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
 URxvt.italicFont: xft:Iosevka Nerd Font Mono:style=Bold Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
 
-URxvt.depth:                    32
+URxvt.depth:                    24
 URxvt*internalBorder:           20
 URxvt*scrollBar:                false
 URxvt*scrollTtyOutput:          false

@@ -9,8 +9,8 @@ terminal_colors:
     *.color8:       #a29a93
 
     ! red
-    *.color1:       #59ada9
-    *.color9:       #59ada9
+    *.color1:       #6354a4
+    *.color9:       #6354a4
 
     ! green
     *.color2:       #6fb5b1
@@ -21,8 +21,8 @@ terminal_colors:
     *.color11:      #e79057
 
     ! blue
-    *.color4:       #4dc4c9
-    *.color12:      #4dc4c9
+    *.color4:       #2b73a0
+    *.color12:      #2b73a0
 
     ! magenta
     *.color5:       #948578
@@ -39,32 +39,32 @@ wallpaper: "beach.jpg"
 bodyfg: "background"
 bodybg: "magenta"
 titlefg: "background"
-titlebg: "cyan"
+titlebg: "yellow"
 focusedfg: "background"
-focusedbg: "cyan"
-urgentfg: "background"
-urgentbg: "yellow"
-altfg: "blue"
-altbg: "foreground"
+focusedbg: "yellow"
+urgentfg: "yellow"
+urgentbg: "background"
+altfg: "cyan"
+altbg: "background"
 gradient:
-    - "red"
     - "green"
-    - "blue"
     - "cyan"
     - "magenta"
     - "yellow"
-moduleseparator: " "
+    - "blue"
+    - "red"
+moduleseparator: ""
 wspadding: 0
-background: "#00000000"
-leftmoduleprefix: ""
-leftmodulesuffix: ""
-rightmoduleprefix: ""
-rightmodulesuffix: ""
+background: "green"
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+leftmoduleprefix: ""
+leftmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "yellow"
 windowborder: "background"
-barleftborder : 10
-barrightborder : 10
-bartopborder : 3
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
 barbottomborder : 0
