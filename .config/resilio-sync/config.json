@@ -1,0 +1,12 @@
+{
+    "storage_path" : "/home/job/.config/resilio-sync/storage",
+    "pid_file" : "/home/job/.config/resilio-sync/sync.pid",
+    "service_folders.use_relay" : false, 
+    "service_folders.use_tracker" : false,
+
+    "webui" :
+    {
+        "force_https": true,
+        "listen" : "127.0.0.1:8888"
+    }
+}

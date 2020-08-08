@@ -56,10 +56,10 @@ gradient:
     - "red"
     - "blue"
 background: "background"
-rightmoduleprefix: ""
-rightmodulesuffix: ""
-leftmoduleprefix: ""
-leftmodulesuffix: ""
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "magenta"

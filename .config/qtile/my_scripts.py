@@ -242,12 +242,12 @@ def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', widgets:list=[], o
         net_speed_objects.append(speed_obj)
 
     try:
-        speed = speed_obj.getSpeed()['download']
+        speeds = speed_obj.getSpeed()
     except Exception as e:
         logger.warning(e)
         return "  0 kb/s"
     else:
-        return "{}|{}".format(essid, speed)
+        return "{}|{}|{}".format(essid, speeds['download'], speeds['upload'])
 
 def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str=''):
     # check if enabled:
@@ -276,12 +276,12 @@ def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='
         net_speed_objects.append(speed_obj)
 
     try:
-        speed = speed_obj.getSpeed()['download']
+        speeds = speed_obj.getSpeed()
     except Exception as e:
         logger.warning(e)
         return "  0 kb/s"
     else:
-        return speed
+        return "{}|{}".format(speeds['download'], speeds['upload'])
 
 # ---------------------------------------------
 # MISC

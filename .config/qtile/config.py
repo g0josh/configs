@@ -270,7 +270,7 @@ screens = []
 for n in range(NUM_SCREENS):
     screens.append(
        Screen(
-           bottom=bar.Bar(
+           top=bar.Bar(
                widgets=getWidgets(THEME, n, groups),
                size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
                                                         THEME['barleftborder'],

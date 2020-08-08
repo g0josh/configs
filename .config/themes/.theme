@@ -25,11 +25,11 @@ gradient6body: '#a20086'
 gradient6title: '#a20086'
 gradient7body: '#072e88'
 gradient7title: '#072e88'
-leftmoduleprefix: "\uE0BA"
-leftmodulesuffix: "\uE0BC"
+leftmoduleprefix: "\uE0BE"
+leftmodulesuffix: "\uE0B8"
 moduleseparator: ''
-rightmoduleprefix: "\uE0BE"
-rightmodulesuffix: "\uE0B8"
+rightmoduleprefix: "\uE0BA"
+rightmodulesuffix: "\uE0BC"
 terminal_colors:
   background: '#090117'
   black: '#090117'
