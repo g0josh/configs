@@ -1,27 +1,70 @@
-terminal_colors:  "pywal"
+terminal_colors: "! special
+    *.foreground:   #e67b99
+    *.background:   #090117 
+    *.cursorColor:  #e67b99
+
+    ! black
+    *.color0:       #090117
+    *.color8:       #65425d
+
+    ! red
+    *.color1:       #a20086
+    *.color9:       #a20086
+
+    ! green
+    *.color2:       #026b74
+    *.color10:      #0397a3
+
+    ! yellow
+    *.color3:       #494b6c
+    *.color11:      #636691
+
+    ! blue
+    *.color4:       #072e88
+    *.color12:      #0c43c2
+
+    ! magenta
+    *.color5:       #b81061
+    *.color13:      #b81061
+
+    ! cyan
+    *.color6:       #22d1e4
+    *.color14:      #22d1e4
+
+    ! white
+    *.color7:       #e67b99
+    *.color15:      #e67b99"
 wallpaper: "purplePorsche.jpg"
 bodyfg: "background"
-bodybg: "red"
+bodybg: "blue"
 titlefg: "background"
-titlebg: "green"
+titlebg: "red"
 focusedfg: "background"
-focusedbg: "green"
+focusedbg: "red"
 urgentfg: "background"
-urgentbg: "bright_cyan"
-altfg: "blue"
+urgentbg: "magenta"
+altfg: "green"
 altbg: "foreground"
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
-leftmoduleprefix: ""
-leftmodulesuffix: ""
-rightmoduleprefix: ""
-rightmodulesuffix: ""
+gradient:
+    - "cyan"
+    - "green"
+    - "blue"
+    - "magenta"
+    - "bright_black"
+    - "red"
+    - "blue"
+background: "background"
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+leftmoduleprefix: ""
+leftmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "blue"
+focusedwindowborder: "magenta"
 windowborder: "background"
-barleftborder : 10
-barrightborder : 10
-bartopborder : 3
+barleftborder : 0
+barrightborder : 0
+bartopborder : 0
 barbottomborder : 0

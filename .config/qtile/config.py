@@ -183,8 +183,8 @@ keys = [
     # Key([MOD], "a", lazy.spawn("rofi -show drun")),
     Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
-    Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
-    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
+    # Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
+    # Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
 
 ]
@@ -270,7 +270,7 @@ screens = []
 for n in range(NUM_SCREENS):
     screens.append(
        Screen(
-           top=bar.Bar(
+           bottom=bar.Bar(
                widgets=getWidgets(THEME, n, groups),
                size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
                                                         THEME['barleftborder'],
