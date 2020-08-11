@@ -22,7 +22,9 @@ ALTTERMINAL = "alacritty"
 TERMINAL = "urxvtc"
 BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
+AUTOSTART_SCRIPT = "~/.config/autostart.sh"
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
+
 NUM_SCREENS = getNumScreens()
 
 POLYBAR_INFO = {}
@@ -122,7 +124,7 @@ keys = [
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
-    Key([MOD, "control"], "m", lazy.spawn(os.path.expanduser('~/.config/qtile/autostart.sh'))),
+    Key([MOD, "control"], "m", lazy.spawn(os.path.expanduser(AUTOSTART_SCRIPT))),
     Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
@@ -293,12 +295,12 @@ wmname = "LG3D"
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile, ev):
-    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
 
 @hook.subscribe.startup_once
 def startOnce():
-    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
 
 @hook.subscribe.client_new
@@ -314,7 +316,7 @@ def windowDeleted(c):
 '''
 @hook.subscribe.startup
 def start():
-    start = os.path.expanduser('~/.config/qtile/autostart.sh')
+    start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
 '''
 
