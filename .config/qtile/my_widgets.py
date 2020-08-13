@@ -69,12 +69,12 @@ class ComboWidget(object):
                  body_func: Optional[Callable[[Qtile], str]] = None, body_bg: Optional[str] = None, body_fg: Optional[str] = None,
                  body_padding: Optional[int] = None, body_color_func: Optional[Callable[[Qtile], ComboWidgetColor]] = None,
                  poll_interval: Optional[int] = None, title_label: Optional[str] = None, body_label: Optional[str] = None,
-                 title_head_text: Optional[str] = None, title_tail_text: Optional[str] = None, body_tail_text: Optional[str] = None,
-                 head_tail_font: Optional[str] = None, head_tail_font_size: Optional[int] = None,
-                 title_font: Optional[str] = None, title_font_size: Optional[int] = None,
-                 body_font: Optional[str] = None, body_font_size: Optional[int] = None,
+                 title_head_text: str = "", title_tail_text: str = "", body_tail_text: str = "",
+                 head_tail_font: str = "sans", head_tail_font_size: Optional[int] = None,
+                 title_font: str = "sans", title_font_size: Optional[int] = None,
+                 body_font: Optional[str] = "sans", body_font_size: Optional[int] = None,
                  click_func: Optional[Callable[[Qtile, int], None]] = None, click_update: Optional[bool] = None,
-                 hide: Optional[bool] = None, inactive_hide: Optional[bool] = None, margin_text:Optional[str]=None
+                 hide: Optional[bool] = None, inactive_hide: Optional[bool] = None, margin_text:str=""
                  ):
 
         if not body_func and not title_func:

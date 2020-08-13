@@ -8,7 +8,7 @@ from my_scripts import getVolume, getVolumeIcon, volumeClicked
 from my_scripts import getGroupColors, getGroupLabel
 from my_scripts import getMpd, clickMpd
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
-from my_scripts import getInterfaces, getWlan, getLan
+from my_scripts import getInterfaces, getWlan, getLan, getNetSpeed
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
 
 from my_widgets import ComboWidget
@@ -100,10 +100,25 @@ def prepareCommonWidgets(theme):
                         title_padding=theme['titlepadding'], body_func=partial(func, interface=interface),
                         body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
                         poll_interval=5, title_head_text=theme['rightmoduleprefix'], title_tail_text=theme['rightmodulesuffix'],
-                        body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'], head_tail_font_size=BORDER_FONT['fontsize'],
+                        head_tail_font=BORDER_FONT['font'], head_tail_font_size=BORDER_FONT['fontsize'],
                         title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
                         body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
                         margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
+        i_list.append(ComboWidget(title_func=lambda qtile: "", title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
+                        title_padding=5, body_func=partial(getNetSpeed, interface=interface),
+                        body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
+                        poll_interval=5, title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
+                        body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
+                        margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
+        i_list.append(ComboWidget(title_func=lambda qtile: "", title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
+                        title_padding=5, body_func=partial(getNetSpeed, interface=interface, upload=True),
+                        body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
+                        poll_interval=5, title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
+                        body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
+                        margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
+        i_list.append(ComboWidget(title_func=partial(func, interface=interface), title_label=theme['rightmodulesuffix'], title_bg=theme['background'], title_fg=theme['gradient5body'],
+                               title_padding=0, poll_interval=5, title_font=BORDER_FONT['font'],
+                               title_font_size=BORDER_FONT['fontsize'], click_update=True, title_update=True))
     
     common_widgets['local_time'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient6title'], title_fg=theme['titlefg'],
                                   title_padding=theme['titlepadding'], body_func=getTime, body_bg=theme['gradient6body'],

@@ -198,21 +198,50 @@ class NetSpeeds(object):
         self.init_time = 0
         self.init_bytes_tx_rx = [0, 0]
         self.interface = interface
+        self.prev_speeds = [0, 0]
+
+    def formatSpeeds(self):
+        return {'upload': self.prev_speeds[0], 'download': self.prev_speeds[1]}
 
     def getSpeed(self):
+        if time.time() - self.init_time < 5:
+            return self.formatSpeeds()
+
         bytes_tx_rx = []
         for f in ['/sys/class/net/{}/statistics/tx_bytes'.format(self.interface),
                   '/sys/class/net/{}/statistics/rx_bytes'.format(self.interface)]:
             with open(f, 'r') as fo:
                 bytes_tx_rx.append(int(fo.read()))
         _time = time.time()
-        speeds = [(x - y) / (_time - self.init_time)
+        self.prev_speeds = [(x - y) / (_time - self.init_time)
                   for x, y in zip(bytes_tx_rx, self.init_bytes_tx_rx)]
         self.init_bytes_tx_rx = bytes_tx_rx
         self.init_time = _time
-        speeds = ["{:3.0f} kB/s".format(x/1e3) if x <
-                  1e6 else "{:2.1f} MB/s".format(x/1e6) for x in speeds]
-        return {'upload': speeds[0], 'download': speeds[1]}
+        return self.formatSpeeds()
+
+def getNetSpeed(qtile:Optional[Qtile]=None, interface:str="wlo1", upload=False, min=10e3):
+    # get speeds
+    global net_speed_objects
+    speed_obj = None
+    for o in net_speed_objects:
+        if o.interface == interface:
+            speed_obj = o
+
+    if speed_obj is None:
+        speed_obj = NetSpeeds(interface=interface)
+        net_speed_objects.append(speed_obj)
+
+    try:
+        speed = speed_obj.getSpeed()
+    except Exception as e:
+        logger.warn("getNetSpeed error: {}".format(e))
+
+    speed = speed["upload"] if upload else speed["download"]
+    if speed < min:
+        return ""
+    else:
+        return "{:3.0f} kB/s".format(speed/1e3) if speed < 1e6 else "{:2.1f} MB/s".format(speed/1e6)
+    
 
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
@@ -229,25 +258,7 @@ def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', widgets:list=[], o
     if not _essid:
         return ""
     essid = _essid.group(1)
-
-    # get speeds
-    global net_speed_objects
-    speed_obj = None
-    for o in net_speed_objects:
-        if o.interface == interface:
-            speed_obj = o
-
-    if speed_obj is None:
-        speed_obj = NetSpeeds(interface=interface)
-        net_speed_objects.append(speed_obj)
-
-    try:
-        speeds = speed_obj.getSpeed()
-    except Exception as e:
-        logger.warning(e)
-        return "  0 kb/s"
-    else:
-        return "{}|{}|{}".format(essid, speeds['download'], speeds['upload'])
+    return essid
 
 def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str=''):
     # check if enabled:
@@ -263,25 +274,8 @@ def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='
             up.append("-1")
     if up != ['up', '1']:
         return ""
-
-    # get speeds
-    global net_speed_objects
-    speed_obj = None
-    for o in net_speed_objects:
-        if o.interface == interface:
-            speed_obj = o
-
-    if speed_obj is None:
-        speed_obj = NetSpeeds(interface=interface)
-        net_speed_objects.append(speed_obj)
-
-    try:
-        speeds = speed_obj.getSpeed()
-    except Exception as e:
-        logger.warning(e)
-        return "  0 kb/s"
     else:
-        return "{}|{}".format(speeds['download'], speeds['upload'])
+        return " "
 
 # ---------------------------------------------
 # MISC
