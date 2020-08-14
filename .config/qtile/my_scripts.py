@@ -6,7 +6,7 @@ import os
 from contextlib import contextmanager
 import json
 import yaml
-from typing import Optional
+from typing import Optional, List
 
 from libqtile.log_utils import logger
 from libqtile.command import lazy
@@ -219,7 +219,7 @@ class NetSpeeds(object):
         self.init_time = _time
         return self.formatSpeeds()
 
-def getNetSpeed(qtile:Optional[Qtile]=None, interface:str="wlo1", upload=False, min=10e3):
+def getNetSpeeds(interface:str="wlo1", show_speed_above:int=1e3):
     # get speeds
     global net_speed_objects
     speed_obj = None
@@ -232,21 +232,45 @@ def getNetSpeed(qtile:Optional[Qtile]=None, interface:str="wlo1", upload=False, 
         net_speed_objects.append(speed_obj)
 
     try:
-        speed = speed_obj.getSpeed()
+        speeds = speed_obj.getSpeed()
     except Exception as e:
-        logger.warn("getNetSpeed error: {}".format(e))
+        logger.warn("getNetSpeeds error: {}".format(e))
 
-    speed = speed["upload"] if upload else speed["download"]
-    if speed < min:
-        return ""
-    else:
+    def format_speed(speed:int):
         return "{:3.0f} kB/s".format(speed/1e3) if speed < 1e6 else "{:2.1f} MB/s".format(speed/1e6)
-    
 
+    for k in speeds:
+        speeds[k] = format_speed(speeds[k]) if speeds[k] > show_speed_above else ""
+
+    return speeds
+
+# def getNetSpeed(qtile:Optional[Qtile]=None, interface:str="wlo1", upload=False, min=10e3):
+#     # get speeds
+#     global net_speed_objects
+#     speed_obj = None
+#     for o in net_speed_objects:
+#         if o.interface == interface:
+#             speed_obj = o
+
+#     if speed_obj is None:
+#         speed_obj = NetSpeeds(interface=interface)
+#         net_speed_objects.append(speed_obj)
+
+#     try:
+#         speed = speed_obj.getSpeed()
+#     except Exception as e:
+#         logger.warn("getNetSpeed error: {}".format(e))
+
+#     speed = speed["upload"] if upload else speed["download"]
+#     if speed < min:
+#         return ""
+#     else:
+#         return "{:3.0f} kB/s".format(speed/1e3) if speed < 1e6 else "{:2.1f} MB/s".format(speed/1e6)
+    
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
-def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', widgets:list=[], ontexts:list=[], offtexts:list=[], error_text:str=''):
+def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='', show_speed_above:int=10e3, speed_icons:List[str]=["",""]):
     try:
         output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
@@ -257,10 +281,14 @@ def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', widgets:list=[], o
 
     if not _essid:
         return ""
-    essid = _essid.group(1)
-    return essid
+    
+    speeds = getNetSpeeds(interface, show_speed_above)
+    result = _essid.group(1)
+    result = result + " {} {}".format(speed_icons[0], speeds['download']) if speeds['download'] else result
+    result = result + " {} {}".format(speed_icons[1], speeds['upload']) if speeds['upload'] else result
+    return result
 
-def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str=''):
+def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='', show_speed_above:int=10e3, speed_icons:List[str]=["",""]):
     # check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
@@ -275,7 +303,10 @@ def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='
     if up != ['up', '1']:
         return ""
     else:
-        return " "
+        speeds = getNetSpeeds(interface, show_speed_above)
+        result = "{} {}".format(speed_icons[0], speeds['download']) if speeds['download'] else ""
+        result = result + " {} {}".format(speed_icons[1], speeds['upload']) if speeds['upload'] else result
+        return result
 
 # ---------------------------------------------
 # MISC
