@@ -16,7 +16,7 @@ gradient:
     - "yellow"
     - "blue"
     - "magenta"
-    - "cyan"
+    - "blue"
     - "green"
 moduleseparator: ""
 wspadding: 0
@@ -29,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "green"
 windowborder: "background"
-barleftborder : 300
-barrightborder : 300
-bartopborder : 0
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
 barbottomborder : 0
