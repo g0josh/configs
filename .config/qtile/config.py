@@ -93,6 +93,12 @@ def polybar_hook(qtile):
     #     logger.warn(e)
     #     return
 
+@lazy.function
+def changeWallpaper(qtile):
+    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
+        updateWallpaper(qtile)
+
+
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -157,8 +163,8 @@ keys = [
 
     Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets())),
     Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets())),
-    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
-    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
     Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets())),
 
     Key([], "XF86AudioMute", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
@@ -177,8 +183,8 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x))),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
@@ -202,10 +208,9 @@ for i in groups:
     else:
         keys.extend([
             # MOD1 + letter of group = switch to group
-            # Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook, lazy.function(lambda x:updateWallpaper(x)) ),
-            Key([MOD], i.name, lazy.group[i.name].toscreen(), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x)) ),
+            Key([MOD], i.name, lazy.group[i.name].toscreen(), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
             # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), lazy.function(lambda x:updateGroupWidgets()), lazy.function(lambda x:updateWallpaper(x)) ),
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
         ])
 
 layout_configs={
@@ -226,9 +231,6 @@ layouts = [
 ]
 
 extension_defaults = DEFAULT_FONT.copy()
-
-#No bar as we are using polybar
-screens = []
 
 # Drag floating layouts.
 mouse = [
@@ -305,12 +307,14 @@ def startOnce():
 
 @hook.subscribe.client_new
 def windowAdded(c):
-    updateWallpaper(c.qtile, 1)
+    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
+        updateWallpaper(c.qtile, 1)
     updateGroupWidgets()
 
 @hook.subscribe.client_killed
 def windowDeleted(c):
-    updateWallpaper(c.qtile, -1)
+    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
+        updateWallpaper(c.qtile, -1)
     updateGroupWidgets()
 
 '''
@@ -322,5 +326,6 @@ def start():
 
 @hook.subscribe.startup_complete
 def refreshWidgets():
+    updateWallpaper(setSolid=True)
     updateGroupWidgets()
     updateVolumeWidgets()

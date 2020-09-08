@@ -48,7 +48,7 @@ altfg: blue
 altbg: foreground
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
+background: background
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""

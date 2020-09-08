@@ -15,18 +15,18 @@ from my_widgets import ComboWidget
 
 DEFAULT_FONT = dict(
     font="Iosevka Nerd Font Medium",
-    # font="JetBrainsMono Nerd Font Mono Regular",
-    fontsize=16,
+    #font="JetBrainsMonoMedium Nerd Font Mono",
+    fontsize=14,
 )
 
 BORDER_FONT = dict(
     font="Iosevka Nerd Font Mono",
-    fontsize=18,
+    fontsize=20,
 )
 
 ICON_FONT = dict(
     font="Font Awesome 5 Free Solid",
-    fontsize=13,
+    fontsize=12,
 )
 
 common_widgets = {}
