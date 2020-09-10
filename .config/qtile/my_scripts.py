@@ -345,7 +345,6 @@ def getlocksStatus(qtile:Optional[Qtile]=None):
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
         return ""
-
     if ('Caps', 'on') in output:
         result.append('A')
     if ('Num', 'on') in output:
@@ -355,13 +354,15 @@ def getlocksStatus(qtile:Optional[Qtile]=None):
 def getTemps(qtile:Optional[Qtile]=None, threshold:int=-1 ):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
+    except:
+        cpu = ""
+    try:
         gpu = subprocess.check_output(['nvidia-smi']).decode().strip()
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
-        return 'error'
-
-    _cpu_temp = re.search(r'\d+\.\d+°C', cpu, flags=re.UNICODE)
-    _gpu_temp = re.search(r'\s\d+C\s', gpu)
+    except:
+        gpu = ""
+    
+    _cpu_temp = re.search(r'\d+\.\d+°C', cpu, flags=re.UNICODE) if cpu else None
+    _gpu_temp = re.search(r'\s\d+C\s', gpu) if gpu else None
     cpu_temp = gpu_temp = 0
     if _cpu_temp:
         cpu_temp = _cpu_temp.group()[:-4]
@@ -374,14 +375,19 @@ def getTemps(qtile:Optional[Qtile]=None, threshold:int=-1 ):
 def getUtilization(qtile:Optional[Qtile]=None, threshold:int=-1):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
+    except:
+        cpu = ""
+    try:
         gpu = subprocess.check_output(
             ['nvidia-smi', '-q', '-d', 'UTILIZATION']).decode()
-    except subprocess.CalledProcessError as e:
-        logger.warning(e.output.decode().strip())
+    except:
+        gpu = ""
+
+    if not cpu and not gpu:
         return 'error'
 
-    _cpu_util = re.search(r'load average:\s(\d+\.\d+)', cpu)
-    _gpu_util = re.search(r'Gpu\s+:\s\d+', gpu)
+    _cpu_util = re.search(r'load average:\s(\d+\.\d+)', cpu) if cpu else None
+    _gpu_util = re.search(r'Gpu\s+:\s\d+', gpu) if gpu else None
     cpu_util = gpu_util = 0
     if _cpu_util:
         u = _cpu_util.group().split(':')[-1].strip()

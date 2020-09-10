@@ -7,7 +7,7 @@ if [ "$cont" == "n" ]; then
 fi
 read -p 'Office(1) or Home(0): ' office
 
-sudo apt install xorg -y
+sudo apt install xserver-xorg-core x11-xserver-utils udiskie curl --no-install-recommends --no-install-suggests
 
 echo ""
 echo "---------------------------------------"
@@ -25,17 +25,14 @@ echo "---------------------------------------"
 echo "Installing Misc stuff"
 echo "---------------------------------------"
 echo ""
-sudo apt install software-properties-common curl udiskie
 
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get install apt-transport-https
-sudo add-apt-repository ppa:codejamninja/jam-os
-sudo add-apt-repository ppa:mmstick76/alacritty
 
 sudo apt update
-sudo apt install code i3lock-color tmux pavucontrol alacritty firefox rxvt-unicode imagemagick feh bc lm-sensors rofi 
+sudo apt install code tmux pavucontrol firefox rxvt-unicode imagemagick feh bc lm-sensors 
 
 
 if [ "$office" == "1" ]; then
@@ -47,12 +44,10 @@ else
     echo "-----------------------------------------------"
     echo "Installing home tools..."
     echo "-----------------------------------------------"
-    curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
-    echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
-    sudo apt install syncthing transmission uget mpd mpc nomacs ncmpcpp numlockx bcmwl-kernel-source network-manager nautilus
+    sudo apt install transmission uget mpd mpc nomacs ncmpcpp numlockx network-manager 
     sudo dpkg -i resemsmice_1.1.3_amd64.deb
     cp .profile ~/
-    cp .xinitrc ~/
+    cp .xsession ~/
     systemctl enable network-manager
 fi
 
@@ -63,9 +58,8 @@ echo "---------------------------------------"
 echo ""
 
 cp .config/qtile ~/.config/ -r
-cp .config/polybar ~/.config/ -r
-cp .config/ranger ~/.config/ -r
-cp .config/alacritty ~/.config/ -r
+cp .config/autostart.sh ~/.config
+sudo chmod u+x ~/.config/autostart.sh
 cp .config/mpd ~/.config/ -r
 cp .config/ncmpcpp ~/.config/ -r
 cp .config/nvim ~/.config/ -r
@@ -85,28 +79,10 @@ echo "Installing NVIM"
 echo "---------------------------------------"
 echo ""
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-mv nvim.appimage $HOME/tools
-sudo chmod u+x nvim.appimage
-sudo update-alternatives --install /usr/bin/vim vim "$HOME/tools/nvim.appimage" 110
-
-echo ""
-echo "---------------------------------------"
-echo "Installing Polybar"
-echo "---------------------------------------"
-echo ""
-cd $HOME/tools
-git clone --recursive https://github.com/polybar/polybar
-sudo apt install pkg-config python3-sphinx
-sudo apt install libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev	
-sudo apt install libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
-
-cd polybar
-mkdir build && cd build
-cmake ..
-make -j$(nproc)
-sudo make install
-
-sudo apt remove python3-sphinx
+mkdir $HOME/.local/bin -p
+mv nvim.appimage $HOME/.local/bin/
+sudo chmod u+x $HOME/.local/bin/nvim.appimage
+sudo update-alternatives --install /usr/bin/vim vim "$HOME/.local/bin/nvim.appimage" 110
 
 echo ""
 echo "---------------------------------------"
@@ -120,7 +96,7 @@ git clone https://github.com/tryone144/compton.git
 cd compton
 make
 make docs
-sudo make install
+make install PREFIX=$HOME/.local/bin
 sudo apt remove libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev docbook-xml libxml2-utils xsltproc asciidoc libxslt1-dev libconfig-dev docbook-xsl
 
 echo ""

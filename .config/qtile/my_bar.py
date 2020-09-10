@@ -56,7 +56,8 @@ def prepareCommonWidgets(theme):
                                   head_tail_font=BORDER_FONT['font'],
                                   head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
                                   title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True,
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
+                                  click_update=True, inactive_hide=True,
                                   margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
 
     common_widgets['temperature'] = ComboWidget(title_func=lambda qtile: "", title_bg=theme['gradient2title'], title_fg=theme['titlefg'],
