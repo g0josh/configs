@@ -1,4 +1,31 @@
 def getIcons():
     return {
-        "battery": ["", "", "", "" ]
+        'user':'',
+        'terminal':'',
+        'code':'',
+        'folder':'',
+        'battery': ['', '', '', '' ],
+        'power': '', 
+        'screen_lock':'',
+        'reboot': '',
+        'logout': '',
+        'columns': 'HHH',
+        'monadtall': '[]=',
+        'monadwide': 'TTT',
+        'max': '[ ]',
+        'treetab': '|[]',
+        'volume':['', '', ''],
+        'mute':'',
+        'music':'',
+        'temperature':'',
+        'locks':'',
+        'utilization':'',
+        'wifi':'',
+        'lan':'',
+        'clock':'',
+        'launch':'',
+        'download':"",
+        'upload':"",
+        'cancel':'',
+        'error':''
     }

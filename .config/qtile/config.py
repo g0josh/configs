@@ -15,6 +15,7 @@ from my_scripts import getTheme, updateWallpaper, getNumScreens
 from my_bar import getWidgets
 from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
 from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
+from icons import getIcons
 
 MOD = "mod4"
 ALT = "mod1"
@@ -28,31 +29,26 @@ THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
 NUM_SCREENS = getNumScreens()
 
 POLYBAR_INFO = {}
-
 groups = [
-    Group(name='1', label="1 "),
-    Group(name='2', label="2 "),
-    #Group(name='3', label="3 ", matches=[Match(wm_class=["Code"])]),
-    Group(name='3', label="3 "),
-    #Group(name='4', label="4 ", init=True, spawn="nautilus".format(TERMINAL),
-                                #matches=[Match(wm_class=["explorer"])]),
-    Group(name='4', label="4 ", init=True, spawn="nautilus"),
-    Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e ncmpcpp -s visualizer",
-    # Group(name='5', label="5 ", init=True, spawn="urxvt -name music -e cmus",
-                                matches=[Match(wm_class=["music"])]),
-    Group(name='6', label="6 ", matches=[Match(wm_class=["Transmission-gtk", "Uget-gtk"])]),
-    Group(name='7', label="7 "),
-    ScratchPad("scratchpad", [
+    Group(name='1', label=f'1 {getIcons()["user"]}'),
+    Group(name='2', label=f'2 {getIcons()["terminal"]}'),
+    Group(name='3', label=f'3 {getIcons()["code"]}'),
+    Group(name='4', label=f'4 {getIcons()["folder"]}', init=True, spawn='urxvt -e nnn'),
+    Group(name='5', label=f'5 {getIcons()["music"]}', init=True, spawn='urxvt -name music -e ncmpcpp -s visualizer',
+                                matches=[Match(wm_class=['music'])]),
+    Group(name='6', label=f'6 {getIcons()["user"]}', matches=[Match(wm_class=['Transmission-gtk', 'Uget-gtk'])]),
+    Group(name='7', label=f'7 {getIcons()["user"]}'),
+    ScratchPad('scratchpad', [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
-        DropDown("term", "urxvt",
+        DropDown('term', 'urxvt',
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True),
-        DropDown("calc", "urxvt -e python3",
+        DropDown('calc', 'urxvt -e python3',
                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
                 on_focus_lost_hide=True)
         ],
-        label="")
+        label='')
 ]
 
 def window_to_next_prev_group(qtile, next=True):

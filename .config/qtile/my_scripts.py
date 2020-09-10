@@ -17,9 +17,6 @@ import my_audio as audio
 from my_widgets import ComboWidgetColor
 from icons import getIcons
 
-POWER_ICONS = {'power': '', 'reboot': '', 'lock': '', 'logout': ''}
-LAYOUT_ICONS = {'columns': 'HHH', 'monadtall': '[]=',
-                'monadwide': 'TTT', 'max': '[ ]', 'treetab': '|[]'}
 MOUSE_BUTTONS = {'LEFT_CLICK': 1, 'RIGHT_CLICK': 2,
                  'SCROLL_UP': 4, 'SCROLL_DOWN': 5}
 POWER_BUTTONS = {'SHUT_DOWN': 0, 'LOG_OUT': 1, 'LOCK_SCREEN': 2}
@@ -96,14 +93,14 @@ def volumeClicked(qtile:Qtile, button:int):
     else:
         logger.warning('Uknown mouse click = {}'.format(button))
 
-def getVolumeIcon(qtile:Qtile, muted_icon='', icons=['', '', '']):
+def getVolumeIcon(qtile:Qtile):
     # check if muted
     if audio.isMuted() == True:
-        return muted_icon
+        return getIcons()['mute']
 
     # Check volume level
     volume = audio.getVolume()
-
+    icons = getIcons()['volume']
     margin = 100 / len(icons)
     index, _ = divmod(volume, margin)
     if index >= len(icons):
@@ -119,12 +116,12 @@ def getVolume(qtile:Qtile):
 # Music
 # ---------------------------------------------
 
-def getCmus(qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_len:int=20):
+def getCmus(qtile:Optional[Qtile]=None, max_title_len:int=20):
     try:
         output = subprocess.check_output(['cmus-remote', '-Q']).decode()
     except subprocess.CalledProcessError as e:
         logger.warn("getMpd: {}".format(e))
-        return not_connected_text
+        return getIcons()['error']
     else:
         output = re.findall(r'file (.*)|duration (\d+)|position (\d+)|tag title (.*)', output, re.MULTILINE)
 
@@ -142,7 +139,7 @@ def getCmus(qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_
 
     except Exception as e:
         logger.warning("{} {}".format(e, output))
-        return not_connected_text
+        return getIcons()['error']
     else:
         return "{} {}:{}/{}:{}".format(title, time_m, time_s, total_time_m, total_time_s)
 
@@ -302,7 +299,7 @@ def getNetSpeeds(interface:str="wlo1", show_speed_above:int=1e3):
 def getInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
-def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='', show_speed_above:int=10e3, speed_icons:List[str]=["",""]):
+def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='', show_speed_above:int=10e3):
     try:
         output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
@@ -316,11 +313,11 @@ def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='�
     
     speeds = getNetSpeeds(interface, show_speed_above)
     result = _essid.group(1)
-    result = result + " {} {}".format(speed_icons[0], speeds['download']) if speeds['download'] else result
-    result = result + " {} {}".format(speed_icons[1], speeds['upload']) if speeds['upload'] else result
+    result = result + " {} {}".format(getIcons()['download'], speeds['download']) if speeds['download'] else result
+    result = result + " {} {}".format(getIcons()['upload'], speeds['upload']) if speeds['upload'] else result
     return result
 
-def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='', show_speed_above:int=10e3, speed_icons:List[str]=["",""]):
+def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='', show_speed_above:int=10e3):
     # check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
@@ -336,8 +333,8 @@ def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='
         return ""
     else:
         speeds = getNetSpeeds(interface, show_speed_above)
-        result = "{} {}".format(speed_icons[0], speeds['download']) if speeds['download'] else ""
-        result = result + " {} {}".format(speed_icons[1], speeds['upload']) if speeds['upload'] else result
+        result = "{} {}".format(getIcons()['download'], speeds['download']) if speeds['download'] else ""
+        result = result + " {} {}".format(getIcons()['upload'], speeds['upload']) if speeds['upload'] else result
         return result
 
 # ---------------------------------------------
@@ -493,113 +490,6 @@ def setupMonitors():
         logger.warning(e.output.decode().strip())
     else:
         return monitors
-
-def startPolybar(theme_path):
-    monitors = setupMonitors()
-    theme = getTheme(theme_path)
-    os.environ['POLY_WLAN'] = os.environ['POLY_LAN1'] = ""
-    os.environ['POLY_LAN2'] = ""
-    for i in getInterfaces():
-        if 'w' in i:
-            os.environ['POLY_WLAN'] = i
-        elif not os.getenv('POLY_LAN1'):
-            os.environ['POLY_LAN1'] = i
-        else:
-            os.environ['POLY_LAN2'] = i
-    poly_theme = {}
-    poly_theme['ewmhactive'] = f'%[B{theme["background"]}]%[F{theme["focusedbg"]}]{theme["leftmoduleprefix"]}%[F-]%[B-]%[B{theme["focusedbg"]}]%[F{theme["focusedfg"]}]{" "*theme["wspadding"]}%index% %icon%{" "*theme["wspadding"]}%[F-]%[B-]%[B{theme["background"]}]%[F{theme["focusedbg"]}]{theme["leftmodulesuffix"]}%[F-]%[B-]'
-    # power menu widgets
-    poly_theme['poweropen'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                    theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                        'titlebg'], theme['titlefg'],
-                                                                                                                    " " *
-                                                                                                                    theme['titlepadding'], POWER_ICONS[
-                                                                                                                        'power'], " "*theme['titlepadding'], theme['background'],
-                                                                                                                    theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['powerclose'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                    theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                        'titlebg'], theme['titlefg'],
-                                                                                                                    " "*theme['titlepadding'], " " *
-                                                                                                                    theme['titlepadding'], theme[
-                                                                                                                        'background'],
-                                                                                                                    theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power00'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'reboot'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power01'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'power'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power02'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'logout'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power03'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'lock'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power10'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'reboot'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power20'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'power'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    poly_theme['power30'] = '%[B{}]%[F{}]{}%[F-]%[B-]%[B{}]%[F{}]{}{}{}%[F-]%[B-]%[B{}]%[F{}]{}%[F-]%[B-]'.format(theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmoduleprefix'], theme[
-                                                                                                                      'titlebg'], theme['titlefg'],
-                                                                                                                  " " *
-                                                                                                                  theme['bodypadding'], POWER_ICONS[
-                                                                                                                      'logout'], " "*theme['bodypadding'], theme['background'],
-                                                                                                                  theme['titlebg'], theme['rightmodulesuffix'])
-    for i in poly_theme:
-        poly_theme[i] = poly_theme[i].replace('[', '{')
-        poly_theme[i] = poly_theme[i].replace(']', '}')
-    poly_screens = {}
-    for i, monitor in enumerate(monitors):
-        os.environ['POLY_MONITOR'] = monitor
-        os.environ['POLY_WS_FIFO_PATH'] = f'tail -F /tmp/qtile_ws_{i}'
-        os.environ['POLY_WS_FIFO_CHECK'] = f'[ -p /tmp/qtile_ws_{i} ]'
-        os.environ['POLY_EWMHACTIVE'] = poly_theme['ewmhactive']
-        os.environ['POLY_THEME_PATH'] = theme_path
-        os.environ['POLY_POWER_OPEN'] = poly_theme['poweropen']
-        os.environ['POLY_POWER_CLOSE'] = poly_theme['powerclose']
-        os.environ['POLY_POWER_0-0'] = poly_theme['power00']
-        os.environ['POLY_POWER_0-1'] = poly_theme['power01']
-        os.environ['POLY_POWER_0-2'] = poly_theme['power02']
-        os.environ['POLY_POWER_0-3'] = poly_theme['power03']
-        os.environ['POLY_POWER_1-0'] = poly_theme['power10']
-        os.environ['POLY_POWER_2-0'] = poly_theme['power20']
-        os.environ['POLY_POWER_3-0'] = poly_theme['power30']
-        try:
-            subprocess.run(['killall', '-q', 'polybar'])
-            o = subprocess.Popen('polybar -r island', shell=True)
-            poly_screens[i] = {'name': monitor, 'pid': o.pid,
-                               'ws_fifo_path': f'/tmp/qtile_ws_{i}', 'ws_format': '', 'layout_format': ''}
-        except subprocess.CalledProcessError as e:
-            logger.warn(e.output.decode().strip())
-    logger.warn(poly_screens)
-    return poly_screens
 
 def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0, setSolid=False):
     if setSolid:
