@@ -10,6 +10,7 @@ from my_scripts import getMpd, clickMpd
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
 from my_scripts import getInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
+from my_scripts import getBatteryCapacity, getBatteryStatusIcon
 
 from my_widgets import ComboWidget
 
@@ -142,6 +143,17 @@ def prepareCommonWidgets(theme):
                                 title_font_size=DEFAULT_FONT['fontsize'], click_update=True, title_update=True,
                                 margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
 
+    common_widgets['battery'] = ComboWidget(title_func=getBatteryStatusIcon, title_bg=theme['gradient1title'], title_fg=theme['gradienttitlefg'],
+                                  title_padding=theme['titlepadding'], body_func=getBatteryCapacity, body_bg=theme['gradient1body'],
+                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
+                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
+                                  head_tail_font=BORDER_FONT['font'],
+                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
+                                  title_font_size=ICON_FONT['fontsize'],
+                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
+                                  click_update=True, inactive_hide=True, title_update=True,
+                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
+
     power_bg = theme['gradient7title'] if 'gradient7title' in theme else theme['titlebg']
     common_widgets['screen_lock'] = ComboWidget(title_func=lambda qtile: "", title_bg=power_bg, title_fg=theme['gradienttitlefg'],
                                        title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
@@ -232,6 +244,7 @@ def getWidgets(theme, screen, groups):
 
     widgets += common_widgets['local_time'].getWidgets()
     widgets += common_widgets['india_time'].getWidgets()
+    widgets += common_widgets['battery'].getWidgets()
     widgets += common_widgets['screen_lock'].getWidgets()
     widgets += common_widgets['shut'].getWidgets()
     widgets += common_widgets['toggle_power'].getWidgets()

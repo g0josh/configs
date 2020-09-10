@@ -15,6 +15,7 @@ from socket import error as socket_error
 
 import my_audio as audio
 from my_widgets import ComboWidgetColor
+from icons import getIcons
 
 POWER_ICONS = {'power': '', 'reboot': '', 'lock': '', 'logout': ''}
 LAYOUT_ICONS = {'columns': 'HHH', 'monadtall': '[]=',
@@ -49,6 +50,37 @@ def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> ComboWid
                 return ComboWidgetColor(foreground=theme['altfg'],background=theme['altbg'])
             break
     return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
+
+
+# ---------------------------------------------
+# BATTERY
+# ---------------------------------------------
+
+def getBatteryStatusIcon(qtile:Qtile=None):
+    try:
+        with open("/sys/class/power_supply/BAT0/status") as sf:
+            status = sf.read()
+    except:
+        return ""
+
+    if "Charging" in status:
+        return ""
+
+    try:
+        index = min( int(getBatteryCapacity()[:-1])//25, 3)
+    except:
+        index = 0
+
+    return getIcons()['battery'][index]
+    
+def getBatteryCapacity(qtile:Qtile=None):
+    try:
+        with open("/sys/class/power_supply/BAT0/capacity") as cf:
+            capacity = cf.read().strip()
+    except:
+        return 0
+
+    return f'{capacity}%'
 
 # ---------------------------------------------
 # VOLUME
