@@ -28,10 +28,9 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-#font-0 = Iosevka Term SS03 Medium:style=Medium:pixelsize=11;2:antialias=true
-font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;2:antialias=true
-font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
-font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
+font-0 = Iosevka Nerd Font Mono:style=Medium:size=14;2:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;2:antialias=true
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia
@@ -63,14 +62,14 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-#font-0 = Iosevka Term SS03 Medium:style=Medium:pixelsize=11;2:antialias=true
-font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;2:antialias=true
+
+font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;3:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
 
 modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -268,7 +267,7 @@ format-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
 indicator-icon-0 = caps lock;;%{T3}%{T-} A
 indicator-icon-1 = num lock;;%{T3}%{T-} 1
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${env:POLY_TITLEFG}
+label-indicator-on-foreground = ${env:POLY_GRADIENTTITLEFG}
 label-indicator-on-background = ${env:POLY_GRADIENT1TITLE}
 label-indicator-on-padding = ${env:POLY_BODYPADDING}
 
@@ -281,7 +280,7 @@ format-volume = <label-volume>
 format-volume-suffix= ${env:POLY_RIGHTMODULESUFFIX}
 format-volume-suffix-foreground = ${env:POLY_GRADIENT2BODY}
 label-volume = %percentage%
-label-volume-foreground = ${env:POLY_BODYFG}
+label-volume-foreground = ${env:POLY_GRADIENTBODYFG}
 label-volume-background = ${env:POLY_GRADIENT2BODY}
 label-volume-padding = ${env:POLY_BODYPADDING}
 
@@ -299,7 +298,7 @@ format-volume-suffix-background = ${env:POLY_GRADIENT2BODY}
 
 format-muted = <label-muted>
 label-muted = %{T3}%{T-}
-label-muted-foreground = ${env:POLY_TITLEFG}
+label-muted-foreground = ${env:POLY_GRADIENTTITLEFG}
 label-muted-background = ${env:POLY_GRADIENT2TITLE}
 label-muted-padding = ${env:POLY_TITLEPADDING}
 format-muted-prefix = ${env:POLY_RIGHTMODULEPREFIX}
@@ -312,7 +311,7 @@ ramp-volume-1 = %{T3}%{T-}
 ramp-volume-2 = %{T3}%{T-}
 ramp-volume-3 = %{T3}%{T-}
 ramp-volume-4 = %{T3}%{T-}
-ramp-volume-foreground = ${env:POLY_TITLEFG}
+ramp-volume-foreground = ${env:POLY_GRADIENTTITLEFG}
 ramp-volume-background = ${env:POLY_GRADIENT2TITLE}
 ramp-volume-padding = ${env:POLY_TITLEPADDING}
 
@@ -329,7 +328,7 @@ content-prefix-background = ${env:POLY_BACKGROUND}
 content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 content-suffix-foreground = ${env:POLY_GRADIENT3TITLE}
 content-suffix-background = ${env:POLY_GRADIENT3BODY}
-content-foreground = ${env:POLY_TITLEFG}
+content-foreground = ${env:POLY_GRADIENTTITLEFG}
 content-background = ${env:POLY_GRADIENT3TITLE}
 content-padding = ${env:POLY_TITLEPADDING}
 
@@ -339,7 +338,7 @@ interval = 5
 exec = utilization
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-suffix-foreground = ${env:POLY_GRADIENT3BODY}
-label-foreground = ${env:POLY_BODYFG}
+label-foreground = ${env:POLY_GRADIENTBODYFG}
 label-background = ${env:POLY_GRADIENT3BODY}
 label-padding = ${env:POLY_BODYPADDING}
 
@@ -353,7 +352,7 @@ content-prefix-background = ${env:POLY_BACKGROUND}
 content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 content-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
 content-suffix-background = ${env:POLY_GRADIENT4BODY}
-content-foreground = ${env:POLY_TITLEFG}
+content-foreground = ${env:POLY_GRADIENTTITLEFG}
 content-background = ${env:POLY_GRADIENT4TITLE}
 content-padding = ${env:POLY_TITLEPADDING}
 
@@ -363,14 +362,14 @@ interval = 5.0
 exec = temp
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-suffix-foreground = ${env:POLY_GRADIENT4BODY}
-label-foreground = ${env:POLY_BODYFG}
+label-foreground = ${env:POLY_GRADIENTBODYFG}
 label-background = ${env:POLY_GRADIENT4BODY}
 label-padding = ${env:POLY_BODYPADDING}
 
-#WIFI-------------------------------------------------------------------------
-[module/wlanPrefix]
+#WIFI 1-------------------------------------------------------------------------
+[module/wlanPrefix1]
 type = internal/network
-interface = ${env:POLY_WLAN}
+interface = ${env:POLY_WLAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
@@ -379,20 +378,49 @@ format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT5TITLE}
 format-connected-suffix-background = ${env:POLY_GRADIENT5BODY}
 label-connected = %{T3}%{T-}
-label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
 label-connected-background = ${env:POLY_GRADIENT5TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
-[module/wlan]
+[module/wlan1]
 type = internal/network
-interface = ${env:POLY_WLAN}
+interface = ${env:POLY_WLAN1}
 interval = 3.0
 
 format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT5BODY}
 label-connected = %essid%|%downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
+label-connected-background = ${env:POLY_GRADIENT5BODY}
+label-connected-padding = ${env:POLY_BODYPADDING}
+
+#WIFI 2-------------------------------------------------------------------------
+[module/wlanPrefix2]
+type = internal/network
+interface = ${env:POLY_WLAN2}
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-connected-prefix-foreground = ${env:POLY_GRADIENT5TITLE}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5TITLE}
+format-connected-suffix-background = ${env:POLY_GRADIENT5BODY}
+label-connected = %{T3}%{T-}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-connected-background = ${env:POLY_GRADIENT5TITLE}
+label-connected-padding = ${env:POLY_TITLEPADDING}
+
+[module/wlan2]
+type = internal/network
+interface = ${env:POLY_WLAN2}
+interval = 3.0
+
+format-connected = <label-connected>
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5BODY}
+label-connected = %essid%|%downspeed%
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
 label-connected-background = ${env:POLY_GRADIENT5BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
 
@@ -409,7 +437,7 @@ format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT6TITLE}
 format-connected-suffix-background = ${env:POLY_GRADIENT6BODY}
 label-connected = %{T3}%{T-}
-label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
 label-connected-background = ${env:POLY_GRADIENT6TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
@@ -421,7 +449,7 @@ format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT6BODY}
 label-connected = %downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
 label-connected-background = ${env:POLY_GRADIENT6BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
 
@@ -437,7 +465,7 @@ format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT6TITLE}
 format-connected-suffix-background = ${env:POLY_GRADIENT6BODY}
 label-connected = %{T3}%{T-}
-label-connected-foreground = ${env:POLY_TITLEFG}
+label-connected-foreground = ${env:POLY_RADIENTTITLEFG}
 label-connected-background = ${env:POLY_GRADIENT6TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
@@ -449,7 +477,7 @@ format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT6BODY}
 label-connected = %downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
 label-connected-background = ${env:POLY_GRADIENT6BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
 

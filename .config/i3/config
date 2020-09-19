@@ -32,14 +32,13 @@ client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-
 # Startup
 exec --no-startup-id urxvtd
 for_window [class="Nautilus"] move workspace $ws4
-for_window [class=$TERM_NAME instance="calculator"] move scratchpad
+
 for_window [class=$TERM_NAME instance="music"] move workspace $ws5
-exec --no-startup-id reload-screens
+exec --no-startup-id reload-screens -x
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec --no-startup-id nautilus
 exec $TERM -name calculator -e python3
 exec --no-startup-id $TERM -name music -e ncmpcpp -s visualizer
-exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpaper --no-fehbg
 
 # Keys --------------------------------------------------------------------------------
 
@@ -76,6 +75,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id audio -v -5
 bindsym $MOD+$MOD_ALT+Down exec --no-startup-id audio -v -5
 bindsym XF86AudioMute exec --no-startup-id audio -m 2
 bindsym $MOD+$MOD_ALT+z exec --no-startup-id audio -m 2
+bindsym $MOD+z exec --no-startup-id audio -m 2
 bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id audio -r prev
 bindsym $MOD+$MOD_ALT+Next exec --no-startup-id audio -r next
 bindsym XF86AudioPlay exec mpc toggle
@@ -114,6 +114,8 @@ bindsym $MOD+Shift+Right move right
 # Monitors/outputs
 bindsym $MOD_ALT+Control+Shift+Left move workspace to output left
 bindsym $MOD_ALT+Control+Shift+Right move workspace to output right
+bindsym $MOD_ALT+Control+Shift+h move workspace to output left
+bindsym $MOD_ALT+Control+Shift+l move workspace to output right
 
 set $ws1 "1"
 set $ws2 "2"
@@ -142,6 +144,8 @@ bindsym Control+$MOD+Right workspace next; exec --no-startup-id i3-change-wall
 
 bindsym Control+Shift+$MOD+Left move container to workspace prev; exec --no-startup-id i3-change-wall
 bindsym Control+Shift+$MOD+Right move container to workspace next; exec --no-startup-id i3-change-wall
+bindsym Control+Shift+$MOD+h move container to workspace prev; exec --no-startup-id i3-change-wall
+bindsym Control+Shift+$MOD+l move container to workspace next; exec --no-startup-id i3-change-wall
 
 bindsym $MOD+Shift+1 move container to workspace $ws1 ; exec --no-startup-id i3-change-wall
 bindsym $MOD+Shift+2 move container to workspace $ws2 ; exec --no-startup-id i3-change-wall
@@ -156,10 +160,10 @@ bindsym $MOD+Shift+0 move container to workspace $ws10 ; exec --no-startup-id i3
 
 # Resizing
 mode "resize" {
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
@@ -170,4 +174,4 @@ mode "resize" {
         bindsym Escape mode "default"
         bindsym $MOD+r mode "default"
 }
-bindsym $MOD+z mode "resize"
+bindsym $MOD+r mode "resize"
