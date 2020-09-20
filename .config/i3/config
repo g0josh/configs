@@ -29,15 +29,17 @@ client.focused_inactive $bg-clr         $bg-clr         $inact-txt-clr  $bg-clr
 client.unfocused        $bg-clr         $bg-clr         $inact-txt-clr  $bg-clr
 client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-clr
 
-# Startup
-exec --no-startup-id urxvtd
-for_window [class="Nautilus"] move workspace $ws4
-
-for_window [class=$TERM_NAME instance="music"] move workspace $ws5
+# Startup -----------------------------------------------------------------------------
+exec urxvtd
 exec --no-startup-id reload-screens -x
+
+for_window [class="Nautilus"] move workspace $ws4
+for_window [class=$TERM_NAME instance="music"] move workspace $ws5
+for_window [class=$TERM_NAME instance="calculator-scratch"] move scratchpad
+
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec --no-startup-id nautilus
-exec $TERM -name calculator -e python3
+exec --no-startup-id $TERM -name calculator-scratch -e python3
 exec --no-startup-id $TERM -name music -e ncmpcpp -s visualizer
 
 # Keys --------------------------------------------------------------------------------
@@ -69,15 +71,15 @@ bindsym $MOD+a exec rofi -show drun
 
 # Music/Audio
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id audio -v +5
-bindsym $MOD+$MOD_ALT+Up exec --no-startup-id audio -v +5
-bindsym XF86AudioLowerVolume exec --no-startup-id audio -v -5
-bindsym $MOD+$MOD_ALT+Down exec --no-startup-id audio -v -5
-bindsym XF86AudioMute exec --no-startup-id audio -m 2
-bindsym $MOD+$MOD_ALT+z exec --no-startup-id audio -m 2
-bindsym $MOD+z exec --no-startup-id audio -m 2
-bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id audio -r prev
-bindsym $MOD+$MOD_ALT+Next exec --no-startup-id audio -r next
+bindsym XF86AudioRaiseVolume exec --no-startup-id aucli -v +5%
+bindsym $MOD+$MOD_ALT+Up exec --no-startup-id aucli -v +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id aucli -v -5%
+bindsym $MOD+$MOD_ALT+Down exec --no-startup-id aucli -v -5%
+bindsym XF86AudioMute exec --no-startup-id aucli -m 2
+bindsym $MOD+$MOD_ALT+z exec --no-startup-id aucli -m 2
+bindsym $MOD+z exec --no-startup-id aucli -m 2
+bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id aucli -r prev
+bindsym $MOD+$MOD_ALT+Next exec --no-startup-id aucli -r next
 bindsym XF86AudioPlay exec mpc toggle
 bindsym $MOD+$MOD_ALT+End exec mpc toggle
 bindsym $MOD+$MOD_ALT+Right exec mpc next
