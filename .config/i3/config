@@ -71,13 +71,13 @@ bindsym $MOD+a exec rofi -show drun
 
 # Music/Audio
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id aucli -v +5%
-bindsym $MOD+$MOD_ALT+Up exec --no-startup-id aucli -v +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id aucli -v -5%
-bindsym $MOD+$MOD_ALT+Down exec --no-startup-id aucli -v -5%
-bindsym XF86AudioMute exec --no-startup-id aucli -m 2
-bindsym $MOD+$MOD_ALT+z exec --no-startup-id aucli -m 2
-bindsym $MOD+z exec --no-startup-id aucli -m 2
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym $MOD+$MOD_ALT+Up exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym $MOD+$MOD_ALT+Down exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym $MOD+$MOD_ALT+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym $MOD+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id aucli -r prev
 bindsym $MOD+$MOD_ALT+Next exec --no-startup-id aucli -r next
 bindsym XF86AudioPlay exec mpc toggle
