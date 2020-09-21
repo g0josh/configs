@@ -67,9 +67,10 @@ font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;3:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
 
-modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+# modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = i3Ws
 modules-center = timePrefix time sep timeIndia
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep batteryPrefix battery powermenu
 tray-position = right
 tray-padding = 2
 
@@ -465,7 +466,7 @@ format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-connected-suffix-foreground = ${env:POLY_GRADIENT6TITLE}
 format-connected-suffix-background = ${env:POLY_GRADIENT6BODY}
 label-connected = %{T3}%{T-}
-label-connected-foreground = ${env:POLY_RADIENTTITLEFG}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
 label-connected-background = ${env:POLY_GRADIENT6TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
@@ -480,6 +481,64 @@ label-connected = %downspeed%
 label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
 label-connected-background = ${env:POLY_GRADIENT6BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
+
+# BATTERY
+[module/batteryPrefix]
+type = internal/battery
+full-at = 99
+battery = BAT0
+adapter = ADP1
+format-charging = %{T3}<animation-charging>%{T-}
+format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-charging-backgound = ${env:POLY_GRADIENT1TITLE}
+format-charging-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-charging-prefix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-charging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-charging-suffix-background = ${env:POLY_GRADIENT1BODY}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+; Framerate in milliseconds
+animation-charging-framerate = 1000
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+format-discharging = %{T3}<ramp-capacity>%{T-}
+format-discharging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-discharging-background = ${env:POLY_GRADIENT1TITLE}
+format-discharging-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-discharging-prefix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-discharging-prefix-background = ${env:POLY_BACKGROUND}
+format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-discharging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-discharging-suffix-background = ${env:POLY_GRADIENT1BODY} 
+format-charging-padding = ${env:POLY_TITLEPADDING}
+format-discharging-padding = ${env:POLY_TITLEPADDING}
+
+[module/battery]
+type = internal/battery
+full-at = 99
+battery = BAT0
+adapter = ADP1
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-discharging-padding = ${env:POLY_BODYPADDING}
+label-charging-padding = ${env:POLY_BODYPADDING}
+format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-charging-background = ${env:POLY_GRADIENT1TITLE}
+format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-charging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-charging-suffix-background = ${env:POLY_GRADIENT1BODY} 
+format-discharging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-discharging-background = ${env:POLY_GRADIENT1TITLE}
+format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-discharging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-discharging-suffix-background = ${env:POLY_BACKGROUND} 
 
 #POWER------------------------------------------------------------------------
 [module/powermenu]
