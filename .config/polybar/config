@@ -490,9 +490,10 @@ battery = BAT0
 adapter = ADP1
 format-charging = %{T3}<animation-charging>%{T-}
 format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
-format-charging-backgound = ${env:POLY_GRADIENT1TITLE}
+format-charging-background = ${env:POLY_GRADIENT1TITLE}
 format-charging-prefix = ${env:POLY_RIGHTMODULEPREFIX}
 format-charging-prefix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-charging-prefix-background = ${env:POLY_BACKGROUND}
 format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-charging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
 format-charging-suffix-background = ${env:POLY_GRADIENT1BODY}
@@ -532,12 +533,12 @@ label-charging-padding = ${env:POLY_BODYPADDING}
 format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
 format-charging-background = ${env:POLY_GRADIENT1TITLE}
 format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-charging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
-format-charging-suffix-background = ${env:POLY_GRADIENT1BODY} 
+format-charging-suffix-foreground = ${env:POLY_GRADIENT1BODY}
+format-charging-suffix-background = ${env:POLY_BACKGROUND} 
 format-discharging-foreground = ${env:POLY_GRADIENTTITLEFG}
 format-discharging-background = ${env:POLY_GRADIENT1TITLE}
 format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-discharging-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-discharging-suffix-foreground = ${env:POLY_GRADIENT1BODY}
 format-discharging-suffix-background = ${env:POLY_BACKGROUND} 
 
 #POWER------------------------------------------------------------------------

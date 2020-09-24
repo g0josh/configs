@@ -55,7 +55,7 @@ gradient:
     - "red"
 moduleseparator: ""
 wspadding: 0
-background: "green"
+background: "00000000"
 rightmoduleprefix: ""
 rightmodulesuffix: ""
 leftmoduleprefix: ""
@@ -64,7 +64,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "yellow"
 windowborder: "background"
-barleftborder : 300
-barrightborder : 300
-bartopborder : 0
+barleftborder : 12
+barrightborder : 12
+bartopborder : 3
 barbottomborder : 0

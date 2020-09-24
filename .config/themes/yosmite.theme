@@ -8,8 +8,8 @@ focusedfg: "background"
 focusedbg: "red"
 urgentfg: "background"
 urgentbg: "bright_cyan"
-altfg: "blue"
-altbg: "foreground"
+altfg: "foreground"
+altbg: "blue"
 gradient:
     - "white"
     - "yellow"
@@ -20,7 +20,7 @@ gradient:
     - "green"
 moduleseparator: ""
 wspadding: 0
-background: "background"
+background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
@@ -29,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "red"
 windowborder: "background"
-barleftborder : 300
-barrightborder : 300
-bartopborder : 0
+barleftborder : 12
+barrightborder : 12
+bartopborder : 3
 barbottomborder : 0
