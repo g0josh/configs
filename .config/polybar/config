@@ -485,7 +485,7 @@ label-connected-padding = ${env:POLY_BODYPADDING}
 # BATTERY
 [module/batteryPrefix]
 type = internal/battery
-full-at = 99
+#full-at = 99
 battery = BAT0
 adapter = ADP1
 format-charging = %{T3}<animation-charging>%{T-}
@@ -521,6 +521,17 @@ format-discharging-suffix-background = ${env:POLY_GRADIENT1BODY}
 format-charging-padding = ${env:POLY_TITLEPADDING}
 format-discharging-padding = ${env:POLY_TITLEPADDING}
 
+format-full = %{T3}<label-full>%{T-}
+format-full-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-full-background = ${env:POLY_GRADIENT1TITLE}
+format-full-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-full-prefix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-full-prefix-background = ${env:POLY_BACKGROUND}
+format-full-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-full-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+format-full-suffix-background = ${env:POLY_GRADIENT1BODY}
+label-full = 
+
 [module/battery]
 type = internal/battery
 full-at = 99
@@ -528,8 +539,10 @@ battery = BAT0
 adapter = ADP1
 label-charging = %percentage%%
 label-discharging = %percentage%%
+label-full = %percentage%%
 label-discharging-padding = ${env:POLY_BODYPADDING}
 label-charging-padding = ${env:POLY_BODYPADDING}
+label-full-padding = ${env:POLY_BODYPADDING}
 format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
 format-charging-background = ${env:POLY_GRADIENT1TITLE}
 format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
@@ -540,6 +553,11 @@ format-discharging-background = ${env:POLY_GRADIENT1TITLE}
 format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
 format-discharging-suffix-foreground = ${env:POLY_GRADIENT1BODY}
 format-discharging-suffix-background = ${env:POLY_BACKGROUND} 
+format-full-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-full-background = ${env:POLY_GRADIENT1TITLE}
+format-full-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-full-suffix-foreground = ${env:POLY_GRADIENT1BODY}
+format-full-suffix-background = ${env:POLY_BACKGROUND} 
 
 #POWER------------------------------------------------------------------------
 [module/powermenu]
