@@ -1,21 +1,21 @@
-*.background: #141018
-*.foreground: #debcc0
-*.cursor: #debcc0
-*.color0: #141018
-*.color1: #CD787A
-*.color2: #D2827C
-*.color3: #645D95
-*.color4: #9D7495
-*.color5: #C87B84
-*.color6: #AF8CAE
-*.color7: #debcc0
-*.color8: #9b8386
-*.color9: #CD787A
-*.color10: #D2827C
-*.color11: #645D95
-*.color12: #9D7495
-*.color13: #C87B84
-*.color14: #AF8CAE
-*.color15: #debcc0
-rofi.color-window: #a0CD787A, #141018, #141018
-rofi.color-normal: #00000000,	#141018, #00000000, #141018, #CD787A
+*.foreground: #e3dad1
+*.background: #0c080d
+*.cursorColor: #e3dad1
+*.color0: #0c080d
+*.color8: #9e9892
+*.color1: #911728
+*.color9: #b72520
+*.color2: #57293b
+*.color10: #c05a82
+*.color3: #ba5622
+*.color11: #fa752f
+*.color4: #224260
+*.color12: #2087e6
+*.color5: #94605d
+*.color13: #ff857e
+*.color6: #7b8689
+*.color14: #21cfff
+*.color7: #e3dad1
+*.color15: #e3dad1
+rofi.color-window: #a0911728, #0c080d, #0c080d
+rofi.color-normal: #00000000,	#0c080d, #00000000, #0c080d, #911728

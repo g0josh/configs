@@ -30,17 +30,16 @@ client.unfocused        $bg-clr         $bg-clr         $inact-txt-clr  $bg-clr
 client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-clr
 
 # Startup -----------------------------------------------------------------------------
-exec urxvtd
+exec --no-startup-id $HOME/.config/autostart.sh
 exec --no-startup-id reload-screens -x
 
 for_window [class="Nautilus"] move workspace $ws4
 for_window [class=$TERM_NAME instance="music"] move workspace $ws5
 for_window [class=$TERM_NAME instance="calculator-scratch"] move scratchpad
 
-exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec --no-startup-id nautilus
-exec --no-startup-id $TERM -name calculator-scratch -e python3
-exec --no-startup-id $TERM -name music -e ncmpcpp -s visualizer
+exec --no-startup-id urxvt -name calculator-scratch -e python3
+exec --no-startup-id urxvt -name music -e ncmpcpp -s visualizer
 
 # Keys --------------------------------------------------------------------------------
 
@@ -70,7 +69,6 @@ bindsym $MOD_ALT+Return exec $TERM_ALT ; exec --no-startup-id i3-change-wall
 bindsym $MOD+a exec rofi -show drun
 
 # Music/Audio
-
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym $MOD+$MOD_ALT+Up exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
@@ -78,8 +76,8 @@ bindsym $MOD+$MOD_ALT+Down exec --no-startup-id pactl set-sink-volume @DEFAULT_S
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym $MOD+$MOD_ALT+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym $MOD+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id aucli -r prev
-bindsym $MOD+$MOD_ALT+Next exec --no-startup-id aucli -r next
+bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id aucli -a prev
+bindsym $MOD+$MOD_ALT+Next exec --no-startup-id aucli -a next
 bindsym XF86AudioPlay exec mpc toggle
 bindsym $MOD+$MOD_ALT+End exec mpc toggle
 bindsym $MOD+$MOD_ALT+Right exec mpc next
@@ -143,6 +141,8 @@ bindsym $MOD+0 workspace $ws10 ; exec --no-startup-id i3-change-wall
 
 bindsym Control+$MOD+Left workspace prev; exec --no-startup-id i3-change-wall
 bindsym Control+$MOD+Right workspace next; exec --no-startup-id i3-change-wall
+bindsym Control+$MOD+h workspace prev; exec --no-startup-id i3-change-wall
+bindsym Control+$MOD+l workspace next; exec --no-startup-id i3-change-wall
 
 bindsym Control+Shift+$MOD+Left move container to workspace prev; exec --no-startup-id i3-change-wall
 bindsym Control+Shift+$MOD+Right move container to workspace next; exec --no-startup-id i3-change-wall
