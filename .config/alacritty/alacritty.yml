@@ -1,30 +1,30 @@
 alt_send_esc: true
-background_opacity: 1.0
+background_opacity: 0.97
 colors:
   bright:
-    black: '#34264b'
-    blue: '#6c5596'
-    cyan: '#ff8e6f'
-    green: '#af6666'
-    magenta: '#b66181'
-    red: '#ff6f6f'
-    white: '#f6dacb'
-    yellow: '#f8983d'
+    black: '#9e9892'
+    blue: '#2087e6'
+    cyan: '#21cfff'
+    green: '#c05a82'
+    magenta: '#ff857e'
+    red: '#b72520'
+    white: '#e3dad1'
+    yellow: '#fa752f'
   indexed_colors: []
   normal:
-    black: '#150c24'
-    blue: '#6c5596'
+    black: '#0c080d'
+    blue: '#224260'
     cursor: '#ffffff'
-    cursorColor: '#f6dacb'
-    cyan: '#ee7f61'
-    green: '#af6666'
-    magenta: '#b03f84'
-    red: '#d35071'
-    white: '#f6dacb'
-    yellow: '#de935f'
+    cursorColor: '#e3dad1'
+    cyan: '#7b8689'
+    green: '#57293b'
+    magenta: '#94605d'
+    red: '#911728'
+    white: '#e3dad1'
+    yellow: '#ba5622'
   primary:
-    background: '#150c24'
-    foreground: '#f6dacb'
+    background: '#0c080d'
+    foreground: '#e3dad1'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -35,20 +35,19 @@ debug:
   ref_test: false
   render_timer: false
 draw_bold_text_with_bright_colors: true
-dynamic_title: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: JetBrainsMono Nerd Font Mono
+    family: Iosevka Nerd Font Mono
     style: Bold Italic
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: JetBrainsMono Nerd Font Mono
+    family: Iosevka Nerd Font Mono
     style: Italic
   normal:
-    family: JetBrainsMono Nerd Font Mono
+    family: Iosevka Nerd Font Mono
     style: Regular
   offset:
     x: 0
@@ -394,23 +393,17 @@ mouse_bindings:
 - action: PasteSelection
   mouse: Middle
 scrolling:
-  auto_scroll: false
-  history: 10000
   multiplier: 3
 selection:
   save_to_clipboard: true
   semantic_escape_chars: ",\u2502`|:\"' ()[]{}<>"
-tabspaces: 4
-visual_bell:
-  animation: EaseOutExpo
-  color: '0xffffff'
-  duration: 0
 window:
   decorations: none
   dimensions:
     columns: 0
     lines: 0
   dynamic_padding: false
+  dynamic_title: true
   padding:
     x: 20
     y: 20
