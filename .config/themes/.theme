@@ -1,62 +1,64 @@
-altbg: '#ba5622'
-altfg: '#e3dad1'
-background: '00000000'
-barbottomborder: 0
+altbg: '#ced9df'
+altfg: '#91748D'
+background: '#00000000'
+barbottomborder: 3
 barleftborder: 10
 barrightborder: 10
-bartopborder: 3
-bodybg: '#94605d'
-bodyfg: '#e3dad1'
+bartopborder: 0
+blurwallpaper: false
+bodybg: '#6399AD'
+bodyfg: '#150b0d'
 bodypadding: 1
-focusedbg: '#b72520'
-focusedfg: '#e3dad1'
-focusedwindowborder: '#57293b'
-gradient1body: '#c05a82'
-gradient1title: '#c05a82'
-gradient2body: '#fa752f'
-gradient2title: '#fa752f'
-gradient3body: '#ba5622'
-gradient3title: '#ba5622'
-gradient4body: '#b72520'
-gradient4title: '#b72520'
-gradient5body: '#224260'
-gradient5title: '#224260'
-gradient6body: '#94605d'
-gradient6title: '#94605d'
-gradient7body: '#57293b'
-gradient7title: '#57293b'
-gradientbodyfg: '#e3dad1'
-gradienttitlefg: '#e3dad1'
-leftmoduleprefix: "\uE0BE"
-leftmodulesuffix: "\uE0B8"
-moduleseparator: ''
-rightmoduleprefix: "\uE0BA"
-rightmodulesuffix: "\uE0BC"
+bottombar: 'true'
+focusedbg: '#DAA353'
+focusedfg: '#150b0d'
+focusedwindowborder: '#FEDE11'
+gradient1body: '#FEDE11'
+gradient1title: '#FEDE11'
+gradient2body: '#DAA353'
+gradient2title: '#DAA353'
+gradient3body: '#3F6A9A'
+gradient3title: '#3F6A9A'
+gradient4body: '#91748D'
+gradient4title: '#91748D'
+gradient5body: '#6399AD'
+gradient5title: '#6399AD'
+gradient6body: '#9B9DAC'
+gradient6title: '#9B9DAC'
+gradient7body: '#ced9df'
+gradient7title: '#ced9df'
+gradientbodyfg: '#150b0d'
+gradienttitlefg: '#150b0d'
+leftmoduleprefix: "\uE0BA"
+leftmodulesuffix: "\uE0BC"
+moduleseparator: ' '
+rightmoduleprefix: "\uE0BE"
+rightmodulesuffix: "\uE0B8"
 terminal_colors:
-  background: '#0c080d'
-  black: '#0c080d'
-  blue: '#224260'
-  bright_black: '#9e9892'
-  bright_blue: '#2087e6'
-  bright_cyan: '#21cfff'
-  bright_green: '#c05a82'
-  bright_magenta: '#ff857e'
-  bright_red: '#b72520'
-  bright_white: '#e3dad1'
-  bright_yellow: '#fa752f'
-  cursorColor: '#e3dad1'
-  cyan: '#7b8689'
-  foreground: '#e3dad1'
-  green: '#57293b'
-  magenta: '#94605d'
-  red: '#911728'
-  white: '#e3dad1'
-  yellow: '#ba5622'
-titlebg: '#b72520'
-titlefg: '#e3dad1'
-titlepadding: 0
-urgentbg: '#fa752f'
-urgentfg: '#e3dad1'
-wallpaper: /home/job/.config/themes/walls/shuttle.png
-windowborder: '#0c080d'
-wspadding: 0
+  background: '#150b0d'
+  black: '#150b0d'
+  blue: '#91748D'
+  bright_black: '#90979c'
+  bright_blue: '#91748D'
+  bright_cyan: '#9B9DAC'
+  bright_green: '#DAA353'
+  bright_magenta: '#6399AD'
+  bright_red: '#FEDE11'
+  bright_white: '#ced9df'
+  bright_yellow: '#3F6A9A'
+  cursorColor: '#ced9df'
+  cyan: '#9B9DAC'
+  foreground: '#ced9df'
+  green: '#DAA353'
+  magenta: '#6399AD'
+  red: '#FEDE11'
+  white: '#ced9df'
+  yellow: '#3F6A9A'
+titlebg: '#DAA353'
+titlefg: '#150b0d'
+titlepadding: 1
+urgentbg: '#9B9DAC'
+urgentfg: '#150b0d'
+wallpaper: /home/job/.config/themes/walls/riverPainting.png
+windowborder: '#150b0d'
+wspadding: 1

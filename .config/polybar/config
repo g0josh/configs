@@ -14,7 +14,7 @@ fixed-center = true
 enable-ipc = true
 background = ${env:POLY_BACKGROUND}
 override-redirect = false
-bottom = false
+bottom = ${env:POLY_BOTTOMBAR}
 
 border-top-size = ${env:POLY_BARTOPBORDER}
 border-left-size = ${env:POLY_BARLEFTBORDER}
@@ -48,7 +48,7 @@ fixed-center = true
 enable-ipc = true
 background = ${env:POLY_BACKGROUND}
 override-redirect = false
-bottom = false
+bottom = ${env:POLY_BOTTOMBAR}
 
 border-top-size = ${env:POLY_BARTOPBORDER}
 border-left-size = ${env:POLY_BARLEFTBORDER}
@@ -69,7 +69,7 @@ font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
 
 # modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-left = i3Ws
-modules-center = timePrefix time sep timeIndia
+modules-center = timePrefix time timeIndia
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep batteryPrefix battery powermenu
 tray-position = right
 tray-padding = 2
@@ -220,16 +220,17 @@ format-online-background = ${env:POLY_TITLEBG}
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
 type = custom/text
-content = %{T3}%{T-}
-content-prefix = ${env:POLY_LEFTMODULEPREFIX}
-content-prefix-foreground = ${env:POLY_TITLEBG}
-content-prefix-background = ${env:POLY_BACKGROUND}
-content-suffix = ${env:POLY_LEFTMODULESUFFIX}
-content-suffix-foreground = ${env:POLY_TITLEBG}
-content-suffix-background = ${env:POLY_BODYBG}
-content-foreground = ${env:POLY_TITLEFG}
-content-background = ${env:POLY_TITLEBG}
-content-padding = ${env:POLY_TITLEPADDING}
+content = ${env:POLY_TIMETITLE}
+#content = %{T3}%{T-}
+#content-prefix = ${env:POLY_LEFTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_TITLEBG}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#content-suffix = ${env:POLY_LEFTMODULESUFFIX}
+#content-suffix-foreground = ${env:POLY_TITLEBG}
+#content-suffix-background = ${env:POLY_BODYBG}
+#content-foreground = ${env:POLY_TITLEFG}
+#content-background = ${env:POLY_TITLEBG}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/time]
 type = internal/date
@@ -322,16 +323,17 @@ click-right = audio -r next &
 [module/utilizationPrefix]
 type = custom/text
 interval = 1600
-content = %{T3}%{T-}
-content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-content-prefix-foreground = ${env:POLY_GRADIENT3TITLE}
-content-prefix-background = ${env:POLY_BACKGROUND}
-content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-content-suffix-foreground = ${env:POLY_GRADIENT3TITLE}
-content-suffix-background = ${env:POLY_GRADIENT3BODY}
-content-foreground = ${env:POLY_GRADIENTTITLEFG}
-content-background = ${env:POLY_GRADIENT3TITLE}
-content-padding = ${env:POLY_TITLEPADDING}
+content = ${env:POLY_UTILIZATIONTITLE}
+#content = %{T3}%{T-}
+#content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_GRADIENT3TITLE}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+#content-suffix-foreground = ${env:POLY_GRADIENT3TITLE}
+#content-suffix-background = ${env:POLY_GRADIENT3BODY}
+#content-foreground = ${env:POLY_GRADIENTTITLEFG}
+#content-background = ${env:POLY_GRADIENT3TITLE}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/utilization]
 type = custom/script
@@ -346,16 +348,17 @@ label-padding = ${env:POLY_BODYPADDING}
 #TEMPERATURES-----------------------------------------------------------------
 [module/tempPrefix]
 type = custom/text
-content = %{T3}%{T-}
-content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-content-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
-content-prefix-background = ${env:POLY_BACKGROUND}
-content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-content-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
-content-suffix-background = ${env:POLY_GRADIENT4BODY}
-content-foreground = ${env:POLY_GRADIENTTITLEFG}
-content-background = ${env:POLY_GRADIENT4TITLE}
-content-padding = ${env:POLY_TITLEPADDING}
+#content = %{T3}%{T-}
+content = ${env:POLY_TEMPERATURETITLE}
+#content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#ontent-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+#ontent-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
+#content-suffix-background = ${env:POLY_GRADIENT4BODY}
+#content-foreground = ${env:POLY_GRADIENTTITLEFG}
+#content-background = ${env:POLY_GRADIENT4TITLE}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/temp]
 type = custom/script

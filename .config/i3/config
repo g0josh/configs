@@ -31,7 +31,6 @@ client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-
 
 # Startup -----------------------------------------------------------------------------
 exec --no-startup-id $HOME/.config/autostart.sh
-exec --no-startup-id reload-screens -x
 
 for_window [class="Nautilus"] move workspace $ws4
 for_window [class=$TERM_NAME instance="music"] move workspace $ws5

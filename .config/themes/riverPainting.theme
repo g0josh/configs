@@ -1,0 +1,37 @@
+terminal_colors:  "pywal"
+wallpaper: "riverPainting.png"
+blurwallpaper: false
+bodyfg: "background"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "green"
+focusedfg: "background"
+focusedbg: "green"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: " "
+wspadding: 1
+background: "#00000000"
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+titlepadding: 1
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 0
+barbottomborder : 3
+bottombar: "true"
