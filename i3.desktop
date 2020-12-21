@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Qtile
+Comment=Qtile Session
+Exec=i3
+Type=Application
+Keywords=wm;tiling

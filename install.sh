@@ -96,7 +96,7 @@ git clone https://github.com/tryone144/compton.git
 cd compton
 make
 make docs
-make install PREFIX=$HOME/.local/bin
+make install PREFIX=$HOME/.local
 sudo apt remove libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev docbook-xml libxml2-utils xsltproc asciidoc libxslt1-dev libconfig-dev docbook-xsl
 
 echo ""
