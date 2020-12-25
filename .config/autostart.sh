@@ -12,4 +12,5 @@ numlockx on
 udiskie -2 &
 urxvtd &
 compton &
+mcc &
 reload-screens
