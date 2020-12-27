@@ -33,13 +33,11 @@ client.urgent           $urg-bg-clr     $urg-bg-clr     $txt-clr        $urg-bg-
 exec --no-startup-id $HOME/.config/autostart.sh
 
 for_window [class="Nautilus"] move workspace $ws4
-for_window [class=$TERM_NAME instance="music"] move workspace $ws5
-for_window [class=$TERM_NAME instance="calculator-scratch"] move scratchpad
-
+for_window [class=$TERM_ALT_NAME instance="music"] move workspace $ws5
+for_window [class=$TERM_ALT_NAME instance="calculator"] move scratchpad
 exec --no-startup-id nautilus
-exec --no-startup-id urxvt -name calculator-scratch -e python3
-exec --no-startup-id urxvt -name music -e ncmpcpp -s visualizer
-
+exec --no-startup-id $TERM_ALT --class calculator -e python3
+exec --no-startup-id $TERM_ALT --class music -e musikcube
 # Keys --------------------------------------------------------------------------------
 
 # i3
@@ -59,6 +57,7 @@ bindsym $MOD+Control+m exec --no-startup-id reload-screens
 bindsym $MOD+Shift+Control+q exit
 bindsym $MOD+x	exec --no-startup-id $HOME/.config/i3/lockscreen.sh
 bindsym $MOD+q kill ; exec --no-startup-id i3-change-wall
+bindsym $MOD+Shift+s exec --no-startup-id gnome-screenshot
 
 # Apps
 bindsym $MOD+b exec --no-startup-id $BROWSER ; exec --no-startup-id i3-change-wall
@@ -77,10 +76,10 @@ bindsym $MOD+$MOD_ALT+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ 
 bindsym $MOD+z exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym $MOD+$MOD_ALT+Prior exec --no-startup-id aucli -a prev
 bindsym $MOD+$MOD_ALT+Next exec --no-startup-id aucli -a next
-bindsym XF86AudioPlay exec mpc toggle
-bindsym $MOD+$MOD_ALT+End exec mpc toggle
-bindsym $MOD+$MOD_ALT+Right exec mpc next
-bindsym $MOD+$MOD_ALT+Left exec mpc prev
+bindsym XF86AudioPlay exec curl -X POST http://localhost:7907 -d 'TOGGLE_PAUSE'
+bindsym $MOD+$MOD_ALT+End exec curl -X POST http://localhost:7907 -d 'TOGGLE_PAUSE'
+bindsym $MOD+$MOD_ALT+Right exec curl -X POST http://localhost:7907 -d 'NEXT_TRACK'
+bindsym $MOD+$MOD_ALT+Left exec curl -X POST http://localhost:7907 -d 'PREV_TRACK'
 
 # Floating
 floating_modifier $MOD
@@ -176,3 +175,4 @@ mode "resize" {
         bindsym $MOD+r mode "default"
 }
 bindsym $MOD+r mode "resize"
+

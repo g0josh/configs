@@ -68,7 +68,7 @@ font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
 
 # modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-modules-left = i3Ws
+modules-left = i3Ws sep musikPrefix musik
 modules-center = timePrefix time timeIndia
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep batteryPrefix battery powermenu
 tray-position = right
@@ -216,6 +216,35 @@ icon-next = %{T3}%{T-}
 icon-next-padding = ${env:POLY_TITLEPADDING}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
+
+#MusikCube---------------------------------------------------------------------
+[module/musikPrefix]
+type = custom/text
+content = %{T3}%{T-}
+content-prefix = ${env:POLY_LEFTMODULEPREFIX}
+content-prefix-foreground = ${env:POLY_TITLEBG}
+content-prefix-background = ${env:POLY_BACKGROUND}
+content-suffix = ${env:POLY_LEFTMODULESUFFIX}
+content-suffix-foreground = ${env:POLY_TITLEBG}
+content-suffix-background = ${env:POLY_BODYBG}
+content-foreground = ${env:POLY_TITLEFG}
+content-background = ${env:POLY_TITLEBG}
+content-padding = ${env:POLY_TITLEPADDING}
+
+[module/musik]
+type = custom/ipc
+hook-0 = curl -X GET http://localhost:7907
+initial = 1
+scroll-up = curl -X POST http://localhost:7907 -d 'PREV_TRACK'
+scroll-down = curl -X POST http://localhost:7907 -d 'NEXT_TRACK'
+click-left = curl -X POST http://localhost:7907 -d 'TOGGLE_PAUSE'
+click-right = curl -X POST http://localhost:7907 -d 'TOGGLE_REPEAT'
+format-background = ${env:POLY_BODYBG}
+format-foreground = ${env:POLY_BODYFG}
+format-padding = ${env:POLY_BODYPADDING}
+format-suffix= ${env:POLY_LEFTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
+format-suffix-background = ${env:POLY_BACKGROUND}
 
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
