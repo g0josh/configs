@@ -5,9 +5,11 @@ read -p 'Continue[y/n] :' cont
 if [ "$cont" == "n" ]; then
 	exit 1
 fi
-read -p 'Office(1) or Home(0): ' office
 
-sudo apt install xserver-xorg-core x11-xserver-utils udiskie curl --no-install-recommends --no-install-suggests
+sudo apt install xorg udiskie curl alsa-utils build-essentials software-properties-common
+sudo apt-add-repository non-free
+sudo apt update
+sudo apt install firmware-iwlwifi
 
 echo ""
 echo "---------------------------------------"
@@ -32,31 +34,20 @@ sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode s
 sudo apt-get install apt-transport-https
 
 sudo apt update
-sudo apt install code tmux pavucontrol firefox rxvt-unicode imagemagick feh bc lm-sensors 
+sudo apt install code tmux pulseaudio pavucontrol firefox-esr rxvt-unicode imagemagick feh bc lm-sensors 
 
 
-if [ "$office" == "1" ]; then
-    echo "-----------------------------------------------"
-    echo "Installing Office tools only..."
-    echo "-----------------------------------------------"
-    sudo cp qtile.desktop /usr/share/xsessions
-else
-    echo "-----------------------------------------------"
-    echo "Installing home tools..."
-    echo "-----------------------------------------------"
-    sudo apt install transmission uget mpd mpc nomacs ncmpcpp numlockx network-manager 
-    sudo dpkg -i resemsmice_1.1.3_amd64.deb
-    cp .profile ~/
-    cp .xsession ~/
-    systemctl enable network-manager
-fi
+echo "-----------------------------------------------"
+echo "Installing home tools..."
+echo "-----------------------------------------------"
+sudo apt install transmission uget mpd mpc nomacs ncmpcpp numlockx network-manager nvim
+systemctl enable network-manager
 
 echo ""
 echo "---------------------------------------"
 echo "Setting up configs"
 echo "---------------------------------------"
 echo ""
-
 cp .config/qtile ~/.config/ -r
 cp .config/autostart.sh ~/.config
 sudo chmod u+x ~/.config/autostart.sh
@@ -64,7 +55,9 @@ cp .config/mpd ~/.config/ -r
 cp .config/ncmpcpp ~/.config/ -r
 cp .config/nvim ~/.config/ -r
 cp .config/themes ~/.config/ -r
-cp .config/compton.conf ~/.config/compton.conf
+cp .config/picom/compton.conf ~/.config/picom/compton.conf
+cp .profile ~/
+cp .xinitrc ~/
 cp .Xresources ~/
 cp .bashrc ~/
 cp .tmux.conf ~/
@@ -75,29 +68,27 @@ mkdir $HOME/tools
 
 echo ""
 echo "---------------------------------------"
-echo "Installing NVIM"
+echo "Installing picom"
 echo "---------------------------------------"
 echo ""
-curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-mkdir $HOME/.local/bin -p
-mv nvim.appimage $HOME/.local/bin/
-sudo chmod u+x $HOME/.local/bin/nvim.appimage
-sudo update-alternatives --install /usr/bin/vim vim "$HOME/.local/bin/nvim.appimage" 110
+sudo apt install libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev meson ninja-build
+cd $HOME/tools
+git clone https://github.com/yshui/picom.git
+cd picom
+git checkout next
+git submodule update --init --recursive
+meson --buildtype=release . build
+sudo ninja -C build install
 
 echo ""
 echo "---------------------------------------"
-echo "Installing compton"
+echo "Installing CLI utils"
 echo "---------------------------------------"
 echo ""
-sudo apt install asciidoc --no-install-recommends
-sudo apt install libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev libconfig9 docbook-xml libxml2-utils xsltproc libconfig-dev libxslt1-dev docbook-xsl libxdamage-dev libdrm-dev mesa-common-dev libgl1-mesa-dev libpcre3-dev
 cd $HOME/tools
-git clone https://github.com/tryone144/compton.git
-cd compton
-make
-make docs
-make install PREFIX=$HOME/.local
-sudo apt remove libxinerama-dev libxrandr-dev libxcomposite-dev libdbus-1-dev docbook-xml libxml2-utils xsltproc asciidoc libxslt1-dev libconfig-dev docbook-xsl
+git clone https://github.com/g0josh/pycliutils.git
+cd pycliutils
+pip3 install .
 
 echo ""
 echo "---------------------------------------"

@@ -12,9 +12,9 @@ from libqtile.log_utils import logger
 
 from my_audio import setMute, setVolume, setActiveSink
 from my_scripts import getTheme, updateWallpaper, getNumScreens
-from my_bar import getWidgets
-from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
-from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
+#from my_bar import getWidgets
+#from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
+#from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
 from icons import getIcons
 
 MOD = "mod4"
@@ -25,9 +25,10 @@ BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
 AUTOSTART_SCRIPT = "~/.config/autostart.sh"
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
-
+DEFAULT_FONT = dict(
+        font="Iosevka Nerd Font Medium",
+        fontsize=14)
 NUM_SCREENS = getNumScreens()
-
 POLYBAR_INFO = {}
 groups = [
     Group(name='1', label=f'1 {getIcons()["user"]}'),
@@ -82,12 +83,11 @@ def float_to_front(qtile):
 
 @lazy.function
 def polybar_hook(qtile):
-    return
-    # try:
-    #     subprocess.call(['polybar-msg','hook','qtileWs','1'])
-    # except subprocess.CalledProcessError as e:
-    #     logger.warn(e)
-    #     return
+    try:
+        subprocess.call(['polybar-msg','hook','qtileWs','1'])
+    except subprocess.CalledProcessError as e:
+        logger.warn(e)
+        return
 
 @lazy.function
 def changeWallpaper(qtile):
@@ -157,11 +157,16 @@ keys = [
 
     Key([MOD], "q", lazy.window.kill()),
 
-    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets())),
-    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets())),
-    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
-    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
-    Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets())),
+    # Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets()), polybar_hook),
+    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), polybar_hook),
+    # Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
+    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), polybar_hook),
+    # Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
+    Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), changeWallpaper, polybar_hook),
+    # Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
+    Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), changeWallpaper, polybar_hook),
+    # Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
+    Key([MOD], "u", lazy.next_urgent(), polybar_hook),
 
     Key([], "XF86AudioMute", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
     Key([MOD], "z", lazy.function(lambda x: setMute(2)), lazy.function(lambda x: updateVolumeWidgets())),
@@ -179,16 +184,18 @@ keys = [
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
 
-    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
-    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
+    # Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
+    # Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
+    Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), polybar_hook, changeWallpaper),
+    Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), polybar_hook, changeWallpaper),
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
-    # Key([MOD], "a", lazy.spawn("rofi -show drun")),
-    Key([MOD], 'a', lazy.spawncmd()),
+    Key([MOD], "a", lazy.spawn("rofi -show drun")),
+    # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
-    # Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
-    # Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
+    Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
+    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh'))),
 
 ]
@@ -204,9 +211,11 @@ for i in groups:
     else:
         keys.extend([
             # MOD1 + letter of group = switch to group
-            Key([MOD], i.name, lazy.group[i.name].toscreen(), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
+            # Key([MOD], i.name, lazy.group[i.name].toscreen(), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
+            Key([MOD], i.name, lazy.group[i.name].toscreen(), polybar_hook, changeWallpaper ),
             # MOD1 + shift + letter of group = switch to & move focused window to group
-            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
+            # Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper ),
+            Key([MOD, "shift"], i.name, lazy.window.togroup(i.name), polybar_hook, changeWallpaper ),
         ])
 
 layout_configs={
@@ -267,19 +276,19 @@ auto_fullscreen = True
 #focus_on_window_activation = "smart"
 
 screens = []
-for n in range(NUM_SCREENS):
-    screens.append(
-       Screen(
-           top=bar.Bar(
-               widgets=getWidgets(THEME, n, groups),
-               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
-                                                        THEME['barleftborder'],
-                                                        THEME['barbottomborder'],
-                                                        THEME['barrightborder']],
-               background=THEME['background'], opacity=1
-           )
-       )
-   )
+#for n in range(NUM_SCREENS):
+#    screens.append(
+#       Screen(
+#           top=bar.Bar(
+#               widgets=getWidgets(THEME, n, groups),
+#               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'], 
+#                                                        THEME['barleftborder'],
+#                                                        THEME['barbottomborder'],
+#                                                        THEME['barrightborder']],
+#               background=THEME['background'], opacity=1
+#           )
+#       )
+#   )
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -305,13 +314,15 @@ def startOnce():
 def windowAdded(c):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(c.qtile, 1)
-    updateGroupWidgets()
+    # updateGroupWidgets()
+    polybar_hook(c.qtile)
 
 @hook.subscribe.client_killed
 def windowDeleted(c):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(c.qtile, -1)
-    updateGroupWidgets()
+    # updateGroupWidgets()
+    polybar_hook(c.qtile)
 
 '''
 @hook.subscribe.startup
@@ -323,5 +334,6 @@ def start():
 @hook.subscribe.startup_complete
 def refreshWidgets():
     updateWallpaper(setSolid=True)
-    updateGroupWidgets()
+    # updateGroupWidgets()
     updateVolumeWidgets()
+    polybar_hook(c.qtile)
