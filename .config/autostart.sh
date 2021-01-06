@@ -1,7 +1,5 @@
 #!/bin/bash
 
-killall compton &
-
 # merge theme
 theme=$HOME/.config/themes/.xcolors
 if [ -f $theme ]; then
@@ -11,6 +9,6 @@ fi
 numlockx on
 udiskie -2 &
 urxvtd &
-compton &
+picom --experimental-backends &
 mcc &
 reload-screens

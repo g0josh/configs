@@ -14,7 +14,7 @@ from libqtile.core.manager import Qtile
 from socket import error as socket_error
 
 import my_audio as audio
-from my_widgets import ComboWidgetColor
+#from my_widgets import ComboWidgetColor
 from icons import getIcons
 
 MOUSE_BUTTONS = {'LEFT_CLICK': 1, 'RIGHT_CLICK': 2,
@@ -33,20 +33,20 @@ def getGroupLabel(qtile:Qtile, group:str):
             return _group.label if (_group.screen is not None or len(_group.windows) > 0) else ""
     return ""
 
-def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> ComboWidgetColor:
-    curr_group = qtile.current_group.name
-    curr_screen = qtile.current_group.screen.index
-    if curr_group == group and curr_screen == screen :
-        return ComboWidgetColor(foreground=theme['focusedfg'],background=theme['focusedbg'])
-    curr_screen = qtile.current_group.screen.index
-    for _group in qtile.groups:
-        if group == _group.name:
-            if _group.screen is None:
-                return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
-            elif _group.screen.index == screen:
-                return ComboWidgetColor(foreground=theme['altfg'],background=theme['altbg'])
-            break
-    return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
+#def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> ComboWidgetColor:
+#    curr_group = qtile.current_group.name
+#    curr_screen = qtile.current_group.screen.index
+#    if curr_group == group and curr_screen == screen :
+#        return ComboWidgetColor(foreground=theme['focusedfg'],background=theme['focusedbg'])
+#    curr_screen = qtile.current_group.screen.index
+#    for _group in qtile.groups:
+#        if group == _group.name:
+#            if _group.screen is None:
+#                return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
+#            elif _group.screen.index == screen:
+#                return ComboWidgetColor(foreground=theme['altfg'],background=theme['altbg'])
+#            break
+#    return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
 
 
 # ---------------------------------------------

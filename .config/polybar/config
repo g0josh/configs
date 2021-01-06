@@ -28,13 +28,13 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka Nerd Font Mono:style=Medium:size=14;2:antialias=true
+font-0 = Iosevka Nerd Font Mono:style=Medium:size=12;2:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;2:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
 modules-center = timePrefix time sep timeIndia
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
 tray-position = right
 tray-padding = 2
 
@@ -82,7 +82,7 @@ tray-padding = 2
 [module/qtileWs]
 type = custom/ipc
 hook-0 = qtile-ws get -p %pid%
-#initial = 1
+initial = 1
 click-left = qtile-ws set -w next
 click-right = qtile-ws set -w prev
 scroll-up = qtile-ws set -w prev
