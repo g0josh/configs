@@ -10,5 +10,6 @@ numlockx on
 udiskie -2 &
 urxvtd &
 picom --experimental-backends &
-mcc &
+urxvt -e musikcube &
+mcc --updated-callback 'polybar-msg hook musik 1' &
 reload-screens
