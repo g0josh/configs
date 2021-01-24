@@ -4,7 +4,7 @@ content = ${env:POLY_MODULESEPARATOR:}
 content-foreground = ${env:POLY_BACKGROUND}
 content-background = ${env:POLY_BACKGROUND}
 
-[bar/island]
+[bar/qtile]
 monitor = ${env:POLY_MONITOR}
 monitor-fallback = HDMI-0
 width = 100%
@@ -14,14 +14,13 @@ fixed-center = true
 enable-ipc = true
 background = ${env:POLY_BACKGROUND}
 override-redirect = false
-bottom = false
+bottom = ${env:POLY_BOTTOMBAR}
 
+border-top-size = ${env:POLY_BARTOPBORDER}
+border-left-size = ${env:POLY_BARLEFTBORDER}
+border-right-size = ${env:POLY_BARRIGHTBORDER}
+border-bottom-size = ${env:POLY_BARBOTTOMBORDER}
 line-size = 1
-
-border-top-size = 4
-border-left-size = 4
-border-right-size = 4
-border-bottom-size = 0
 
 padding-left = 0
 padding-right = 0
@@ -29,13 +28,50 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-font-0 = Iosevka Term SS03 Medium:style=Medium Italic:pixelsize=11;3:antialias=true
-font-1 = Font Awesome 5 Free: style=Regular:pixelsize=10;3:antialias=true
-font-2 = Font Awesome 5 Free: style=Solid:pixelsize=10;3:antialias=true
+font-0 = Iosevka Nerd Font Mono:style=Medium:size=12;3:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;2:antialias=true
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;2:antialias=true
 
 modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-modules-center = timePrefix time sep timeIndia 
-modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix wlan sep lanPrefix1 lan1 sep powermenu
+#modules-left = qtileWs sep musikPrefix musik
+modules-center = timePrefix time sep timeIndia
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep lanPrefix1 lan1 lanPrefix2 lan2 sep powermenu
+tray-position = right
+tray-padding = 2
+
+[bar/i3]
+monitor = ${env:POLY_MONITOR}
+monitor-fallback = HDMI-0
+width = 100%
+height = 18
+radius = 0
+fixed-center = true
+enable-ipc = true
+background = ${env:POLY_BACKGROUND}
+override-redirect = false
+bottom = ${env:POLY_BOTTOMBAR}
+
+border-top-size = ${env:POLY_BARTOPBORDER}
+border-left-size = ${env:POLY_BARLEFTBORDER}
+border-right-size = ${env:POLY_BARRIGHTBORDER}
+border-bottom-size = ${env:POLY_BARBOTTOMBORDER}
+line-size = 1
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+
+font-0 = Iosevka Nerd Font Mono:style=Medium:pixelsize=11;3:antialias=true
+font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;3:antialias=true
+font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;3:antialias=true
+
+# modules-left = i3Ws sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+modules-left = i3Ws sep musikPrefix musik
+modules-center = timePrefix time timeIndia
+modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep wlanPrefix2 wlan2 sep lanPrefix1 lan1 lanPrefix2 lan2 sep batteryPrefix battery powermenu
 tray-position = right
 tray-padding = 2
 
@@ -46,16 +82,63 @@ tray-padding = 2
 # qtile workspaces and layout-------------------------------------------------
 [module/qtileWs]
 type = custom/ipc
-hook-0 = python3 ~/.config/polybar/qtile_ws.py get %pid%
-#initial = 1
-click-left = python3 ~/.config/polybar/qtile_ws.py set next
-click-right = python3 ~/.config/polybar/qtile_ws.py set prev
-scroll-up = python3 ~/.config/polybar/qtile_ws.py set prev
-scroll-down = python3 ~/.config/polybar/qtile_ws.py set next
+hook-0 = qtile-ws get -p %pid%
+initial = 1
+click-left = qtile-ws set -w next
+click-right = qtile-ws set -w prev
+scroll-up = qtile-ws set -w prev
+scroll-down = qtile-ws set -w next
+
+#i3---------------------------------------------------------------------------
+[module/i3Ws]
+type = internal/i3
+index-sort = true
+wrapping-scroll = false
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+
+ws-icon-default = 
+format = <label-state>
+
+#label-focused = %index%
+#label-focused-foreground = #ffffff
+#label-focused-background = #3f3f3f
+#label-focused-underline = #fba922
+#label-focused-padding = 4
+
+#focused = activecolor workspace on focused monitor
+label-focused = ${env:POLY_ACTIVEWS}
+#label-focused-background = ${env:POLY_FOCUSEDBG}
+#label-focused-foreground = ${env:POLY_FOCUSEDFG}
+
+#unfocused = Inactivecolor workspace on any monitor
+label-unfocused = ${env:POLY_OCCUPIEDWS}
+#label-unfocused-background = ${env:POLY_BODYBG}
+#label-unfocused-foreground = ${env:POLY_BODYFG}
+
+#visible = activecolor workspace on unfocused monitor
+label-visible = ${env:POLY_VISIBLEWSOTHER}
+#label-visible-background = ${env:POLY_ALTBG}
+#label-visible-foreground = ${env:POLY_ALTFG}
+
+#urgentcolor = Workspace with urgency hint set
+label-urgent = ${env:POLY_URGENTWS}
+#label-urgent-background = ${env:POLY_URGENTBG}
+#label-urgent-foreground = ${env:POLY_URGENTFG}
 
 #MPD--------------------------------------------------------------------------
 [module/mpdPrefix]
 type = internal/mpd
+format-online = %{T3}%{T-}
+format-offline = %{T3} %{T-}
+format-offline-foreground = ${env:POLY_TITLEFG}
+format-offline-background = ${env:POLY_TITLEBG}
+format-online-foreground = ${env:POLY_TITLEFG}
+format-online-background = ${env:POLY_TITLEBG}
 
 format-online-prefix = ${env:POLY_LEFTMODULEPREFIX}
 format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
@@ -70,13 +153,6 @@ format-offline-prefix-background = ${env:POLY_BACKGROUND}
 format-offline-suffix-foreground = ${env:POLY_TITLEBG}
 format-offline-suffix-background = ${env:POLY_BACKGROUND}
 
-format-online =  
-format-offline =  
-format-offline-foreground = ${env:POLY_TITLEFG}
-format-offline-background = ${env:POLY_TITLEBG}
-format-online-foreground = ${env:POLY_TITLEFG}
-format-online-background = ${env:POLY_TITLEBG}
-
 [module/mpd]
 type = internal/mpd
 
@@ -85,9 +161,10 @@ format-online-foreground = ${env:POLY_BODYFG}
 format-online-background = ${env:POLY_BODYBG}
 label-song = %title%
 label-song-padding = ${env:POLY_BODYPADDING}
-label-time = %elapsed% / %total% 
+label-time = %elapsed% / %total%
 label-time-padding = ${env:POLY_BODYPADDING}
 label-song-maxlen = 30
+label-song-minlen = 2
 label-song-ellipsis = true
 
 format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
@@ -103,10 +180,11 @@ format-online-prefix-foreground = ${env:POLY_TITLEBG}
 format-online-prefix-background = ${env:POLY_BACKGROUND}
 format-online-suffix-foreground = ${env:POLY_TITLEBG}
 format-online-suffix-background = ${env:POLY_BACKGROUND}
-format-online = <icon-prev> 
-icon-prev= 
+format-online = <icon-prev>
+icon-prev= %{T3}%{T-}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
+icon-prev-padding = ${env:POLY_TITLEPADDING}
 
 [module/mpdPlayPause]
 type = internal/mpd
@@ -118,8 +196,10 @@ format-online-prefix-background = ${env:POLY_BACKGROUND}
 format-online-suffix-foreground = ${env:POLY_TITLEBG}
 format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <toggle>
-icon-pause = 
-icon-play = 
+icon-pause = %{T3}%{T-}
+icon-play = %{T3}%{T-}
+icon-pause-padding = ${env:POLY_TITLEPADDING}
+icon-play-padding = ${env:POLY_TITLEPADDING}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
 
@@ -133,22 +213,54 @@ format-online-prefix-background = ${env:POLY_BACKGROUND}
 format-online-suffix-foreground = ${env:POLY_TITLEBG}
 format-online-suffix-background = ${env:POLY_BACKGROUND}
 format-online = <icon-next>
-icon-next = 
+icon-next = %{T3}%{T-}
+icon-next-padding = ${env:POLY_TITLEPADDING}
 format-online-foreground = ${env:POLY_TITLEFG}
 format-online-background = ${env:POLY_TITLEBG}
+
+#MusikCube---------------------------------------------------------------------
+[module/musikPrefix]
+type = custom/text
+content = %{T3}%{T-}
+content-prefix = ${env:POLY_LEFTMODULEPREFIX}
+content-prefix-foreground = ${env:POLY_TITLEBG}
+content-prefix-background = ${env:POLY_BACKGROUND}
+content-suffix = ${env:POLY_LEFTMODULESUFFIX}
+content-suffix-foreground = ${env:POLY_TITLEBG}
+content-suffix-background = ${env:POLY_BODYBG}
+content-foreground = ${env:POLY_TITLEFG}
+content-background = ${env:POLY_TITLEBG}
+content-padding = ${env:POLY_TITLEPADDING}
+
+[module/musik]
+type = custom/ipc
+hook-0 = curl -X GET http://localhost:7907
+initial = 1
+scroll-up = curl -X POST http://localhost:7907 -d 'PREV_TRACK'
+scroll-down = curl -X POST http://localhost:7907 -d 'NEXT_TRACK'
+click-left = curl -X POST http://localhost:7907 -d 'TOGGLE_PAUSE'
+click-right = curl -X POST http://localhost:7907 -d 'TOGGLE_REPEAT'
+format-background = ${env:POLY_BODYBG}
+format-foreground = ${env:POLY_BODYFG}
+format-padding = ${env:POLY_BODYPADDING}
+format-suffix= ${env:POLY_LEFTMODULESUFFIX}
+format-suffix-foreground = ${env:POLY_BODYBG}
+format-suffix-background = ${env:POLY_BACKGROUND}
+
 #TIME--------------------------------------------------------------------------
 [module/timePrefix]
-type = custom/script
-interval = 1600
-exec = echo 
-format-prefix = ${env:POLY_LEFTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_TITLEBG}
-format-suffix = ${env:POLY_LEFTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_TITLEBG}
-format-suffix-background = ${env:POLY_BODYBG}
-label-foreground = ${env:POLY_TITLEFG}
-label-background = ${env:POLY_TITLEBG}
-label-padding = ${env:POLY_TITLEPADDING}
+type = custom/text
+content = ${env:POLY_TIMETITLE}
+#content = %{T3}%{T-}
+#content-prefix = ${env:POLY_LEFTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_TITLEBG}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#content-suffix = ${env:POLY_LEFTMODULESUFFIX}
+#content-suffix-foreground = ${env:POLY_TITLEBG}
+#content-suffix-background = ${env:POLY_BODYBG}
+#content-foreground = ${env:POLY_TITLEFG}
+#content-background = ${env:POLY_TITLEBG}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/time]
 type = internal/date
@@ -181,15 +293,15 @@ type = internal/xkeyboard
 format = <label-indicator>
 format-spacing = 0
 format-prefix= ${env:POLY_RIGHTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_TITLEBG}
+format-prefix-foreground = ${env:POLY_GRADIENT1TITLE}
 format-suffix= ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_TITLEBG}
-indicator-icon-0 = caps lock;; A
-indicator-icon-1 = num lock;; 1
+format-suffix-foreground = ${env:POLY_GRADIENT1TITLE}
+indicator-icon-0 = caps lock;;%{T3}%{T-} A
+indicator-icon-1 = num lock;;%{T3}%{T-} 1
 label-indicator-on = %icon%
-label-indicator-on-foreground = ${env:POLY_TITLEFG}
-label-indicator-on-background = ${env:POLY_TITLEBG}
-label-indicator-on-padding = 1
+label-indicator-on-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-indicator-on-background = ${env:POLY_GRADIENT1TITLE}
+label-indicator-on-padding = ${env:POLY_BODYPADDING}
 
 #VOLUME-----------------------------------------------------------------------
 [module/volume]
@@ -198,120 +310,152 @@ use-ui-max = 100
 
 format-volume = <label-volume>
 format-volume-suffix= ${env:POLY_RIGHTMODULESUFFIX}
-format-volume-suffix-foreground = ${env:POLY_BODYBG}
+format-volume-suffix-foreground = ${env:POLY_GRADIENT2BODY}
 label-volume = %percentage%
-label-volume-foreground = ${env:POLY_BODYFG}
-label-volume-background = ${env:POLY_BODYBG}
+label-volume-foreground = ${env:POLY_GRADIENTBODYFG}
+label-volume-background = ${env:POLY_GRADIENT2BODY}
 label-volume-padding = ${env:POLY_BODYPADDING}
 
-format-muted = 
+click-right = audio -r next &
+format-muted =
 
 [module/volumePrefix]
 type = internal/pulseaudio
 format-volume = <ramp-volume>
 format-volume-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-volume-prefix-foreground = ${env:POLY_TITLEBG}
-format-volume-prefix-background = #00000000
+format-volume-prefix-foreground = ${env:POLY_GRADIENT2TITLE}
 format-volume-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-volume-suffix-foreground = ${env:POLY_TITLEBG}
-format-volume-suffix-background = ${env:POLY_BODYBG}
+format-volume-suffix-foreground = ${env:POLY_GRADIENT2TITLE}
+format-volume-suffix-background = ${env:POLY_GRADIENT2BODY}
 
 format-muted = <label-muted>
-label-muted = 
-label-muted-foreground = ${env:POLY_TITLEFG}
-label-muted-background = ${env:POLY_TITLEBG}
+label-muted = %{T3}%{T-}
+label-muted-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-muted-background = ${env:POLY_GRADIENT2TITLE}
 label-muted-padding = ${env:POLY_TITLEPADDING}
 format-muted-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-muted-prefix-foreground = ${env:POLY_TITLEBG}
-format-muted-prefix-background = #00000000
+format-muted-prefix-foreground = ${env:POLY_GRADIENT2TITLE}
 format-muted-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-muted-suffix-foreground = ${env:POLY_TITLEBG}
+format-muted-suffix-foreground = ${env:POLY_GRADIENT2TITLE}
 
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-3 = 
-ramp-volume-4 = 
-ramp-volume-foreground = ${env:POLY_TITLEFG}
-ramp-volume-background = ${env:POLY_TITLEBG}
+ramp-volume-0 = %{T3}%{T-}
+ramp-volume-1 = %{T3}%{T-}
+ramp-volume-2 = %{T3}%{T-}
+ramp-volume-3 = %{T3}%{T-}
+ramp-volume-4 = %{T3}%{T-}
+ramp-volume-foreground = ${env:POLY_GRADIENTTITLEFG}
+ramp-volume-background = ${env:POLY_GRADIENT2TITLE}
 ramp-volume-padding = ${env:POLY_TITLEPADDING}
+
+click-right = audio -r next &
 
 #UTILIZATION------------------------------------------------------------------
 [module/utilizationPrefix]
-type = custom/script
+type = custom/text
 interval = 1600
-exec = echo 
-format-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_TITLEBG}
-format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_TITLEBG}
-format-suffix-background = ${env:POLY_BODYBG}
-label-foreground = ${env:POLY_TITLEFG}
-label-background = ${env:POLY_TITLEBG}
-label-padding = ${env:POLY_TITLEPADDING}
+content = ${env:POLY_UTILIZATIONTITLE}
+#content = %{T3}%{T-}
+#content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_GRADIENT3TITLE}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#content-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+#content-suffix-foreground = ${env:POLY_GRADIENT3TITLE}
+#content-suffix-background = ${env:POLY_GRADIENT3BODY}
+#content-foreground = ${env:POLY_GRADIENTTITLEFG}
+#content-background = ${env:POLY_GRADIENT3TITLE}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/utilization]
 type = custom/script
 interval = 5
-exec = bash $HOME/.config/polybar/utilization.sh
+exec = utilization
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_BODYBG}
-label-foreground = ${env:POLY_BODYFG}
-label-background = ${env:POLY_BODYBG}
+format-suffix-foreground = ${env:POLY_GRADIENT3BODY}
+label-foreground = ${env:POLY_GRADIENTBODYFG}
+label-background = ${env:POLY_GRADIENT3BODY}
 label-padding = ${env:POLY_BODYPADDING}
 
 #TEMPERATURES-----------------------------------------------------------------
 [module/tempPrefix]
-type = custom/script
-interval = 1600
-exec = echo 
-format-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-prefix-foreground = ${env:POLY_TITLEBG}
-format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_TITLEBG}
-format-suffix-background = ${env:POLY_BODYBG}
-label-foreground = ${env:POLY_TITLEFG}
-label-background = ${env:POLY_TITLEBG}
-label-padding = ${env:POLY_TITLEPADDING}
+type = custom/text
+#content = %{T3}%{T-}
+content = ${env:POLY_TEMPERATURETITLE}
+#content-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+#content-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
+#content-prefix-background = ${env:POLY_BACKGROUND}
+#ontent-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+#ontent-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
+#content-suffix-background = ${env:POLY_GRADIENT4BODY}
+#content-foreground = ${env:POLY_GRADIENTTITLEFG}
+#content-background = ${env:POLY_GRADIENT4TITLE}
+#content-padding = ${env:POLY_TITLEPADDING}
 
 [module/temp]
 type = custom/script
 interval = 5.0
-exec = bash $HOME/.config/polybar/gettemp.sh
+exec = temp
 format-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-suffix-foreground = ${env:POLY_BODYBG}
-label-foreground = ${env:POLY_BODYFG}
-label-background = ${env:POLY_BODYBG}
+format-suffix-foreground = ${env:POLY_GRADIENT4BODY}
+label-foreground = ${env:POLY_GRADIENTBODYFG}
+label-background = ${env:POLY_GRADIENT4BODY}
 label-padding = ${env:POLY_BODYPADDING}
 
-#WIFI-------------------------------------------------------------------------
-[module/wlanPrefix]
+#WIFI 1-------------------------------------------------------------------------
+[module/wlanPrefix1]
 type = internal/network
-interface = ${env:POLY_WLAN}
+interface = ${env:POLY_WLAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-connected-prefix-foreground = ${env:POLY_TITLEBG}
-format-connected-prefix-background = #00000000
+format-connected-prefix-foreground = ${env:POLY_GRADIENT5TITLE}
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_TITLEBG}
-format-connected-suffix-background = ${env:POLY_BODYBG}
-label-connected = 
-label-connected-foreground = ${env:POLY_TITLEFG}
-label-connected-background = ${env:POLY_TITLEBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5TITLE}
+format-connected-suffix-background = ${env:POLY_GRADIENT5BODY}
+label-connected = %{T3}%{T-}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-connected-background = ${env:POLY_GRADIENT5TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
-[module/wlan]
+[module/wlan1]
 type = internal/network
-interface = ${env:POLY_WLAN}
+interface = ${env:POLY_WLAN1}
 interval = 3.0
 
 format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_BODYBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5BODY}
 label-connected = %essid%|%downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
-label-connected-background = ${env:POLY_BODYBG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
+label-connected-background = ${env:POLY_GRADIENT5BODY}
+label-connected-padding = ${env:POLY_BODYPADDING}
+
+#WIFI 2-------------------------------------------------------------------------
+[module/wlanPrefix2]
+type = internal/network
+interface = ${env:POLY_WLAN2}
+interval = 3.0
+format-connected = <label-connected>
+format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-connected-prefix-foreground = ${env:POLY_GRADIENT5TITLE}
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5TITLE}
+format-connected-suffix-background = ${env:POLY_GRADIENT5BODY}
+label-connected = %{T3}%{T-}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-connected-background = ${env:POLY_GRADIENT5TITLE}
+label-connected-padding = ${env:POLY_TITLEPADDING}
+
+[module/wlan2]
+type = internal/network
+interface = ${env:POLY_WLAN2}
+interval = 3.0
+
+format-connected = <label-connected>
+format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT5BODY}
+label-connected = %essid%|%downspeed%
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
+label-connected-background = ${env:POLY_GRADIENT5BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
 
 #LAN--------------------------------------------------------------------------
@@ -321,14 +465,14 @@ interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-connected-prefix-foreground = ${env:POLY_TITLEBG}
-format-connected-prefix-background = #00000000
+format-connected-prefix-foreground = ${env:POLY_GRADIENT6TITLE}
+#format-connected-prefix-background = ${POLY_BACKGROUND}
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_TITLEBG}
-format-connected-suffix-background = ${env:POLY_BODYBG}
-label-connected = 
-label-connected-foreground = ${env:POLY_TITLEFG}
-label-connected-background = ${env:POLY_TITLEBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT6TITLE}
+format-connected-suffix-background = ${env:POLY_GRADIENT6BODY}
+label-connected = %{T3}%{T-}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-connected-background = ${env:POLY_GRADIENT6TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
 [module/lan1]
@@ -337,10 +481,10 @@ interface = ${env:POLY_LAN1}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_BODYBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT6BODY}
 label-connected = %downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
-label-connected-background = ${env:POLY_BODYBG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
+label-connected-background = ${env:POLY_GRADIENT6BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
 
 [module/lanPrefix2]
@@ -349,14 +493,14 @@ interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-prefix = ${env:POLY_RIGHTMODULEPREFIX}
-format-connected-prefix-foreground = ${env:POLY_TITLEBG}
-format-connected-prefix-background = #00000000
+format-connected-prefix-foreground = ${env:POLY_GRADIENT6TITLE}
+#format-connected-prefix-background = ${POLY_BACKGROUND}
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_TITLEBG}
-format-connected-suffix-background = ${env:POLY_BODYBG}
-label-connected = 
-label-connected-foreground = ${env:POLY_TITLEFG}
-label-connected-background = ${env:POLY_TITLEBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT6TITLE}
+format-connected-suffix-background = ${env:POLY_GRADIENT6BODY}
+label-connected = %{T3}%{T-}
+label-connected-foreground = ${env:POLY_GRADIENTTITLEFG}
+label-connected-background = ${env:POLY_GRADIENT6TITLE}
 label-connected-padding = ${env:POLY_TITLEPADDING}
 
 [module/lan2]
@@ -365,11 +509,83 @@ interface = ${env:POLY_LAN2}
 interval = 3.0
 format-connected = <label-connected>
 format-connected-suffix = ${env:POLY_RIGHTMODULESUFFIX}
-format-connected-suffix-foreground = ${env:POLY_BODYBG}
+format-connected-suffix-foreground = ${env:POLY_GRADIENT6BODY}
 label-connected = %downspeed%
-label-connected-foreground = ${env:POLY_BODYFG}
-label-connected-background = ${env:POLY_BODYBG}
+label-connected-foreground = ${env:POLY_GRADIENTBODYFG}
+label-connected-background = ${env:POLY_GRADIENT6BODY}
 label-connected-padding = ${env:POLY_BODYPADDING}
+
+# BATTERY
+[module/batteryPrefix]
+type = internal/battery
+full-at = 97
+battery = BAT0
+adapter = ADP1
+format-charging = %{T3}<animation-charging>%{T-}
+format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-charging-background = ${env:POLY_GRADIENT4TITLE}
+format-charging-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-charging-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-charging-prefix-background = ${env:POLY_BACKGROUND}
+format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-charging-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-charging-suffix-background = ${env:POLY_GRADIENT4BODY}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+; Framerate in milliseconds
+animation-charging-framerate = 1000
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+format-discharging = %{T3}<ramp-capacity>%{T-}
+format-discharging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-discharging-background = ${env:POLY_GRADIENT4TITLE}
+format-discharging-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-discharging-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-discharging-prefix-background = ${env:POLY_BACKGROUND}
+format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-discharging-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-discharging-suffix-background = ${env:POLY_GRADIENT4BODY} 
+format-charging-padding = ${env:POLY_TITLEPADDING}
+format-discharging-padding = ${env:POLY_TITLEPADDING}
+
+format-full = %{T3}<label-full>%{T-}
+format-full-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-full-background = ${env:POLY_GRADIENT4TITLE}
+format-full-prefix = ${env:POLY_RIGHTMODULEPREFIX}
+format-full-prefix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-full-prefix-background = ${env:POLY_BACKGROUND}
+format-full-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-full-suffix-foreground = ${env:POLY_GRADIENT4TITLE}
+format-full-suffix-background = ${env:POLY_BACKGROUND}
+label-full = 
+
+[module/battery]
+type = internal/battery
+full-at = 97
+battery = BAT0
+adapter = ADP1
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-full = 
+label-discharging-padding = ${env:POLY_BODYPADDING}
+label-charging-padding = ${env:POLY_BODYPADDING}
+label-full-padding = ${env:POLY_BODYPADDING}
+format-charging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-charging-background = ${env:POLY_GRADIENT4TITLE}
+format-charging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-charging-suffix-foreground = ${env:POLY_GRADIENT4BODY}
+format-charging-suffix-background = ${env:POLY_BACKGROUND} 
+format-discharging-foreground = ${env:POLY_GRADIENTTITLEFG}
+format-discharging-background = ${env:POLY_GRADIENT4TITLE}
+format-discharging-suffix = ${env:POLY_RIGHTMODULESUFFIX}
+format-discharging-suffix-foreground = ${env:POLY_GRADIENT4BODY}
+format-discharging-suffix-background = ${env:POLY_BACKGROUND} 
 
 #POWER------------------------------------------------------------------------
 [module/powermenu]
@@ -378,7 +594,6 @@ expand-right = false
 
 label-open = ${env:POLY_POWER_OPEN}
 label-close = ${env:POLY_POWER_CLOSE}
-label-separator = ${env:POLY_MODULESEPARATOR:}
 
 menu-0-0 = ${env:POLY_REBOOT}
 menu-0-0-exec = reboot

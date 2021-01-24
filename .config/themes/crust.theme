@@ -1,0 +1,36 @@
+terminal_colors:  "pywal"
+wallpaper: "crust.png"
+blurWall: false
+bodyfg: "background"
+bodybg: "red"
+titlefg: "background"
+titlebg: "green"
+focusedfg: "background"
+focusedbg: "green"
+urgentfg: "background"
+urgentbg: "yellow"
+altfg: "blue"
+altbg: "red"
+gradient:
+    - "cyan"
+    - "green"
+    - "white"
+    - "yellow"
+    - "green"
+    - "red"
+    - "magenta"
+moduleseparator: ""
+wspadding: 0
+background: "00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "green"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

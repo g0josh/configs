@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "towerwatch.jpg"
+bodyfg: "background"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "red"
+focusedfg: "background"
+focusedbg: "red"
+urgentfg: "background"
+urgentbg: "green"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "blue"
+    - "green"
+moduleseparator: ""
+wspadding: 0
+background: "cyan"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "green"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

@@ -1,23 +1,35 @@
-{
-    "bodyfg":"#c495b5",
-    "bodybg":"#331f4d",
-    "titlefg":"#1f034d",
-    "titlebg":"#bd3545",
-    "focusedfg":"#1f034d",
-    "focusedbg":"#d23c4d",
-    "urgentfg":"#1f034d",
-    "urgentbg":"#e37b83",
-    "altfg":"#1f034d",
-    "altbg":"#e37b83",
-    "moduleseparator":"",
-    "wspadding":0,
-    "background":"#00000000",
-    "leftmoduleprefix":"",
-    "leftmodulesuffix":"",
-    "rightmoduleprefix":"",
-    "rightmodulesuffix":"",
-    "titlepadding":0,
-    "bodypadding":1,
-    "focusedwindowborder":"#00CED1",
-    "windowborder":"#000212"
-}
+terminal_colors: "pywal"
+wallpaper: "feathers.png"
+bodyfg: "background"
+bodybg: "blue"
+titlefg: "background"
+titlebg: "red"
+focusedfg: "foreground"
+focusedbg: "green"
+urgentfg: "foreground"
+urgentbg: "blue"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "bright_yellow"
+    - "yellow"
+    - "cyan"
+    - "green"
+    - "red"
+    - "blue"
+    - "magenta"
+moduleseparator: ""
+wspadding: 0
+background: "green" 
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0

@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "treeTrunk.jpg"
+bodyfg: "background"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "green"
+focusedfg: "background"
+focusedbg: "green"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "white"
+    - "red"
+    - "magenta"
+    - "green"
+    - "blue"
+    - "cyan"
+    - "yellow"
+moduleseparator: ""
+wspadding: 0
+background: "#00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "yellow"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 3
+barbottomborder : 0

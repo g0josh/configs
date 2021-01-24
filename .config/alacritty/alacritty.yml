@@ -1,29 +1,30 @@
 alt_send_esc: true
-background_opacity: 1.0
+background_opacity: 0.97
 colors:
   bright:
-    black: '#7f7f7a'
-    blue: '#5986b2'
-    cyan: '#f2854a'
-    green: '#664233'
-    magenta: '#d9ae98'
-    red: '#b23636'
-    white: '#4c4742'''
-    yellow: '#bf8f60'
+    black: '#628a9c'
+    blue: '#D35361'
+    cyan: '#0657A1'
+    green: '#9D2751'
+    magenta: '#124992'
+    red: '#D91621'
+    white: '#8dc6df'
+    yellow: '#D72C4F'
   indexed_colors: []
   normal:
-    black: '#666661'
-    blue: '#4c7399'
+    black: '#080E34'
+    blue: '#D35361'
     cursor: '#ffffff'
-    cyan: '#d97742'
-    green: '#4c3226'
-    magenta: '#bf9986'
-    red: '#992e2e'
-    white: '#34302d'
-    yellow: '#a67c53'
+    cursorColor: '#8dc6df'
+    cyan: '#0657A1'
+    green: '#9D2751'
+    magenta: '#124992'
+    red: '#D91621'
+    white: '#8dc6df'
+    yellow: '#D72C4F'
   primary:
-    background: '#f5e7de'
-    foreground: '#34302d'
+    background: '#080E34'
+    foreground: '#8dc6df'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -34,26 +35,25 @@ debug:
   ref_test: false
   render_timer: false
 draw_bold_text_with_bright_colors: true
-dynamic_title: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: Iosevka Term SS03 Medium
-    style: Medium Italic
+    family: Iosevka Nerd Font Mono
+    style: Bold Italic
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: Iosevka Term SS03
-    style: Bold Italic
+    family: Iosevka Nerd Font Mono
+    style: Italic
   normal:
-    family: Iosevka Term SS03 Medium
+    family: Iosevka Nerd Font Mono
     style: Regular
   offset:
     x: 0
     y: 0
-  size: 13.0
-  use_thin_strokes: false
+  size: 12.0
+  use_thin_strokes: true
 key_bindings:
 - action: Paste
   key: V
@@ -68,7 +68,7 @@ key_bindings:
   key: Equals
   mods: Control
 - action: DecreaseFontSize
-  key: Subtract
+  key: Minus
   mods: Control
 - action: Paste
   key: Paste
@@ -393,26 +393,19 @@ mouse_bindings:
 - action: PasteSelection
   mouse: Middle
 scrolling:
-  auto_scroll: false
-  faux_multiplier: 3
-  history: 10000
   multiplier: 3
 selection:
   save_to_clipboard: true
   semantic_escape_chars: ",\u2502`|:\"' ()[]{}<>"
-tabspaces: 4
-visual_bell:
-  animation: EaseOutExpo
-  color: '0xffffff'
-  duration: 0
 window:
   decorations: none
   dimensions:
     columns: 0
     lines: 0
   dynamic_padding: false
+  dynamic_title: true
   padding:
-    x: 10
-    y: 10
+    x: 20
+    y: 20
   startup_mode: Windowed
 working_directory: None

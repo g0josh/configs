@@ -1,0 +1,35 @@
+terminal_colors:  "pywal"
+wallpaper: "island.jpg"
+bodyfg: "000000"
+bodybg: "green"
+titlefg: "background"
+titlebg: "magenta"
+focusedfg: "background"
+focusedbg: "magenta"
+urgentfg: "background"
+urgentbg: "white"
+altfg: "red"
+altbg: "foreground"
+gradient:
+    - "red"
+    - "green"
+    - "yellow"
+    - "blue"
+    - "magenta"
+    - "cyan"
+    - "white"
+moduleseparator: ""
+wspadding: 0
+background: "background"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "magenta"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0

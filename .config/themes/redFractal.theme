@@ -1,0 +1,71 @@
+terminal_colors:
+    "! special
+    *.foreground:   #d3a8bf
+    *.background:   #090209
+    *.cursorColor:  #d3a8bf
+
+    ! black
+    *.color0:       #090209
+    *.color8:       #937585
+
+    ! red
+    *.color1:       #900227
+    *.color9:       #ab022f
+
+    ! green
+    *.color2:       #633d58
+    *.color10:      #633d58
+
+    ! yellow
+    *.color3:       #a65a85
+    *.color11:      #a65a85
+
+    ! blue
+    *.color4:       #5c091f
+    *.color12:      #5c091f
+
+    ! magenta
+    *.color5:       #58274e
+    *.color13:      #58274e
+
+    ! cyan
+    *.color6:       #b31c4e
+    *.color14:      #b31c4e
+
+    ! white
+    *.color7:       #d3a8bf
+    *.color15:      #d3a8bf"
+wallpaper: "redFractal.jpg"
+bodyfg: "background"
+bodybg: "green"
+titlefg: "background"
+titlebg: "blue"
+focusedfg: "background"
+focusedbg: "blue"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "white"
+    - "yellow"
+    - "green"
+    - "magenta"
+    - "cyan"
+    - "blue"
+    - "red"
+moduleseparator: ""
+wspadding: 0
+background: "#000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

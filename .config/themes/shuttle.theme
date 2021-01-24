@@ -1,0 +1,71 @@
+terminal_colors:
+    "! special
+    *.foreground:   #e3dad1
+    *.background:   #0c080d
+    *.cursorColor:  #e3dad1
+
+    ! black
+    *.color0:       #0c080d
+    *.color8:       #9e9892
+
+    ! red
+    *.color1:       #911728
+    *.color9:       #b72520
+
+    ! green
+    *.color2:       #57293b
+    *.color10:      #c05a82
+
+    ! yellow
+    *.color3:       #ba5622
+    *.color11:      #fa752f
+
+    ! blue
+    *.color4:       #224260
+    *.color12:      #2087e6
+
+    ! magenta
+    *.color5:       #94605d
+    *.color13:      #ff857e
+
+    ! cyan
+    *.color6:       #7b8689
+    *.color14:      #21cfff
+
+    ! white
+    *.color7:       #e3dad1
+    *.color15:      #e3dad1"
+wallpaper: "shuttle.png"
+bodyfg: "white"
+bodybg: "magenta"
+titlefg: "white"
+titlebg: "bright_red"
+focusedfg: "white"
+focusedbg: "bright_red"
+urgentfg: "white"
+urgentbg: "bright_yellow"
+altfg: "white"
+altbg: "yellow"
+gradient:
+    - "bright_green"
+    - "bright_yellow"
+    - "yellow"
+    - "bright_red"
+    - "blue"
+    - "magenta"
+    - "green"
+moduleseparator: ""
+wspadding: 0
+background: "00000000"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "green"
+windowborder: "background"
+barleftborder : 10
+barrightborder : 10
+bartopborder : 3
+barbottomborder : 0

@@ -1,0 +1,71 @@
+terminal_colors:
+    "! special
+    *.foreground:   #c5979b
+    *.background:   #01030f
+    *.cursorColor:  #c5979b
+
+    ! black
+    *.color0:       #01030f
+    *.color8:       #89696c
+
+    ! red
+    *.color1:       #730d36
+    *.color9:       #730d36
+
+    ! green
+    *.color2:       #4e113d
+    *.color10:      #581044
+
+    ! yellow
+    *.color3:       #a23d3f
+    *.color11:      #a23d3f
+
+    ! blue
+    *.color4:       #132a5d
+    *.color12:      #0c338a
+
+    ! magenta
+    *.color5:       #2b142a
+    *.color13:      #461f43
+
+    ! cyan
+    *.color6:       #2c44bb
+    *.color14:      #2c5bbb
+
+    ! white
+    *.color7:       #c5979b
+    *.color15:      #c5979b"
+wallpaper: "fluorescentMountains.jpg"
+bodyfg: "bright_black"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "yellow"
+focusedfg: "background"
+focusedbg: "yellow"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "cyan"
+gradient:
+    - "yellow"
+    - "red"
+    - "green"
+    - "bright_magenta"
+    - "magenta"
+    - "blue"
+    - "cyan"
+moduleseparator: ""
+wspadding: 0
+background: "background"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "bright_yellow"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0

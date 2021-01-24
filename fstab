@@ -1,0 +1,16 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/nvme0n1p6
+UUID=9d800c90-63f7-4b0e-a9ad-82d1bc49d040	/         	ext4      	rw,relatime	0 1
+
+# /dev/sda2 LABEL=Media
+UUID=268A20F48A20C263	/mnt/media    	ntfs      	rw,nosuid,nodev,user_id=0,group_id=0,allow_other,blksize=4096	0 0
+
+# /dev/nvme0n1p2 LABEL=ESP
+UUID=2AD1-7E1D      	/boot     	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/sdb2 LABEL=Storage
+UUID=701A66371A65FA8C	/mnt/storage  	ntfs      	rw,nosuid,nodev,user_id=0,group_id=0,allow_other,blksize=4096	0 0
+

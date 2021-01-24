@@ -8,11 +8,14 @@ Xft.rgba:      rgba
 
 !URxvt----------------------------
 !URxvt.letterSpace:0
-URxvt.font: xft:Iosevka Term SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
-URxvt.boldFont: xft:Iosevka Term SS03 Medium:style=Medium Italic:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
-URxvt.italicFont: xft:Iosevka Term SS03:style=Bold Italic:size=13:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
+!URxvt.font: xft:JetBrainsMono Nerd Font Mono:style=Regular:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=12
+!URxvt.boldFont: xft:JetBrainsMono Nerd Font Mono:style=Bold Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=12
+!URxvt.italicFont: xft:JetBrainsMono Nerd Font Mono:style=Bold Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=12
+URxvt.font: xft:Iosevka Nerd Font Mono:style=Regular:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
+URxvt.boldFont: xft:Iosevka Nerd Font Mono:style=Medium Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
+URxvt.italicFont: xft:Iosevka Nerd Font Mono:style=Bold Italic:size=12:antialias=true:hinting=true:minispace=False,xft:Font Awesome 5 Free Regular:style=Regular:size=20
 
-URxvt.depth:                    32
+URxvt.depth:                    24
 URxvt*internalBorder:           20
 URxvt*scrollBar:                false
 URxvt*scrollTtyOutput:          false
@@ -24,9 +27,12 @@ URxvt*saveLines:                10000
 !URxvt*fadeColor:		#0d0b0b
 !URxvt*blurRadius:		5
 
-URxvt.keysym.C-0: command:\033]710;xft:Iosevka\ Term\ SS03:style=Regular:size=13:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Term\ SS03\ Medium:style=Medium\ Italic:size=13:antialias=true:hinting=true:minispace=False\007
-URxvt.keysym.C-minus: command:\033]710;xft:Iosevka\ Term\ SS03:style=Regular:size=10:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Term\ SS03\ Medium:style=Medium\ Italic:size=10:antialias=true:hinting=true:minispace=False\007
-URxvt.keysym.C-equal: command:\033]710;xft:Iosevka\ Term\ SS03:style=Regular:size=16:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Term\ SS03\ Medium:style=Medium\ Italic:size=16:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-0: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=12:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=12:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-7: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=4:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=4:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-8: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=6:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=6:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-9: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=8:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=8:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-minus: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=10:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=10:antialias=true:hinting=true:minispace=False\007
+URxvt.keysym.C-equal: command:\033]710;xft:Iosevka\ Nerd\ Font\ Mono:style=Regular:size=16:antialias=true:hinting=true:minispace=False\007\033]711;xft:Iosevka\ Nerd\ Font\ Mono:style=Medium\ Italic:size=16:antialias=true:hinting=true:minispace=False\007
 
 !Pass on Ctrl Tab correctly
 URxvt.keysym.Control-Tab:                      \033[27;5;9~
