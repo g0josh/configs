@@ -214,20 +214,34 @@ keys = [
     # Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')),
     #     lazy.function(lambda x: updateVolumeWidgets())),
 
+    # Key([], "XF86AudioPlay", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([], "XF86AudioPlay", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+        "mpc toggle")),
+    # Key([MOD, ALT], "space", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([MOD, ALT], "space", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+        "mpc toggle")),
+    # Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+        "mpc prev")),
+    # Key([MOD, ALT], "Left", lazy.spawn(
+    #     "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD, ALT], "Left", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+        "mpc prev")),
+    # Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+        "mpc next")),
+    # Key([MOD, ALT], "Right", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD, ALT], "Right", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
-    Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
-    Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+        "mpc next")),
+    # Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
+    # Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
 
     # Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
     # Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
