@@ -37,7 +37,7 @@ groups = [
     Group(
         name='4', label=f'4 {getIcons()["folder"]}', init=True, spawn='nautilus'),
     Group(name='5', label=f'5 {getIcons()["music"]}', matches=[
-          Match(title=['musikcube'])]),
+          Match(wm_class=['music'])]),
     Group(name='6', label=f'6 {getIcons()["user"]}', matches=[
           Match(wm_class=['Transmission-gtk', 'Uget-gtk'])]),
     Group(name='7', label=f'7 {getIcons()["user"]}'),

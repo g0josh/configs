@@ -11,6 +11,5 @@ udiskie -2 &
 urxvtd &
 rslync --config ~/.config/resilio-sync/config.json 
 picom --experimental-backends &
-urxvt -e musikcube &
-mcc --updated-callback 'polybar-msg hook musik 1' &
-reload-screens
+urxvt -name music -e ncmpcpp &
+reload-screens &
