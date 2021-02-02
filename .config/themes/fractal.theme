@@ -1,11 +1,46 @@
-terminal_colors:  "pywal"
+terminal_colors: "! special
+    *.foreground:   #79d9e9
+    *.background:   #010011
+    *.cursorColor:  #79d9e9
+
+    ! black
+    *.color0:       #010011
+    *.color8:       #5497a3
+
+    ! red
+    *.color1:       #b54c65
+    *.color9:       #b54c65
+
+    ! green
+    *.color2:       #db684a
+    *.color10:      #db684a
+
+    ! yellow
+    *.color3:       #4f78ec
+    *.color11:      #4f78ec
+
+    ! blue
+    *.color4:       #1b39ca
+    *.color12:      #1b39ca
+
+    ! magenta
+    *.color5:       #ad0dba
+    *.color13:      #ad0dba
+
+    ! cyan
+    *.color6:       #0296e1
+    *.color14:      #0296e1
+
+    ! white
+    *.color7:       #79d9e9
+    *.color15:      #79d9e9"
 wallpaper: "fractal.jpg"
 bodyfg: "background"
-bodybg: "magenta"
+bodybg: "blue"
 titlefg: "background"
-titlebg: "green"
+titlebg: "magenta"
 focusedfg: "background"
-focusedbg: "green"
+focusedbg: "magenta"
 urgentfg: "background"
 urgentbg: "bright_cyan"
 altfg: "blue"
