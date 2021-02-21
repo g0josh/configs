@@ -173,13 +173,19 @@ keys = [
 
     # Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets()), polybar_hook),
     Key([MOD, ALT, "control"], "Up", lazy.prev_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "k", lazy.prev_screen(), polybar_hook),
     # Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
     Key([MOD, ALT, "control"], "Down", lazy.next_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "j", lazy.next_screen(), polybar_hook),
     # Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
     Key([MOD, ALT, "control"], "Right", lazy.function(
         lambda x:next_prev_group(x, next=True)), changeWallpaper, polybar_hook),
+    Key([MOD, ALT, "control"], "l", lazy.function(
+        lambda x:next_prev_group(x, next=True)), changeWallpaper, polybar_hook),
     # Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
     Key([MOD, ALT, "control"], "Left", lazy.function(
+        lambda x:next_prev_group(x, next=False)), changeWallpaper, polybar_hook),
+    Key([MOD, ALT, "control"], "h", lazy.function(
         lambda x:next_prev_group(x, next=False)), changeWallpaper, polybar_hook),
     # Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
     Key([MOD], "u", lazy.next_urgent(), polybar_hook),
