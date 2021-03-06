@@ -2,29 +2,29 @@ alt_send_esc: true
 background_opacity: 0.97
 colors:
   bright:
-    black: '#628a9c'
-    blue: '#D35361'
-    cyan: '#0657A1'
-    green: '#9D2751'
-    magenta: '#124992'
-    red: '#D91621'
-    white: '#8dc6df'
-    yellow: '#D72C4F'
+    black: '#9e9892'
+    blue: '#2087e6'
+    cyan: '#21cfff'
+    green: '#c05a82'
+    magenta: '#ff857e'
+    red: '#b72520'
+    white: '#e3dad1'
+    yellow: '#fa752f'
   indexed_colors: []
   normal:
-    black: '#080E34'
-    blue: '#D35361'
+    black: '#0c080d'
+    blue: '#224260'
     cursor: '#ffffff'
-    cursorColor: '#8dc6df'
-    cyan: '#0657A1'
-    green: '#9D2751'
-    magenta: '#124992'
-    red: '#D91621'
-    white: '#8dc6df'
-    yellow: '#D72C4F'
+    cursorColor: '#e3dad1'
+    cyan: '#7b8689'
+    green: '#57293b'
+    magenta: '#94605d'
+    red: '#911728'
+    white: '#e3dad1'
+    yellow: '#ba5622'
   primary:
-    background: '#080E34'
-    foreground: '#8dc6df'
+    background: '#0c080d'
+    foreground: '#e3dad1'
 cursor:
   style: Block
   unfocused_hollow: true

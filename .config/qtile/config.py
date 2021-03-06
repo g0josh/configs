@@ -297,7 +297,7 @@ layout_configs = {
 }
 
 layouts = [
-    layout.Columns(num_columns=3, **layout_configs),
+    layout.Columns(num_columns=2, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
@@ -373,7 +373,7 @@ wmname = "LG3D"
 
 
 @hook.subscribe.screen_change
-def restart_on_randr(qtile, ev):
+def restart_on_randr(qtile):
     start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
 

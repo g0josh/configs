@@ -6,7 +6,6 @@ if [ -f $theme ]; then
     xrdb -merge $theme
 fi
 
-numlockx on
 udiskie -2 &
 urxvtd &
 rslync --config ~/.config/resilio-sync/config.json 
