@@ -37,7 +37,7 @@ groups = [
     Group(
         name='4', label=f'4 {getIcons()["folder"]}', init=True, spawn='nautilus'),
     Group(name='5', label=f'5 {getIcons()["music"]}', matches=[
-          Match(title=['musikcube'])]),
+          Match(wm_class=['music'])]),
     Group(name='6', label=f'6 {getIcons()["user"]}', matches=[
           Match(wm_class=['Transmission-gtk', 'Uget-gtk'])]),
     Group(name='7', label=f'7 {getIcons()["user"]}'),
@@ -172,14 +172,20 @@ keys = [
     Key([MOD], "q", lazy.window.kill()),
 
     # Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), lazy.function(lambda x:updateGroupWidgets()), polybar_hook),
-    Key([MOD, "shift", "control"], "Up", lazy.prev_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "Up", lazy.prev_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "k", lazy.prev_screen(), polybar_hook),
     # Key([MOD, "shift", "control"], "Down", lazy.next_screen(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
-    Key([MOD, "shift", "control"], "Down", lazy.next_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "Down", lazy.next_screen(), polybar_hook),
+    Key([MOD, ALT, "control"], "j", lazy.next_screen(), polybar_hook),
     # Key([MOD, "shift", "control"], "Right", lazy.function(lambda x:next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
-    Key([MOD, "shift", "control"], "Right", lazy.function(
+    Key([MOD, ALT, "control"], "Right", lazy.function(
+        lambda x:next_prev_group(x, next=True)), changeWallpaper, polybar_hook),
+    Key([MOD, ALT, "control"], "l", lazy.function(
         lambda x:next_prev_group(x, next=True)), changeWallpaper, polybar_hook),
     # Key([MOD, "shift", "control"], "Left", lazy.function(lambda x:next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper, polybar_hook),
-    Key([MOD, "shift", "control"], "Left", lazy.function(
+    Key([MOD, ALT, "control"], "Left", lazy.function(
+        lambda x:next_prev_group(x, next=False)), changeWallpaper, polybar_hook),
+    Key([MOD, ALT, "control"], "h", lazy.function(
         lambda x:next_prev_group(x, next=False)), changeWallpaper, polybar_hook),
     # Key([MOD], "u", lazy.next_urgent(), lazy.function(lambda x:updateGroupWidgets(), polybar_hook)),
     Key([MOD], "u", lazy.next_urgent(), polybar_hook),
@@ -214,26 +220,44 @@ keys = [
     # Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')),
     #     lazy.function(lambda x: updateVolumeWidgets())),
 
+    # Key([], "XF86AudioPlay", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([], "XF86AudioPlay", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+        "mpc toggle")),
+    # Key([MOD, ALT], "space", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([MOD, ALT], "space", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+        "mpc toggle")),
+    # Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+        "mpc prev")),
+    # Key([MOD, ALT], "Left", lazy.spawn(
+    #     "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD, ALT], "Left", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+        "mpc prev")),
+    # Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+        "mpc next")),
+    # Key([MOD, ALT], "Right", lazy.spawn(
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD, ALT], "Right", lazy.spawn(
-        "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
-    Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
-    Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+        "mpc next")),
+    # Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
+    # Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
 
     # Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
     # Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
-    Key([MOD, ALT, "control"], "Right", lazy.function(
+    Key([MOD, "shift", "control"], "Right", lazy.function(
         lambda x:window_to_next_prev_group(x, next=True)), polybar_hook, changeWallpaper),
-    Key([MOD, ALT, "control"], "Left", lazy.function(
+    Key([MOD, "shift", "control"], "Left", lazy.function(
+        lambda x:window_to_next_prev_group(x, next=False)), polybar_hook, changeWallpaper),
+    Key([MOD, "shift", "control"], "l", lazy.function(
+        lambda x:window_to_next_prev_group(x, next=True)), polybar_hook, changeWallpaper),
+    Key([MOD, "shift", "control"], "h", lazy.function(
         lambda x:window_to_next_prev_group(x, next=False)), polybar_hook, changeWallpaper),
 
     Key([MOD, "control"], "r", lazy.restart()),
@@ -273,7 +297,7 @@ layout_configs = {
 }
 
 layouts = [
-    layout.Columns(num_columns=3, **layout_configs),
+    layout.Columns(num_columns=2, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
@@ -323,19 +347,20 @@ auto_fullscreen = True
 #focus_on_window_activation = "smart"
 
 screens = []
-# for n in range(NUM_SCREENS):
-#    screens.append(
-#       Screen(
-#           top=bar.Bar(
-#               widgets=getWidgets(THEME, n, groups),
-#               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
-#                                                        THEME['barleftborder'],
-#                                                        THEME['barbottomborder'],
-#                                                        THEME['barrightborder']],
-#               background=THEME['background'], opacity=1
-#           )
-#       )
-#   )
+for n in range(NUM_SCREENS):
+   screens.append(
+      Screen(
+        #   top=bar.Bar(
+        #       widgets=getWidgets(THEME, n, groups),
+        #       size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
+        #                                                THEME['barleftborder'],
+        #                                                THEME['barbottomborder'],
+        #                                                THEME['barrightborder']],
+        #       background=THEME['background'], opacity=1
+        #   )
+        top=bar.Gap(20)
+      )
+  )
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -349,40 +374,19 @@ wmname = "LG3D"
 
 
 @hook.subscribe.screen_change
-def restart_on_randr(qtile, ev):
-    start = os.path.expanduser(AUTOSTART_SCRIPT)
-    subprocess.call([start])
-
-
 @hook.subscribe.startup_once
-def startOnce():
+def restart_on_randr(qtile):
     start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
-
-
-@hook.subscribe.client_new
-def windowAdded(c):
-    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
-        updateWallpaper(c.qtile, 1)
-    # updateGroupWidgets()
-    _polybar_hook()
-
 
 @hook.subscribe.client_killed
+@hook.subscribe.client_focus
+@hook.subscribe.client_new
 def windowDeleted(c):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(c.qtile, -1)
     # updateGroupWidgets()
     _polybar_hook()
-
-
-'''
-@hook.subscribe.startup
-def start():
-    start = os.path.expanduser(AUTOSTART_SCRIPT)
-    subprocess.call([start])
-'''
-
 
 @hook.subscribe.startup_complete
 def refreshWidgets():
