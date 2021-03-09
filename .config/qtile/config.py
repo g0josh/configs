@@ -347,19 +347,20 @@ auto_fullscreen = True
 #focus_on_window_activation = "smart"
 
 screens = []
-# for n in range(NUM_SCREENS):
-#    screens.append(
-#       Screen(
-#           top=bar.Bar(
-#               widgets=getWidgets(THEME, n, groups),
-#               size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
-#                                                        THEME['barleftborder'],
-#                                                        THEME['barbottomborder'],
-#                                                        THEME['barrightborder']],
-#               background=THEME['background'], opacity=1
-#           )
-#       )
-#   )
+for n in range(NUM_SCREENS):
+   screens.append(
+      Screen(
+        #   top=bar.Bar(
+        #       widgets=getWidgets(THEME, n, groups),
+        #       size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
+        #                                                THEME['barleftborder'],
+        #                                                THEME['barbottomborder'],
+        #                                                THEME['barrightborder']],
+        #       background=THEME['background'], opacity=1
+        #   )
+        top=bar.Gap(20)
+      )
+  )
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -373,40 +374,19 @@ wmname = "LG3D"
 
 
 @hook.subscribe.screen_change
+@hook.subscribe.startup_once
 def restart_on_randr(qtile):
     start = os.path.expanduser(AUTOSTART_SCRIPT)
     subprocess.call([start])
 
-
-@hook.subscribe.startup_once
-def startOnce():
-    start = os.path.expanduser(AUTOSTART_SCRIPT)
-    subprocess.call([start])
-
-
-@hook.subscribe.client_new
-def windowAdded(c):
-    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
-        updateWallpaper(c.qtile, 1)
-    # updateGroupWidgets()
-    _polybar_hook()
-
-
 @hook.subscribe.client_killed
+@hook.subscribe.client_focus
+@hook.subscribe.client_new
 def windowDeleted(c):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(c.qtile, -1)
     # updateGroupWidgets()
     _polybar_hook()
-
-
-'''
-@hook.subscribe.startup
-def start():
-    start = os.path.expanduser(AUTOSTART_SCRIPT)
-    subprocess.call([start])
-'''
-
 
 @hook.subscribe.startup_complete
 def refreshWidgets():

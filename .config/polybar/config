@@ -13,7 +13,7 @@ radius = 0
 fixed-center = true
 enable-ipc = true
 background = ${env:POLY_BACKGROUND}
-override-redirect = false
+override-redirect = true
 bottom = ${env:POLY_BOTTOMBAR}
 
 border-top-size = ${env:POLY_BARTOPBORDER}
