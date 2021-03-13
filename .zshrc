@@ -12,3 +12,4 @@ source ~/tools/powerlevel10k/powerlevel10k.zsh-theme
 
 alias ls='ls --color'
 alias vim=nvim
+alias shut='shutdown now'
