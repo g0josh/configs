@@ -1,23 +1,58 @@
-terminal_colors: "pywal"
+terminal_colors: "! special
+    *.foreground:   #d0d7dd
+    *.background:   #0a1115
+    *.cursorColor:  #d0d7dd
+
+    ! black
+    *.color0:       #0a1115
+    *.color8:       #91969a
+
+    ! red
+    *.color1:       #e03f38
+    *.color9:       #e03f38
+
+    ! green
+    *.color2:       #c45f58
+    *.color10:      #c45f58
+
+    ! yellow
+    *.color3:       #eb9933
+    *.color11:      #eb9933
+
+    ! blue
+    *.color4:       #617d92
+    *.color12:      #617d92
+
+    ! magenta
+    *.color5:       #8c847a
+    *.color13:      #8c847a
+
+    ! cyan
+    *.color6:       #cca3a5
+    *.color14:      #cca3a5
+
+    ! white
+    *.color7:       #d0d7dd
+    *.color15:      #d0d7dd"
 wallpaper: "ferrari.jpg"
 bodyfg: "background"
-bodybg: "green"
+bodybg: "blue"
 titlefg: "background"
-titlebg: "red"
+titlebg: "green"
 focusedfg: "background"
-focusedbg: "red"
+focusedbg: "green"
 urgentfg: "background"
-urgentbg: "white"
-altfg: "blue"
-altbg: "foreground"
+urgentbg: "yellow"
+altfg: "background"
+altbg: "magenta"
 gradient:
     - "white"
-    - "yellow"
-    - "green"
-    - "magenta"
     - "cyan"
+    - "magenta"
     - "blue"
+    - "yellow"
     - "red"
+    - "green"
 moduleseparator: ""
 wspadding: 0
 background: "#00000000"
