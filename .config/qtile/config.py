@@ -16,6 +16,7 @@ from my_scripts import getTheme, updateWallpaper, getNumScreens
 #from my_bar import updateGroupWidgets, show_hide_power_widgets, updateVolumeWidgets
 #from my_bar import DEFAULT_FONT, BORDER_FONT, ICON_FONT
 from icons import getIcons
+from cliutils import reload_screens
 
 MOD = "mod4"
 ALT = "mod1"
@@ -23,7 +24,7 @@ ALTTERMINAL = "alacritty"
 TERMINAL = "urxvtc"
 BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
-AUTOSTART_SCRIPT = "~/.config/autostart.sh"
+AUTOSTART_SCRIPT = os.path.expanduser("~/.config/autostart.sh")
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
 DEFAULT_FONT = dict(
     font="Iosevka Nerd Font Medium",
@@ -105,7 +106,6 @@ def changeWallpaper(qtile):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(qtile)
 
-
 keys = [
     # Switch between windows in current stack pane
     Key([MOD], "k", lazy.layout.up()),
@@ -139,8 +139,7 @@ keys = [
     Key([MOD, "control"], "Right", lazy.layout.grow_right()),
 
     Key([MOD, "control"], "n", lazy.layout.normalize()),
-    Key([MOD, "control"], "m", lazy.spawn(
-        os.path.expanduser(AUTOSTART_SCRIPT))),
+    Key([MOD, "control"], "m", lazy.function(lambda x: reload_screens.main())),
     Key([MOD, "shift"], "space", lazy.layout.flip()),
 
 
@@ -297,7 +296,7 @@ layout_configs = {
 }
 
 layouts = [
-    layout.Columns(num_columns=2, **layout_configs),
+    layout.Columns(num_columns=3, **layout_configs),
     layout.MonadTall(**layout_configs, ratio=0.65),
     layout.MonadWide(**layout_configs, ratio=0.65),
     layout.TreeTab(**layout_configs, active_bg=THEME['focusedwindowborder'], inactive_bg=THEME['windowborder'],
@@ -310,9 +309,7 @@ extension_defaults = DEFAULT_FONT.copy()
 
 # Drag floating layouts.
 mouse = [
-    Drag([MOD], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([MOD], "Button3", lazy.window.set_size_floating(),
+    Drag([MOD], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()), Drag([MOD], "Button3", lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
     Click([MOD], "Button2", lazy.window.bring_to_front())
 ]
@@ -375,9 +372,9 @@ wmname = "LG3D"
 
 @hook.subscribe.screen_change
 @hook.subscribe.startup_once
-def restart_on_randr(qtile):
-    start = os.path.expanduser(AUTOSTART_SCRIPT)
-    subprocess.call([start])
+def restart_on_randr():
+    subprocess.run(['bash', AUTOSTART_SCRIPT])
+    reload_screens.main()
 
 @hook.subscribe.client_killed
 @hook.subscribe.client_focus
