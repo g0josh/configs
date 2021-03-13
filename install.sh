@@ -80,9 +80,9 @@ echo "---------------------------------------"
 echo "Installing zsh theme"
 echo "---------------------------------------"
 echo ""
+chsh -s $(which zsh)
 cd $HOME/tools
 git clone git@github.com:romkatv/powerlevel10k.git
-echo 'source ~/tools/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
 echo ""
 echo "---------------------------------------"
