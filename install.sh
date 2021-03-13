@@ -90,3 +90,24 @@ echo "Cleaning up"
 echo "---------------------------------------"
 echo ""
 sudo apt autoremove
+
+echo ""
+echo "---------------------------------------"
+echo "Mounting drives"
+echo "---------------------------------------"
+echo ""
+sudo mkdir /mnt/hdd /mnt/media
+sudo mount /dev/sda2 /mnt/media
+sudo mount /dev/sdb2 /mnt/hdd
+rm -rf Music Videos Documents Pictures
+ln -s /mnt/hdd/sync Sync
+ln -s /mnt/hdd Hdd
+ln -s /mnt/media Media
+ln -s /mnt/hdd/sync/documents Documents
+ln -s /mnt/hdd/sync/music Music
+ln -s /mnt/hdd/pictures Pictures
+ln -s /mnt/media/movies Videosecho ""
+echo "---------------------------------------"
+echo "Mounted drives, refer fstab and fix /etc/fstab"
+echo "---------------------------------------"
+echo ""
