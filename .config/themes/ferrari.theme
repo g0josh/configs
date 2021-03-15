@@ -44,7 +44,7 @@ focusedbg: "green"
 urgentfg: "background"
 urgentbg: "yellow"
 altfg: "background"
-altbg: "magenta"
+altbg: "cyan"
 gradient:
     - "white"
     - "cyan"
