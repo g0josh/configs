@@ -56,7 +56,8 @@ gradient:
     - "white"
 moduleseparator: ""
 wspadding: 0
-background: "080d22"
+#background: "080d22"
+background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""

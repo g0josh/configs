@@ -55,7 +55,7 @@ gradient:
     - "bright_black"
     - "red"
     - "blue"
-background: "background"
+background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
