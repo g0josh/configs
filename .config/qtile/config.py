@@ -40,7 +40,7 @@ groups = [
     Group(name='5', label=f'5 {getIcons()["music"]}', spawn='musikcube',
           matches=[Match(title='musikcube')]),
     Group(name='6', label=f'6 {getIcons()["mail"]}', spawn=['geary', 'gnome-calendar'],
-          matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
+          layout='monadtall', matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
     Group(name='7', label=f'7 {getIcons()["download"]}',
           matches=[Match(wm_class=['Transmission-gtk', 'Uget-gtk'])]),
     Group(name='8', label=f'8 {getIcons()["user"]}'),
