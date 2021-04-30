@@ -27,7 +27,7 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "blue"
+focusedwindowborder: "green"
 windowborder: "background"
 barleftborder : 300
 barrightborder : 300

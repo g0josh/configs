@@ -36,9 +36,11 @@ groups = [
     Group(name='2', label=f'2 {getIcons()["terminal"]}'),
     Group(name='3', label=f'3 {getIcons()["code"]}'),
     Group(
-        name='4', label=f'4 {getIcons()["folder"]}', init=True, spawn='nautilus'),
-    Group(name='5', label=f'5 {getIcons()["music"]}', matches=[
-          Match(wm_class=['music'])]),
+        name='4', label=f'4 {getIcons()["folder"]}', spawn='nautilus',
+        matches=[Match(wm_class='geary')]),
+    # Group(name='5', label=f'5 {getIcons()["music"]}', spawn='musikcube',
+    Group(name='5', label=f'5 {getIcons()["music"]}',
+          matches=[Match(title='musikcube')]),
     Group(name='6', label=f'6 {getIcons()["user"]}', matches=[
           Match(wm_class=['Transmission-gtk', 'Uget-gtk'])]),
     Group(name='7', label=f'7 {getIcons()["user"]}'),
@@ -105,6 +107,7 @@ def _polybar_hook():
 def changeWallpaper(qtile):
     if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
         updateWallpaper(qtile)
+
 
 keys = [
     # Switch between windows in current stack pane
@@ -219,34 +222,34 @@ keys = [
     # Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')),
     #     lazy.function(lambda x: updateVolumeWidgets())),
 
-    # Key([], "XF86AudioPlay", lazy.spawn(
-    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([], "XF86AudioPlay", lazy.spawn(
-        "mpc toggle")),
-    # Key([MOD, ALT], "space", lazy.spawn(
-    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+         "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+    #Key([], "XF86AudioPlay", lazy.spawn(
+    #    "mpc toggle")),
     Key([MOD, ALT], "space", lazy.spawn(
-        "mpc toggle")),
-    # Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-    #     "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+         "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+    #Key([MOD, ALT], "space", lazy.spawn(
+    #    "mpc toggle")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-        "mpc prev")),
-    # Key([MOD, ALT], "Left", lazy.spawn(
-    #     "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
+         "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    #Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
+    #    "mpc prev")),
     Key([MOD, ALT], "Left", lazy.spawn(
-        "mpc prev")),
-    # Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+         "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
+    #Key([MOD, ALT], "Left", lazy.spawn(
+    #    "mpc prev")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-        "mpc next")),
-    # Key([MOD, ALT], "Right", lazy.spawn(
-    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+         "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    #Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
+    #    "mpc next")),
     Key([MOD, ALT], "Right", lazy.spawn(
-        "mpc next")),
-    # Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
-    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
-    # Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
-    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
+         "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    #Key([MOD, ALT], "Right", lazy.spawn(
+    #    "mpc next")),
+    Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    #Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
+    Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    #Key([MOD, ALT], "l", lazy.spawn("mpc next")),
 
     # Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
     # Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
@@ -265,7 +268,8 @@ keys = [
     # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
-    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot")),
+    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
+    Key([MOD], "s", lazy.spawn("gnome-screenshot")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
 
@@ -273,7 +277,7 @@ keys = [
 for i in groups:
     if i.name == 'scratchpad':
         keys.extend([
-            Key([MOD], "s", lazy.group['scratchpad'].dropdown_toggle('term')),
+            Key([MOD], "w", lazy.group['scratchpad'].dropdown_toggle('term')),
             Key([MOD], "c", lazy.group['scratchpad'].dropdown_toggle('calc'))
         ])
     else:
@@ -310,7 +314,7 @@ extension_defaults = DEFAULT_FONT.copy()
 # Drag floating layouts.
 mouse = [
     Drag([MOD], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()), Drag([MOD], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
+                                                                                                        start=lazy.window.get_size()),
     Click([MOD], "Button2", lazy.window.bring_to_front())
 ]
 
@@ -334,6 +338,7 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'maketag'},  # gitk
     {'wname': 'branchdialog'},  # gitk
     {'wname': 'pinentry'},  # GPG key password entry
+    {'wname': 'Open File'},
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
 ],
     border_width=2,
@@ -345,19 +350,19 @@ auto_fullscreen = True
 
 screens = []
 for n in range(NUM_SCREENS):
-   screens.append(
-      Screen(
-        #   top=bar.Bar(
-        #       widgets=getWidgets(THEME, n, groups),
-        #       size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
-        #                                                THEME['barleftborder'],
-        #                                                THEME['barbottomborder'],
-        #                                                THEME['barrightborder']],
-        #       background=THEME['background'], opacity=1
-        #   )
-        top=bar.Gap(20)
-      )
-  )
+    screens.append(
+        Screen(
+            #   top=bar.Bar(
+            #       widgets=getWidgets(THEME, n, groups),
+            #       size=BORDER_FONT['fontsize'] - 1, margin=[THEME['bartopborder'],
+            #                                                THEME['barleftborder'],
+            #                                                THEME['barbottomborder'],
+            #                                                THEME['barrightborder']],
+            #       background=THEME['background'], opacity=1
+            #   )
+            top=bar.Gap(20)
+        )
+    )
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -376,6 +381,7 @@ def restart_on_randr():
     subprocess.run(['bash', AUTOSTART_SCRIPT])
     reload_screens.main()
 
+
 @hook.subscribe.client_killed
 @hook.subscribe.client_focus
 @hook.subscribe.client_new
@@ -384,6 +390,7 @@ def windowDeleted(c):
         updateWallpaper(c.qtile, -1)
     # updateGroupWidgets()
     _polybar_hook()
+
 
 @hook.subscribe.startup_complete
 def refreshWidgets():
