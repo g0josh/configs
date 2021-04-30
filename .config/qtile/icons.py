@@ -27,5 +27,7 @@ def getIcons():
         'download':"",
         'upload':"",
         'cancel':'',
-        'error':''
+        'error':'',
+        'mail': '',
+        'download':''
     }
