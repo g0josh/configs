@@ -147,7 +147,7 @@ keys = [
 
 
     # Switch window focus to other pane(s) of stack
-    Key([MOD], "space", lazy.layout.next()),
+    # Key([MOD], "space", lazy.layout.next()),
 
     # Swap panes of split stack
     # Key([MOD, "shift"], "space", lazy.layout.rotate()),
@@ -264,7 +264,7 @@ keys = [
 
     Key([MOD, "control"], "r", lazy.restart()),
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
-    Key([MOD], "a", lazy.spawn("rofi -show drun")),
+    Key([MOD], "space", lazy.spawn("rofi -show drun")),
     # Key([MOD], 'a', lazy.spawncmd()),
     Key([], "Print", lazy.spawn("gnome-screenshot")),
     Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),

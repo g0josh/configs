@@ -10,7 +10,7 @@ bodyfg: '#0a0f17'
 bodypadding: 1
 focusedbg: '#9B1B5D'
 focusedfg: '#0a0f17'
-focusedwindowborder: '#656A88'
+focusedwindowborder: '#9B1B5D'
 gradient1body: '#982A95'
 gradient1title: '#982A95'
 gradient2body: '#BE183D'
