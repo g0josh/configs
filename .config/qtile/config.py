@@ -350,6 +350,10 @@ auto_fullscreen = True
 
 screens = []
 for n in range(NUM_SCREENS):
+    if THEME['bottombar']:
+        _settings = {'bottom':bar.Gap(20)}
+    else:
+        _settings = {'top':bar.Gap(20)}
     screens.append(
         Screen(
             #   top=bar.Bar(
@@ -360,8 +364,9 @@ for n in range(NUM_SCREENS):
             #                                                THEME['barrightborder']],
             #       background=THEME['background'], opacity=1
             #   )
-            top=bar.Gap(20)
+            **_settings
         )
+
     )
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
