@@ -38,7 +38,7 @@ groups = [
     Group(
         name='4', label=f'4 {getIcons()["folder"]}', spawn='nautilus'),
     Group(name='5', label=f'5 {getIcons()["music"]}', spawn='musikcube',
-          matches=[Match(title='musikcube')]),
+          matches=[Match(title='musikcube'), Match(wm_class="music")]),
     Group(name='6', label=f'6 {getIcons()["mail"]}', spawn=['geary', 'gnome-calendar'],
           layout='monadtall', matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
     Group(name='7', label=f'7 {getIcons()["download"]}',
@@ -222,34 +222,28 @@ keys = [
     # Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')),
     #     lazy.function(lambda x: updateVolumeWidgets())),
 
-    Key([], "XF86AudioPlay", lazy.spawn(
-         "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     #Key([], "XF86AudioPlay", lazy.spawn(
-    #    "mpc toggle")),
-    Key([MOD, ALT], "space", lazy.spawn(
-         "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+    Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     #Key([MOD, ALT], "space", lazy.spawn(
-    #    "mpc toggle")),
-    Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-         "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
+    Key([MOD, ALT], "space", lazy.spawn("mpc toggle")),
     #Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
-    #    "mpc prev")),
-    Key([MOD, ALT], "Left", lazy.spawn(
-         "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
+    #     "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
     #Key([MOD, ALT], "Left", lazy.spawn(
-    #    "mpc prev")),
-    Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-         "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    #     "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
+    Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
     #Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
-    #    "mpc next")),
-    Key([MOD, ALT], "Right", lazy.spawn(
-         "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
     #Key([MOD, ALT], "Right", lazy.spawn(
-    #    "mpc next")),
-    Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
-    #Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
-    Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
-    #Key([MOD, ALT], "l", lazy.spawn("mpc next")),
+    #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
+    #Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
+    Key([MOD, ALT], "h", lazy.spawn("mpc prev")),
+    #Key([MOD, ALT], "l", lazy.spawn("curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
+    Key([MOD, ALT], "l", lazy.spawn("mpc next")),
 
     # Key([MOD, ALT, "control"], "Right", lazy.function(lambda x:window_to_next_prev_group(x, next=True)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
     # Key([MOD, ALT, "control"], "Left", lazy.function(lambda x:window_to_next_prev_group(x, next=False)), lazy.function(lambda x:updateGroupWidgets()), changeWallpaper),
@@ -350,7 +344,7 @@ auto_fullscreen = True
 
 screens = []
 for n in range(NUM_SCREENS):
-    if THEME['bottombar']:
+    if 'bottombar' in THEME and THEME['bottombar']:
         _settings = {'bottom':bar.Gap(20)}
     else:
         _settings = {'top':bar.Gap(20)}

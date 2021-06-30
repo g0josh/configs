@@ -33,8 +33,8 @@ font-0 = Iosevka Nerd Font Mono:style=Medium:size=12;3:antialias=true
 font-1 = Font Awesome 5 Free: style=Regular:pixelsize=9;2:antialias=true
 font-2 = Font Awesome 5 Free: style=Solid:pixelsize=9;2:antialias=true
 
-#modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
-modules-left = qtileWs sep musikPrefix musik
+modules-left = qtileWs sep mpdPrefix mpd sep mpdPrev sep mpdPlayPause sep mpdNext
+#modules-left = qtileWs sep musikPrefix musik
 #modules-left = qtileWs sep musik
 modules-center = timePrefix time sep timeIndia
 modules-right = capsNumLock sep volumePrefix volume sep utilizationPrefix utilization sep tempPrefix temp sep wlanPrefix1 wlan1 sep lanPrefix1 lan1 lanPrefix2 lan2 sep batteryPrefix battery  powermenu
