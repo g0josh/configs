@@ -1,5 +1,5 @@
 terminal_colors:  "pywal"
-wallpaper: "sweet.png"
+wallpaper: "waves.jpg"
 bodyfg: "background"
 bodybg: "magenta"
 titlefg: "background"
@@ -20,8 +20,7 @@ gradient:
     - "white"
 moduleseparator: ""
 wspadding: 0
-background: "#00000000"
-blurwallpaper: true
+background: "white"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
@@ -30,7 +29,7 @@ titlepadding: 0
 bodypadding: 1
 focusedwindowborder: "red"
 windowborder: "background"
-barleftborder : 10
-barrightborder : 10
+barleftborder : 300
+barrightborder : 300
 bartopborder : 3
 barbottomborder : 0

@@ -1,35 +1,70 @@
-terminal_colors:  "pywal"
+terminal_colors:  "! special
+*.foreground:   #d5d9da
+*.background:   #04080b
+*.cursorColor:  #d5d9da
+
+! black
+*.color0:       #121619
+*.color8:       #959798
+
+! red
+*.color1:       #8b7970
+*.color9:       #8b7970
+
+! green
+*.color2:       #448f7c
+*.color10:      #448f7c
+
+! yellow
+*.color3:       #5b7688
+*.color11:      #5b7688
+
+! blue
+*.color4:       #2d5e8e
+*.color12:      #2d5e8e
+
+! magenta
+*.color5:       #987f6f
+*.color13:      #987f6f
+
+! cyan
+*.color6:       #33b9df
+*.color14:      #33b9df
+
+! white
+*.color7:       #d5d9da
+*.color15:      #d5d9da"
 wallpaper: "merc.jpg"
 bodyfg: "background"
-bodybg: "green"
+bodybg: "yellow"
 titlefg: "background"
-titlebg: "blue"
+titlebg: "cyan"
 focusedfg: "background"
-focusedbg: "blue"
+focusedbg: "cyan"
 urgentfg: "background"
 urgentbg: "white"
 altfg: "red"
 altbg: "foreground"
 gradient:
-    - "red"
-    - "green"
-    - "yellow"
-    - "blue"
-    - "magenta"
     - "cyan"
+    - "red"
+    - "magenta"
+    - "yellow"
+    - "green"
+    - "blue"
     - "white"
 moduleseparator: ""
 wspadding: 0
-background: "background"
+background: #00000000
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: "blue"
+focusedwindowborder: "cyan"
 windowborder: "background"
-barleftborder : 300
-barrightborder : 300
+barleftborder : 200
+barrightborder : 200
 bartopborder : 0
 barbottomborder : 0

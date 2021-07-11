@@ -1,12 +1,12 @@
 terminal_colors:
     "! special
     *.foreground:   #d49988
-    *.background:   #1f1622
+    *.background:   #151016
     *.cursorColor:  #d49988
 
     ! black
-    *.color0:       #3b293e
-    *.color8:       #544357
+    *.color0:       #151016
+    *.color8:       #615863
 
     ! red
     *.color1:       #bd4349

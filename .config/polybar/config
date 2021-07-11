@@ -154,6 +154,7 @@ format-offline-prefix-foreground = ${env:POLY_TITLEBG}
 format-offline-prefix-background = ${env:POLY_BACKGROUND}
 format-offline-suffix-foreground = ${env:POLY_TITLEBG}
 format-offline-suffix-background = ${env:POLY_BACKGROUND}
+format-padding = ${env:POLY_TITLEPADDING}
 
 [module/mpd]
 type = internal/mpd
@@ -166,8 +167,9 @@ label-song-padding = ${env:POLY_BODYPADDING}
 label-time = %elapsed% / %total%
 label-time-padding = ${env:POLY_BODYPADDING}
 label-song-maxlen = 30
-label-song-minlen = 2
+label-song-minlen = 5
 label-song-ellipsis = true
+format-padding = ${env:POLY_BODYPADDING}
 
 format-online-suffix = ${env:POLY_LEFTMODULESUFFIX}
 format-online-suffix-foreground = ${env:POLY_BODYBG}

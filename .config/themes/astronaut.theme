@@ -1,5 +1,6 @@
 terminal_colors:  "pywal"
 wallpaper: "astronaut.png"
+blurwallpaper: true
 bodyfg: "background"
 bodybg: "blue"
 titlefg: "background"
