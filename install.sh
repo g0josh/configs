@@ -23,8 +23,8 @@ echo "Installing packages"
 echo "---------------------------------------"
 echo ""
 sudo apt update
-sudo apt install code tmux pavucontrol firefox rxvt-unicode imagemagick \
-feh bc lm-sensors zsh lxappearance arandr rofi udiskie \
+sudo apt install code pavucontrol firefox rxvt-unicode imagemagick \
+feh bc lm-sensors zsh lxappearance arandr rofi \
 shotwell numlockx polybar neovim python3-opencv -y
 
 echo ""
@@ -70,7 +70,7 @@ echo "Installing CLI tools"
 echo "---------------------------------------"
 echo ""
 cd $HOME/tools
-git clone git@github:g0josh/pycliutils
+git clone git@github.com:g0josh/pycliutils
 cd pycliutils
 git checkout qtile
 pip3 install .
@@ -106,7 +106,7 @@ ln -s /mnt/media Media
 ln -s /mnt/hdd/sync/documents Documents
 ln -s /mnt/hdd/sync/music Music
 ln -s /mnt/hdd/pictures Pictures
-ln -s /mnt/media/movies Videosecho ""
+ln -s /mnt/media/movies Videos
 echo "---------------------------------------"
 echo "Mounted drives, refer fstab and fix /etc/fstab"
 echo "---------------------------------------"

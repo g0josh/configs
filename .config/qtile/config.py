@@ -37,7 +37,7 @@ groups = [
     Group(name='3', label=f'3 {getIcons()["code"]}'),
     Group(
         name='4', label=f'4 {getIcons()["folder"]}', spawn='nautilus'),
-    Group(name='5', label=f'5 {getIcons()["music"]}', spawn='musikcube',
+    Group(name='5', label=f'5 {getIcons()["music"]}',
           matches=[Match(title='musikcube'), Match(wm_class="music")]),
     Group(name='6', label=f'6 {getIcons()["mail"]}', spawn=['geary', 'gnome-calendar'],
           layout='monadtall', matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
@@ -222,22 +222,22 @@ keys = [
     # Key([MOD, ALT], "Next", lazy.function(lambda x:setActiveSink('next')),
     #     lazy.function(lambda x: updateVolumeWidgets())),
 
-    #Key([], "XF86AudioPlay", lazy.spawn(
+    # Key([], "XF86AudioPlay", lazy.spawn(
     #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle")),
-    #Key([MOD, ALT], "space", lazy.spawn(
+    # Key([MOD, ALT], "space", lazy.spawn(
     #     "curl -X POST localhost:7907 -d 'TOGGLE_PAUSE'")),
     Key([MOD, ALT], "space", lazy.spawn("mpc toggle")),
-    #Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
+    # Key([MOD], "XF86AudioLowerVolume", lazy.spawn(
     #     "curl -X POST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD], "XF86AudioLowerVolume", lazy.spawn("mpc prev")),
-    #Key([MOD, ALT], "Left", lazy.spawn(
+    # Key([MOD, ALT], "Left", lazy.spawn(
     #     "curl -X wPOST localhost:7907 -d 'PREV_TRACK'")),
     Key([MOD, ALT], "Left", lazy.spawn("mpc prev")),
-    #Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
+    # Key([MOD], "XF86AudioRaiseVolume", lazy.spawn(
     #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD], "XF86AudioRaiseVolume", lazy.spawn("mpc next")),
-    #Key([MOD, ALT], "Right", lazy.spawn(
+    # Key([MOD, ALT], "Right", lazy.spawn(
     #     "curl -X POST localhost:7907 -d 'NEXT_TRACK'")),
     Key([MOD, ALT], "Right", lazy.spawn("mpc next")),
     #Key([MOD, ALT], "h", lazy.spawn("curl -X POST localhost:7907 -d 'PREV_TRACK'")),
@@ -321,6 +321,7 @@ cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
+    {'role':'Dialog'},
     {'wmclass': 'download'},
     {'wmclass': 'error'},
     {'wmclass': 'file_progress'},
@@ -339,15 +340,15 @@ floating_layout = layout.Floating(float_rules=[
     border_focus=THEME['focusedwindowborder'],
     border_normal=THEME['windowborder']
 )
-auto_fullscreen = True
+# auto_fullscreen = True
 #focus_on_window_activation = "smart"
 
 screens = []
 for n in range(NUM_SCREENS):
     if 'bottombar' in THEME and THEME['bottombar']:
-        _settings = {'bottom':bar.Gap(20)}
+        _settings = {'bottom': bar.Gap(20)}
     else:
-        _settings = {'top':bar.Gap(20)}
+        _settings = {'top': bar.Gap(20)}
     screens.append(
         Screen(
             #   top=bar.Bar(
