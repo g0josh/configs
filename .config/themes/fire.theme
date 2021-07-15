@@ -1,40 +1,39 @@
-terminal_colors:
-    "! special
-    *.foreground:   #7aaea8
-    *.background:   #0a1012
-    *.cursorColor:  #7aaea8
+terminal_colors: "! special
+*.foreground:   #7aaea8
+*.background:   #0a1012
+*.cursorColor:  #7aaea8
 
-    ! black
-    *.color0:       #0a1012
-    *.color8:       #0d242c
+! black
+*.color0:       #0a1012
+*.color8:       #275e6c
 
-    ! red
-    *.color1:       #9c3519
-    *.color9:       #bf4726
+! red
+*.color1:       #9c3519
+*.color9:       #bf4726
 
-    ! green
-    *.color2:       #095a56
-    *.color10:      #17a396
+! green
+*.color2:       #095a3e
+*.color10:      #42b58d
 
-    ! yellow
-    *.color3:       #ff6501
-    *.color11:      #c97244
+! yellow
+*.color3:       #ff6501
+*.color11:      #c97244
 
-    ! blue
-    *.color4:       #09378f
-    *.color12:      #12809a
+! blue
+*.color4:       #0f5364
+*.color12:      #12809a
 
-    ! magenta
-    *.color5:       #865a3e
-    *.color13:      #ebb159
+! magenta
+*.color5:       #6e577e
+*.color13:      #e9b260
 
-    ! cyan
-    *.color6:       #239490
-    *.color14:      #8abeb7
+! cyan
+*.color6:       #239490
+*.color14:      #8abeb7
 
-    ! white
-    *.color7:       #239490
-    *.color15:      #7aaea8"
+! white
+*.color7:       #239490
+*.color15:      #7aaea8"
 wallpaper: "fire.jpg"
 bodyfg: white
 bodybg: bright_black
@@ -48,14 +47,14 @@ altfg: blue
 altbg: foreground
 moduleseparator: ""
 wspadding: 0
-background: background
+background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
-focusedwindowborder: yellow
+focusedwindowborder: red
 windowborder: background
 barleftborder : 10
 barrightborder : 10
