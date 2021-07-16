@@ -4,8 +4,8 @@ terminal_colors: "! special
 *.cursorColor:  #7aaea8
 
 ! black
-*.color0:       #0a1012
-*.color8:       #275e6c
+*.color0:       #0f1d22
+*.color8:       #49626c
 
 ! red
 *.color1:       #9c3519
@@ -36,7 +36,7 @@ terminal_colors: "! special
 *.color15:      #7aaea8"
 wallpaper: "fire.jpg"
 bodyfg: white
-bodybg: bright_black
+bodybg: black
 titlefg: background
 titlebg: red
 focusedfg: background
