@@ -6,7 +6,7 @@ terminal_colors:
 
     ! black
     *.color0:       #150c24
-    *.color8:       #34264b
+    *.color8:       #5b4f6f
 
     ! red
     *.color1:       #d35071
@@ -36,7 +36,7 @@ terminal_colors:
     *.color7:       #f6dacb
     *.color15:      #f6dacb"
 wallpaper: "sunsetCoast.jpg"
-bodyfg: "bright_black"
+bodyfg: "background"
 bodybg: "red"
 titlefg: "background"
 titlebg: "bright_yellow"
@@ -56,7 +56,7 @@ gradient:
     - "magenta"
 moduleseparator: " "
 wspadding: 0
-background: "background"
+background: #00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
@@ -67,5 +67,5 @@ focusedwindowborder: "bright_yellow"
 windowborder: "background"
 barleftborder : 300
 barrightborder : 300
-bartopborder : 0
+bartopborder : 2
 barbottomborder : 0
