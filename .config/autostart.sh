@@ -7,10 +7,7 @@ if [ -f $theme ]; then
     xrdb -merge ~/.Xresources
 fi
 
-# udiskie -2 &
-numlockx off
 urxvtd &
-mpd &
-urxvt -name music -e ncmpcpp -s visualizer &
 picom --experimental-backends &
+urxvt -name music -e ncmpcpp -s visualizer &
 # mcc --updated-callback 'polybar-msg hook musik 1' &

@@ -48,10 +48,10 @@ groups = [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
         DropDown('term', 'urxvt',
-                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
+                x=0.7, y=0.008, width=0.297, height=0.4, opacity=0.8,
                  on_focus_lost_hide=True),
         DropDown('calc', 'urxvt -e python3',
-                 x=0.05, y=0.008, width=0.9, height=0.5, opacity=0.9,
+                x=0.7, y=0.008, width=0.297, height=0.4, opacity=0.8,
                  on_focus_lost_hide=True)
     ],
         label='')
@@ -260,10 +260,10 @@ keys = [
     Key([MOD, "shift", "control"], "q", lazy.shutdown()),
     Key([MOD], "space", lazy.spawn("rofi -show drun")),
     # Key([MOD], 'a', lazy.spawncmd()),
-    Key([], "Print", lazy.spawn("gnome-screenshot")),
-    Key(["shift"], "Print", lazy.spawn("gnome-screenshot -a")),
-    Key([MOD, "shift"], "s", lazy.spawn("gnome-screenshot -a")),
-    Key([MOD], "s", lazy.spawn("gnome-screenshot")),
+    Key([], "Print", lazy.spawn("flameshot gui")),
+    Key(["shift"], "Print", lazy.spawn("flameshot gui")),
+    Key([MOD, "shift"], "s", lazy.spawn("flameshot gui")),
+    Key([MOD], "s", lazy.spawn("flameshot gui")),
     Key([MOD], "x", lazy.spawn(os.path.expanduser('~/.config/qtile/lockscreen.sh')))
 ]
 
@@ -322,6 +322,7 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
     {'role':'Dialog'},
+    {'role':'GtkFileChooserDialog'},
     {'wmclass': 'download'},
     {'wmclass': 'error'},
     {'wmclass': 'file_progress'},

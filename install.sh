@@ -24,8 +24,8 @@ echo "---------------------------------------"
 echo ""
 sudo apt update
 sudo apt install code pavucontrol firefox rxvt-unicode imagemagick \
-feh bc lm-sensors zsh lxappearance arandr rofi \
-shotwell numlockx polybar neovim python3-opencv -y
+feh bc lm-sensors zsh lxappearance arandr rofi nomacs \
+shotwell numlockx polybar neovim python3-opencv flameshot -y
 
 echo ""
 echo "---------------------------------------"
