@@ -34,7 +34,7 @@ window-position=(16, 16)
 window-size=(2528, 1408)
 
 [org/gnome/control-center]
-last-panel='keyboard'
+last-panel='background'
 
 [org/gnome/desktop/app-folders/folders/Pop-Office]
 apps=['libreoffice-calc.desktop', 'libreoffice-draw.desktop', 'libreoffice-impress.desktop', 'libreoffice-math.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-writer.desktop']
@@ -54,9 +54,9 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri-dark='file:///usr/share/backgrounds/pop/benjamin-voros-250200.jpg'
-primary-color='#000000'
-secondary-color='#000000'
+picture-uri-dark='file:///home/job/.local/share/backgrounds/2022-06-24-11-31-51-Wallpaper'
+primary-color='#000000000000'
+secondary-color='#000000000000'
 
 [org/gnome/desktop/calendar]
 show-weekdate=true
@@ -113,9 +113,9 @@ report-technical-problems=false
 color-shading-type='solid'
 lock-delay=uint32 0
 picture-options='zoom'
-picture-uri='file:///usr/share/backgrounds/pop/benjamin-voros-250200.jpg'
-primary-color='#000000'
-secondary-color='#000000'
+picture-uri='file:///home/job/.local/share/backgrounds/2022-06-24-11-31-51-Wallpaper'
+primary-color='#000000000000'
+secondary-color='#000000000000'
 
 [org/gnome/desktop/session]
 idle-delay=uint32 300
@@ -173,7 +173,7 @@ name='WiFi'
 
 [org/gnome/shell]
 disabled-extensions=['cosmic-dock@system76.com', 'ding@rastersoft.com', 'transparent-top-bar@zhanghai.me', 'appindicatorsupport@rgcjonas.gmail.com']
-enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'workspaces-bar@fthx', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'cosmic-workspaces@system76.com']
+enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'cosmic-workspaces@system76.com', 'workspaces-bar@fthx']
 welcome-dialog-last-shown-version='42.1'
 
 [org/gnome/shell/extensions/appindicator]
@@ -235,5 +235,5 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(718, 211)
+window-position=(82, 571)
 window-size=(1124, 822)
