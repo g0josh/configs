@@ -1,0 +1,239 @@
+[com/ftpix/transparentbar]
+dark-full-screen=true
+transparency=9
+
+[io/elementary/appcenter/settings]
+cached-drivers=['nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'bcmwl-kernel-source']
+last-refresh-time=int64 1655942057
+window-maximized=false
+window-position=(1153, 467)
+window-size=(1100, 660)
+
+[org/gnome/Geary]
+migrated-config=true
+
+[org/gnome/calculator]
+accuracy=9
+angle-units='degrees'
+base=10
+button-mode='basic'
+number-format='automatic'
+show-thousands=false
+show-zeroes=false
+source-currency=''
+source-units='degree'
+target-currency=''
+target-units='radian'
+window-position=(50, 82)
+word-size=64
+
+[org/gnome/calendar]
+active-view='month'
+window-maximized=false
+window-position=(16, 16)
+window-size=(2528, 1408)
+
+[org/gnome/control-center]
+last-panel='keyboard'
+
+[org/gnome/desktop/app-folders/folders/Pop-Office]
+apps=['libreoffice-calc.desktop', 'libreoffice-draw.desktop', 'libreoffice-impress.desktop', 'libreoffice-math.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-writer.desktop']
+name='Office'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/Pop-System]
+apps=['gnome-language-selector.desktop', 'gnome-session-properties.desktop', 'gnome-system-monitor.desktop', 'im-config.desktop', 'nm-connection-editor.desktop', 'nvidia-settings.desktop', 'org.gnome.baobab.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.PowerStats.desktop', 'org.gnome.seahorse.Application.desktop', 'software-properties-gnome.desktop', 'system76-driver.desktop', 'system76-firmware.desktop']
+name='System'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/Pop-Utility]
+apps=['com.github.donadigo.eddy.desktop', 'com.system76.Popsicle.desktop', 'gucharmap.desktop', 'info.desktop', 'org.gnome.eog.desktop', 'org.gnome.Evince.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.FileRoller.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Screenshot.desktop', 'org.gnome.Totem.desktop', 'pop-cosmic-applications.desktop', 'pop-cosmic-launcher.desktop', 'pop-cosmic-workspaces.desktop', 'simple-scan.desktop', 'yelp.desktop']
+name='Utilities'
+translate=true
+
+[org/gnome/desktop/background]
+color-shading-type='solid'
+picture-options='zoom'
+picture-uri-dark='file:///usr/share/backgrounds/pop/benjamin-voros-250200.jpg'
+primary-color='#000000'
+secondary-color='#000000'
+
+[org/gnome/desktop/calendar]
+show-weekdate=true
+
+[org/gnome/desktop/input-sources]
+current=uint32 0
+per-window=false
+sources=[('xkb', 'us')]
+xkb-options=@as []
+
+[org/gnome/desktop/interface]
+clock-show-seconds=false
+clock-show-weekday=true
+color-scheme='prefer-dark'
+enable-hot-corners=true
+font-antialiasing='rgba'
+font-hinting='medium'
+gtk-theme='Pop-dark'
+
+[org/gnome/desktop/notifications]
+application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal']
+
+[org/gnome/desktop/notifications/application/firefox]
+application-id='firefox.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-control-center]
+application-id='gnome-control-center.desktop'
+
+[org/gnome/desktop/notifications/application/io-elementary-appcenter]
+application-id='io.elementary.appcenter.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-calendar]
+application-id='org.gnome.Calendar.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-nautilus]
+application-id='org.gnome.Nautilus.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-terminal]
+application-id='org.gnome.Terminal.desktop'
+
+[org/gnome/desktop/notifications/application/rxvt-unicode]
+application-id='rxvt-unicode.desktop'
+
+[org/gnome/desktop/peripherals/keyboard]
+numlock-state=false
+
+[org/gnome/desktop/peripherals/touchpad]
+two-finger-scrolling-enabled=true
+
+[org/gnome/desktop/privacy]
+report-technical-problems=false
+
+[org/gnome/desktop/screensaver]
+color-shading-type='solid'
+lock-delay=uint32 0
+picture-options='zoom'
+picture-uri='file:///usr/share/backgrounds/pop/benjamin-voros-250200.jpg'
+primary-color='#000000'
+secondary-color='#000000'
+
+[org/gnome/desktop/session]
+idle-delay=uint32 300
+
+[org/gnome/desktop/wm/keybindings]
+switch-group=['<Super>asciitilde', '<Primary>Tab']
+switch-group-backward=['<Shift><Super>asciitilde', '<Primary><Shift>Tab']
+switch-to-workspace-1=['<Super>1']
+switch-to-workspace-2=['<Super>2']
+switch-to-workspace-3=['<Super>3']
+switch-to-workspace-4=['<Super>4']
+toggle-fullscreen=['<Super>f']
+
+[org/gnome/desktop/wm/preferences]
+button-layout='appmenu:minimize,maximize,close'
+focus-mode='mouse'
+
+[org/gnome/evolution-data-server]
+migrated=true
+network-monitor-gio-name=''
+
+[org/gnome/gedit/preferences/editor]
+scheme='pop-dark'
+
+[org/gnome/mutter]
+attach-modal-dialogs=true
+edge-tiling=false
+
+[org/gnome/nautilus/preferences]
+default-folder-viewer='icon-view'
+search-filter-time-type='last_modified'
+
+[org/gnome/nautilus/window-state]
+initial-size=(890, 550)
+maximized=false
+
+[org/gnome/settings-daemon/plugins/media-keys]
+calculator=['<Super>c']
+control-center=['<Super>comma']
+home=['<Super>p']
+mic-mute=['<Alt><Super>a']
+next=['<Alt><Super>l']
+play=['<Alt><Super>space']
+previous=['<Alt><Super>h']
+search=['<Super>slash']
+terminal=['<Super>Return']
+volume-down=['<Alt><Super>j']
+volume-mute=['<Alt><Super>z']
+volume-up=['<Alt><Super>k']
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/PopLaunch1]
+binding='Launch1'
+command='gnome-control-center wifi'
+name='WiFi'
+
+[org/gnome/shell]
+disabled-extensions=['cosmic-dock@system76.com', 'ding@rastersoft.com', 'transparent-top-bar@zhanghai.me', 'appindicatorsupport@rgcjonas.gmail.com']
+enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'workspaces-bar@fthx', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'cosmic-workspaces@system76.com']
+welcome-dialog-last-shown-version='42.1'
+
+[org/gnome/shell/extensions/appindicator]
+custom-icons=@a(sss) []
+icon-opacity=255
+icon-size=0
+tray-pos='right'
+
+[org/gnome/shell/extensions/dash-to-dock]
+extend-height=true
+manualhide=true
+
+[org/gnome/shell/extensions/lockkeys]
+notification-preferences='osd'
+style='show-hide'
+
+[org/gnome/shell/extensions/pop-cosmic]
+overlay-key-action='APPLICATIONS'
+show-applications-button=true
+
+[org/gnome/shell/extensions/pop-shell]
+activate-launcher=@as []
+active-hint=true
+fullscreen-launcher=true
+gap-inner=uint32 4
+gap-outer=uint32 4
+mouse-cursor-follows-active-window=false
+pop-monitor-down=['<Primary><Shift><Alt><Super>j']
+pop-monitor-left=['<Primary><Shift><Alt><Super>h']
+pop-monitor-right=['<Primary><Shift><Alt><Super>l']
+pop-monitor-up=['<Primary><Shift><Alt><Super>k']
+pop-workspace-down=['<Primary><Shift><Super>j']
+pop-workspace-up=['<Primary><Shift><Super>k']
+show-title=false
+smart-gaps=false
+snap-to-grid=true
+tile-by-default=true
+tile-enter=['<Super>a']
+tile-move-down=['Down', 'KP_Down', 'j']
+tile-move-left=['Left', 'KP_Left', 'h']
+tile-move-right=['Right', 'KP_Right', 'l']
+tile-move-up=['Up', 'k']
+toggle-floating=['<Shift><Super>f']
+
+[org/gnome/shell/keybindings]
+toggle-application-view=@as []
+
+[org/gnome/system/location]
+enabled=false
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=true
+show-size-column=true
+show-type-column=true
+sidebar-width=150
+sort-column='name'
+sort-directories-first=false
+sort-order='ascending'
+type-format='category'
+window-position=(718, 211)
+window-size=(1124, 822)
