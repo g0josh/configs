@@ -1,30 +1,29 @@
 alt_send_esc: true
-background_opacity: 0.97
 colors:
   bright:
-    black: '#628a9c'
-    blue: '#D35361'
-    cyan: '#0657A1'
-    green: '#9D2751'
-    magenta: '#124992'
-    red: '#D91621'
-    white: '#8dc6df'
-    yellow: '#D72C4F'
+    black: '#9b8386'
+    blue: '#9D7495'
+    cyan: '#AF8CAE'
+    green: '#D2827C'
+    magenta: '#C87B84'
+    red: '#CD787A'
+    white: '#debcc0'
+    yellow: '#645D95'
   indexed_colors: []
   normal:
-    black: '#080E34'
-    blue: '#D35361'
+    black: '#141018'
+    blue: '#9D7495'
     cursor: '#ffffff'
-    cursorColor: '#8dc6df'
-    cyan: '#0657A1'
-    green: '#9D2751'
-    magenta: '#124992'
-    red: '#D91621'
-    white: '#8dc6df'
-    yellow: '#D72C4F'
+    cursorColor: '#debcc0'
+    cyan: '#AF8CAE'
+    green: '#D2827C'
+    magenta: '#C87B84'
+    red: '#CD787A'
+    white: '#debcc0'
+    yellow: '#645D95'
   primary:
-    background: '#080E34'
-    foreground: '#8dc6df'
+    background: '#141018'
+    foreground: '#debcc0'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -387,8 +386,6 @@ mouse:
   hide_when_typing: false
   triple_click:
     threshold: 300
-  url:
-    modifiers: None
 mouse_bindings:
 - action: PasteSelection
   mouse: Middle
@@ -398,6 +395,7 @@ selection:
   save_to_clipboard: true
   semantic_escape_chars: ",\u2502`|:\"' ()[]{}<>"
 window:
+  opacity: 0.97
   decorations: none
   dimensions:
     columns: 0
