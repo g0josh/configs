@@ -1,18 +1,23 @@
-from typing import Callable, Optional, TypedDict
+from typing import Callable, Optional
 
 from libqtile.core.manager import Qtile
 from libqtile.widget import base
 from libqtile.widget import TextBox
 from libqtile.widget import base
 from libqtile.log_utils import logger
+from libqtile.lazy import lazy
 
+class ComboWidgetColor(object):
+    def __init__(self, foreground: str, background: str):
+        self.foreground = foreground
+        self.background = background
 
-class PollText(base.ThreadedPollText):
+class PollText(base.ThreadPoolText):
     """
     A generic text widget that polls using poll function to get the text
     Differences between this and the inbuilt GenPollText:
         - Does not update text on click
-        - The first update interval is set to 1 and the later ones are
+        - The first update interval is set to 3 and the later ones are
           as provided in args  
     """
     orientations = base.ORIENTATION_HORIZONTAL
@@ -21,9 +26,9 @@ class PollText(base.ThreadedPollText):
     ]
 
     def __init__(self, **config):
+        base.ThreadPoolText.__init__(self, "", **config)
         self.actual_update_interval = config["update_interval"]
-        config['update_interal'] = 1
-        base.ThreadedPollText.__init__(self, **config)
+        config['update_interal'] = 3
         self.add_defaults(PollText.defaults)
 
     def poll(self):
@@ -31,10 +36,10 @@ class PollText(base.ThreadedPollText):
             return "You need a poll function"
         return self.func()
 
-    def tick(self):
-        text = self.poll()
-        self.update(text)
-        return self.actual_update_interval
+    # def tick(self):
+    #     text = self.poll()
+    #     self.update(text)
+    #     return self.actual_update_interval
 
     def button_press(self, x, y, button):
         name = 'Button{0}'.format(button)
@@ -47,16 +52,11 @@ class PollText(base.ThreadedPollText):
             self.mouse_callbacks[name](self.qtile)
 
 
-class ComboWidgetColor(object):
-    def __init__(self, foreground: str, background: str):
-        self.foreground = foreground
-        self.background = background
-
 class ComboWidget(object):
     """ 
     Combowidget is wrapper around PollText and TextBox widgets so that a widget can 
     can be prefixed and suffixed with text/icons. It contains 5 widgets
-        1. title_head(glyph mostly): TextBox,
+        3. title_head(glyph mostly): TextBox,
         2. title(icon mostly)): Polltext,
         3. title_tail(glyph mostly)): TextBox,
         4. body(the widget text): Polltext,
@@ -102,11 +102,11 @@ class ComboWidget(object):
         self.inactive_hide = inactive_hide if inactive_hide else False
 
         _mouse_callbacks = {
-            'Button1': lambda q: self.click(q, 1),
-            'Button2': lambda q: self.click(q, 2),
-            'Button3': lambda q: self.click(q, 3),
-            'Button4': lambda q: self.click(q, 4),
-            'Button5': lambda q: self.click(q, 5),
+            'Button1': lazy.function(lambda q: self.click(q, 1)),
+            'Button2': lazy.function(lambda q: self.click(q, 2)),
+            'Button3': lazy.function(lambda q: self.click(q, 3)),
+            'Button4': lazy.function(lambda q: self.click(q, 4)),
+            'Button5': lazy.function(lambda q: self.click(q, 5)),
         }
 
         title_func = (lambda: "") if (hide or self.body_func) else self.pollTitle

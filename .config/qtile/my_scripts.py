@@ -4,24 +4,20 @@ from datetime import datetime, timedelta
 import re
 import os
 from contextlib import contextmanager
-import json
 import yaml
-from typing import Optional, List
+from typing import Optional, Tuple
 
 from libqtile.log_utils import logger
-from libqtile.command import lazy
 from libqtile.core.manager import Qtile
-from socket import error as socket_error
 
 import my_audio as audio
-#from my_widgets import ComboWidgetColor
 from icons import getIcons
 
 MOUSE_BUTTONS = {'LEFT_CLICK': 1, 'RIGHT_CLICK': 2,
                  'SCROLL_UP': 4, 'SCROLL_DOWN': 5}
 POWER_BUTTONS = {'SHUT_DOWN': 0, 'LOG_OUT': 1, 'LOCK_SCREEN': 2}
 THEME = {}
-
+RATE_REGEX = re.compile('(\d+\.\d{2})')
 
 # ---------------------------------------------
 # Group
@@ -33,27 +29,27 @@ def getGroupLabel(qtile:Qtile, group:str):
             return _group.label if (_group.screen is not None or len(_group.windows) > 0) else ""
     return ""
 
-#def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> ComboWidgetColor:
-#    curr_group = qtile.current_group.name
-#    curr_screen = qtile.current_group.screen.index
-#    if curr_group == group and curr_screen == screen :
-#        return ComboWidgetColor(foreground=theme['focusedfg'],background=theme['focusedbg'])
-#    curr_screen = qtile.current_group.screen.index
-#    for _group in qtile.groups:
-#        if group == _group.name:
-#            if _group.screen is None:
-#                return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
-#            elif _group.screen.index == screen:
-#                return ComboWidgetColor(foreground=theme['altfg'],background=theme['altbg'])
-#            break
-#    return ComboWidgetColor(foreground=theme['bodyfg'],background=theme['bodybg'])
+def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> Tuple[str, str]:
+    curr_group = qtile.current_group.name
+    curr_screen = qtile.current_group.screen.index
+    if curr_group == group and curr_screen == screen :
+        return theme['focusedfg'], theme['focusedbg']
+    curr_screen = qtile.current_group.screen.index
+    for _group in qtile.groups:
+        if group == _group.name:
+            if _group.screen is None:
+                return theme['bodyfg'], theme['bodybg']
+            elif _group.screen.index == screen:
+                return theme['altfg'], theme['altbg']
+            break
+    return theme['bodyfg'], theme['bodybg']
 
 
 # ---------------------------------------------
 # BATTERY
 # ---------------------------------------------
 
-def getBatteryStatusIcon(qtile:Qtile=None):
+def getBatteryStatusIcon():
     try:
         with open("/sys/class/power_supply/BAT0/status") as sf:
             status = sf.read()
@@ -70,7 +66,7 @@ def getBatteryStatusIcon(qtile:Qtile=None):
 
     return getIcons()['battery'][index]
     
-def getBatteryCapacity(qtile:Qtile=None):
+def getBatteryCapacity():
     try:
         with open("/sys/class/power_supply/BAT0/capacity") as cf:
             capacity = cf.read().strip()
@@ -83,17 +79,17 @@ def getBatteryCapacity(qtile:Qtile=None):
 # VOLUME
 # ---------------------------------------------
 
-def volumeClicked(qtile:Qtile, button:int):
+def volumeClicked(button:int):
     if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
-        audio.setMute(2)
+        audio.setMute()
     elif button == MOUSE_BUTTONS['SCROLL_UP']:
-        audio.setVolume("+5%")
+        audio.setVolume("5%+")
     elif button == MOUSE_BUTTONS['SCROLL_DOWN']:
-        audio.setVolume("-5%")
+        audio.setVolume("5%-")
     else:
         logger.warning('Uknown mouse click = {}'.format(button))
 
-def getVolumeIcon(qtile:Qtile):
+def getVolumeIcon():
     # check if muted
     if audio.isMuted() == True:
         return getIcons()['mute']
@@ -107,16 +103,16 @@ def getVolumeIcon(qtile:Qtile):
         index = len(icons) - 1
     return icons[int(index)]
 
-def getVolume(qtile:Qtile):
+def getVolume():
     if audio.isMuted() == True:
         return ""
-    return audio.getVolume()
+    return f'{audio.getVolume()}%'
 
 # ---------------------------------------------
 # Music
 # ---------------------------------------------
 
-def getCmus(qtile:Optional[Qtile]=None, max_title_len:int=20):
+def getCmus(max_title_len:int=20):
     try:
         output = subprocess.check_output(['cmus-remote', '-Q']).decode()
     except subprocess.CalledProcessError as e:
@@ -170,7 +166,7 @@ def clickCmus(qtile:Optional[Qtile]=None, button:int=1):
     except subprocess.CalledProcessError as e:
         logger.warning(e.output.decode().strip())
 
-def getMpd( qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_len:int=20):
+def getMpd(not_connected_text:str='', max_title_len:int=20):
     try:
         output = subprocess.check_output(['mpc']).decode()
     except subprocess.CalledProcessError as e:
@@ -189,28 +185,20 @@ def getMpd( qtile:Optional[Qtile]=None, not_connected_text:str='', max_title_
     else:
         return "{} - {}".format(title, time)
 
-def clickMpd(qtile:Optional[Qtile]=None, button:int=1):
+def clickMpd(button:int=1):
     keys = {
         # Left mouse button
-        "toggle": 1,
+        1: 'toggle',
         # Right mouse button
-        "stop": 3,
+        3: "stop",
         # Scroll up
-        "previous": 4,
+        4: "prev",
         # Scroll down
-        "next": 5,
-        # User defined command
-        "command": None
+        5: "next",
     }
-    cmd = ['mpc']
-    if button == keys["toggle"]:
-        cmd.append('toggle')
-    elif button == keys["stop"]:
-        cmd.append('stop')
-    elif button == keys["previous"]:
-        cmd.append('prev')
-    elif button == keys["next"]:
-        cmd.append('next')
+    if button not in keys:
+        return
+    cmd = ['mpc', keys[button]]
     try:
         subprocess.run(cmd)
     except subprocess.CalledProcessError as e:
@@ -296,10 +284,10 @@ def getNetSpeeds(interface:str="wlo1", show_speed_above:int=1e3):
 #     else:
 #         return "{:3.0f} kB/s".format(speed/1e3) if speed < 1e6 else "{:2.1f} MB/s".format(speed/1e6)
     
-def getInterfaces():
+def getNetworkInterfaces():
     return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
-def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='', show_speed_above:int=10e3):
+def getWlan(interface:str='wlo1', error_text:str='', show_speed_above:int=10e3):
     try:
         output = subprocess.check_output(['nmcli']).decode()
     except subprocess.CalledProcessError as e:
@@ -313,11 +301,13 @@ def getWlan(qtile:Optional[Qtile]=None, interface:str='wlo1', error_text:str='�
     
     speeds = getNetSpeeds(interface, show_speed_above)
     result = _essid.group(1)
-    result = result + " {} {}".format(getIcons()['download'], speeds['download']) if speeds['download'] else result
-    result = result + " {} {}".format(getIcons()['upload'], speeds['upload']) if speeds['upload'] else result
+    result = result + " {}{}".format(getIcons()['down'], speeds['download']) if speeds['download'] else result
+    result = result + " {}{}".format(getIcons()['up'], speeds['upload']) if speeds['upload'] else result
+    # result = result + " {}".format(speeds['download']) if speeds['download'] else result
+    # result = result + " {}".format(speeds['upload']) if speeds['upload'] else result
     return result
 
-def getLan(qtile:Optional[Qtile]=None, interface:str='enp24s0', error_text:str='', show_speed_above:int=10e3):
+def getLan(interface:str='enp24s0', error_text:str='', show_speed_above:int=10e3):
     # check if enabled:
     up = []
     for _file in ['/sys/class/net/{}/operstate'.format(interface),
@@ -355,7 +345,7 @@ def setTimeZone(the_tz):
         del os.environ['TZ']
     time.tzset()
 
-def getTime(qtile:Optional[Qtile]=None, format:str='%b %d, %A, %I:%M %p', timezone:Optional[str]=None):
+def getTime(format:str='%b %d, %A, %I:%M %p', timezone:Optional[str]=None):
     def _get_time():
         now = datetime.now().astimezone()
         return (now + timedelta(seconds=0.5)).strftime(format)
@@ -366,7 +356,7 @@ def getTime(qtile:Optional[Qtile]=None, format:str='%b %d, %A, %I:%M %p', timezo
     else:
         return _get_time()
 
-def getlocksStatus(qtile:Optional[Qtile]=None):
+def getlocksStatus():
     result = []
     try:
         output = subprocess.check_output(['xset', 'q']).decode()
@@ -380,7 +370,7 @@ def getlocksStatus(qtile:Optional[Qtile]=None):
         result.append('0')
     return " ".join(result)
 
-def getTemps(qtile:Optional[Qtile]=None, threshold:int=-1 ):
+def getTemps(threshold:int=-1 ):
     try:
         cpu = subprocess.check_output(['sensors']).decode().strip()
     except:
@@ -401,7 +391,7 @@ def getTemps(qtile:Optional[Qtile]=None, threshold:int=-1 ):
     if int(cpu_temp) > threshold or int(gpu_temp) > threshold:
         return '{}|{}'.format(cpu_temp, gpu_temp)
 
-def getUtilization(qtile:Optional[Qtile]=None, threshold:int=-1):
+def getUtilization(threshold:int=-1):
     try:
         cpu = subprocess.check_output(['top', '-bn2', '-d0.1']).decode()
     except:
@@ -427,7 +417,7 @@ def getUtilization(qtile:Optional[Qtile]=None, threshold:int=-1):
     if int(cpu_util) > threshold or int(gpu_util) > threshold:
         return "{}|{}".format(cpu_util, gpu_util)
 
-def powerClicked(qtile:Optional[Qtile]=None, button:int=1, power_button:int=1):
+def powerClicked(button:int=1, power_button:int=1):
     if button != MOUSE_BUTTONS['LEFT_CLICK']:
         return
 
@@ -460,7 +450,7 @@ def getTheme(path):
     THEME = theme
     return theme
 
-def setupMonitors():
+def setupMonitors(q: Qtile = None):
     try:
         o = subprocess.check_output(['xrandr']).decode()
     except subprocess.CalledProcessError as e:
@@ -476,8 +466,10 @@ def setupMonitors():
 
         name = e.strip().split()[0]
         if ' connected' in e:
-            res = o.split('\n')[i+1].strip().split()[0]
-            cmd += ['--output', name, '--mode', res,
+            line = o.split('\n')[i+1].strip()
+            res = line.split()[0]
+            rate = max([float(x) for x in RATE_REGEX.findall(line)])
+            cmd += ['--output', name, '--mode', res, '--rate', str(rate),
                     '--pos', "{}x{}".format(x, 0), '--rotate', 'normal']
             x += int(res.split('x')[0])
             monitors.append(name)

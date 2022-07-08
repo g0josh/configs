@@ -53,16 +53,7 @@ echo "---------------------------------------"
 echo "Installing picom"
 echo "---------------------------------------"
 echo ""
-sudo apt install libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev \
-libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev \
-libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev ninja-build meson -y
-mkdir $HOME/tools
-cd $HOME/tools
-git clone git@github.com:yshui/picom.git
-cd picom
-git submodule update --init --recursive
-meson --buildtype=release . build
-sudo ninja -C build install
+sudo apt install picom
 
 echo ""
 echo "---------------------------------------"
@@ -96,17 +87,16 @@ echo "---------------------------------------"
 echo "Mounting drives"
 echo "---------------------------------------"
 echo ""
-sudo mkdir /mnt/hdd /mnt/media
+sudo mkdir /mnt/storage /mnt/media
 sudo mount /dev/sda2 /mnt/media
-sudo mount /dev/sdb2 /mnt/hdd
+sudo mount /dev/sdb2 /mnt/storage
 rm -rf Music Videos Documents Pictures
-ln -s /mnt/hdd/sync Sync
-ln -s /mnt/hdd Hdd
+ln -s /mnt/storage Storage
 ln -s /mnt/media Media
-ln -s /mnt/hdd/sync/documents Documents
-ln -s /mnt/hdd/sync/music Music
-ln -s /mnt/hdd/pictures Pictures
-ln -s /mnt/media/movies Videos
+ln -s /mnt/storage/documents Documents
+ln -s /mnt/storage/music Music
+ln -s /mnt/storage/pictures Pictures
+ln -s /mnt/storage/videos Videos
 echo "---------------------------------------"
 echo "Mounted drives, refer fstab and fix /etc/fstab"
 echo "---------------------------------------"

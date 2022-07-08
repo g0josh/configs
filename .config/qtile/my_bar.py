@@ -1,23 +1,27 @@
 from functools import partial
+from libqtile.lazy import lazy
 
+from libqtile.config import Group
 from libqtile import widget
 from libqtile.core.manager import Qtile
 from libqtile.log_utils import logger
+from psutil import net_connections
 
-from my_scripts import getVolume, getVolumeIcon, volumeClicked
-from my_scripts import getGroupColors, getGroupLabel
+from my_scripts import getGroupLabel, getVolume, getVolumeIcon, volumeClicked
+from my_scripts import getGroupColors
 from my_scripts import getMpd, clickMpd
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
-from my_scripts import getInterfaces, getWlan, getLan
+from my_scripts import getNetworkInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
 from my_scripts import getBatteryCapacity, getBatteryStatusIcon
 
 from my_widgets import ComboWidget
 from icons import getIcons
 
+
 DEFAULT_FONT = dict(
-    font="Iosevka Nerd Font Medium",
-    #font="JetBrainsMonoMedium Nerd Font Mono",
+    # font="Iosevka Nerd Font Medium",
+    font="JetBrainsMono Medium Nerd Font Mono",
     fontsize=14,
 )
 
@@ -31,180 +35,243 @@ ICON_FONT = dict(
     fontsize=12,
 )
 
-common_widgets = {}
-group_widgets = {}
+# These are stored to update colors dynamically when interacted with
+common_widgets: dict[str, list[any]] = {}
+group_widgets: dict[int, list[list[any]]] = {}
 
 
-def prepareCommonWidgets(theme):
-    global common_widgets, group_widgets
-    global DEFAULT_FONT, BORDER_FONT, ICON_FONT
+def prepareWidgets(theme: dict):
+    '''
+    This function creates widgets common to all the screens
+    '''
 
-    common_widgets['mpd'] = ComboWidget(title_func=lambda qtile: getIcons()['music'], title_bg=theme['titlebg'], title_fg=theme['titlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getMpd, body_bg=theme['bodybg'],
-                                  body_fg=theme['bodyfg'], body_padding=theme['bodypadding'], poll_interval=30,
-                                  title_head_text=theme['leftmoduleprefix'], title_tail_text=theme['leftmodulesuffix'],
-                                  body_tail_text=theme['leftmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
-                                  click_func=clickMpd, click_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
+    global common_widgets
+
+    common_widgets['module_separator'] = [widget.TextBox(
+            **BORDER_FONT, text=theme['moduleseparator'], padding=0)]
+
+    # Mpd
+    mpdClick = {
+        'Button1': partial(clickMpd, 1),
+        'Button2': partial(clickMpd, 2),
+        'Button3': partial(clickMpd, 3),
+        'Button4': partial(clickMpd, 4),
+        'Button5': partial(clickMpd, 5)
+    }
+    common_widgets['mpd'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0, mouse_callbacks=mpdClick),
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['titlefg'], background=theme['titlebg'],
+            text=getIcons()['music'], padding=theme['titlepadding'], mouse_callbacks=mpdClick),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['titlebg'], background=theme['bodybg'], text=theme['leftmodulesuffix'], padding=0, mouse_callbacks=mpdClick),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['bodyfg'], background=theme['bodybg'],
+            func=getMpd, mouse_callbacks=mpdClick,
+            padding=theme['bodypadding'], update_interval=3),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['bodybg'], text=theme['leftmodulesuffix'], padding=0, mouse_callbacks=clickMpd)
+    ]
+
+    # Prompt
+    common_widgets['prompt'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0),
+        widget.Prompt(
+            **DEFAULT_FONT, foreground=theme['titlefg'], background=theme['titlebg'], prompt=getIcons()['launch']+" "),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
+    ]
+
+    # Locks
+    common_widgets['locks'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient1title'], text=theme['rightmoduleprefix'], padding=0),
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient1title'],
+            text=getIcons()['locks'], padding=theme['titlepadding']),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient1title'], background=theme['gradient1body'], text=theme['rightmodulesuffix'], padding=0),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient1body'],
+            func=partial(updateLockWidget, theme), padding=theme['bodypadding'], update_interval=0.5),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient1body'], text=theme['rightmodulesuffix'], padding=0)
+    ]
+
+    # Volume
+    volumeClick = {
+        'Button1': partial(updateVolume, 1),
+        'Button2': partial(updateVolume, 2),
+        'Button3': partial(updateVolume, 3),
+        'Button4': partial(updateVolume, 4),
+        'Button5': partial(updateVolume, 5)
+    }
+    common_widgets['volume'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient2title'], text=theme['rightmoduleprefix'], padding=0, mouse_callbacks=volumeClick),
+        widget.GenPollText(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient2title'],
+            func=getVolumeIcon, padding=theme['titlepadding'], mouse_callbacks=volumeClick, update_interval=5),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient2title'], background=theme['gradient2body'], text=theme['rightmodulesuffix'], padding=0, mouse_callbacks=volumeClick),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient2body'],
+            func=getVolume, padding=theme['bodypadding'], mouse_callbacks=volumeClick, update_interval=5),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient2body'], text=theme['rightmodulesuffix'], padding=0, mouse_callbacks=volumeClick)
+    ]
+
+    # Utilization
+    common_widgets['utilization'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient3title'], text=theme['rightmoduleprefix'], padding=0),
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient3title'],
+            text=getIcons()['utilization'], padding=theme['titlepadding']),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient3title'], background=theme['gradient3body'], text=theme['rightmodulesuffix'], padding=0),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient3body'],
+            func=getUtilization, padding=theme['bodypadding'], update_interval=3),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient3body'], text=theme['rightmodulesuffix'], padding=0)
+    ]
+
+    # Temperature
+    common_widgets['temperature'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient4title'], text=theme['rightmoduleprefix'], padding=0),
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient4title'],
+            text=getIcons()['temperature'], padding=theme['titlepadding']),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient4title'], background=theme['gradient4body'], text=theme['rightmodulesuffix'], padding=0),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient4body'],
+            func=getTemps, padding=theme['bodypadding'], update_interval=3),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient4body'], text=theme['rightmodulesuffix'], padding=0)
+    ]
+
+    # Network
+    common_widgets['network'] = []
+    for interface in getNetworkInterfaces():
+        icon = getIcons()['wlan' if 'wl' in interface else 'lan']
+        common_widgets[interface] = [
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient5title'], text=theme['rightmoduleprefix'], padding=0),
+            widget.TextBox(
+                **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient5title'],
+                text=icon, padding=theme['titlepadding']),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient5title'], background=theme['gradient5body'], text=theme['rightmodulesuffix'], padding=0),
+            widget.GenPollText(
+                **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient5body'],
+                func=partial(updateNetworkWidgets, theme, interface), padding=theme['bodypadding'], update_interval=3),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient5body'], text=theme['rightmodulesuffix'], padding=0)
+        ]
+        if not common_widgets['network']:
+            common_widgets['network'] += common_widgets['module_separator']
+        common_widgets['network'] += common_widgets[interface]
+
+    # Time
+    common_widgets['time'] = [
+        # Local time
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient6title'], text=theme['rightmoduleprefix'], padding=0),
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient6title'],
+            text=getIcons()['clock'], padding=theme['titlepadding']),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient6title'], background=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient6body'],
+            func=getTime, padding=theme['bodypadding'], update_interval=30),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
+
+        # Indian time
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient6title'], text=theme['rightmoduleprefix'], padding=0),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient6title'],
+            func=partial(getTime, format='%I:%M %p', timezone='Asia/Kolkata'), padding=theme['bodypadding'], update_interval=30),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
+    ]
+
+    # Battery
+    if getBatteryStatusIcon():
+        common_widgets['battery'] = [
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7title'], text=theme['rightmoduleprefix'], padding=0),
+            widget.GenPollText(
+                **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient7title'],
+                func=getBatteryStatusIcon, padding=theme['titlepadding']),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7title'], background=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
+            widget.GenPollText(
+                **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient7body'],
+                func=getBatteryCapacity, padding=theme['bodypadding'], update_interval=3),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0)
+        ]
+
+    # Power/Logout/Screen lock
+    common_widgets['power'] = [
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
+        widget.WidgetBox(background=theme['gradient7body'], foreground=theme['gradienttitlefg'], close_button_location='right',
+                         text_closed=getIcons()['power'], text_open=getIcons()['cancel'], **ICON_FONT,
+                         widgets=[
+            # screen lock
+            widget.TextBox(
+                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                text=getIcons()['screen_lock'], mouse_callbacks={'Button1': partial(powerClicked, 1, 2)}),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
+
+            # Logout
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
+            widget.TextBox(
+                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                text=getIcons()['logout'], mouse_callbacks={'Button1': partial(powerClicked, 1, 1)}),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
+
+            # shutdown
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
+            widget.TextBox(
+                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                text=getIcons()['power'], mouse_callbacks={'Button1': partial(powerClicked, 1, 0)}),
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
+
+            # prefix for the cancel button when box is opened
+            widget.TextBox(
+                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0)
+        ]),
+        widget.TextBox(
+            **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
+    ]
 
 
-    common_widgets['locks'] = ComboWidget(title_func=lambda qtile: getIcons()['locks'], title_bg=theme['gradient1title'], title_fg=theme['gradienttitlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getlocksStatus, body_bg=theme['gradient1body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=2, title_head_text=theme['rightmoduleprefix'],
-                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
-                                  head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
-                                  click_update=True, inactive_hide=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
 
-    common_widgets['temperature'] = ComboWidget(title_func=lambda qtile: getIcons()['temperature'], title_bg=theme['gradient2title'], title_fg=theme['gradienttitlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getTemps, body_bg=theme['gradient2body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
-                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
-                                  head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
+def getWidgets(theme: dict, screen: int, groups: list[Group]):
+    global group_widgets, common_widgets 
 
-    common_widgets['utilization'] = ComboWidget(title_func=lambda qtile: getIcons()['utilization'], title_bg=theme['gradient3title'], title_fg=theme['gradienttitlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getUtilization, body_bg=theme['gradient3body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
-                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
-                                  head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
+    if not common_widgets:
+        prepareWidgets(theme)
 
-    common_widgets['volume'] = ComboWidget(title_func=getVolumeIcon, title_bg=theme['gradient4title'], title_fg=theme['gradienttitlefg'],
-                                  title_update=True, title_padding=theme['titlepadding'], body_func=getVolume, body_bg=theme['gradient4body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=None, title_head_text=theme['rightmoduleprefix'],
-                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme[
-                                      'rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT[
-                                      'font'], title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_func=volumeClicked, click_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-    # Since computers can have multiple net interfaces
-    common_widgets['wlan'] = []
-    common_widgets['lan'] = []
-    for interface in getInterfaces():
-        title = (lambda qtile: getIcons()['wifi']) if 'wl' in interface else (lambda qtile: getIcons()['lan'])
-        func = getWlan if 'wl' in interface else getLan
-        i_list = common_widgets['wlan'] if 'wl' in interface else common_widgets['lan']
-        i_list.append(ComboWidget(title_func=title, title_fg=theme['gradienttitlefg'], title_bg=theme['gradient5title'],
-                        title_padding=theme['titlepadding'], body_func=partial(func, interface=interface),
-                        body_fg=theme['gradientbodyfg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
-                        poll_interval=5, title_head_text=theme['rightmoduleprefix'], title_tail_text=theme['rightmodulesuffix'],
-                        body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'], head_tail_font_size=BORDER_FONT['fontsize'],
-                        title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
-                        body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
-                        margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
-        # Upload/download speeds as separate widgets. This is usefull if the default font does not contain
-        # the Upload/download glymphs(and looks better), But since it will add the overhead of more widgets
-        # and our default _font has these glymphs we are disabling it
-        # i_list.append(ComboWidget(title_func=lambda qtile: "", title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
-        #                 title_padding=5, body_func=partial(getNetSpeed, interface=interface),
-        #                 body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
-        #                 poll_interval=5, title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
-        #                 body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
-        #                 margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
-        # i_list.append(ComboWidget(title_func=lambda qtile: "", title_fg=theme['titlefg'], title_bg=theme['gradient5title'],
-        #                 title_padding=5, body_func=partial(getNetSpeed, interface=interface, upload=True),
-        #                 body_fg=theme['titlefg'], body_bg=theme['gradient5body'], body_padding=theme['bodypadding'],
-        #                 poll_interval=5, title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'], body_font=DEFAULT_FONT['font'],
-        #                 body_font_size=DEFAULT_FONT['fontsize'], inactive_hide=True, click_update=True,
-        #                 margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '' ))
-        # i_list.append(ComboWidget(title_func=partial(func, interface=interface), title_label=theme['rightmodulesuffix'], title_bg=theme['background'], title_fg=theme['gradient5body'],
-        #                        title_padding=0, poll_interval=5, title_font=BORDER_FONT['font'],
-        #                        title_font_size=BORDER_FONT['fontsize'], click_update=True, title_update=True))
-    
-    common_widgets['local_time'] = ComboWidget(title_func=lambda qtile: getIcons()['clock'], title_bg=theme['gradient6title'], title_fg=theme['gradienttitlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getTime, body_bg=theme['gradient6body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=30,
-                                  title_head_text=theme['rightmoduleprefix'], title_tail_text=theme['rightmodulesuffix'],
-                                  body_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], click_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-    common_widgets['india_time'] = ComboWidget(title_func=partial(getTime, format='%I:%M %p', timezone='Asia/Kolkata'), 
-                                title_bg=theme['gradient6body'], title_fg=theme['gradientbodyfg'],
-                                title_padding=theme['bodypadding'], poll_interval=30, title_head_text=theme['rightmoduleprefix'],
-                                title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=DEFAULT_FONT['font'],
-                                title_font_size=DEFAULT_FONT['fontsize'], click_update=True, title_update=True,
-                                margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-    common_widgets['battery'] = ComboWidget(title_func=getBatteryStatusIcon, title_bg=theme['gradient1title'], title_fg=theme['gradienttitlefg'],
-                                  title_padding=theme['titlepadding'], body_func=getBatteryCapacity, body_bg=theme['gradient1body'],
-                                  body_fg=theme['gradientbodyfg'], body_padding=theme['bodypadding'], poll_interval=5, title_head_text=theme['rightmoduleprefix'],
-                                  title_tail_text=theme['rightmodulesuffix'], body_tail_text=theme['rightmodulesuffix'],
-                                  head_tail_font=BORDER_FONT['font'],
-                                  head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                  title_font_size=ICON_FONT['fontsize'],
-                                  body_font=DEFAULT_FONT['font'], body_font_size=DEFAULT_FONT['fontsize'], 
-                                  click_update=True, inactive_hide=True, title_update=True,
-                                  margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-    power_bg = theme['gradient7title'] if 'gradient7title' in theme else theme['titlebg']
-    common_widgets['screen_lock'] = ComboWidget(title_func=lambda qtile: getIcons()['screen_lock'], title_bg=power_bg, title_fg=theme['gradienttitlefg'],
-                                       title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
-                                       title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                       head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                       title_font_size=ICON_FONT['fontsize'], hide=True,
-                                       click_func=lambda qtile, buttton: powerClicked(qtile, buttton, POWER_BUTTONS['LOCK_SCREEN']),
-                                       margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-    common_widgets['shut'] = ComboWidget(title_func=lambda qtile: getIcons()['power'], title_bg=power_bg, title_fg=theme['gradienttitlefg'],
-                                title_update=True, title_padding=theme['titlepadding'], title_head_text=theme['rightmoduleprefix'],
-                                title_tail_text=theme['rightmodulesuffix'], head_tail_font=BORDER_FONT['font'],
-                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                title_font_size=ICON_FONT['fontsize'], hide=True,
-                                click_func=lambda qtile, buttton: powerClicked(qtile, buttton, POWER_BUTTONS['SHUT_DOWN']))
-
-    common_widgets['toggle_power'] = ComboWidget(title_func=lambda qtile: getIcons()['power'], title_bg=power_bg, title_fg=theme['gradienttitlefg'],
-                                title_update=True, 
-                                title_padding=theme['titlepadding'] if theme['titlepadding'] else 4,
-                                title_head_text=theme['rightmoduleprefix'], head_tail_font=BORDER_FONT['font'],
-                                head_tail_font_size=BORDER_FONT['fontsize'], title_font=ICON_FONT['font'],
-                                title_font_size=ICON_FONT['fontsize'], click_func=show_hide_power_widgets,
-                                margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-
-def getGroupWidgets(theme, screen, groups):
-    result = []
-    for group in groups:
-        result.append(
-            ComboWidget(title_func=partial(getGroupLabel, group=group.name),
-               title_bg=theme['bodybg'], title_fg=theme['bodyfg'], title_update=True,
-               title_padding=theme['wspadding'], title_head_text=theme['leftmoduleprefix'],
-               title_color_func=partial(
-                   getGroupColors, group=group.name, theme=theme, screen=screen),
-               title_tail_text=theme['leftmodulesuffix'], head_tail_font=BORDER_FONT[
-                   'font'], head_tail_font_size=BORDER_FONT['fontsize'],
-               title_font=ICON_FONT['font'], title_font_size=ICON_FONT['fontsize'],
-               click_func=partial(clickGroup, group=group.name), inactive_hide=True,
-               click_update=True, margin_text=theme['moduleseparator'] if 'moduleseparator' in theme else '')
-        )
-    return result
-
-
-def getWidgets(theme, screen, groups):
-    global common_widgets, group_widgets
-
-    if len(common_widgets) < 1:
-        prepareCommonWidgets(theme)
-
-    # Layout Icon
+    # Layout icon
     widgets = [
+        widget.TextBox(
+            **BORDER_FONT, text=theme['leftmoduleprefix'], foreground=theme['titlebg'], padding=0),
         widget.CurrentLayoutIcon(
             background=theme['titlebg'], scale=0.6, foreground=theme['titlefg'],
             padding=theme['titlepadding'] if theme['titlepadding'] else 4),
@@ -212,77 +279,110 @@ def getWidgets(theme, screen, groups):
             **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['titlebg'], padding=0)
     ]
 
-    _groups_widgets = getGroupWidgets(theme, screen, groups)
-    for w in _groups_widgets:
-        widgets += w.getWidgets()
-    group_widgets[screen] = _groups_widgets
+    # Group widgets
+    group_widgets[screen] = []
+    for group in groups:
+        if group.name == 'scratchpad':
+            continue
 
-    widgets += common_widgets['mpd'].getWidgets()
-
-    # Prompt
-    if screen == 0:
-        if 'moduleseparator' in theme and theme['moduleseparator'] != "":
-            widgets += [widget.TextBox(text=theme['moduleseparator'], padding=0)]
-        widgets += [
+        _group_widgets = [
             widget.TextBox(
-                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0),
-            widget.Prompt(
-                **DEFAULT_FONT, foreground=theme['titlefg'], background=theme['titlebg'], prompt=getIcons()['launch']+" "),
+                **BORDER_FONT, text=theme['leftmoduleprefix'], foreground=theme['bodybg'], padding=0),
             widget.TextBox(
-                **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
+                # **ICON_FONT, text=lazy.function(getGroupLabel, group.name),
+                **ICON_FONT, text=group.label,
+                foreground=theme['bodyfg'], background=theme['bodybg'], padding=1,
+                mouse_callbacks={'Button1': lazy.function(clickGroup, group.name, theme)}),
+            widget.TextBox(
+                **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['bodybg'], padding=0)
         ]
+        group_widgets[screen].append(_group_widgets)
+        widgets += _group_widgets
 
-    # Auto spacer
-    widgets += [widget.Spacer()]
-
-    widgets += common_widgets['locks'].getWidgets()
-    widgets += common_widgets['temperature'].getWidgets()
-    widgets += common_widgets['utilization'].getWidgets()
-    widgets += common_widgets['volume'].getWidgets()
-    for k in ['wlan', 'lan']:
-        for w in common_widgets[k]:
-            widgets += w.getWidgets()
-
-    widgets += common_widgets['local_time'].getWidgets()
-    widgets += common_widgets['india_time'].getWidgets()
-    widgets += common_widgets['battery'].getWidgets()
-    widgets += common_widgets['screen_lock'].getWidgets()
-    widgets += common_widgets['shut'].getWidgets()
-    widgets += common_widgets['toggle_power'].getWidgets()
+    widgets += common_widgets['mpd'] + common_widgets['module_separator'] + common_widgets['prompt']
+    widgets.append(widget.Spacer())
+    widgets += common_widgets['locks'] + common_widgets['module_separator'] + common_widgets['volume'] + common_widgets['module_separator'] 
+    widgets += common_widgets['temperature'] + common_widgets['module_separator'] + common_widgets['utilization'] + common_widgets['module_separator'] 
+    widgets += common_widgets['network'] + common_widgets['module_separator'] 
+    widgets += common_widgets['time'] + common_widgets['module_separator'] 
+    if 'battery' in common_widgets:
+        widgets += common_widgets['battery'] + common_widgets['module_separator'] 
+    widgets += common_widgets['power']
 
     return widgets
 
 
-def updateGroupWidgets():
-    global group_widgets
-    for screen in group_widgets:
-        for w in group_widgets[screen]:
-            w.update()
-
-
-def clickGroup(qtile: Qtile, button: int, group: str):
+def clickGroup(qtile: Qtile, groupName: str, theme):
     for _group in qtile.groups:
-        if _group.name == group:
+        if _group.name == groupName:
             _group.cmd_toscreen()
             break
-    updateGroupWidgets()
+    updateGroupWidgets(qtile, theme)
 
 
-def show_hide_power_widgets(qtile, button):
-    if button != MOUSE_BUTTONS['LEFT_CLICK']:
-        return
+def updateGroupWidgets(q: Qtile, theme: dict):
+    global group_widgets
 
+    for screen in group_widgets:
+        for i, group in enumerate(group_widgets[screen], start=1):
+            # group is an array of the form [TextBox(modulePrefix), TextBox(group.label), TextBox(moduleSuffix)]
+            # label = getGroupLabel(q, str(i))
+            # if not label:
+            #     for g in group:
+            #         g.update("")
+            # else:
+            (fgColor, bgColor) = getGroupColors(q, str(i), theme, screen)
+            group[0].foreground = bgColor
+            group[1].foreground = fgColor
+            group[1].background = bgColor
+            group[2].foreground = bgColor
+            for g in group:
+                g.update(g.text)
+
+
+def updateVolume(button: int):
     global common_widgets
-    common_widgets['screen_lock'].show(
-        common_widgets['screen_lock'].isHidden())
-    common_widgets['shut'].show(common_widgets['shut'].isHidden())
+    volumeClicked(button)
+    # if button in [1, 2]:
+    #     common_widgets['volume'][1].update(getIcons()['mute'])
+    # else:
+    common_widgets['volume'][1].update(getVolumeIcon())
+    common_widgets['volume'][3].update(getVolume())
 
-    if common_widgets['screen_lock'].isHidden():
-        common_widgets['toggle_power'].title.update(getIcons()['power'])
+
+def updateNetworkWidgets(theme: dict, interface: str):
+    global common_widgets
+    wlan = 'wl' in interface
+    widgets = common_widgets[interface] if interface in common_widgets else []
+    if not widgets:
+        return ""
+
+    result = getWlan(interface, '') if wlan else getLan(interface, '')
+    if not result:
+        # hide all the widgets
+        for _widget in widgets:
+            _widget.update("")
     else:
-        common_widgets['toggle_power'].title.update(getIcons()['cancel'])
+        widgets[0].update(theme['rightmoduleprefix'])
+        widgets[1].update(getIcons()['wlan' if wlan else 'lan'])
+        widgets[2].update(theme['rightmodulesuffix'])
+        widgets[4].update(theme['rightmodulesuffix'])
 
+    return result
 
-def updateVolumeWidgets():
+def updateLockWidget(theme: dict):
     global common_widgets
-    common_widgets['volume'].update()
+
+    widgets = common_widgets['locks']
+    result = getlocksStatus()
+    if not result:
+        # hide all the widgets
+        for _widget in widgets:
+            _widget.update("")
+    else:
+        widgets[0].update(theme['rightmoduleprefix'])
+        widgets[1].update(getIcons()['locks'])
+        widgets[2].update(theme['rightmodulesuffix'])
+        widgets[4].update(theme['rightmodulesuffix'])
+
+    return result

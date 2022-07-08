@@ -1,11 +1,15 @@
 from subprocess import check_output, CalledProcessError, Popen
+import subprocess
 import re
-import argparse
 
 from libqtile.log_utils import logger
 
-GET_SINK_DETAILS_RE = re.compile('\d+\s+sink\(s\)\s+available.([\s\S]*)\d+\s+source\(s\)\s+available.')
-SINK_DETAILS_RE = re.compile('(\*?)\s+index:\s+(\d+)|volume:\s+front-left:\s+\d+\s+/\s+(\d+)%|volume:\s+mono:\s+\d+\s+/\s+(\d+)%|muted:\s+(\w+)')
+GET_SINK_DETAILS_RE = re.compile(
+    '\d+\s+sink\(s\)\s+available.([\s\S]*)\d+\s+source\(s\)\s+available.')
+SINK_DETAILS_RE = re.compile(
+    '(\*?)\s+index:\s+(\d+)|volume:\s+front-left:\s+\d+\s+/\s+(\d+)%|volume:\s+mono:\s+\d+\s+/\s+(\d+)%|muted:\s+(\w+)')
+GET_VOL_RE = re.compile('\[(\d+)\%\]')
+GET_MUTED_RE = re.compile('\[\d+\%\]\s\[(\w+)\]')
 
 sinks = []
 active_sink = []
@@ -14,14 +18,14 @@ def _getSinks(fullDetails=True):
     sinks = []
     active = {}
     if fullDetails:
-        cmd =  "pacmd list sinks"
+        cmd = "pacmd list sinks"
         try:
             pacmd = check_output(
                 cmd.split()).decode()
         except CalledProcessError as e:
             logger.warn("Error while getting current sinks: {}".format(e))
             return [], {}
-        
+
         _sink_details = GET_SINK_DETAILS_RE.search(pacmd).group()
         _sinks = SINK_DETAILS_RE.findall(_sink_details)
         this_sink = {}
@@ -41,7 +45,8 @@ def _getSinks(fullDetails=True):
                     logger.warn(f'Audio/GetSinks: Empty volume: {_sinks}')
                     return [], {}
 
-                this_sink['volume'] = int(found[3]) if not found[2] else int(found[2])
+                this_sink['volume'] = int(
+                    found[3]) if not found[2] else int(found[2])
             elif _index == 2:
                 if not found[4]:
                     logger.warn(f'Audio/GetSinks: Empty mute flag: {_sinks}')
@@ -63,6 +68,7 @@ def _getSinks(fullDetails=True):
     # logger.warn(sinks)
     return sinks, active
 
+
 def update():
     """
      Re-fetches current data from pulse audio
@@ -70,7 +76,8 @@ def update():
     global sinks, active_sink
     sinks, active_sink = _getSinks()
 
-def isMuted(refresh=True):
+
+def isMuted() -> bool:
     '''
     Check if the active sink is muted
 
@@ -78,78 +85,67 @@ def isMuted(refresh=True):
     refresh:boolean - Re-fetches current data from pulse audio
     returns True/False
     '''
-    global active_sink, sinks
-    if refresh or not active_sink:
-        sinks, active_sink = _getSinks()
-    if not active_sink:
-        logger.warning(f'Audio/toggleMuted: no active sink: {active_sink}')
+    try:
+        rawVol = check_output('amixer get Master'.split()).decode()
+        muted = GET_MUTED_RE.search(rawVol).groups()[0]
+        return muted == 'off'
+    except CalledProcessError as err:
+        logger.warning("audio getMuted error : {}".format(err))
         return False
 
-    return active_sink['muted']
 
-def getVolume(refresh=True):
+def getVolume() -> str:
     '''
     Gets the active sink volume
 
     Args:
-    refresh:boolean - Re-fetches current data from pulse audio
-    returns int. -1 if error
+    returns int 
     '''
-    global active_sink, sinks
-    if refresh or not active_sink:
-        sinks, active_sink = _getSinks()
-    if not active_sink:
-        logger.warning(f'Audio/toggleMuted: no active sink: {active_sink}')
-        return 0
-    return active_sink['volume']
+    try:
+        rawVol = check_output('amixer get Master'.split()).decode()
+        return int(GET_VOL_RE.search(rawVol).groups()[0])
+    except CalledProcessError as err:
+        logger.warning("audio getVolume error : {}".format(err))
+        return ''
 
-def setMute(mute=2, refresh=False):
+
+def setMute(action='toggle') -> bool:
     '''
     Sets active sink mute state
 
     Args:
-    mute:int        - 0-unmute, 1-mute, 2-toggle
-    refresh:boolean - Re-fetches current data from pulse audio
-
-    returns True is succeeded, False if error
+    action:str        - mute, unmute, toggle
+    returns True if carried out successfully else False
     '''
-    global active_sink, sinks
-    if refresh or not active_sink:
-        sinks, active_sink = _getSinks()
-    if not active_sink:
-        logger.warning(f'Audio/toggleMuted: no active sink: {active_sink}')
-        return False
-    cmd = 'toggle' if mute == 2 else str(mute)
-    muteCmd = f'pactl set-sink-mute {active_sink["index"]} {cmd}'.split()
-    
+    muteCmd = f'amixer -q sset Master {action}'.split()
+
     try:
-        Popen(muteCmd)
+        subprocess.run(muteCmd)
     except CalledProcessError as err:
         logger.warning("SetMute error : {}".format(err))
         return False
 
     return True
 
-def setVolume(value, refresh=False):
+
+def setVolume(value) -> bool:
     '''
     Sets active sink volume
 
     Args
-    value:string -  "+5" or "-5" for incremental control
-                     "5" or "7" for absolute control
-                     "+5%" or "5%" is also valid
-    refresh:boolean - Re-fetches current data from pulse audio
-    returns True is succeeded, False if error
+    value:string -  "5%+" or "5%-" for incremental control
+                     "5%" or "7%" for absolute control
+    returns True if carried out successfully else False
     '''
-    global active_sink, sinks
-    if refresh or not active_sink:
-        sinks, active_sink = _getSinks()
-    if not active_sink:
-        logger.warning(f'Audio/toggleMuted: no active sink: {active_sink}')
+    volCmd = f'amixer -q set Master {value.strip()}'.split()
+    try:
+        subprocess.run(volCmd)
+    except CalledProcessError as err:
+        logger.warning("SetVolume error : {}".format(err))
         return False
-    volCmd = f'pactl set-sink-volume {active_sink["index"]} {value.strip()}'.split()
-    Popen(volCmd)
+
     return True
+
 
 def setActiveSink(sink):
     '''
@@ -163,9 +159,11 @@ def setActiveSink(sink):
     toSink = 0
     sink = sink.strip().lower()
     if sink == 'next':
-        toSink = active_sink['position'] + 1 if active_sink['position'] < len(sinks)-1 else 0
+        toSink = active_sink['position'] + \
+            1 if active_sink['position'] < len(sinks)-1 else 0
     elif sink == 'prev':
-        toSink = active_sink['position'] - 1 if active_sink['position'] > 0 else len(sinks) - 1
+        toSink = active_sink['position'] - \
+            1 if active_sink['position'] > 0 else len(sinks) - 1
     else:
         if sink > len(sinks):
             logger.warning("Audio/setActiveSink: Invalid sink({}), expected {}".format(
