@@ -27,7 +27,7 @@ groups = [
     Group(name='3', label=f'3 {getIcons()["code"]}'),
     Group(
         name='4', label=f'4 {getIcons()["folder"]}', spawn='nautilus'),
-    Group(name='5', label=f'5 {getIcons()["music"]}',
+    Group(name='5', label=f'5 {getIcons()["music"]}', spawn=['ncmpcpp'],
           matches=[Match(title='mpd'), Match(wm_class="music")]),
     Group(name='6', label=f'6 {getIcons()["mail"]}', spawn=['geary', 'gnome-calendar'],
           layout='monadtall', matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
