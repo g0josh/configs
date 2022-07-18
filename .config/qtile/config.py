@@ -8,8 +8,9 @@ from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
 
 from icons import getIcons
-from my_scripts import getTheme, setupMonitors, updateWallpaper, getNumScreens
-from my_bar import DEFAULT_FONT, BORDER_FONT, getWidgets, updateGroupWidgets
+from my_scripts import MOUSE_BUTTONS, clickMpd, getTheme, setupMonitors, updateWallpaper, getNumScreens, volumeClicked
+from my_bar import DEFAULT_FONT, BORDER_FONT, getWidgets, updateGroupWidgets, updateVolume
+from my_audio import setActiveSink
 
 MOD = "mod4"
 ALT = "mod1"
@@ -66,6 +67,10 @@ def next_prev_group(qtile, next=True):
     qtile.groups[i].cmd_toscreen()
     updateWallpaper(qtile)
     updateGroupWidgets(qtile, THEME)
+
+def cycle_audio_sink(qtile, next=True):
+    setActiveSink('next' if next else 'prev')
+    updateVolume(1, True)
 
 
 keys = [
@@ -154,7 +159,20 @@ keys = [
     Key([MOD, "control", "shift"], "k", lazy.function(
         lambda x:window_to_next_prev_group(x, next=False))),
 
-    Key([MOD, "control"], "m", lazy.function(setupMonitors))
+    Key([MOD, "control"], "m", lazy.function(setupMonitors)),
+    
+    # Audio
+    Key([MOD, ALT], "k", lazy.function(lambda x: updateVolume(MOUSE_BUTTONS['SCROLL_UP'])), desc="Increase volume of active sink"),
+    Key([MOD, ALT], "j", lazy.function(lambda x: updateVolume(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Decrease volume of active sink"),
+    Key([MOD, ALT], "u", lazy.function(cycle_audio_sink), desc="Switch to next audio sink"),
+    Key([MOD, ALT], "d", lazy.function(cycle_audio_sink, False), desc="Switch to previous audio sink"),
+    Key([MOD, ALT], "Next", lazy.function(cycle_audio_sink), desc="Switch to next audio sink"),
+    Key([MOD, ALT], "Prior", lazy.function(cycle_audio_sink, False), desc="Switch to previous audio sink"),
+
+    # Music
+    Key([MOD, ALT], "space", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['LEFT_CLICK'])), desc="Toggle music"),
+    Key([MOD, ALT], "h", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Decrease volume of active sink"),
+    Key([MOD, ALT], "l", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_UP'])), desc="Decrease volume of active sink")
 ]
 
 for i in groups:

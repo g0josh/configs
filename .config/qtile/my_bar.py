@@ -7,7 +7,7 @@ from libqtile.core.manager import Qtile
 from libqtile.log_utils import logger
 from psutil import net_connections
 
-from my_scripts import getGroupLabel, getVolume, getVolumeIcon, volumeClicked
+from my_scripts import getGroupLabel, getVolume, getVolumeIcon, updateWallpaper, volumeClicked
 from my_scripts import getGroupColors
 from my_scripts import getMpd, clickMpd
 from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
@@ -318,6 +318,7 @@ def clickGroup(qtile: Qtile, groupName: str, theme):
             _group.cmd_toscreen()
             break
     updateGroupWidgets(qtile, theme)
+    updateWallpaper(qtile)
 
 
 def updateGroupWidgets(q: Qtile, theme: dict):
@@ -340,9 +341,10 @@ def updateGroupWidgets(q: Qtile, theme: dict):
                 g.update(g.text)
 
 
-def updateVolume(button: int):
+def updateVolume(button: int = 1, widget_only = False):
     global common_widgets
-    volumeClicked(button)
+    if not widget_only:
+        volumeClicked(button)
     # if button in [1, 2]:
     #     common_widgets['volume'][1].update(getIcons()['mute'])
     # else:

@@ -80,8 +80,10 @@ def getBatteryCapacity():
 # ---------------------------------------------
 
 def volumeClicked(button:int):
-    if button in [MOUSE_BUTTONS['LEFT_CLICK'], MOUSE_BUTTONS['RIGHT_CLICK']]:
+    if button == MOUSE_BUTTONS['LEFT_CLICK']:
         audio.setMute()
+    elif button == MOUSE_BUTTONS['RIGHT_CLICK']:
+        audio.setActiveSink('next')
     elif button == MOUSE_BUTTONS['SCROLL_UP']:
         audio.setVolume("5%+")
     elif button == MOUSE_BUTTONS['SCROLL_DOWN']:

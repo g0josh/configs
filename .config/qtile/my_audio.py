@@ -1,3 +1,5 @@
+import enum
+import functools
 from subprocess import check_output, CalledProcessError, Popen
 import subprocess
 import re
@@ -10,72 +12,24 @@ SINK_DETAILS_RE = re.compile(
     '(\*?)\s+index:\s+(\d+)|volume:\s+front-left:\s+\d+\s+/\s+(\d+)%|volume:\s+mono:\s+\d+\s+/\s+(\d+)%|muted:\s+(\w+)')
 GET_VOL_RE = re.compile('\[(\d+)\%\]')
 GET_MUTED_RE = re.compile('\[\d+\%\]\s\[(\w+)\]')
+GET_SINKS_RE = re.compile('\d+\t([^\s]+)')
 
-sinks = []
-active_sink = []
+def _getSinks():
+    cmd = "pactl list short sinks"
+    active_sink_cmd = 'pactl get-default-sink'
+    try:
+        raw_sinks = check_output(cmd.split()).decode().strip()
+        active_sink = check_output(active_sink_cmd.split()).decode().strip()
+    except CalledProcessError as e:
+        logger.warn("Error while getting current sinks: {}".format(e))
+        return [] 
 
-def _getSinks(fullDetails=True):
+    _sinks = GET_SINKS_RE.findall(raw_sinks)
     sinks = []
-    active = {}
-    if fullDetails:
-        cmd = "pacmd list sinks"
-        try:
-            pacmd = check_output(
-                cmd.split()).decode()
-        except CalledProcessError as e:
-            logger.warn("Error while getting current sinks: {}".format(e))
-            return [], {}
+    for name in _sinks:
+        sinks.append((name, active_sink == name))
 
-        _sink_details = GET_SINK_DETAILS_RE.search(pacmd).group()
-        _sinks = SINK_DETAILS_RE.findall(_sink_details)
-        this_sink = {}
-        for index, found in enumerate(_sinks):
-            _index = index if index < 3 else index - 3
-            if _index == 0:
-                if not found[1]:
-                    logger.warn(f'Audio/GetSinks: Empty index: {_sinks}')
-                    return [], {}
-                this_sink = {
-                    'index': found[1],
-                    'active': True if found[0] == "*" else False,
-                    'position': len(sinks)
-                }
-            elif _index == 1:
-                if not found[2] and not found[3]:
-                    logger.warn(f'Audio/GetSinks: Empty volume: {_sinks}')
-                    return [], {}
-
-                this_sink['volume'] = int(
-                    found[3]) if not found[2] else int(found[2])
-            elif _index == 2:
-                if not found[4]:
-                    logger.warn(f'Audio/GetSinks: Empty mute flag: {_sinks}')
-                    return [], {}
-
-                this_sink['muted'] = True if found[4] == 'yes' else 'False'
-                sinks.append(dict(this_sink))
-                if this_sink['active']:
-                    active = dict(this_sink)
-                this_sink = {}
-    else:
-        sinksCmd = "pactl list short sinks|awk '{print $1}'"
-        try:
-            sinks = check_output(sinksCmd, shell=True).decode().strip().split()
-        except CalledProcessError as e:
-            logger.warn("Error while getting current sinks: {}".format(e))
-            return [], {}
-
-    # logger.warn(sinks)
-    return sinks, active
-
-
-def update():
-    """
-     Re-fetches current data from pulse audio
-    """
-    global sinks, active_sink
-    sinks, active_sink = _getSinks()
-
+    return sinks
 
 def isMuted() -> bool:
     '''
@@ -146,45 +100,37 @@ def setVolume(value) -> bool:
 
     return True
 
-
-def setActiveSink(sink):
+def setActiveSink(sink_name: str):
     '''
     Sets the active sink
     args:
-    sink:string - "1" or any sink index number sets the corresponding sink as active
-                    "next" or "prev" sets the next or previous sink as the active one
+    sink:string - any sink name ( from pactl list sinks command)
+                  "next" or "prev" sets the next or previous sink as the active one
     '''
-    global sinks, active_sink
-    sinks, active_sink = _getSinks()
-    toSink = 0
-    sink = sink.strip().lower()
-    if sink == 'next':
-        toSink = active_sink['position'] + \
-            1 if active_sink['position'] < len(sinks)-1 else 0
-    elif sink == 'prev':
-        toSink = active_sink['position'] - \
-            1 if active_sink['position'] > 0 else len(sinks) - 1
+    to_sink = None
+    if sink_name not in ['prev', 'next']:
+        to_sink = sink_name
     else:
-        if sink > len(sinks):
-            logger.warning("Audio/setActiveSink: Invalid sink({}), expected {}".format(
-                sink, ['prev', 'next', range(len(sinks))]))
-            return False
-        else:
-            toSink = sink - 1
+        sinks = _getSinks()
+        if not sinks:
+            logger.warn('No sinks found to set active sink')
+            return
 
-    Popen("pacmd set-default-sink {}".format(sinks[toSink]['index']).split())
-    active_sink = sinks[toSink]
+        active_sink_index = None
+        for index, (_, active) in enumerate(sinks):
+            if active:
+                active_sink_index = index
+                break
+        if active_sink_index is None:
+            logger.warn("No active index found while setting active sink")
+            return
+        
+        if sink_name == 'next':
+            to_sink = sinks[active_sink_index + 1 if active_sink_index+1 < len(sinks) else 0][0]
+        elif sink_name == 'prev':
+            to_sink = sinks[active_sink_index - 1 if active_sink_index > 0 else len(sinks)-1][0]
 
-    # Most of the time you dont need this
-    # get sink inputs
-    # try:
-    #     inputs = check_output("pactl list short sink-inputs|awk '{print $1}'", shell=True).decode().strip().split()
-    # except CalledProcessError as e:
-    #     logger.warning("Error while getting sink inputs: {}"format(e))
-    #     return False
-
-    # for inp in inputs:
-    #     cmd = f'pactl move-sink-input {inp} {sinks[toSink]["index"]}'
-    #     Popen(cmd.split())
-
-    return True
+    if to_sink:
+        Popen("pactl set-default-sink {}".format(to_sink).split())
+    else:
+        logger.warn('No sink to set active sink')
