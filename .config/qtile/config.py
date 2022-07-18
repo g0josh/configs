@@ -171,8 +171,8 @@ keys = [
 
     # Music
     Key([MOD, ALT], "space", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['LEFT_CLICK'])), desc="Toggle music"),
-    Key([MOD, ALT], "h", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Decrease volume of active sink"),
-    Key([MOD, ALT], "l", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_UP'])), desc="Decrease volume of active sink")
+    Key([MOD, ALT], "h", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_UP'])), desc="Decrease volume of active sink"),
+    Key([MOD, ALT], "l", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Decrease volume of active sink")
 ]
 
 for i in groups:
