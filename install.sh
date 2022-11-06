@@ -6,10 +6,8 @@ echo "---------------------------------------"
 echo ""
 sudo pamac checkupdates -a
 sudo pamac upgrade -a
-sudo pamac install code pavucontrol firefox rxvt-unicode imagemagick \
-feh bc lm_sensors lxappearance arandr rofi nomacs \
-polybar neovim python3-opencv flameshot neovim samba mpd ncmpcpp mpc -y
-pamac build picom rslsync
+sudo pamac install code pavucontrol firefox imagemagick feh bc lm_sensors lxappearance picom qtile polybar neovim python3-opencv flameshot samba mpd ncmpcpp mpc
+pamac build rslsync
 
 echo ""
 echo "---------------------------------------"
@@ -33,7 +31,6 @@ cp .config/rslsync ~/.config -r
 cp .Xresources ~/
 cp .xinitrc ~/
 cp .tmux.conf ~/
-cp .zshrc ~/
 cp .fonts ~/ -r
 fc-cache -fv
 
@@ -74,18 +71,15 @@ sudo mount /dev/sdb2 /mnt/storage
 rm -rf Music Videos Documents Pictures
 ln -s /mnt/storage Storage
 ln -s /mnt/media Media
-ln -s /mnt/hdd/sync/documents Documents
-ln -s /mnt/hdd/sync/music Music
-ln -s /mnt/hdd/pictures Pictures
+ln -s /mnt/storage/sync/documents Documents
+ln -s /mnt/storage/sync/music Music
+ln -s /mnt/storage/pictures Pictures
 ln -s /mnt/media/movies Videos
 echo "---------------------------------------"
 echo "Mounted drives, refer fstab and fix /etc/fstab"
 echo "---------------------------------------"
 echo ""
 
-systemctl start smb
 systemctl enable smb
-systemctl start rslsync --user
 systemctl enable rslsync --user
 systemctl enable mpd --user
-systemctl start mpd --user
