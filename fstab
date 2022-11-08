@@ -6,9 +6,9 @@
 #
 # <file system>             <mount point>  <type>  <options>  <dump>  <pass>
 UUID=2AD1-7E1D                            /boot/efi      vfat    umask=0077 0 2
-UUID=851ecae6-7b93-4980-9485-1be1f0176a49 /              ext4    defaults,noatime 0 1
+UUID=96e14e6c-4c87-4115-8ed1-70e1fdc34b86 /              ext4    defaults,noatime 0 1
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
 # /dev/sdb2 storage NTFS partition shared with Windows
 UUID=701A66371A65FA8C /mnt/storage ntfs-3g uid=1000,gid=1000,umask=0022 0 0
 # /dev/sda2 media NTFS partition shared with Windows
 UUID=268A20F48A20C263 /mnt/media ntfs-3g uid=1000,gid=1000,umask=0022 0 0
-
