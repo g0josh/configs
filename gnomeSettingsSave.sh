@@ -1,0 +1,1 @@
+dconf dump / > dconf.dump

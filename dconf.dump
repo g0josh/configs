@@ -3,8 +3,8 @@ dark-full-screen=true
 transparency=9
 
 [io/elementary/appcenter/settings]
-cached-drivers=['nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'bcmwl-kernel-source']
-last-refresh-time=int64 1655942057
+cached-drivers=['nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-515-server, (kernel modules provided by nvidia-dkms-515-server)', 'nvidia-driver-520, (kernel modules provided by nvidia-dkms-520)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'bcmwl-kernel-source']
+last-refresh-time=int64 1668029612
 window-maximized=false
 window-position=(1153, 467)
 window-size=(1100, 660)
@@ -24,7 +24,7 @@ source-currency=''
 source-units='degree'
 target-currency=''
 target-units='radian'
-window-position=(50, 82)
+window-position=(1288, 48)
 word-size=64
 
 [org/gnome/calendar]
@@ -34,7 +34,7 @@ window-position=(16, 16)
 window-size=(2528, 1408)
 
 [org/gnome/control-center]
-last-panel='background'
+last-panel='keyboard'
 
 [org/gnome/desktop/app-folders/folders/Pop-Office]
 apps=['libreoffice-calc.desktop', 'libreoffice-draw.desktop', 'libreoffice-impress.desktop', 'libreoffice-math.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-writer.desktop']
@@ -54,7 +54,8 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri-dark='file:///home/job/.local/share/backgrounds/2022-06-24-11-31-51-Wallpaper'
+picture-uri='file:///home/job/Pictures/Wallpaper'
+picture-uri-dark='file:///home/job/Pictures/Wallpaper'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -77,7 +78,7 @@ font-hinting='medium'
 gtk-theme='Pop-dark'
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal']
+application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal', 'org-gnome-calculator']
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
@@ -85,8 +86,14 @@ application-id='firefox.desktop'
 [org/gnome/desktop/notifications/application/gnome-control-center]
 application-id='gnome-control-center.desktop'
 
+[org/gnome/desktop/notifications/application/gnome-power-panel]
+application-id='gnome-power-panel.desktop'
+
 [org/gnome/desktop/notifications/application/io-elementary-appcenter]
 application-id='io.elementary.appcenter.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-calculator]
+application-id='org.gnome.Calculator.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-calendar]
 application-id='org.gnome.Calendar.desktop'
@@ -101,7 +108,7 @@ application-id='org.gnome.Terminal.desktop'
 application-id='rxvt-unicode.desktop'
 
 [org/gnome/desktop/peripherals/keyboard]
-numlock-state=false
+numlock-state=true
 
 [org/gnome/desktop/peripherals/touchpad]
 two-finger-scrolling-enabled=true
@@ -113,7 +120,7 @@ report-technical-problems=false
 color-shading-type='solid'
 lock-delay=uint32 0
 picture-options='zoom'
-picture-uri='file:///home/job/.local/share/backgrounds/2022-06-24-11-31-51-Wallpaper'
+picture-uri='file:///home/job/.local/share/backgrounds/2022-11-10-08-45-16-Wallpaper'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -121,17 +128,19 @@ secondary-color='#000000000000'
 idle-delay=uint32 300
 
 [org/gnome/desktop/wm/keybindings]
-switch-group=['<Super>asciitilde', '<Primary>Tab']
-switch-group-backward=['<Shift><Super>asciitilde', '<Primary><Shift>Tab']
+switch-group=['<Super>grave', '<Super>asciitilde', '<Primary>grave']
+switch-group-backward=['<Shift><Super>grave', '<Shift><Super>asciitilde', '<Primary><Shift>grave']
 switch-to-workspace-1=['<Super>1']
 switch-to-workspace-2=['<Super>2']
 switch-to-workspace-3=['<Super>3']
 switch-to-workspace-4=['<Super>4']
+switch-to-workspace-up=['<Primary><Super>Up', '<Primary><Super>KP_Up']
 toggle-fullscreen=['<Super>f']
 
 [org/gnome/desktop/wm/preferences]
 button-layout='appmenu:minimize,maximize,close'
 focus-mode='mouse'
+num-workspaces=7
 
 [org/gnome/evolution-data-server]
 migrated=true
@@ -142,6 +151,7 @@ scheme='pop-dark'
 
 [org/gnome/mutter]
 attach-modal-dialogs=true
+dynamic-workspaces=false
 edge-tiling=false
 
 [org/gnome/nautilus/preferences]
@@ -171,9 +181,15 @@ binding='Launch1'
 command='gnome-control-center wifi'
 name='WiFi'
 
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=1800
+sleep-inactive-ac-type='suspend'
+sleep-inactive-battery-timeout=1800
+sleep-inactive-battery-type='suspend'
+
 [org/gnome/shell]
 disabled-extensions=['cosmic-dock@system76.com', 'ding@rastersoft.com', 'transparent-top-bar@zhanghai.me', 'appindicatorsupport@rgcjonas.gmail.com']
-enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'cosmic-workspaces@system76.com', 'workspaces-bar@fthx']
+enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'workspaces-bar@fthx', 'cosmic-workspaces@system76.com']
 welcome-dialog-last-shown-version='42.1'
 
 [org/gnome/shell/extensions/appindicator]
@@ -191,12 +207,16 @@ notification-preferences='osd'
 style='show-hide'
 
 [org/gnome/shell/extensions/pop-cosmic]
+clock-alignment='RIGHT'
 overlay-key-action='APPLICATIONS'
 show-applications-button=true
+show-workspaces-button=false
 
 [org/gnome/shell/extensions/pop-shell]
 activate-launcher=@as []
 active-hint=true
+active-hint-border-radius=uint32 5
+focus-up=['<Super>Up', '<Super>KP_Up']
 fullscreen-launcher=true
 gap-inner=uint32 4
 gap-outer=uint32 4
@@ -218,8 +238,12 @@ tile-move-right=['Right', 'KP_Right', 'l']
 tile-move-up=['Up', 'k']
 toggle-floating=['<Shift><Super>f']
 
+[org/gnome/shell/extensions/sound-output-device-chooser]
+integrate-with-slider=true
+
 [org/gnome/shell/keybindings]
 toggle-application-view=@as []
+toggle-overview=['<Primary><Super>k']
 
 [org/gnome/system/location]
 enabled=false
@@ -235,5 +259,5 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(82, 571)
+window-position=(718, 302)
 window-size=(1124, 822)
