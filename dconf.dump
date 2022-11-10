@@ -1,6 +1,6 @@
 [com/ftpix/transparentbar]
 dark-full-screen=true
-transparency=9
+transparency=100
 
 [io/elementary/appcenter/settings]
 cached-drivers=['nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-515-server, (kernel modules provided by nvidia-dkms-515-server)', 'nvidia-driver-520, (kernel modules provided by nvidia-dkms-520)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'bcmwl-kernel-source']
@@ -78,7 +78,7 @@ font-hinting='medium'
 gtk-theme='Pop-dark'
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal', 'org-gnome-calculator']
+application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal', 'org-gnome-calculator', 'gnome-power-panel']
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
@@ -134,7 +134,7 @@ switch-to-workspace-1=['<Super>1']
 switch-to-workspace-2=['<Super>2']
 switch-to-workspace-3=['<Super>3']
 switch-to-workspace-4=['<Super>4']
-switch-to-workspace-up=['<Primary><Super>Up', '<Primary><Super>KP_Up']
+switch-to-workspace-up=['<Primary><Super>Up', '<Primary><Super>KP_Up', '<Primary><Super>k']
 toggle-fullscreen=['<Super>f']
 
 [org/gnome/desktop/wm/preferences]
@@ -188,8 +188,8 @@ sleep-inactive-battery-timeout=1800
 sleep-inactive-battery-type='suspend'
 
 [org/gnome/shell]
-disabled-extensions=['cosmic-dock@system76.com', 'ding@rastersoft.com', 'transparent-top-bar@zhanghai.me', 'appindicatorsupport@rgcjonas.gmail.com']
-enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'workspaces-bar@fthx', 'cosmic-workspaces@system76.com']
+disabled-extensions=['cosmic-dock@system76.com', 'ding@rastersoft.com', 'appindicatorsupport@rgcjonas.gmail.com']
+enabled-extensions=['pop-cosmic@system76.com', 'pop-shell@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'popx11gestures@system76.com', 'transparent-panel@fthx', 'lockkeys@vaina.lt', 'workspaces-bar@fthx', 'cosmic-workspaces@system76.com', 'network-stats@gnome.noroadsleft.xyz', 'sound-output-device-chooser@kgshank.net', 'transparent-top-bar@ftpix.com']
 welcome-dialog-last-shown-version='42.1'
 
 [org/gnome/shell/extensions/appindicator]
@@ -205,6 +205,11 @@ manualhide=true
 [org/gnome/shell/extensions/lockkeys]
 notification-preferences='osd'
 style='show-hide'
+
+[org/gnome/shell/extensions/network-stats]
+devices-info='{"enp34s0":{"initialReading":0,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"},"wlo1":{"initialReading":170283701,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"},"docker0":{"initialReading":0,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"}}'
+display-mode='both_speed'
+refresh-interval=2000
 
 [org/gnome/shell/extensions/pop-cosmic]
 clock-alignment='RIGHT'
@@ -243,7 +248,7 @@ integrate-with-slider=true
 
 [org/gnome/shell/keybindings]
 toggle-application-view=@as []
-toggle-overview=['<Primary><Super>k']
+toggle-overview=['<Super>d', '<Primary><Super>i']
 
 [org/gnome/system/location]
 enabled=false
