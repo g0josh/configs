@@ -34,7 +34,7 @@ window-position=(16, 16)
 window-size=(2528, 1408)
 
 [org/gnome/control-center]
-last-panel='keyboard'
+last-panel='display'
 
 [org/gnome/desktop/app-folders/folders/Pop-Office]
 apps=['libreoffice-calc.desktop', 'libreoffice-draw.desktop', 'libreoffice-impress.desktop', 'libreoffice-math.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-writer.desktop']
@@ -54,7 +54,7 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/job/Pictures/Wallpaper'
+picture-uri='file:///home/job/.config/themes/walls/shuttle.png'
 picture-uri-dark='file:///home/job/Pictures/Wallpaper'
 primary-color='#000000000000'
 secondary-color='#000000000000'
@@ -130,6 +130,8 @@ idle-delay=uint32 300
 [org/gnome/desktop/wm/keybindings]
 switch-group=['<Super>grave', '<Super>asciitilde', '<Primary>grave']
 switch-group-backward=['<Shift><Super>grave', '<Shift><Super>asciitilde', '<Primary><Shift>grave']
+switch-input-source=@as []
+switch-input-source-backward=@as []
 switch-to-workspace-1=['<Super>1']
 switch-to-workspace-2=['<Super>2']
 switch-to-workspace-3=['<Super>3']
@@ -236,7 +238,7 @@ show-title=false
 smart-gaps=false
 snap-to-grid=true
 tile-by-default=true
-tile-enter=['<Super>a']
+tile-enter=['<Super>space']
 tile-move-down=['Down', 'KP_Down', 'j']
 tile-move-left=['Left', 'KP_Left', 'h']
 tile-move-right=['Right', 'KP_Right', 'l']
