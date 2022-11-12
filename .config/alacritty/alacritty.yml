@@ -1,29 +1,29 @@
 alt_send_esc: true
 colors:
   bright:
-    black: '#9b8386'
-    blue: '#9D7495'
-    cyan: '#AF8CAE'
-    green: '#D2827C'
-    magenta: '#C87B84'
-    red: '#CD787A'
-    white: '#debcc0'
-    yellow: '#645D95'
+    black: '#615863'
+    blue: '#855269'
+    cyan: '#ed9b6f'
+    green: '#52977a'
+    magenta: '#855269'
+    red: '#ed5757'
+    white: '#fecdbe'
+    yellow: '#dc9754'
   indexed_colors: []
   normal:
-    black: '#141018'
-    blue: '#9D7495'
+    black: '#151016'
+    blue: '#762e4e'
     cursor: '#ffffff'
-    cursorColor: '#debcc0'
-    cyan: '#AF8CAE'
-    green: '#D2827C'
-    magenta: '#C87B84'
-    red: '#CD787A'
-    white: '#debcc0'
-    yellow: '#645D95'
+    cursorColor: '#d49988'
+    cyan: '#dc9754'
+    green: '#2d6f53'
+    magenta: '#762e4e'
+    red: '#bd4349'
+    white: '#d49988'
+    yellow: '#d26226'
   primary:
-    background: '#141018'
-    foreground: '#debcc0'
+    background: '#151016'
+    foreground: '#d49988'
 cursor:
   style: Block
   unfocused_hollow: true
@@ -37,22 +37,21 @@ draw_bold_text_with_bright_colors: true
 enable_experimental_conpty_backend: false
 font:
   bold:
-    family: Iosevka Nerd Font Mono
-    style: Bold Italic
+    family: Iosevka Nerd Font
+    style: Bold
   glyph_offset:
     x: 0
     y: 0
   italic:
-    family: Iosevka Nerd Font Mono
+    family: Iosevka Nerd Font
     style: Italic
   normal:
-    family: Iosevka Nerd Font Mono
+    family: Iosevka Nerd Font
     style: Regular
   offset:
     x: 0
     y: 0
   size: 12.0
-  use_thin_strokes: true
 key_bindings:
 - action: Paste
   key: V
@@ -395,13 +394,13 @@ selection:
   save_to_clipboard: true
   semantic_escape_chars: ",\u2502`|:\"' ()[]{}<>"
 window:
-  opacity: 0.97
   decorations: none
   dimensions:
     columns: 0
     lines: 0
   dynamic_padding: false
   dynamic_title: true
+  opacity: 0.97
   padding:
     x: 20
     y: 20

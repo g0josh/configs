@@ -3,14 +3,18 @@ dark-full-screen=true
 transparency=100
 
 [io/elementary/appcenter/settings]
-cached-drivers=['nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-515-server, (kernel modules provided by nvidia-dkms-515-server)', 'nvidia-driver-520, (kernel modules provided by nvidia-dkms-520)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'bcmwl-kernel-source']
-last-refresh-time=int64 1668029612
+cached-drivers=['nvidia-driver-510, (kernel modules provided by nvidia-dkms-510)', 'nvidia-driver-390, (kernel modules provided by nvidia-dkms-390)', 'nvidia-driver-418-server, (kernel modules provided by nvidia-dkms-418-server)', 'nvidia-driver-450-server, (kernel modules provided by nvidia-dkms-450-server)', 'nvidia-driver-515-server, (kernel modules provided by nvidia-dkms-515-server)', 'nvidia-driver-470, (kernel modules provided by nvidia-dkms-470)', 'nvidia-driver-510-server, (kernel modules provided by nvidia-dkms-510-server)', 'nvidia-driver-515, (kernel modules provided by nvidia-dkms-515)', 'nvidia-driver-520, (kernel modules provided by nvidia-dkms-520)', 'nvidia-driver-470-server, (kernel modules provided by nvidia-dkms-470-server)', 'bcmwl-kernel-source']
+last-refresh-time=int64 1668241427
 window-maximized=false
 window-position=(1153, 467)
 window-size=(1100, 660)
 
 [org/gnome/Geary]
 migrated-config=true
+
+[org/gnome/Totem]
+active-plugins=['mpris', 'apple-trailers', 'screensaver', 'autoload-subtitles', 'movie-properties', 'recent', 'vimeo', 'open-directory', 'variable-rate', 'skipto', 'screenshot', 'rotation', 'save-file']
+subtitle-encoding='UTF-8'
 
 [org/gnome/calculator]
 accuracy=9
@@ -24,7 +28,7 @@ source-currency=''
 source-units='degree'
 target-currency=''
 target-units='radian'
-window-position=(1288, 48)
+window-position=(16, 744)
 word-size=64
 
 [org/gnome/calendar]
@@ -34,7 +38,7 @@ window-position=(16, 16)
 window-size=(2528, 1408)
 
 [org/gnome/control-center]
-last-panel='display'
+last-panel='keyboard'
 
 [org/gnome/desktop/app-folders/folders/Pop-Office]
 apps=['libreoffice-calc.desktop', 'libreoffice-draw.desktop', 'libreoffice-impress.desktop', 'libreoffice-math.desktop', 'libreoffice-startcenter.desktop', 'libreoffice-writer.desktop']
@@ -54,10 +58,10 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/job/.config/themes/walls/shuttle.png'
-picture-uri-dark='file:///home/job/Pictures/Wallpaper'
-primary-color='#000000000000'
-secondary-color='#000000000000'
+picture-uri='file:///home/job/Pictures/Wallpapers/Wallpaper'
+picture-uri-dark='file:///home/job/Pictures/Wallpapers/Wallpaper'
+primary-color='#000000'
+secondary-color='#000000'
 
 [org/gnome/desktop/calendar]
 show-weekdate=true
@@ -78,16 +82,25 @@ font-hinting='medium'
 gtk-theme='Pop-dark'
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal', 'org-gnome-calculator', 'gnome-power-panel']
+application-children=['org-gnome-nautilus', 'io-elementary-appcenter', 'firefox', 'gnome-control-center', 'org-gnome-calendar', 'rxvt-unicode', 'org-gnome-terminal', 'org-gnome-calculator', 'gnome-power-panel', 'org-gnome-eog', 'com-alacritty-alacritty', 'org-gnome-totem', 'gimp', 'gnome-printers-panel']
+
+[org/gnome/desktop/notifications/application/com-alacritty-alacritty]
+application-id='com.alacritty.Alacritty.desktop'
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
+
+[org/gnome/desktop/notifications/application/gimp]
+application-id='gimp.desktop'
 
 [org/gnome/desktop/notifications/application/gnome-control-center]
 application-id='gnome-control-center.desktop'
 
 [org/gnome/desktop/notifications/application/gnome-power-panel]
 application-id='gnome-power-panel.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-printers-panel]
+application-id='gnome-printers-panel.desktop'
 
 [org/gnome/desktop/notifications/application/io-elementary-appcenter]
 application-id='io.elementary.appcenter.desktop'
@@ -98,11 +111,17 @@ application-id='org.gnome.Calculator.desktop'
 [org/gnome/desktop/notifications/application/org-gnome-calendar]
 application-id='org.gnome.Calendar.desktop'
 
+[org/gnome/desktop/notifications/application/org-gnome-eog]
+application-id='org.gnome.eog.desktop'
+
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-terminal]
 application-id='org.gnome.Terminal.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-totem]
+application-id='org.gnome.Totem.desktop'
 
 [org/gnome/desktop/notifications/application/rxvt-unicode]
 application-id='rxvt-unicode.desktop'
@@ -128,8 +147,8 @@ secondary-color='#000000000000'
 idle-delay=uint32 300
 
 [org/gnome/desktop/wm/keybindings]
-switch-group=['<Super>grave', '<Super>asciitilde', '<Primary>grave']
-switch-group-backward=['<Shift><Super>grave', '<Shift><Super>asciitilde', '<Primary><Shift>grave']
+switch-group=['<Super>grave', '<Super>asciitilde']
+switch-group-backward=['<Shift><Super>grave', '<Shift><Super>asciitilde']
 switch-input-source=@as []
 switch-input-source-backward=@as []
 switch-to-workspace-1=['<Super>1']
@@ -143,6 +162,10 @@ toggle-fullscreen=['<Super>f']
 button-layout='appmenu:minimize,maximize,close'
 focus-mode='mouse'
 num-workspaces=7
+
+[org/gnome/eog/view]
+background-color='rgb(0,0,0)'
+use-background-color=true
 
 [org/gnome/evolution-data-server]
 migrated=true
@@ -159,19 +182,21 @@ edge-tiling=false
 [org/gnome/nautilus/preferences]
 default-folder-viewer='icon-view'
 search-filter-time-type='last_modified'
+search-view='list-view'
 
 [org/gnome/nautilus/window-state]
-initial-size=(890, 550)
+initial-size=(1256, 680)
 maximized=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
 calculator=['<Super>c']
 control-center=['<Super>comma']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/PopLaunch1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
 home=['<Super>p']
 mic-mute=['<Alt><Super>a']
-next=['<Alt><Super>l']
-play=['<Alt><Super>space']
-previous=['<Alt><Super>h']
+next=@as []
+play=@as []
+previous=@as []
 search=['<Super>slash']
 terminal=['<Super>Return']
 volume-down=['<Alt><Super>j']
@@ -182,6 +207,21 @@ volume-up=['<Alt><Super>k']
 binding='Launch1'
 command='gnome-control-center wifi'
 name='WiFi'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Alt><Super>space'
+command='mpc toggle'
+name='Toggle play pause mpd'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Alt><Super>l'
+command='mpc next'
+name='Next track mpd'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Alt><Super>h'
+command='mpc prev'
+name='Previous track mpd'
 
 [org/gnome/settings-daemon/plugins/power]
 sleep-inactive-ac-timeout=1800
@@ -209,7 +249,7 @@ notification-preferences='osd'
 style='show-hide'
 
 [org/gnome/shell/extensions/network-stats]
-devices-info='{"enp34s0":{"initialReading":0,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"},"wlo1":{"initialReading":170283701,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"},"docker0":{"initialReading":0,"resetedAt":"Thu Nov 10 2022 17:44:11 GMT+1100 (AEDT)"}}'
+devices-info='{"enp34s0":{"resetedAt":"Sat Nov 12 2022 10:04:17 GMT+1100 (AEDT)","initialReading":0},"wlo1":{"resetedAt":"Sat Nov 12 2022 19:23:30 GMT+1100 (AEDT)","initialReading":2532537},"docker0":{"resetedAt":"Sat Nov 12 2022 10:04:17 GMT+1100 (AEDT)","initialReading":0},"enx02f43e2fe13c":{"initialReading":5297,"resetedAt":"Sat Nov 12 2022 11:56:48 GMT+1100 (AEDT)"}}'
 display-mode='both_speed'
 refresh-interval=2000
 
@@ -258,7 +298,7 @@ enabled=false
 [org/gtk/settings/file-chooser]
 date-format='regular'
 location-mode='path-bar'
-show-hidden=true
+show-hidden=false
 show-size-column=true
 show-type-column=true
 sidebar-width=150
@@ -266,5 +306,5 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(718, 302)
+window-position=(82, 302)
 window-size=(1124, 822)
