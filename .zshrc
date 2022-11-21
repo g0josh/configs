@@ -10,6 +10,7 @@ source /home/job/tools/powerlevel10k/powerlevel10k.zsh-theme
 bindkey '^r' history-incremental-search-backward
 bindkey -v
 alias ls='ls --color'
+alias logout='gnome-session-quit --no-prompt'
 alias vim=nvim
 alias shut='shutdown now'
 EDITOR='vi'
