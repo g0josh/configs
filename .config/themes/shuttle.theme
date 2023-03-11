@@ -1,8 +1,7 @@
-terminal_colors:
-    "! special
-    *.foreground:   #e3dad1
+terminal_colors: "! special
+    *.foreground:   #b6a28e
     *.background:   #0c080d
-    *.cursorColor:  #e3dad1
+    *.cursorColor:  #b6a28e
 
     ! black
     *.color0:       #0c080d
@@ -13,8 +12,8 @@ terminal_colors:
     *.color9:       #b72520
 
     ! green
-    *.color2:       #57293b
-    *.color10:      #c05a82
+    *.color2:       #82475e
+    *.color10:      #82475e
 
     ! yellow
     *.color3:       #ba5622
@@ -33,8 +32,8 @@ terminal_colors:
     *.color14:      #21cfff
 
     ! white
-    *.color7:       #e3dad1
-    *.color15:      #e3dad1"
+    *.color7:       #b6a28e
+    *.color15:      #b6a28e"
 wallpaper: "shuttle.png"
 bodyfg: "white"
 bodybg: "magenta"

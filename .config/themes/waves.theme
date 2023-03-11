@@ -1,11 +1,11 @@
 terminal_colors: "! special
-*.foreground:   #c3dbc5
+*.foreground:   #9fc4bb
 *.background:   #070d13
-*.cursorColor:  #c3dbc5
+*.cursorColor:  #9fc4bb
 
 ! black
 *.color0:       #070d13
-*.color8:       #e8dcb9
+*.color8:       #9fc4bb
 
 ! red
 *.color1:       #c6723b
@@ -32,8 +32,8 @@ terminal_colors: "! special
 *.color14:      #62958a
 
 ! white
-*.color7:       #c3dbc5
-*.color15:      #c3dbc5"
+*.color7:       #9fc4bb
+*.color15:      #9fc4bb"
 wallpaper: "waves.png"
 bodyfg: "background"
 bodybg: "magenta"

@@ -1,0 +1,35 @@
+terminal_colors: "pywal"
+wallpaper: "fluorescentMountain.jpg"
+bodyfg: "bright_black"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "yellow"
+focusedfg: "background"
+focusedbg: "yellow"
+urgentfg: "background"
+urgentbg: "bright_cyan"
+altfg: "blue"
+altbg: "cyan"
+gradient:
+    - "yellow"
+    - "red"
+    - "green"
+    - "bright_magenta"
+    - "magenta"
+    - "blue"
+    - "cyan"
+moduleseparator: ""
+wspadding: 0
+background: "background"
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "bright_yellow"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0

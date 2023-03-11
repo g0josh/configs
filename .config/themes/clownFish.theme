@@ -1,0 +1,35 @@
+terminal_colors: "pywal"
+wallpaper: "clownFish.jpg"
+bodyfg: "background"
+bodybg: "magenta"
+titlefg: "background"
+titlebg: "yellow"
+focusedfg: "background"
+focusedbg: "yellow"
+urgentfg: "foreground"
+urgentbg: "blue"
+altfg: "blue"
+altbg: "foreground"
+gradient:
+    - "blue"
+    - "bright_yellow"
+    - "yellow"
+    - "cyan"
+    - "green"
+    - "red"
+    - "magenta"
+moduleseparator: ""
+wspadding: 0
+background: "00000000" 
+leftmoduleprefix: ""
+leftmodulesuffix: ""
+rightmoduleprefix: ""
+rightmodulesuffix: ""
+titlepadding: 0
+bodypadding: 1
+focusedwindowborder: "red"
+windowborder: "background"
+barleftborder : 300
+barrightborder : 300
+bartopborder : 0
+barbottomborder : 0
