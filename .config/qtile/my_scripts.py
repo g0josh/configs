@@ -287,7 +287,8 @@ def getNetSpeeds(interface:str="wlo1", show_speed_above:int=1e3):
 #         return "{:3.0f} kB/s".format(speed/1e3) if speed < 1e6 else "{:2.1f} MB/s".format(speed/1e6)
     
 def getNetworkInterfaces():
-    return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
+    return ['enp0s25','wlan0']
+    # return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
 def getWlan(interface:str='wlo1', error_text:str='', show_speed_above:int=10e3):
     try:

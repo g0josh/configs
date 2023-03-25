@@ -15,7 +15,7 @@ from my_scripts import getNetworkInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
 from my_scripts import getBatteryCapacity, getBatteryStatusIcon
 
-from my_widgets import ComboWidget
+# from my_widgets import ComboWidget
 from icons import getIcons
 
 
