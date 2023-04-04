@@ -2,7 +2,9 @@ from functools import partial
 from libqtile.lazy import lazy
 
 from libqtile.config import Group
-from libqtile import widget
+from qtile_extras import widget 
+from qtile_extras.widget.decorations import RectDecoration
+# from libqtile import widget
 from libqtile.core.manager import Qtile
 from libqtile.log_utils import logger
 from psutil import net_connections
@@ -47,8 +49,9 @@ def prepareWidgets(theme: dict):
 
     global common_widgets
 
-    common_widgets['module_separator'] = [widget.TextBox(
-            **BORDER_FONT, text=theme['moduleseparator'], padding=0)]
+    # common_widgets['module_separator'] = [widget.TextBox(
+    #         **BORDER_FONT, text=theme['moduleseparator'], padding=0)]
+    common_widgets['module_separator'] = [widget.Spacer(length=theme['modulepadding'])]
 
     # Mpd
     mpdClick = {
@@ -60,44 +63,34 @@ def prepareWidgets(theme: dict):
     }
     common_widgets['mpd'] = [
         widget.TextBox(
-            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0, mouse_callbacks=mpdClick),
-        widget.TextBox(
-            **ICON_FONT, foreground=theme['titlefg'], background=theme['titlebg'],
-            text=getIcons()['music'], padding=theme['titlepadding'], mouse_callbacks=mpdClick),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['titlebg'], background=theme['bodybg'], text=theme['leftmodulesuffix'], padding=0, mouse_callbacks=mpdClick),
+            **ICON_FONT, foreground=theme['titlefg'], padding=theme['titlepadding'], background=theme['titlebg'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            text=getIcons()['music'], mouse_callbacks=mpdClick),
         widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['bodyfg'], background=theme['bodybg'],
+            **DEFAULT_FONT, foreground=theme['bodyfg'],padding=theme['bodypadding'], background=theme['bodybg'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             func=getMpd, mouse_callbacks=mpdClick,
-            padding=theme['bodypadding'], update_interval=3),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['bodybg'], text=theme['leftmodulesuffix'], padding=0, mouse_callbacks=clickMpd)
+            update_interval=3)
     ]
 
     # Prompt
     common_widgets['prompt'] = [
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmoduleprefix'], padding=0),
         widget.Prompt(
-            **DEFAULT_FONT, foreground=theme['titlefg'], background=theme['titlebg'], prompt=getIcons()['launch']+" "),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['titlebg'], text=theme['leftmodulesuffix'], padding=0),
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            **DEFAULT_FONT, padding=theme['titlepadding'],background=theme['titlebg'],
+            foreground=theme['titlefg'], prompt=getIcons()['launch']+" ")
     ]
 
     # Locks
     common_widgets['locks'] = [
         widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient1title'], text=theme['rightmoduleprefix'], padding=0),
-        widget.TextBox(
             **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient1title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True,group=True)],
             text=getIcons()['locks'], padding=theme['titlepadding']),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient1title'], background=theme['gradient1body'], text=theme['rightmodulesuffix'], padding=0),
         widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient1body'],
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient1title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             func=partial(updateLockWidget, theme), padding=theme['bodypadding'], update_interval=0.5),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient1body'], text=theme['rightmodulesuffix'], padding=0)
     ]
 
     # Volume
@@ -109,50 +102,44 @@ def prepareWidgets(theme: dict):
         'Button5': partial(updateVolume, 5)
     }
     common_widgets['volume'] = [
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient2title'], text=theme['rightmoduleprefix'], padding=0, mouse_callbacks=volumeClick),
         widget.GenPollText(
-            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient2title'],
-            func=getVolumeIcon, padding=theme['titlepadding'], mouse_callbacks=volumeClick, update_interval=5),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient2title'], background=theme['gradient2body'], text=theme['rightmodulesuffix'], padding=0, mouse_callbacks=volumeClick),
+            **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['titlepadding'], background=theme['gradient2title'],
+            func=getVolumeIcon, mouse_callbacks=volumeClick, update_interval=1,
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            ),
         widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient2body'],
-            func=getVolume, padding=theme['bodypadding'], mouse_callbacks=volumeClick, update_interval=5),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient2body'], text=theme['rightmodulesuffix'], padding=0, mouse_callbacks=volumeClick)
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient2title'],
+            func=getVolume, padding=theme['bodypadding'], mouse_callbacks=volumeClick, update_interval=1,
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            ),
     ]
 
     # Utilization
     common_widgets['utilization'] = [
         widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient3title'], text=theme['rightmoduleprefix'], padding=0),
-        widget.TextBox(
-            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient3title'],
-            text=getIcons()['utilization'], padding=theme['titlepadding']),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient3title'], background=theme['gradient3body'], text=theme['rightmodulesuffix'], padding=0),
+            **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+            text=getIcons()['utilization'], background=theme['gradient3title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            ),
         widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient3body'],
-            func=getUtilization, padding=theme['bodypadding'], update_interval=3),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient3body'], text=theme['rightmodulesuffix'], padding=0)
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], padding=theme['bodypadding'],
+            func=getUtilization, update_interval=3, background=theme['gradient3body'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            ),
     ]
 
     # Temperature
     common_widgets['temperature'] = [
         widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient4title'], text=theme['rightmoduleprefix'], padding=0),
-        widget.TextBox(
             **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient4title'],
-            text=getIcons()['temperature'], padding=theme['titlepadding']),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient4title'], background=theme['gradient4body'], text=theme['rightmodulesuffix'], padding=0),
+            text=getIcons()['temperature'], padding=theme['titlepadding'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            ),
         widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient4body'],
-            func=getTemps, padding=theme['bodypadding'], update_interval=3),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient4body'], text=theme['rightmodulesuffix'], padding=0)
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient4body'],
+            func=getTemps, padding=theme['bodypadding'], update_interval=3,
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            )
     ]
 
     # Network
@@ -161,17 +148,13 @@ def prepareWidgets(theme: dict):
         icon = getIcons()['wlan' if 'wl' in interface else 'lan']
         common_widgets[interface] = [
             widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient5title'], text=theme['rightmoduleprefix'], padding=0),
-            widget.TextBox(
-                **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient5title'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient5title'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=icon, padding=theme['titlepadding']),
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient5title'], background=theme['gradient5body'], text=theme['rightmodulesuffix'], padding=0),
             widget.GenPollText(
-                **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient5body'],
-                func=partial(updateNetworkWidgets, theme, interface), padding=theme['bodypadding'], update_interval=3),
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient5body'], text=theme['rightmodulesuffix'], padding=0)
+                **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient5body'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+                func=partial(updateNetworkWidgets, theme, interface), padding=theme['bodypadding'], update_interval=3)
         ]
         if not common_widgets['network']:
             common_widgets['network'] += common_widgets['module_separator']
@@ -179,85 +162,49 @@ def prepareWidgets(theme: dict):
 
     # Time
     common_widgets['time'] = [
-        # Local time
         widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient6title'], text=theme['rightmoduleprefix'], padding=0),
-        widget.TextBox(
-            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient6title'],
+            **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient6title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             text=getIcons()['clock'], padding=theme['titlepadding']),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient6title'], background=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
         widget.GenPollText(
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient6body'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             func=getTime, padding=theme['bodypadding'], update_interval=30),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
-
-        # Indian time
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient6title'], text=theme['rightmoduleprefix'], padding=0),
-        widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient6title'],
-            func=partial(getTime, format='%I:%M %p', timezone='Asia/Kolkata'), padding=theme['bodypadding'], update_interval=30),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient6body'], text=theme['rightmodulesuffix'], padding=0),
     ]
 
     # Battery
     if getBatteryStatusIcon():
         common_widgets['battery'] = [
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7title'], text=theme['rightmoduleprefix'], padding=0),
             widget.GenPollText(
                 **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient7title'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 func=getBatteryStatusIcon, padding=theme['titlepadding']),
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7title'], background=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
             widget.GenPollText(
-                **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient7body'],
-                func=getBatteryCapacity, padding=theme['bodypadding'], update_interval=3),
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0)
+                **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient7body'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+                func=getBatteryCapacity, padding=theme['bodypadding'], update_interval=3)
         ]
 
     # Power/Logout/Screen lock
     common_widgets['power'] = [
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
-        widget.WidgetBox(background=theme['gradient7body'], foreground=theme['gradienttitlefg'], close_button_location='right',
-                         text_closed=getIcons()['power'], text_open=getIcons()['cancel'], **ICON_FONT,
-                         widgets=[
+        widget.WidgetBox(foreground=theme['gradienttitlefg'], close_button_location='right', padding=theme['titlepadding'],
+                        decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+                        text_closed=f" {getIcons()['power']} ", text_open=f" {getIcons()['cancel']} ", **ICON_FONT,
+                        background=theme['gradient7title'], widgets=[
             # screen lock
             widget.TextBox(
-                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['screen_lock'], mouse_callbacks={'Button1': partial(powerClicked, 1, 2)}),
             widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
-
-            # Logout
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
-            widget.TextBox(
-                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['logout'], mouse_callbacks={'Button1': partial(powerClicked, 1, 1)}),
             widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
-
-            # shutdown
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0),
-            widget.TextBox(
-                **ICON_FONT, background=theme['gradient7body'], foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['power'], mouse_callbacks={'Button1': partial(powerClicked, 1, 0)}),
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
-
-            # prefix for the cancel button when box is opened
-            widget.TextBox(
-                **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmoduleprefix'], padding=0)
         ]),
-        widget.TextBox(
-            **BORDER_FONT, foreground=theme['gradient7body'], text=theme['rightmodulesuffix'], padding=0),
     ]
 
 
@@ -270,14 +217,11 @@ def getWidgets(theme: dict, screen: int, groups: list[Group]):
 
     # Layout icon
     widgets = [
-        widget.TextBox(
-            **BORDER_FONT, text=theme['leftmoduleprefix'], foreground=theme['titlebg'], padding=0),
         widget.CurrentLayoutIcon(
-            background=theme['titlebg'], scale=0.6, foreground=theme['titlefg'],
+            decorations=[RectDecoration(colour=theme['titlebg'], radius=5, filled=True)],
+            scale=0.6, foreground=theme['titlefg'],
             padding=theme['titlepadding'] if theme['titlepadding'] else 4),
-        widget.TextBox(
-            **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['titlebg'], padding=0)
-    ]
+    ] + common_widgets['module_separator']
 
     # Group widgets
     group_widgets[screen] = []
@@ -287,15 +231,11 @@ def getWidgets(theme: dict, screen: int, groups: list[Group]):
 
         _group_widgets = [
             widget.TextBox(
-                **BORDER_FONT, text=theme['leftmoduleprefix'], foreground=theme['bodybg'], padding=0),
-            widget.TextBox(
-                # **ICON_FONT, text=lazy.function(getGroupLabel, group.name),
                 **ICON_FONT, text=group.label,
-                foreground=theme['bodyfg'], background=theme['bodybg'], padding=1,
-                mouse_callbacks={'Button1': lazy.function(clickGroup, group.name, theme)}),
-            widget.TextBox(
-                **BORDER_FONT, text=theme['leftmodulesuffix'], foreground=theme['bodybg'], padding=0)
-        ]
+                decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True)],
+                foreground=theme['bodyfg'], padding=theme['titlepadding'], background=theme['bodybg'],
+                mouse_callbacks={'Button1': lazy.function(clickGroup, group.name, theme)})
+        ] + common_widgets['module_separator']
         group_widgets[screen].append(_group_widgets)
         widgets += _group_widgets
 
@@ -331,14 +271,11 @@ def updateGroupWidgets(q: Qtile, theme: dict):
             # if not label:
             #     for g in group:
             #         g.update("")
-            # else:
+            # else:]
             (fgColor, bgColor) = getGroupColors(q, str(i), theme, screen)
-            group[0].foreground = bgColor
-            group[1].foreground = fgColor
-            group[1].background = bgColor
-            group[2].foreground = bgColor
-            for g in group:
-                g.update(g.text)
+            group[0].foreground = fgColor
+            group[0].background = bgColor
+            group[0].update(group[0].text)
 
 
 def updateVolume(button: int = 1, widget_only = False):
@@ -348,8 +285,8 @@ def updateVolume(button: int = 1, widget_only = False):
     # if button in [1, 2]:
     #     common_widgets['volume'][1].update(getIcons()['mute'])
     # else:
-    common_widgets['volume'][1].update(getVolumeIcon())
-    common_widgets['volume'][3].update(getVolume())
+    common_widgets['volume'][0].update(getVolumeIcon())
+    common_widgets['volume'][1].update(getVolume())
 
 
 def updateNetworkWidgets(theme: dict, interface: str):
@@ -365,10 +302,10 @@ def updateNetworkWidgets(theme: dict, interface: str):
         for _widget in widgets:
             _widget.update("")
     else:
-        widgets[0].update(theme['rightmoduleprefix'])
-        widgets[1].update(getIcons()['wlan' if wlan else 'lan'])
-        widgets[2].update(theme['rightmodulesuffix'])
-        widgets[4].update(theme['rightmodulesuffix'])
+        # widgets[0].update(theme['rightmoduleprefix'])
+        widgets[0].update(getIcons()['wlan' if wlan else 'lan'])
+        # widgets[2].update(theme['rightmodulesuffix'])
+        # widgets[4].update(theme['rightmodulesuffix'])
 
     return result
 
@@ -382,9 +319,6 @@ def updateLockWidget(theme: dict):
         for _widget in widgets:
             _widget.update("")
     else:
-        widgets[0].update(theme['rightmoduleprefix'])
-        widgets[1].update(getIcons()['locks'])
-        widgets[2].update(theme['rightmodulesuffix'])
-        widgets[4].update(theme['rightmodulesuffix'])
+        widgets[0].update(getIcons()['locks'])
 
     return result
