@@ -12,8 +12,8 @@ from my_scripts import MOUSE_BUTTONS, clickMpd, getTheme, setupMonitors, updateW
 from my_bar import DEFAULT_FONT, BORDER_FONT, getWidgets, updateGroupWidgets, updateVolume
 from my_audio import setActiveSink
 
-MOD = "mod4"
-ALT = "mod1"
+MOD = "mod1"
+ALT = "mod4"
 TERMINAL = guess_terminal()
 BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
@@ -65,7 +65,7 @@ def next_prev_group(qtile, next=True):
     if i < 0 or i >= len(groups):
         return
     qtile.groups[i].cmd_toscreen()
-    updateWallpaper(qtile)
+    updateWallpaper(qtile, -1)
     updateGroupWidgets(qtile, THEME)
 
 def cycle_audio_sink(qtile, next=True):
@@ -188,14 +188,14 @@ for i in groups:
                 Key(
                     [MOD],
                     i.name,
-                    lazy.group[i.name].toscreen(), lazy.function(updateWallpaper), lazy.function(updateGroupWidgets, THEME),
+                    lazy.group[i.name].toscreen(), lazy.function(updateGroupWidgets, THEME), lazy.function(updateWallpaper, theme=THEME), 
                     desc="Switch to group {}".format(i.name),
                 ),
                 # mod1 + shift + letter of group = switch to & move focused window to group
                 Key(
                     [MOD, "shift"],
                     i.name,
-                    lazy.window.togroup(i.name, switch_group=True), lazy.function(updateWallpaper), lazy.function(updateGroupWidgets, THEME),
+                    lazy.window.togroup(i.name, switch_group=True),lazy.function(updateGroupWidgets, THEME), lazy.function(updateWallpaper, theme=THEME), 
                     desc="Switch to & move focused window to group {}".format(
                         i.name),
                 ),
@@ -302,11 +302,13 @@ def restart_on_randr():
 
 
 @hook.subscribe.client_killed
-@hook.subscribe.client_focus
-@hook.subscribe.client_new
 def windowDeleted(c):
-    if "blurwallpaper" in THEME and THEME["blurwallpaper"]:
-        updateWallpaper(c.qtile, -1)
+    updateWallpaper(c.qtile, -1, theme=THEME)
+    updateGroupWidgets(c.qtile, THEME)
+
+@hook.subscribe.client_new
+def windowAdded(c):
+    updateWallpaper(c.qtile, 1, theme=THEME)
     updateGroupWidgets(c.qtile, THEME)
 
 

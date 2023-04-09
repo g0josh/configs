@@ -12,10 +12,10 @@ from psutil import net_connections
 from my_scripts import getGroupLabel, getVolume, getVolumeIcon, updateWallpaper, volumeClicked
 from my_scripts import getGroupColors
 from my_scripts import getMpd, clickMpd
-from my_scripts import getTime, getlocksStatus, getTemps, getUtilization
+from my_scripts import getlocksStatus
 from my_scripts import getNetworkInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
-from my_scripts import getBatteryCapacity, getBatteryStatusIcon
+from my_scripts import isBatteryPresent
 
 # from my_widgets import ComboWidget
 from icons import getIcons
@@ -48,9 +48,6 @@ def prepareWidgets(theme: dict):
     '''
 
     global common_widgets
-
-    # common_widgets['module_separator'] = [widget.TextBox(
-    #         **BORDER_FONT, text=theme['moduleseparator'], padding=0)]
     common_widgets['module_separator'] = [widget.Spacer(length=theme['modulepadding'])]
 
     # Mpd
@@ -111,7 +108,7 @@ def prepareWidgets(theme: dict):
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient2title'],
             func=getVolume, padding=theme['bodypadding'], mouse_callbacks=volumeClick, update_interval=1,
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            ),
+            )
     ]
 
     # Utilization
@@ -119,13 +116,19 @@ def prepareWidgets(theme: dict):
         widget.TextBox(
             **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['titlepadding'],
             text=getIcons()['utilization'], background=theme['gradient3title'],
-            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)]
             ),
-        widget.GenPollText(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], padding=theme['bodypadding'],
-            func=getUtilization, update_interval=3, background=theme['gradient3body'],
+        widget.CPU(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], padding=theme['bodypadding'], background=theme['gradient3body'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            ),
+            format='{load_percent:.0f}%', update_interval=5
+        ),
+        widget.NvidiaSensors(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient3body'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            padding=theme['bodypadding'],
+            format='| {perf}'
+        )
     ]
 
     # Temperature
@@ -135,30 +138,36 @@ def prepareWidgets(theme: dict):
             text=getIcons()['temperature'], padding=theme['titlepadding'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             ),
-        widget.GenPollText(
+        widget.ThermalSensor(
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient4body'],
-            func=getTemps, padding=theme['bodypadding'], update_interval=3,
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            )
+            padding=theme['bodypadding'], format='{temp:.0f}' 
+        ),
+        widget.NvidiaSensors(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient4body'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            padding=theme['bodypadding'],
+            format='| {temp}'
+        )
     ]
 
     # Network
     common_widgets['network'] = []
     for interface in getNetworkInterfaces():
-        icon = getIcons()['wlan' if 'wl' in interface else 'lan']
         common_widgets[interface] = [
             widget.TextBox(
                 **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient5title'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-                text=icon, padding=theme['titlepadding']),
+                text=getIcons()['wlan'] if 'wl' in interface else getIcons()['lan'], padding=theme['titlepadding']),
             widget.GenPollText(
                 **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient5body'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 func=partial(updateNetworkWidgets, theme, interface), padding=theme['bodypadding'], update_interval=3)
         ]
         if not common_widgets['network']:
-            common_widgets['network'] += common_widgets['module_separator']
+           common_widgets['network'] += common_widgets['module_separator']
         common_widgets['network'] += common_widgets[interface]
+
 
     # Time
     common_widgets['time'] = [
@@ -166,24 +175,45 @@ def prepareWidgets(theme: dict):
             **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient6title'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             text=getIcons()['clock'], padding=theme['titlepadding']),
-        widget.GenPollText(
+        widget.Clock(
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient6body'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            func=getTime, padding=theme['bodypadding'], update_interval=30),
+            format='%b %d, %A, %I:%M %p', update_interval=30, padding=theme['bodypadding']
+        )
     ]
 
     # Battery
-    if getBatteryStatusIcon():
+    battery_icons = getIcons()['battery']
+    if isBatteryPresent():
         common_widgets['battery'] = [
-            widget.GenPollText(
+            widget.Battery(
                 **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient7title'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-                func=getBatteryStatusIcon, padding=theme['titlepadding']),
-            widget.GenPollText(
+                format='{char}', padding=theme['bodypadding'], charge_char=getIcons()['charging'],
+                discharge_char=battery_icons[len(battery_icons)-2], empty_char=battery_icons[0],
+                unknown_char=battery_icons[len(battery_icons)-2],
+                full_char=battery_icons[-1], show_short_text=False
+            ),
+            widget.Battery(
                 **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient7body'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-                func=getBatteryCapacity, padding=theme['bodypadding'], update_interval=3)
+                format='{percent:2.0%}', padding=theme['bodypadding'], show_short_text=False
+            )
         ]
+
+    # Backlight
+    common_widgets['backlight'] = [
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient7title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            text=getIcons()['backlight'], padding=theme['titlepadding']),
+        widget.Backlight(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient7body'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            backlight_name='intel_backlight', change_command='light -Set {0}',
+            padding=theme['bodypadding'] 
+        )
+    ]
 
     # Power/Logout/Screen lock
     common_widgets['power'] = [
@@ -247,6 +277,8 @@ def getWidgets(theme: dict, screen: int, groups: list[Group]):
     widgets += common_widgets['time'] + common_widgets['module_separator'] 
     if 'battery' in common_widgets:
         widgets += common_widgets['battery'] + common_widgets['module_separator'] 
+    if 'backlight' in common_widgets:
+        widgets += common_widgets['backlight'] + common_widgets['module_separator'] 
     widgets += common_widgets['power']
 
     return widgets

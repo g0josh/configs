@@ -5,6 +5,7 @@ def getIcons():
         'code':'',
         'folder':'',
         'battery': ['', '', '', '' ],
+        'charging': "",
         'power': '', 
         'screen_lock':'',
         'reboot': '',
@@ -29,5 +30,6 @@ def getIcons():
         'cancel':'',
         'error':'',
         'mail': '',
-        'download':''
+        'download':'',
+        'backlight': ''
     }

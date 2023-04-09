@@ -48,37 +48,17 @@ def getGroupColors(qtile:Qtile, group:str, theme:dict, screen:int=0) -> Tuple[st
 # ---------------------------------------------
 # BATTERY
 # ---------------------------------------------
-
-def getBatteryStatusIcon():
+def isBatteryPresent():
     try:
         with open("/sys/class/power_supply/BAT0/status") as sf:
             status = sf.read()
     except:
-        return ""
-
-    if "Charging" in status:
-        return ""
-
-    try:
-        index = min( int(getBatteryCapacity()[:-1])//25, 3)
-    except:
-        index = 0
-
-    return getIcons()['battery'][index]
-    
-def getBatteryCapacity():
-    try:
-        with open("/sys/class/power_supply/BAT0/capacity") as cf:
-            capacity = cf.read().strip()
-    except:
-        return 0
-
-    return f'{capacity}%'
+        return False 
+    return True
 
 # ---------------------------------------------
 # VOLUME
 # ---------------------------------------------
-
 def volumeClicked(button:int):
     if button == MOUSE_BUTTONS['LEFT_CLICK']:
         audio.setMute()
@@ -290,6 +270,20 @@ def getNetworkInterfaces():
     return ['enp0s25','wlan0']
     # return [x for x in os.listdir('/sys/class/net') if any(y in x for y in ['wl', 'eth', 'enp'])]
 
+def getWlanSsid(interface: str='wlan0'):
+    try:
+        output = subprocess.check_output(['nmcli']).decode()
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return error_text
+    else:
+        _essid = re.search(f'{interface}:\s+connected\s+\w+\s+(\S+)\n', output)
+
+    if not _essid:
+        return ""
+
+    return _essid.group(1)
+
 def getWlan(interface:str='wlo1', error_text:str='', show_speed_above:int=10e3):
     try:
         output = subprocess.check_output(['nmcli']).decode()
@@ -336,28 +330,28 @@ def getLan(interface:str='enp24s0', error_text:str='', show_speed_above:int=1
 
 # Setting a time zone
 
-@contextmanager
-def setTimeZone(the_tz):
-    orig = os.environ.get('TZ')
-    os.environ['TZ'] = the_tz
-    time.tzset()
-    yield
-    if orig is not None:
-        os.environ['TZ'] = orig
-    else:
-        del os.environ['TZ']
-    time.tzset()
+# @contextmanager
+# def setTimeZone(the_tz):
+#     orig = os.environ.get('TZ')
+#     os.environ['TZ'] = the_tz
+#     time.tzset()
+#     yield
+#     if orig is not None:
+#         os.environ['TZ'] = orig
+#     else:
+#         del os.environ['TZ']
+#     time.tzset()
 
-def getTime(format:str='%b %d, %A, %I:%M %p', timezone:Optional[str]=None):
-    def _get_time():
-        now = datetime.now().astimezone()
-        return (now + timedelta(seconds=0.5)).strftime(format)
+# def getTime(format:str='%b %d, %A, %I:%M %p', timezone:Optional[str]=None):
+#     def _get_time():
+#         now = datetime.now().astimezone()
+#         return (now + timedelta(seconds=0.5)).strftime(format)
 
-    if timezone is not None:
-        with setTimeZone(timezone):
-            return _get_time()
-    else:
-        return _get_time()
+#     if timezone is not None:
+#         with setTimeZone(timezone):
+#             return _get_time()
+#     else:
+#         return _get_time()
 
 def getlocksStatus():
     result = []
@@ -486,7 +480,9 @@ def setupMonitors(q: Qtile = None):
     else:
         return monitors
 
-def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0, setSolid=False):
+def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0, setSolid=False, theme:Optional[dict]=None):
+    if "blurwallpaper" not in theme or not theme["blurwallpaper"]:
+        return
     if setSolid:
         wall = "Wallpaper"
     else:
@@ -496,7 +492,7 @@ def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0, setSolid=Fa
             if groups[group]["screen"] is None:
                 continue
             windows += len(groups[group]["windows"])
-        wall = "BlurredWallpaper" if windows > 0 else "Wallpaper"
+        wall = "BlurredWallpaper" if windows > 1 else "Wallpaper"
 
     wallPath = os.path.expanduser("~/Pictures/") + wall
     cmd = "feh --bg-fill " + wallPath
