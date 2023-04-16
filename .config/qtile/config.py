@@ -299,6 +299,7 @@ wmname = "LG3D"
 def restart_on_randr():
     setupMonitors()
     subprocess.run(['bash', AUTOSTART_SCRIPT])
+    updateWallpaper(setSolid=True, theme=THEME)
 
 
 @hook.subscribe.client_killed
@@ -310,9 +311,3 @@ def windowDeleted(c):
 def windowAdded(c):
     updateWallpaper(c.qtile, 1, theme=THEME)
     updateGroupWidgets(c.qtile, THEME)
-
-
-@hook.subscribe.startup_complete
-def refreshWidgets():
-    # setupMonitors()
-    updateWallpaper(setSolid=True)

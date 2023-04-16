@@ -290,7 +290,7 @@ def clickGroup(qtile: Qtile, groupName: str, theme):
             _group.cmd_toscreen()
             break
     updateGroupWidgets(qtile, theme)
-    updateWallpaper(qtile)
+    updateWallpaper(qtile, theme=theme)
 
 
 def updateGroupWidgets(q: Qtile, theme: dict):
