@@ -12,7 +12,7 @@ from psutil import net_connections
 from my_scripts import getGroupLabel, getVolume, getVolumeIcon, updateWallpaper, volumeClicked
 from my_scripts import getGroupColors
 from my_scripts import getMpd, clickMpd
-from my_scripts import getlocksStatus
+from my_scripts import getLocksStatus, getBluetoothStatus
 from my_scripts import getNetworkInterfaces, getWlan, getLan
 from my_scripts import powerClicked, POWER_BUTTONS, MOUSE_BUTTONS
 from my_scripts import isBatteryPresent
@@ -109,6 +109,19 @@ def prepareWidgets(theme: dict):
             func=getVolume, padding=theme['bodypadding'], mouse_callbacks=volumeClick, update_interval=1,
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             )
+    ]
+
+    # Bluetooth
+    common_widgets['bluetooth'] = [
+        widget.TextBox(
+            **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient1title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True,group=True)],
+            text=getIcons()['locks'], padding=theme['titlepadding']),
+        widget.GenPollText(
+            **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient1title'],
+            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+            func=partial(updateBluetoothWidget, theme), padding=theme['bodypadding'], update_interval=0.5,
+        )
     ]
 
     # Utilization
@@ -272,6 +285,7 @@ def getWidgets(theme: dict, screen: int, groups: list[Group]):
     widgets += common_widgets['mpd'] + common_widgets['module_separator'] + common_widgets['prompt']
     widgets.append(widget.Spacer())
     widgets += common_widgets['locks'] + common_widgets['module_separator'] + common_widgets['volume'] + common_widgets['module_separator'] 
+    widgets += common_widgets['bluetooth'] + common_widgets['module_separator']
     widgets += common_widgets['temperature'] + common_widgets['module_separator'] + common_widgets['utilization'] + common_widgets['module_separator'] 
     widgets += common_widgets['network'] + common_widgets['module_separator'] 
     widgets += common_widgets['time'] + common_widgets['module_separator'] 
@@ -345,12 +359,26 @@ def updateLockWidget(theme: dict):
     global common_widgets
 
     widgets = common_widgets['locks']
-    result = getlocksStatus()
+    result = getLocksStatus()
     if not result:
         # hide all the widgets
         for _widget in widgets:
             _widget.update("")
     else:
         widgets[0].update(getIcons()['locks'])
+
+    return result
+
+def updateBluetoothWidget(theme: dict):
+    global common_widgets
+
+    widgets = common_widgets['bluetooth']
+    result = getBluetoothStatus()
+    if not result:
+        # hide all the widgets
+        for _widget in widgets:
+            _widget.update("")
+    else:
+        widgets[0].update(getIcons()['bluetooth'])
 
     return result

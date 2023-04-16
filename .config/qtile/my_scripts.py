@@ -353,7 +353,16 @@ def getLan(interface:str='enp24s0', error_text:str='', show_speed_above:int=1
 #     else:
 #         return _get_time()
 
-def getlocksStatus():
+def getBluetoothStatus():
+    result = []
+    try:
+        output = subprocess.check_output(['bluetoothctl', 'devices', 'Connected']).decode()
+        return output.split('\n')[0].split(' ', 2)[-1]
+    except subprocess.CalledProcessError as e:
+        logger.warning(e.output.decode().strip())
+        return ""
+
+def getLocksStatus():
     result = []
     try:
         output = subprocess.check_output(['xset', 'q']).decode()

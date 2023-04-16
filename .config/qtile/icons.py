@@ -20,6 +20,7 @@ def getIcons():
         'music':'',
         'temperature':'',
         'locks':'',
+        'bluetooth':'',
         'utilization':'',
         'wlan':'',
         'lan':'',
