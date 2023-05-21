@@ -11,7 +11,7 @@ echo "---------------------------------------"
 echo "Installing packages"
 echo "---------------------------------------"
 echo ""
-yay -S --noconfirm alacritty neovim code zsh numlockx python-opencv flameshot ncmpcpp mpc mpd qtile-extras-git nvm
+yay -S --noconfirm alacritty neovim code zsh numlockx python-opencv flameshot ncmpcpp mpc mpd qtile-extras-git nvm code-marketplace
 
 echo ""
 echo "---------------------------------------"
