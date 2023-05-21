@@ -8,24 +8,10 @@ fi
 
 echo ""
 echo "---------------------------------------"
-echo "Installing Qtile"
-echo "---------------------------------------"
-echo ""
-sudo apt-get install libxcb-render0-dev libffi-dev libcairo2 python3-pip -y
-pip3 install xcffib
-pip3 install --no-cache-dir cairocffi
-pip3 install qtile
-sudo cp qtile.desktop /usr/share/xsessions/
-
-echo ""
-echo "---------------------------------------"
 echo "Installing packages"
 echo "---------------------------------------"
 echo ""
-sudo apt update
-sudo apt install code pavucontrol firefox rxvt-unicode imagemagick \
-feh bc lm-sensors zsh lxappearance arandr rofi nomacs \
-shotwell numlockx polybar neovim python3-opencv flameshot -y
+yay -S --noconfirm alacritty neovim code zsh numlockx python-opencv flameshot ncmpcpp mpc mpd qtile-extras-git
 
 echo ""
 echo "---------------------------------------"
@@ -33,7 +19,6 @@ echo "Setting up configs"
 echo "---------------------------------------"
 echo ""
 cp .config/qtile ~/.config/ -r
-cp .config/polybar ~/.config/ -r
 cp .config/autostart.sh ~/.config
 sudo chmod u+x ~/.config/autostart.sh
 cp .config/mpd ~/.config/ -r
@@ -41,19 +26,12 @@ cp .config/ncmpcpp ~/.config/ -r
 cp .config/nvim ~/.config/ -r
 cp .config/themes ~/.config/ -r
 cp .config/picom ~/.config -r
-cp .Xresources ~/
+cp .config/alacritty ~/.config -r
 cp .tmux.conf ~/
 cp .zshrc ~/
 cp .zshenv ~/
 cp .fonts ~/ -r
 fc-cache -fv
-
-echo ""
-echo "---------------------------------------"
-echo "Installing picom"
-echo "---------------------------------------"
-echo ""
-sudo apt install picom
 
 echo ""
 echo "---------------------------------------"
@@ -73,14 +51,14 @@ echo "---------------------------------------"
 echo ""
 chsh -s $(which zsh)
 cd $HOME/tools
-git clone git@github.com:romkatv/powerlevel10k.git
+yay -S --noconfirm zsh-theme-powerlevel10k-git
 
 echo ""
 echo "---------------------------------------"
 echo "Cleaning up"
 echo "---------------------------------------"
 echo ""
-sudo apt autoremove
+yay -Yc
 
 echo ""
 echo "---------------------------------------"
