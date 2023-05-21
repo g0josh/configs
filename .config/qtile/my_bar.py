@@ -120,7 +120,7 @@ def prepareWidgets(theme: dict):
         widget.GenPollText(
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient1title'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            func=partial(updateBluetoothWidget, theme), padding=theme['bodypadding'], update_interval=0.5,
+            func=partial(updateBluetoothWidget, theme), padding=theme['bodypadding'], update_interval=2,
         )
     ]
 

@@ -65,7 +65,7 @@ def next_prev_group(qtile, next=True):
     if i < 0 or i >= len(groups):
         return
     qtile.groups[i].cmd_toscreen()
-    updateWallpaper(qtile, -1)
+    updateWallpaper(qtile, -1, theme=THEME)
     updateGroupWidgets(qtile, THEME)
 
 def cycle_audio_sink(qtile, next=True):

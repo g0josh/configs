@@ -46,25 +46,27 @@ urgentbg: "bright_yellow"
 altfg: "white"
 altbg: "yellow"
 gradient:
+    - "yellow"
     - "bright_green"
-    - "bright_yellow"
     - "yellow"
     - "bright_red"
     - "blue"
     - "magenta"
     - "green"
-modulepadding: 5
+moduleseparator: ""
 wspadding: 0
 background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
-titlepadding: 0
-bodypadding: 1
+titlepadding: 5
+bodypadding: 7
+modulepadding: 4
 focusedwindowborder: "green"
 windowborder: "background"
 barleftborder : 10
 barrightborder : 10
 bartopborder : 3
 barbottomborder : 0
+blurwallpaper: True

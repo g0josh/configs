@@ -18,15 +18,16 @@ gradient:
     - "red"
     - "magenta"
     - "green"
-moduleseparator: ""
+moduleseparator: "  "
 wspadding: 0
 background: "00000000"
 leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
-titlepadding: 0
-bodypadding: 1
+titlepadding: 5
+bodypadding: 7
+modulepadding: 4
 focusedwindowborder: "red"
 windowborder: "background"
 barleftborder : 12
