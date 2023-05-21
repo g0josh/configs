@@ -11,7 +11,7 @@ echo "---------------------------------------"
 echo "Installing packages"
 echo "---------------------------------------"
 echo ""
-yay -S --noconfirm alacritty neovim code zsh numlockx python-opencv flameshot ncmpcpp mpc mpd qtile-extras-git
+yay -S --noconfirm alacritty neovim code zsh numlockx python-opencv flameshot ncmpcpp mpc mpd qtile-extras-git nvm
 
 echo ""
 echo "---------------------------------------"
@@ -43,6 +43,18 @@ git clone git@github.com:g0josh/pycliutils
 cd pycliutils
 git checkout qtile
 pip3 install .
+
+echo ""
+echo "---------------------------------------"
+echo "Installing vscode pywal theme"
+echo "---------------------------------------"
+echo ""
+cd $HOME/tools
+git clone git@github.com:g0josh/vscode-wal
+cd vscode-wal
+nvm install --lts
+bash install.sh
+
 
 echo ""
 echo "---------------------------------------"

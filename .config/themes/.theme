@@ -29,7 +29,7 @@ gradientbodyfg: '#b6a28e'
 gradienttitlefg: '#b6a28e'
 leftmoduleprefix: "\uE0BE"
 leftmodulesuffix: "\uE0B8"
-moduleseparator: ''
+modulepadding: 5
 rightmoduleprefix: "\uE0BA"
 rightmodulesuffix: "\uE0BC"
 terminal_colors:
