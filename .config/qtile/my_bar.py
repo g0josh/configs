@@ -4,7 +4,6 @@ from libqtile.lazy import lazy
 from libqtile.config import Group
 from qtile_extras import widget 
 from qtile_extras.widget.decorations import RectDecoration
-# from libqtile import widget
 from libqtile.core.manager import Qtile
 from libqtile.log_utils import logger
 from psutil import net_connections
@@ -116,7 +115,7 @@ def prepareWidgets(theme: dict):
         widget.TextBox(
             **ICON_FONT, foreground=theme['gradienttitlefg'], background=theme['gradient1title'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True,group=True)],
-            text=getIcons()['locks'], padding=theme['titlepadding']),
+            text=getIcons()['bluetooth'], padding=theme['titlepadding']),
         widget.GenPollText(
             **DEFAULT_FONT, foreground=theme['gradientbodyfg'],background=theme['gradient1title'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
@@ -215,18 +214,18 @@ def prepareWidgets(theme: dict):
         ]
 
     # Backlight
-    common_widgets['backlight'] = [
-        widget.TextBox(
-            **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient7title'],
-            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            text=getIcons()['backlight'], padding=theme['titlepadding']),
-        widget.Backlight(
-            **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient7body'],
-            decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
-            backlight_name='intel_backlight', change_command='light -Set {0}',
-            padding=theme['bodypadding'] 
-        )
-    ]
+    #common_widgets['backlight'] = [
+    #    widget.TextBox(
+    #        **ICON_FONT, foreground=theme['gradienttitlefg'],background=theme['gradient7title'],
+    #        decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+    #        text=getIcons()['backlight'], padding=theme['titlepadding']),
+    #    widget.Backlight(
+    #        **DEFAULT_FONT, foreground=theme['gradientbodyfg'], background=theme['gradient7body'],
+    #        decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
+    #        backlight_name='intel_backlight', change_command='light -Set {0}',
+    #        padding=theme['bodypadding'] 
+    #    )
+    #]
 
     # Power/Logout/Screen lock
     common_widgets['power'] = [
