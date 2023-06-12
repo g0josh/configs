@@ -12,8 +12,8 @@ from my_scripts import MOUSE_BUTTONS, clickMpd, getTheme, setupMonitors, updateW
 from my_bar import DEFAULT_FONT, BORDER_FONT, getWidgets, updateGroupWidgets, updateVolume
 from my_audio import setActiveSink
 
-MOD = "mod1"
-ALT = "mod4"
+MOD = "mod4"
+ALT = "mod1"
 TERMINAL = guess_terminal()
 BROWSER = "firefox"
 ALTBROWSER = "google-chrome-stable"
@@ -26,8 +26,8 @@ groups = [
     Group(name='2', label=f'2 {getIcons()["terminal"]}'),
     Group(name='3', label=f'3 {getIcons()["code"]}'),
     Group(
-        name='4', label=f'4 {getIcons()["folder"]}', spawn='nautilus'),
-    Group(name='5', label=f'5 {getIcons()["music"]}', spawn=['ncmpcpp'],
+        name='4', label=f'4 {getIcons()["folder"]}', spawn='alacritty -e ranger'),
+    Group(name='5', label=f'5 {getIcons()["music"]}', spawn='alacritty -e ncmpcpp',
           matches=[Match(title='mpd'), Match(wm_class="music")]),
     Group(name='6', label=f'6 {getIcons()["mail"]}', spawn=['geary', 'gnome-calendar'],
           layout='monadtall', matches=[Match(wm_class=['gnome-calendar', 'geary'])]),
