@@ -70,3 +70,7 @@ barleftborder : 300
 barrightborder : 300
 bartopborder : 3
 barbottomborder : 0
+modulepadding: 4
+bodypadding: 4
+blurwallpaper: true
+titlepadding: 4

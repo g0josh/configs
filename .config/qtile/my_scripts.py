@@ -495,12 +495,12 @@ def updateWallpaper(qtile:Optional[Qtile]=None, adjustWindowCount=0, setSolid=Fa
     if setSolid:
         wall = "Wallpaper"
     else:
-        groups = qtile.cmd_groups()
+        groups = qtile.groups
         windows = adjustWindowCount
-        for group in groups:
-            if groups[group]["screen"] is None:
+        for index, group in enumerate(groups):
+            if groups[index].screen is None:
                 continue
-            windows += len(groups[group]["windows"])
+            windows += len(groups[index].windows)
         wall = "BlurredWallpaper" if windows > 1 else "Wallpaper"
 
     wallPath = os.path.expanduser("~/Pictures/") + wall

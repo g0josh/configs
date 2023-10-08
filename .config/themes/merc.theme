@@ -62,6 +62,7 @@ rightmoduleprefix: ""
 rightmodulesuffix: ""
 titlepadding: 0
 bodypadding: 1
+modulepadding: 4
 focusedwindowborder: "cyan"
 windowborder: "background"
 barleftborder : 200
