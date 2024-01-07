@@ -16,6 +16,7 @@ MOD = "mod4"
 ALT = "mod1"
 TERMINAL = guess_terminal()
 BROWSER = "firefox"
+# BROWSER = "vivaldi-stable"
 ALTBROWSER = "google-chrome-stable"
 AUTOSTART_SCRIPT = os.path.expanduser("~/.config/autostart.sh")
 THEME = getTheme(os.path.expanduser('~/.config/themes/.theme'))
@@ -171,8 +172,12 @@ keys = [
 
     # Music
     Key([MOD, ALT], "space", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['LEFT_CLICK'])), desc="Toggle music"),
-    Key([MOD, ALT], "h", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_UP'])), desc="Decrease volume of active sink"),
-    Key([MOD, ALT], "l", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Decrease volume of active sink")
+    Key([MOD, ALT], "h", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_UP'])), desc="Previous song"),
+    Key([MOD, ALT], "l", lazy.function(lambda x: clickMpd(MOUSE_BUTTONS['SCROLL_DOWN'])), desc="Next song"),
+
+    Key([], "Print", lazy.spawn("flameshot gui"), desc="Screenshot")
+
+
 ]
 
 for i in groups:
