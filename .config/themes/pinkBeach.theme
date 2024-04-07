@@ -53,11 +53,12 @@ leftmoduleprefix: ""
 leftmodulesuffix: ""
 rightmoduleprefix: ""
 rightmodulesuffix: ""
-titlepadding: 0
-bodypadding: 1
+titlepadding: 4
+bodypadding: 4 
 focusedwindowborder: "red"
 windowborder: "background"
 barleftborder : 10
 barrightborder : 10
 bartopborder : 3
 barbottomborder : 0
+modulepadding: 6

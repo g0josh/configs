@@ -47,7 +47,11 @@ def prepareWidgets(theme: dict):
     '''
 
     global common_widgets
-    common_widgets['module_separator'] = [widget.Spacer(length=theme['modulepadding'])]
+    module_separator_length = 2
+    if 'modulepadding' in theme:
+        module_separator_length = theme['modulepadding']
+
+    common_widgets['module_separator'] = [widget.Spacer(length=module_separator_length)]
 
     # Mpd
     mpdClick = {
@@ -66,7 +70,7 @@ def prepareWidgets(theme: dict):
             **DEFAULT_FONT, foreground=theme['bodyfg'],padding=theme['bodypadding'], background=theme['bodybg'],
             decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
             func=getMpd, mouse_callbacks=mpdClick,
-            update_interval=3)
+            update_interval=1)
     ]
 
     # Prompt
@@ -235,15 +239,15 @@ def prepareWidgets(theme: dict):
                         background=theme['gradient7title'], widgets=[
             # screen lock
             widget.TextBox(
-                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=module_separator_length, background=theme['gradient7body'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['screen_lock'], mouse_callbacks={'Button1': partial(powerClicked, 1, 2)}),
             widget.TextBox(
-                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=module_separator_length, background=theme['gradient7body'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['logout'], mouse_callbacks={'Button1': partial(powerClicked, 1, 1)}),
             widget.TextBox(
-                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=theme['modulepadding'],background=theme['gradient7body'],
+                **ICON_FONT, foreground=theme['gradienttitlefg'], padding=module_separator_length,background=theme['gradient7body'],
                 decorations=[RectDecoration(radius=5, filled=True, clip=True, use_widget_background=True, group=True)],
                 text=getIcons()['power'], mouse_callbacks={'Button1': partial(powerClicked, 1, 0)}),
         ]),
