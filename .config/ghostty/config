@@ -1,0 +1,92 @@
+command = "/bin/zsh --login -i -c 'tmux new-session -A -s default'"
+
+# 2. Font Settings
+# Make sure JetBrains Mono is installed on your system.
+# Ghostty might default to JetBrains Mono, but explicitly setting it is good.
+# For Nerd Font variants, ensure you use the exact name.
+# Use `ghostty +list-fonts` to see exact names available on your system.
+# If you have a Nerd Font version, it might be something like:
+font-family = "JetBrainsMono Nerd Font Mono"
+
+font-size = 14 
+# Adjust to your preferred size
+# You can set specific weights if desired, but often not necessary
+# font-family-bold = "JetBrains Mono Bold"
+# font-family-italic = "JetBrains Mono Italic"
+# font-family-bold-italic = "JetBrains Mono Bold Italic"
+
+# Enable ligatures if you like them (requires a font with ligatures like JetBrains Mono)
+font-feature = "calt"
+font-feature = "liga"
+
+# 3. Appearance (Adjust to your preference)
+# Example theme (Ghostty comes with some built-in themes, or you can point to a file)
+# Use `ghostty +list-themes` to see built-in themes.
+# You can also use a light/dark system theme follower:
+# theme = "light:solarized-light,dark:solarized-dark"
+#"catppuccin-mocha", 'dracula', 'tokyonight'
+theme = "Cobalt2"
+window-padding-x = 4
+window-padding-y = 4
+window-padding-balance = true 
+
+# Cursor style
+cursor-style = "block"
+cursor-style-blink = true 
+
+# Opacity and blur (macOS only for blur)
+# background-opacity = 0.95
+# background-blur = 20 # Adjust blur intensity
+
+# 4. Scrollback / Copy Mode (THE "VIM MODE" CAVEAT)
+# Ghostty's approach to "Vim mode" for scrollback is different from Alacritty/WezTerm.
+# As of current Ghostty versions (mid-2025), there isn't a native Vim-like
+# scrollback navigation mode *built into Ghostty itself* like you find in
+# some other terminals.
+#
+# Instead, Ghostty's philosophy is often to leverage external tools.
+# The primary method is to "write" the scrollback to a temporary file
+# and then open it in your preferred editor (like Neovim/Vim).
+
+# Keybinding to write scrollback to a file and open it in your default editor
+# For this to work, your system's default text editor should be set to Vim/Neovim
+# (e.g., via $EDITOR or xdg-open/open association).
+# macOS example
+keybind = "shift+cmd+e=write_scrollback_file:open" 
+# For Linux, `ctrl+shift+e` might be a good choice, as Cmd is Super/Windows key
+# keybind = "ctrl+shift+e=write_scrollback_file:open"
+
+# Keybinding to write screen contents to a file and open it
+# keybind = "shift+cmd+s=write_screen_file:open"
+
+# 5. Other Useful Keybindings (Optional)
+# Ghostty has good defaults, but you can customize.
+# Use `ghostty +list-keybinds --default` to see all defaults.
+
+# New tab
+# keybind = "cmd+t=new_tab" # Default
+# Close tab/window
+# keybind = "cmd+w=close_surface" # Default
+
+# Split panes (Ghostty has different philosophy on splits vs. tmux panes)
+# If you use tmux, you'll manage splits/panes within tmux (Prefix + %)
+# keybind = "cmd+d=new_split:right" # Horizontal split (Ghostty's native split)
+# keybind = "cmd+shift+d=new_split:down" # Vertical split (Ghostty's native split)
+
+# Navigate Ghostty's native splits (if you use them, otherwise tmux handles this)
+# keybind = "cmd+left=goto_split:left"
+# keybind = "cmd+right=goto_split:right"
+# keybind = "cmd+up=goto_split:up"
+# keybind = "cmd+down=goto_split:down"
+
+# Reload config (useful for testing changes)
+# keybind = "cmd+shift+comma=reload_config" # Default for macOS
+
+# Shell integration features
+# This helps Ghostty understand your shell for things like prompt detection.
+# shell-integration-features = "cursor,sudo,title"
+
+# Copy/Paste
+# copy-on-select = "clipboard" # Copies text when selected
+# clipboard-paste-protection = true # Good for security against malicious pastes
+
